@@ -72,6 +72,13 @@ Two Deno workarounds, each scoped to one engine and commented in place:
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,
   which blocks headless browsers; a challenged run is recorded as blocked, and nothing here tries to get past it.
+- Refreshing the published table: the landing reads [`results/browser.json`](results/browser.json) from GitHub
+  (5-minute cache; the copy bundled with the deploy is the fallback). Re-measure with
+  `scripts/remeasure.sh [engines|all] [runs]` (runs `measure.py --results results/browser.json`, commits, pushes) or
+  the [Re-measure workflow](.github/workflows/remeasure.yml) (on demand and Mondays 06:17 UTC; Chrome under Xvfb on
+  ubuntu-latest, commits the file). Engines not re-measured keep their previous entry.
+- In the page: every `/v/<engine>` page has **Re-measure now**, which reads JS heap, bytes and files loaded again with
+  open-docs' own `lib/metrics.ts`, as the page is at that moment (nothing is stored).
 
 ## Development
 

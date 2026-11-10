@@ -88,7 +88,10 @@ ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURICompon
     : "Not measured yet."}
 <b>Cold render</b>: navigation start → the document is on screen (the page's own signal, the document's title as text, or a rendered page image, whichever comes first), median of the runs.
 <b>Downloaded</b>: every request in every frame, headers + bodies. <b>JS heap</b>: the page plus every out-of-process frame.
-Each run is a fresh browser and a document URL no engine has seen, so no vendor cache can answer it.</p>
+Each run is a fresh browser and a document URL no engine has seen, so no vendor cache can answer it.
+<b>Refreshing</b>: the table is <a href="https://github.com/arthrod/open-docs-viewer/blob/main/results/browser.json">results/browser.json</a>, re-measured by the
+<a href="https://github.com/arthrod/open-docs-viewer/actions/workflows/remeasure.yml">Re-measure workflow</a> (on demand and weekly) or <code>scripts/remeasure.sh</code>, and read here within 5 minutes.
+Each engine page also has <b>Re-measure now</b> for your own browser, as the page is at that moment.</p>
 <table>${head}<tbody>${open.map(row).join("")}</tbody>
 <tbody><tr class="sep"><th colspan="8">Proprietary — view-only by nature. Microsoft and Google render on their servers; Apryse and Nutrient run unlicensed in evaluation mode (watermarked).</th></tr>${prop.map(row).join("")}</tbody></table>
 <footer>Source: <a href="https://www.val.town/x/arthrod/open-docs-viewer">val.town/x/arthrod/open-docs-viewer</a>; engines from <a href="https://github.com/arthrod/open-docs">github.com/arthrod/open-docs</a>. Fixture: <a href="https://huggingface.co/datasets/arthrod/open-docs-fixtures">huggingface.co/datasets/arthrod/open-docs-fixtures</a>.</footer>

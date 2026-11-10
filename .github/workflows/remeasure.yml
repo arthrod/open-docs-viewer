@@ -1,0 +1,52 @@
+name: Re-measure
+
+# Re-runs the cold browser benchmark (scripts/measure.py) in real Google
+# Chrome under Xvfb and commits results/browser.json; the landing page reads
+# the committed file from GitHub within 5 minutes. No Val Town token needed.
+on:
+  workflow_dispatch:
+    inputs:
+      engines:
+        description: "Engines (comma-separated) or all"
+        default: all
+      runs:
+        description: "Cold runs per engine (median)"
+        default: "3"
+  schedule:
+    - cron: "17 6 * * 1" # Mondays 06:17 UTC
+
+permissions:
+  contents: write
+
+concurrency:
+  group: remeasure
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Install Google Chrome for Playwright
+        run: uv run --with playwright python -m playwright install --with-deps chrome
+      - name: Measure
+        env:
+          MEASURE_WHERE: from a GitHub Actions ubuntu-latest runner
+        run: |
+          xvfb-run -a uv run --with playwright python -I scripts/measure.py \
+            "${{ inputs.engines || 'all' }}" "${{ inputs.runs || '3' }}" \
+            --results results/browser.json > measure-raw.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: measure-raw
+          path: measure-raw.json
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/browser.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Re-measure: ${{ inputs.engines || 'all' }} ($(date -u +%F), GitHub Actions)"
+          git push

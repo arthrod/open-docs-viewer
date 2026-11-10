@@ -17,14 +17,24 @@ If Cloudflare (in front of val.run) shows a challenge, the run is recorded as
 blocked; nothing here tries to get past it.
 
     uv run --with playwright python -I scripts/measure.py docxodus,plate 3 > out.json
+    uv run --with playwright python -I scripts/measure.py all 3 --results results/browser.json
+
+With --results PATH the summary is also written in the shape the landing page
+renders (server/results.ts `Results`); engines not measured in this run keep
+their previous entry from PATH. scripts/remeasure.sh and the "Re-measure"
+GitHub workflow use this.
 """
-import asyncio, json, random, statistics, sys, tempfile, time, urllib.parse
+import asyncio, datetime, json, os, platform, random, statistics, sys, tempfile, time, urllib.parse
 
 from playwright.async_api import async_playwright
 
 BASE = "https://open-docs-viewer.val.run"
 DOC = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/showcase.docx"
 TIMEOUT_S = 120
+ALL = ["apryse", "canvas-editor", "docen", "docxodus", "eigenpal", "folio", "google-viewer", "nutrient", "plate", "superdoc", "word-online", "wordcraft"]
+# Cross-origin frames: the page sees only the frame's load event.
+FRAME = {"google-viewer", "word-online"}
+FRAME_HOW = "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
 
 
 async def one(pw, slug: str) -> dict:
@@ -77,8 +87,9 @@ async def one(pw, slug: str) -> dict:
 
 
 async def main():
-    engines = sys.argv[1].split(",")
+    engines = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
     runs = int(sys.argv[2])
+    out_path = sys.argv[sys.argv.index("--results") + 1] if "--results" in sys.argv else None
     res: dict[str, list] = {e: [] for e in engines}
     async with async_playwright() as pw:
         for r in range(runs):
@@ -99,6 +110,30 @@ async def main():
             "how": "data-od-rendered" if ok else (xs[0].get("blocked") or xs[0].get("error")),
         }
     print(json.dumps({"engines": summary, "raw": res}, indent=1))
+    if out_path:
+        write_results(out_path, summary, runs)
+
+
+def write_results(path: str, summary: dict, runs: int) -> None:
+    try:
+        prev = json.load(open(path))
+    except (OSError, ValueError):
+        prev = {"engines": {}}
+    engines = dict(prev.get("engines", {}))
+    for e, s in summary.items():
+        if e in FRAME and s["renderedMs"] is not None:
+            s = {**s, "how": FRAME_HOW}
+        engines[e] = s
+    where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
+    out = {
+        "measuredAt": datetime.date.today().isoformat(),
+        "environment": f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs} runs, median; {where}",
+        "document": "showcase.docx (47,871 B) with a never-seen ?n= per run",
+        "engines": dict(sorted(engines.items())),
+    }
+    with open(path, "w") as f:
+        f.write(json.dumps(out, indent=1) + "\n")
+    print(f"wrote {path}", file=sys.stderr)
 
 
 asyncio.run(main())
