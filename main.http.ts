@@ -73,10 +73,28 @@ app.get("/api/doc", async (c) => {
 const absolutize = (html: string) => html.replace(/\b(src|href)="\/(?!\/)/g, `$1="${OPEN_DOCS}/`);
 
 // deno-lint-ignore no-explicit-any
-const shells = new Map<string, Promise<any>>();
+const shells = new Map<string, { p: Promise<any>; at: number }>();
+const SHELL_TTL_MS = 5 * 60_000; // then re-resolve, so an open-docs deploy shows up within minutes
+/**
+ * esm.town redirects an unversioned URL to the current version
+ * (`/v/arthrod/open-docs@471-main/...`). Deno caches modules by URL, so
+ * importing the unversioned one keeps serving whatever version it first saw;
+ * resolve the version first and import that exact URL. Adapters load live from
+ * open-docs.val.run, so their shells must be the same version.
+ */
+async function currentShellUrl(slug: string): Promise<string> {
+  const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual" });
+  await res.body?.cancel();
+  const loc = res.headers.get("location");
+  return loc ? new URL(loc, OPEN_DOCS_ESM).href : `${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`;
+}
 const shellOf = (slug: string) => {
-  if (!shells.has(slug)) shells.set(slug, import(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`).then((m) => m.default));
-  return shells.get(slug)!;
+  const hit = shells.get(slug);
+  if (hit && Date.now() - hit.at < SHELL_TTL_MS) return hit.p;
+  const p = currentShellUrl(slug).then((u) => import(u)).then((m) => m.default);
+  p.catch(() => shells.delete(slug)); // retried on the next request
+  shells.set(slug, { p, at: Date.now() });
+  return p;
 };
 
 function viewPage(e: Engine, shell: { head?: string; body: string; entry: string; importMap?: Record<string, string> }, src: URL): string {
@@ -249,9 +267,8 @@ const RENDERERS: Record<string, Renderer> = {
   eigenpal: lazy(async () => (await import("./server/docx-editor.ts")).docxEditorHtml),
   // Styled with the open-docs Plate page's own CSS (its shell head).
   plate: lazy(async () => {
-    const [{ plateHtml }, shell] = await Promise.all([import("./server/plate.ts"), shellOf("plate")]);
-    const css = absolutize(shell.head ?? "");
-    return (bytes: Uint8Array) => plateHtml(bytes, css);
+    const { plateHtml } = await import("./server/plate.ts");
+    return async (bytes: Uint8Array) => plateHtml(bytes, absolutize((await shellOf("plate")).head ?? ""));
   }),
 };
 

@@ -23,7 +23,7 @@ export interface Engine {
 
 const READ_ONLY: Record<string, string> = {
   "canvas-editor": "canvas-editor's EditorMode.READONLY; our toolbar hidden",
-  "docxodus": "Docxodus's createViewer() — its read-only HTML viewer",
+  "docxodus": "Docxodus's paginated page view: convertDocxToHtml (Paginated) + paginateHtml",
   "superdoc": 'SuperDoc documentMode "viewing"; no toolbar',
   "plate": "PlateContent readOnly; our toolbar hidden",
   "docen": 'docen editable="false" (its ribbon always shows, by design)',

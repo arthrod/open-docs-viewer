@@ -23,6 +23,10 @@ import * as L from "npm:@platejs/list@53.3.13";
 import * as M from "npm:@platejs/media@53.1.4";
 import { strFromU8, unzipSync } from "npm:fflate@0.8.2";
 import { parseHTML } from "npm:linkedom@0.18.12";
+// Shared with the open-docs browser adapter (tested there), pinned to one version.
+import { imageNode, type Picture, pictureLayout } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/pictures.ts";
+import { safeUrl } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/safe-url.ts";
+export { safeUrl };
 
 // deno-lint-ignore no-explicit-any
 type Any = any;
@@ -73,40 +77,7 @@ function loadMammoth() {
 }
 export { loadMammoth };
 
-/** Links keep only schemes a viewer should follow; anything else (javascript:, data:, ...) is dropped. */
-export function safeUrl(u: unknown): string | undefined {
-  if (typeof u !== "string") return undefined;
-  const t = u.trim();
-  if (t.startsWith("#")) return t;
-  try {
-    return ["http:", "https:", "mailto:"].includes(new URL(t).protocol) ? t : undefined;
-  } catch {
-    return undefined; // relative or malformed: nothing to resolve it against
-  }
-}
 
-/**
- * mammoth inlines each picture as a data: URL but drops its size, so take the
- * size Word displays (wp:extent, in EMU) and its paragraph's alignment from
- * document.xml: one per DrawingML picture, in document order — the order
- * mammoth emits <img>s. Returns null when the counts disagree (then pictures
- * fall back to fit-width, left-aligned).
- */
-type Picture = { width: number; align?: "center" | "right" };
-function pictureLayout(bytes: Uint8Array, expected: number): Picture[] | null {
-  const file = unzipSync(bytes, { filter: (f) => f.name === "word/document.xml" })["word/document.xml"];
-  if (!file) return null;
-  const xml = strFromU8(file);
-  const pics = [...xml.matchAll(/<w:drawing>[\s\S]*?<\/w:drawing>/g)]
-    .filter((d) => d[0].includes("<pic:pic"))
-    .map((d) => {
-      const width = Number(/<wp:extent cx="(\d+)"/.exec(d[0])?.[1] ?? 0) / 9525; // EMU → CSS px
-      const pStart = Math.max(xml.lastIndexOf("<w:p>", d.index), xml.lastIndexOf("<w:p ", d.index));
-      const jc = /<w:jc w:val="(\w+)"/.exec(xml.slice(pStart, d.index).split("</w:pPr>")[0])?.[1];
-      return { width, align: jc === "center" ? "center" : jc === "right" || jc === "end" ? "right" : undefined } as Picture;
-    });
-  return pics.length === expected ? pics : null;
-}
 
 export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; dropped: number }> {
   const mammoth = await loadMammoth();
@@ -117,18 +88,21 @@ export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; dr
   // Pictures become Plate image nodes (block voids). One inside a list item
   // cannot become a block there without breaking the list; those are counted.
   const imgs = Array.from<Any>(root.querySelectorAll("img"));
-  const layout = imgs.length ? pictureLayout(bytes, imgs.length) : null;
+  let layout: Picture[] | null = null;
+  if (imgs.length) {
+    const file = unzipSync(bytes, { filter: (f) => f.name === "word/document.xml" })["word/document.xml"];
+    const pics = file ? pictureLayout(strFromU8(file)) : [];
+    layout = pics.length === imgs.length ? pics : null; // counts disagree: fit-width, left
+  }
   let emitted = 0;
-  const imageNode = (img: Any) => {
-    const url = img.getAttribute("src") ?? "";
-    if (!/^data:image\/(png|jpe?g|gif|webp|bmp|svg\+xml);base64,/.test(url)) return null;
-    emitted++;
-    const pic = layout?.[imgs.indexOf(img)];
-    return { type: "img", url, ...(pic?.width ? { width: Math.round(pic.width) } : {}), ...(pic?.align ? { align: pic.align } : {}), ...(img.getAttribute("alt") ? { alt: img.getAttribute("alt") } : {}), children: [{ text: "" }] };
+  const picture = (img: Any) => {
+    const node = imageNode(img.getAttribute("src") ?? "", img.getAttribute("alt") ?? "", layout?.[imgs.indexOf(img)]);
+    if (node) emitted++;
+    return node;
   };
   /** A paragraph-like element: its text as `type`, then its pictures as image blocks. */
   const blocks = (el: Any, type: string): Any[] => {
-    const pics = Array.from<Any>(el.querySelectorAll("img")).map(imageNode).filter(Boolean);
+    const pics = Array.from<Any>(el.querySelectorAll("img")).map(picture).filter(Boolean);
     const text = leaves(el);
     const hasText = text.some((l: Any) => l.type || (l.text ?? "").trim());
     return hasText || !pics.length ? [{ type, children: text.length ? text : [{ text: "" }] }, ...pics] : pics;
