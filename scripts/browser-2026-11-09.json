@@ -1,0 +1,426 @@
+{
+ "engines": {
+  "apryse": {
+   "renderedMs": 3477,
+   "runs": [
+    3477,
+    3123,
+    5282
+   ],
+   "bytes": 7296801,
+   "requests": 158,
+   "heapBytes": 21651080,
+   "how": "data-od-rendered"
+  },
+  "canvas-editor": {
+   "renderedMs": 963,
+   "runs": [
+    963,
+    970,
+    824
+   ],
+   "bytes": 609607,
+   "requests": 24,
+   "heapBytes": 9690980,
+   "how": "data-od-rendered"
+  },
+  "docen": {
+   "renderedMs": 1408,
+   "runs": [
+    1672,
+    1356,
+    1408
+   ],
+   "bytes": 1456529,
+   "requests": 327,
+   "heapBytes": 32098880,
+   "how": "data-od-rendered"
+  },
+  "docxodus": {
+   "renderedMs": 2816,
+   "runs": [
+    2816,
+    3308,
+    2042
+   ],
+   "bytes": 8100439,
+   "requests": 58,
+   "heapBytes": 8408300,
+   "how": "data-od-rendered"
+  },
+  "eigenpal": {
+   "renderedMs": 1197,
+   "runs": [
+    1197,
+    1584,
+    971
+   ],
+   "bytes": 5294825,
+   "requests": 200,
+   "heapBytes": 32266276,
+   "how": "data-od-rendered"
+  },
+  "folio": {
+   "renderedMs": 1124,
+   "runs": [
+    2279,
+    1081,
+    1124
+   ],
+   "bytes": 2193101,
+   "requests": 78,
+   "heapBytes": 21732176,
+   "how": "data-od-rendered"
+  },
+  "google-viewer": {
+   "renderedMs": 20838,
+   "runs": [
+    20927,
+    808,
+    20838
+   ],
+   "bytes": 1134168,
+   "requests": 27,
+   "heapBytes": 2143616,
+   "how": "data-od-rendered"
+  },
+  "nutrient": {
+   "renderedMs": 4084,
+   "runs": [
+    4168,
+    3332,
+    4084
+   ],
+   "bytes": 25538995,
+   "requests": 98,
+   "heapBytes": 22391244,
+   "how": "data-od-rendered"
+  },
+  "plate": {
+   "renderedMs": 1394,
+   "runs": [
+    1394,
+    1095,
+    1522
+   ],
+   "bytes": 1079773,
+   "requests": 429,
+   "heapBytes": 26428324,
+   "how": "data-od-rendered"
+  },
+  "superdoc": {
+   "renderedMs": 2656,
+   "runs": [
+    3660,
+    2656,
+    2473
+   ],
+   "bytes": 9077099,
+   "requests": 24,
+   "heapBytes": 18602632,
+   "how": "data-od-rendered"
+  },
+  "word-online": {
+   "renderedMs": 769,
+   "runs": [
+    769,
+    584,
+    785
+   ],
+   "bytes": 1701729,
+   "requests": 66,
+   "heapBytes": 1758268,
+   "how": "data-od-rendered"
+  },
+  "wordcraft": {
+   "renderedMs": 1675,
+   "runs": [
+    1675,
+    1555,
+    2743
+   ],
+   "bytes": 22699273,
+   "requests": 19,
+   "heapBytes": 3199356,
+   "how": "data-od-rendered"
+  }
+ },
+ "raw": {
+  "apryse": [
+   {
+    "engine": "apryse",
+    "renderedMs": 3477,
+    "heapBytes": 21897208,
+    "bytes": 7345592,
+    "requests": 158
+   },
+   {
+    "engine": "apryse",
+    "renderedMs": 3123,
+    "heapBytes": 21651080,
+    "bytes": 7296725,
+    "requests": 158
+   },
+   {
+    "engine": "apryse",
+    "renderedMs": 5282,
+    "heapBytes": 17968632,
+    "bytes": 7296801,
+    "requests": 158
+   }
+  ],
+  "canvas-editor": [
+   {
+    "engine": "canvas-editor",
+    "renderedMs": 963,
+    "heapBytes": 9690980,
+    "bytes": 609607,
+    "requests": 24
+   },
+   {
+    "engine": "canvas-editor",
+    "renderedMs": 970,
+    "heapBytes": 9699032,
+    "bytes": 609321,
+    "requests": 24
+   },
+   {
+    "engine": "canvas-editor",
+    "renderedMs": 824,
+    "heapBytes": 9690804,
+    "bytes": 609616,
+    "requests": 24
+   }
+  ],
+  "docen": [
+   {
+    "engine": "docen",
+    "renderedMs": 1672,
+    "heapBytes": 28963092,
+    "bytes": 1456837,
+    "requests": 327
+   },
+   {
+    "engine": "docen",
+    "renderedMs": 1356,
+    "heapBytes": 32098880,
+    "bytes": 1456022,
+    "requests": 327
+   },
+   {
+    "engine": "docen",
+    "renderedMs": 1408,
+    "heapBytes": 32318920,
+    "bytes": 1456529,
+    "requests": 327
+   }
+  ],
+  "docxodus": [
+   {
+    "engine": "docxodus",
+    "renderedMs": 2816,
+    "heapBytes": 7762964,
+    "bytes": 8100439,
+    "requests": 58
+   },
+   {
+    "engine": "docxodus",
+    "renderedMs": 3308,
+    "heapBytes": 8409852,
+    "bytes": 8100277,
+    "requests": 58
+   },
+   {
+    "engine": "docxodus",
+    "renderedMs": 2042,
+    "heapBytes": 8408300,
+    "bytes": 8131177,
+    "requests": 58
+   }
+  ],
+  "eigenpal": [
+   {
+    "engine": "eigenpal",
+    "renderedMs": 1197,
+    "heapBytes": 23975456,
+    "bytes": 5150469,
+    "requests": 198
+   },
+   {
+    "engine": "eigenpal",
+    "renderedMs": 1584,
+    "heapBytes": 32308400,
+    "bytes": 5294825,
+    "requests": 200
+   },
+   {
+    "engine": "eigenpal",
+    "renderedMs": 971,
+    "heapBytes": 32266276,
+    "bytes": 5328864,
+    "requests": 200
+   }
+  ],
+  "folio": [
+   {
+    "engine": "folio",
+    "renderedMs": 2279,
+    "heapBytes": 21732176,
+    "bytes": 2192915,
+    "requests": 78
+   },
+   {
+    "engine": "folio",
+    "renderedMs": 1081,
+    "heapBytes": 21687404,
+    "bytes": 2193101,
+    "requests": 78
+   },
+   {
+    "engine": "folio",
+    "renderedMs": 1124,
+    "heapBytes": 21751796,
+    "bytes": 2201939,
+    "requests": 78
+   }
+  ],
+  "google-viewer": [
+   {
+    "engine": "google-viewer",
+    "renderedMs": 20927,
+    "heapBytes": 2143616,
+    "bytes": 1133379,
+    "requests": 27
+   },
+   {
+    "engine": "google-viewer",
+    "renderedMs": 808,
+    "heapBytes": 1763276,
+    "bytes": 1134414,
+    "requests": 27
+   },
+   {
+    "engine": "google-viewer",
+    "renderedMs": 20838,
+    "heapBytes": 2150024,
+    "bytes": 1134168,
+    "requests": 27
+   }
+  ],
+  "nutrient": [
+   {
+    "engine": "nutrient",
+    "renderedMs": 4168,
+    "heapBytes": 21785864,
+    "bytes": 25542889,
+    "requests": 98
+   },
+   {
+    "engine": "nutrient",
+    "renderedMs": 3332,
+    "heapBytes": 22391244,
+    "bytes": 25538995,
+    "requests": 98
+   },
+   {
+    "engine": "nutrient",
+    "renderedMs": 4084,
+    "heapBytes": 22477040,
+    "bytes": 25538835,
+    "requests": 98
+   }
+  ],
+  "plate": [
+   {
+    "engine": "plate",
+    "renderedMs": 1394,
+    "heapBytes": 26397196,
+    "bytes": 1079773,
+    "requests": 429
+   },
+   {
+    "engine": "plate",
+    "renderedMs": 1095,
+    "heapBytes": 26428324,
+    "bytes": 1079874,
+    "requests": 429
+   },
+   {
+    "engine": "plate",
+    "renderedMs": 1522,
+    "heapBytes": 26428640,
+    "bytes": 1079619,
+    "requests": 429
+   }
+  ],
+  "superdoc": [
+   {
+    "engine": "superdoc",
+    "renderedMs": 3660,
+    "heapBytes": 18602632,
+    "bytes": 9077099,
+    "requests": 24
+   },
+   {
+    "engine": "superdoc",
+    "renderedMs": 2656,
+    "heapBytes": 18801188,
+    "bytes": 9073499,
+    "requests": 24
+   },
+   {
+    "engine": "superdoc",
+    "renderedMs": 2473,
+    "heapBytes": 18600864,
+    "bytes": 9079314,
+    "requests": 24
+   }
+  ],
+  "word-online": [
+   {
+    "engine": "word-online",
+    "renderedMs": 769,
+    "heapBytes": 1758268,
+    "bytes": 1701729,
+    "requests": 66
+   },
+   {
+    "engine": "word-online",
+    "renderedMs": 584,
+    "heapBytes": 1752968,
+    "bytes": 1748519,
+    "requests": 73
+   },
+   {
+    "engine": "word-online",
+    "renderedMs": 785,
+    "heapBytes": 1758268,
+    "bytes": 20414,
+    "requests": 9
+   }
+  ],
+  "wordcraft": [
+   {
+    "engine": "wordcraft",
+    "renderedMs": 1675,
+    "heapBytes": 3147732,
+    "bytes": 22699399,
+    "requests": 19
+   },
+   {
+    "engine": "wordcraft",
+    "renderedMs": 1555,
+    "heapBytes": 3199356,
+    "bytes": 22699211,
+    "requests": 19
+   },
+   {
+    "engine": "wordcraft",
+    "renderedMs": 2743,
+    "heapBytes": 3233892,
+    "bytes": 22699273,
+    "requests": 19
+   }
+  ]
+ }
+}

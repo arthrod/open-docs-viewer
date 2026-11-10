@@ -68,8 +68,10 @@ Two Deno workarounds, each scoped to one engine and commented in place:
 - Server routes: `python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft 5`
   (plain `curl`, a never-seen `?n=` per request, `Server-Timing` parsed). The numbers on `/` are the first
   request to each engine after a deploy, then the median of 5 warm requests.
-- Browser pages: `val.run` sits behind Cloudflare, which blocks headless browsers. The browser-side numbers were
-  taken in a real Chrome; nothing here tries to get around that block.
+- Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
+  Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
+  `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,
+  which blocks headless browsers; a challenged run is recorded as blocked, and nothing here tries to get past it.
 
 ## Development
 

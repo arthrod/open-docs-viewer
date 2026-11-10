@@ -240,7 +240,7 @@ const BlockListStatic = (props: Any) => {
 
 const STYLE_TARGETS = { inject: { targetPlugins: ["p", "h1", "h2", "h3", "h4", "h5", "h6", "blockquote"] } };
 
-const PLUGINS: Any[] = [
+export const PLUGINS: Any[] = [
   BaseParagraphPlugin.withComponent(Paragraph),
   L.BaseListPlugin.configure({ render: { belowNodes: BlockListStatic } }),
   B.BaseH1Plugin.withComponent(as("h1")),
