@@ -155,7 +155,8 @@ export const NAVBAR_CSS = `
 .od-menu-label .sq{width:9px;height:9px;background:var(--mark);display:inline-block;flex:none}
 .od-menu hr{border:0;border-top:1px solid var(--faint);margin:4px 2px}
 .od-menu-note{font-size:12.5px;color:var(--ink-quiet);padding:4px 10px 8px;max-width:290px;line-height:1.45}
-.od-menu-note .chip{margin-bottom:4px;display:inline-block}
+.od-menu-note .chip{margin-bottom:6px;display:inline-block}
+.od-menu-note small{display:block;font-size:12px}
 .od-status-chip{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums;
   flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:36ch}
 .od-land-nav{margin-left:auto;display:flex;align-items:center;gap:18px;flex-wrap:nowrap;flex:none}
