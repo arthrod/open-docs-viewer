@@ -102,11 +102,12 @@ export const VIEWER_DS_CSS = `
   border-bottom:1px solid var(--ink);padding:12px}
 .odv-bar{display:block;height:10px;border:1px solid var(--ink);background:var(--bg);margin-top:2px}
 .odv-bar > i{display:block;height:100%;background:var(--ink);min-width:1px}
-.odv-form{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 14px;align-items:stretch}
+.odv-form{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 14px;align-items:flex-end}
 .odv-form .fld{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:6px}
 .odv-form label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .odv-form input[type=url],.odv-form select{font-family:var(--font-sans);font-size:15px;padding:12px 14px;border:1px solid var(--ink);border-radius:0;background:var(--surface);color:var(--ink);width:100%}
-.odv-form select{font-family:var(--font-mono);font-size:12px;letter-spacing:.03em;text-transform:uppercase;flex:0 1 220px}
+.odv-form select{font-family:var(--font-mono);font-size:12px;letter-spacing:.03em;text-transform:uppercase}
+.odv-form .fld:has(select){flex:0 1 240px}
 .odv-foot{margin:52px 0 44px;padding-top:22px;border-top:1px solid var(--ink);font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;
   text-transform:uppercase;color:var(--muted);line-height:1.6}
 .odv-foot a{text-decoration:underline;text-decoration-color:var(--link-rule);text-underline-offset:2px}
@@ -122,7 +123,7 @@ html.odv-view body{display:flex;flex-direction:column;height:100dvh;background:v
 #od-stage > .verr{margin:24px;padding:16px 18px;background:var(--surface);color:var(--del);border:1px solid var(--ink);
   font-family:var(--font-mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap}
 @media(max-width:720px){.hide-sm{display:none!important}.stats{grid-template-columns:repeat(2,1fr)}.odv-chrome .note{display:none}}
-@media(max-width:640px){.odv-form select{flex:1 1 100%}}
+@media(max-width:640px){.odv-form .fld:has(select){flex:1 1 100%}}
 `;
 
 // deno-lint-ignore no-explicit-any
