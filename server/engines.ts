@@ -8,8 +8,17 @@ export const OPEN_DOCS_ESM = "https://esm.town/v/arthrod/open-docs";
 
 const { editors } = await import(`${OPEN_DOCS_ESM}/server/registry.ts`);
 
+export interface Maker {
+  name: string;
+  kind: "company" | "person";
+  linkedin?: string;
+  github?: string;
+}
+
 export interface Engine {
   slug: string;
+  /** Who builds it (open-docs registry `makers`): verified LinkedIn, else GitHub. */
+  makers?: Maker[];
   name: string;
   license: string;
   packages: string[];
@@ -46,4 +55,5 @@ export const ENGINES: Engine[] = (editors as any[]).map((e) => ({
   proprietary: e.kind === "viewer",
   frame: e.opensFiles === false,
   readOnly: READ_ONLY[e.slug] ?? "",
+  makers: e.makers ?? [],
 }));
