@@ -212,8 +212,8 @@ type Rendered = {
   renderMs: number;
   pages?: number;
   unpainted?: string[];
-  /** The page loads this Val's own scripts (Docxodus's paginator); nothing else may run. */
-  scripts?: boolean;
+  /** CSP script sources the page needs (Docxodus's paginator); default: none may run. */
+  scriptSrc?: string;
   /** Where page breaks are computed, when not here. */
   paginatedIn?: "browser";
 };
@@ -264,7 +264,7 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
-  const { html, initMs, renderMs, pages, unpainted, scripts, paginatedIn } = await render(got);
+  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = await render(got);
   const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
@@ -275,7 +275,7 @@ app.get("/r/:engine", async (c) => {
     // page loads scripts, and only this Val's own (its paginator). Fonts and
     // styles come from jsDelivr, images are inline.
     "content-security-policy":
-      `default-src 'none'; script-src ${scripts ? "'self'" : "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
+      `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
     "x-content-type-options": "nosniff",
   };
   if (pages !== undefined) headers["x-pages"] = String(pages);

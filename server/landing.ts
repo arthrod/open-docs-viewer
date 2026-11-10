@@ -77,7 +77,7 @@ browser receives finished pages — no engine code runs in your browser. Measure
 <b>First</b>: the first request to each engine after a deploy (engine download + compile counted as init; only the first row also paid the isolate boot).
 <b>Warm</b>: median of 5. Server time for SuperDoc and canvas-editor is not offered: both need a real browser (canvas measuring, DOM painting).</p>
 <table><thead><tr><th>Engine</th><th class="n">First</th><th class="n hide-sm">init · render</th><th class="n">Warm</th><th class="n hide-sm">render</th><th class="n">Sent</th><th>How</th></tr></thead><tbody>
-${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${r.output === "images" ? "page images" : r.output === "pages" ? "positioned pages" : "flowing HTML"}</div></td>
+${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${r.output === "images" ? "page images" : r.output === "pages" ? "positioned pages" : r.output === "browser-paginated" ? "pages; breaks computed in the browser" : "flowing HTML"}</div></td>
 <td class="n"><b>${ms(r.firstMs)}</b></td><td class="n hide-sm">${ms(r.firstInitMs)} · ${ms(r.firstRenderMs)}</td><td class="n"><b>${ms(r.warmMs)}</b></td><td class="n hide-sm">${ms(r.warmRenderMs)}</td>
 <td class="n">${mb(r.bytes)}</td><td class="ro">${esc(r.how)}</td></tr>`).join("")}
 </tbody></table>

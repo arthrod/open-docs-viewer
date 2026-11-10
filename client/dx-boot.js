@@ -1,7 +1,8 @@
 // Flows the server-converted Docxodus HTML into page boxes with Docxodus's own
-// read-only paginator (bundled in dx-paginate.js; see scripts/dx-paginate.entry.ts).
+// read-only paginator (bundled by scripts/build-dx-paginate.sh; the page preloads
+// it with its SRI hash, so a changed file is refused).
 // Pagination measures laid-out text, so it runs where a layout engine is: here.
-import { paginateHtml } from "./dx-paginate.js";
+import { paginateHtml } from "https://cdn.jsdelivr.net/gh/arthrod/open-docs-viewer@e94b27d479e1547371b4ddf091e72a789b44035f/client/dx-paginate.js";
 
 const html = JSON.parse(document.getElementById("dx-html").textContent);
 await document.fonts.ready;

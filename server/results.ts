@@ -33,7 +33,7 @@ export interface ServerResult {
   slug: string;
   name: string;
   how: string;
-  output: "html" | "pages" | "images";
+  output: "html" | "pages" | "images" | "browser-paginated";
   firstMs: number;
   firstInitMs: number;
   firstRenderMs: number;
@@ -41,19 +41,19 @@ export interface ServerResult {
   warmRenderMs: number;
   bytes: number;
 }
-export const SERVER_MEASURED_AT = "2026-11-09, curl from a Mac, showcase.docx (47,871 B)";
+export const SERVER_MEASURED_AT = "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome)";
 export const SERVER_RESULTS: ServerResult[] = [
   {
     "slug": "docxodus",
     "name": "Docxodus",
-    "how": "docxodus/core convertDocxToHtml (.NET in wasm): one flowing HTML document",
-    "output": "html",
-    "firstMs": 3437,
-    "firstInitMs": 220,
-    "firstRenderMs": 985,
-    "warmMs": 584,
-    "warmRenderMs": 290,
-    "bytes": 42643
+    "how": "docxodus/core convertDocxToHtml in Paginated mode (.NET in wasm) here; its own paginateHtml flows it into pages in the browser",
+    "output": "browser-paginated",
+    "firstMs": 2231,
+    "firstInitMs": 235,
+    "firstRenderMs": 1103,
+    "warmMs": 622,
+    "warmRenderMs": 302,
+    "bytes": 58818
   },
   {
     "slug": "folio",
@@ -82,14 +82,14 @@ export const SERVER_RESULTS: ServerResult[] = [
   {
     "slug": "plate",
     "name": "Plate",
-    "how": "platejs/static serializeHtml (react-dom/server) after mammoth's import: one flowing page",
+    "how": "platejs/static serializeHtml (react-dom/server) after mammoth's import, pictures via @platejs/media: one flowing page",
     "output": "html",
-    "firstMs": 851,
-    "firstInitMs": 290,
-    "firstRenderMs": 288,
-    "warmMs": 418,
-    "warmRenderMs": 137,
-    "bytes": 19736
+    "firstMs": 893,
+    "firstInitMs": 355,
+    "firstRenderMs": 245,
+    "warmMs": 448,
+    "warmRenderMs": 133,
+    "bytes": 31504
   },
   {
     "slug": "docen",

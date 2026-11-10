@@ -8,6 +8,11 @@
  * the heavy one); the browser runs Docxodus's own paginateHtml once, from
  * this Val's origin (client/dx-boot.js), to flow it into page boxes.
  */
+/** Docxodus's paginator bundle (scripts/build-dx-paginate.sh), pinned and SRI-checked. */
+export const DX_PAGINATE_URL =
+  "https://cdn.jsdelivr.net/gh/arthrod/open-docs-viewer@e94b27d479e1547371b4ddf091e72a789b44035f/client/dx-paginate.js";
+const DX_PAGINATE_SRI = "sha384-cmn0uJ/FPb43+fQ/t0y+Nn5VfllCoYsrqqksCs9jxnjk9gDcDrXpkfwSG0r8HpFP";
+
 // deno-lint-ignore no-explicit-any
 let dx: Promise<any> | undefined;
 
@@ -30,7 +35,8 @@ export async function docxodusHtml(bytes: Uint8Array) {
 <meta name="viewport" content="width=device-width, initial-scale=1" /><title>Docxodus · server-converted, paginated here</title>
 <style>html,body{margin:0}body{background:#eef1f5;padding:24px 0}#viewer{display:flex;flex-direction:column;align-items:center}</style>
 <script type="application/json" id="dx-html">${data}</script>
+<link rel="modulepreload" href="${DX_PAGINATE_URL}" integrity="${DX_PAGINATE_SRI}" crossorigin="anonymous" />
 <script type="module" src="/client/dx-boot.js"></script>
 </head><body><div id="viewer"></div></body></html>`;
-  return { html, initMs: Math.round(t1 - t0), renderMs: Math.round(performance.now() - t1), scripts: true, paginatedIn: "browser" as const };
+  return { html, initMs: Math.round(t1 - t0), renderMs: Math.round(performance.now() - t1), scriptSrc: `'self' ${DX_PAGINATE_URL}`, paginatedIn: "browser" as const };
 }
