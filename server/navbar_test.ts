@@ -18,7 +18,7 @@ Deno.test("view page: open-docs wordmark and / viewer crumb", () => {
   assertStringIncludes(html, `<span class="del">CHILL</span>`);
   assertStringIncludes(html, `<span class="ins">NEUROTIC</span>`);
   assertStringIncludes(html, `DOCX<span class="dot">.</span>BENCH`);
-  assertStringIncludes(html, `<span class="crumb">/ viewer</span>`);
+  assertStringIncludes(html, `<span class="crumb">/ viewers</span>`);
   assertStringIncludes(html, `<header class="site-nav od-bar odv-chrome">`);
 });
 
@@ -63,4 +63,16 @@ Deno.test("landing: wordmark and site links with MENU chrome", () => {
   assertStringIncludes(html, `Viewers`);
   assertStringIncludes(html, `Measurements`);
   assertStringIncludes(html, `editors-arena.val.run`);
+});
+
+Deno.test("Contact is the last item of both menus; crumb reads / viewers (#9)", () => {
+  const e = ENGINES.find((x) => x.slug === "docxodus")!;
+  const pages = [viewPage(e, shell, src, absolutize), landingPage(ENGINES, RESULTS, SAMPLE_SRC)];
+  for (const html of pages) {
+    assertStringIncludes(html, `<span class="crumb">/ viewers</span>`);
+    const menu = html.slice(html.indexOf(`id="od-menu"`));
+    const items = [...menu.slice(0, menu.indexOf("</div>\n    </div>")).matchAll(/role="menuitem"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+    assertEquals(items.at(-1), "Contact →");
+    assertStringIncludes(menu, `href="https://arthur.law/contact"`);
+  }
 });
