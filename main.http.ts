@@ -206,7 +206,17 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
  * browser gets finished HTML, like Word's and Google's viewers. Each renderer
  * reports its own init (one-time, per isolate) and render time.
  */
-type Rendered = { html: string; initMs: number; renderMs: number; pages?: number; unpainted?: string[] };
+type Rendered = {
+  html: string;
+  initMs: number;
+  renderMs: number;
+  pages?: number;
+  unpainted?: string[];
+  /** The page loads this Val's own scripts (Docxodus's paginator); nothing else may run. */
+  scripts?: boolean;
+  /** Where page breaks are computed, when not here. */
+  paginatedIn?: "browser";
+};
 type Renderer = (bytes: Uint8Array) => Promise<Rendered>;
 
 /**
@@ -254,20 +264,22 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
-  const { html, initMs, renderMs, pages, unpainted } = await render(got);
+  const { html, initMs, renderMs, pages, unpainted, scripts, paginatedIn } = await render(got);
   const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
     "server-timing": timing,
     "cache-control": "no-store",
-    // The pages are finished markup built from an untrusted document: no
-    // script may run in them (a javascript: link in the .docx included), and
-    // they load only fonts/styles from jsDelivr and inline images.
+    // The pages are markup built from an untrusted document: no script from
+    // it may run (a javascript: link in the .docx included). Only Docxodus's
+    // page loads scripts, and only this Val's own (its paginator). Fonts and
+    // styles come from jsDelivr, images are inline.
     "content-security-policy":
-      "default-src 'none'; script-src 'none'; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'",
+      `default-src 'none'; script-src ${scripts ? "'self'" : "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
     "x-content-type-options": "nosniff",
   };
   if (pages !== undefined) headers["x-pages"] = String(pages);
+  if (paginatedIn) headers["x-paginated-in"] = paginatedIn;
   // What a renderer laid out but this server does not paint yet.
   if (unpainted?.length) headers["x-unpainted"] = unpainted.join(", ");
   return new Response(html, { headers });

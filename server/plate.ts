@@ -20,6 +20,8 @@ import * as Lk from "npm:@platejs/link@53.3.5";
 import * as CB from "npm:@platejs/code-block@53.0.0";
 import * as T from "npm:@platejs/table@53.0.9";
 import * as L from "npm:@platejs/list@53.3.13";
+import * as M from "npm:@platejs/media@53.1.4";
+import { strFromU8, unzipSync } from "npm:fflate@0.8.2";
 import { parseHTML } from "npm:linkedom@0.18.12";
 
 // deno-lint-ignore no-explicit-any
@@ -83,14 +85,54 @@ export function safeUrl(u: unknown): string | undefined {
   }
 }
 
-export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; images: number }> {
+/**
+ * mammoth inlines each picture as a data: URL but drops its size, so take the
+ * size Word displays (wp:extent, in EMU) and its paragraph's alignment from
+ * document.xml: one per DrawingML picture, in document order — the order
+ * mammoth emits <img>s. Returns null when the counts disagree (then pictures
+ * fall back to fit-width, left-aligned).
+ */
+type Picture = { width: number; align?: "center" | "right" };
+function pictureLayout(bytes: Uint8Array, expected: number): Picture[] | null {
+  const file = unzipSync(bytes, { filter: (f) => f.name === "word/document.xml" })["word/document.xml"];
+  if (!file) return null;
+  const xml = strFromU8(file);
+  const pics = [...xml.matchAll(/<w:drawing>[\s\S]*?<\/w:drawing>/g)]
+    .filter((d) => d[0].includes("<pic:pic"))
+    .map((d) => {
+      const width = Number(/<wp:extent cx="(\d+)"/.exec(d[0])?.[1] ?? 0) / 9525; // EMU → CSS px
+      const pStart = Math.max(xml.lastIndexOf("<w:p>", d.index), xml.lastIndexOf("<w:p ", d.index));
+      const jc = /<w:jc w:val="(\w+)"/.exec(xml.slice(pStart, d.index).split("</w:pPr>")[0])?.[1];
+      return { width, align: jc === "center" ? "center" : jc === "right" || jc === "end" ? "right" : undefined } as Picture;
+    });
+  return pics.length === expected ? pics : null;
+}
+
+export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; dropped: number }> {
   const mammoth = await loadMammoth();
   const { value: html } = await mammoth.convertToHtml({ arrayBuffer: bytes.slice().buffer } as Any, { styleMap: STYLE_MAP });
   const { document } = parseHTML(`<!doctype html><html><body>${html}</body></html>`);
   const root: Any = document.body;
   const nodes: Any[] = [];
-  // The browser adapter has no image plugin either; count what is dropped so it is reported, not silent.
-  const images = root.querySelectorAll("img").length;
+  // Pictures become Plate image nodes (block voids). One inside a list item
+  // cannot become a block there without breaking the list; those are counted.
+  const imgs = Array.from<Any>(root.querySelectorAll("img"));
+  const layout = imgs.length ? pictureLayout(bytes, imgs.length) : null;
+  let emitted = 0;
+  const imageNode = (img: Any) => {
+    const url = img.getAttribute("src") ?? "";
+    if (!/^data:image\/(png|jpe?g|gif|webp|bmp|svg\+xml);base64,/.test(url)) return null;
+    emitted++;
+    const pic = layout?.[imgs.indexOf(img)];
+    return { type: "img", url, ...(pic?.width ? { width: Math.round(pic.width) } : {}), ...(pic?.align ? { align: pic.align } : {}), ...(img.getAttribute("alt") ? { alt: img.getAttribute("alt") } : {}), children: [{ text: "" }] };
+  };
+  /** A paragraph-like element: its text as `type`, then its pictures as image blocks. */
+  const blocks = (el: Any, type: string): Any[] => {
+    const pics = Array.from<Any>(el.querySelectorAll("img")).map(imageNode).filter(Boolean);
+    const text = leaves(el);
+    const hasText = text.some((l: Any) => l.type || (l.text ?? "").trim());
+    return hasText || !pics.length ? [{ type, children: text.length ? text : [{ text: "" }] }, ...pics] : pics;
+  };
 
   const leaves = (el: Any, marks: Record<string, unknown> = {}): Any[] => {
     const out: Any[] = [];
@@ -131,7 +173,7 @@ export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; im
 
   for (const el of Array.from(root.children as Any[])) {
     const t = el.tagName;
-    if (/^H[1-6]$/.test(t)) nodes.push({ type: `h${t[1]}`, children: kids(el) });
+    if (/^H[1-6]$/.test(t)) nodes.push(...blocks(el, `h${t[1]}`));
     else if (isList(el)) listItems(el, 1, nodes);
     else if (t === "BLOCKQUOTE") nodes.push({ type: "blockquote", children: kids(el) });
     else if (t === "PRE") {
@@ -144,9 +186,9 @@ export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; im
         const children: Any[] = [];
         for (const k of Array.from(c.children as Any[])) {
           if (isList(k)) listItems(k, 1, children);
-          else children.push({ type: "p", children: kids(k) });
+          else children.push(...blocks(k, "p"));
         }
-        if (!children.length) children.push({ type: "p", children: kids(c) });
+        if (!children.length) children.push(...blocks(c, "p"));
         const span = Number(c.getAttribute("colspan")) || 1;
         return { type: c.tagName === "TH" ? "th" : "td", ...(span > 1 ? { colSpan: span } : {}), children };
       };
@@ -154,10 +196,10 @@ export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; im
         type: "table",
         children: Array.from<Any>(el.querySelectorAll("tr")).filter((tr) => tr.closest("table") === el).map((tr) => ({ type: "tr", children: Array.from(tr.children as Any[]).map(cell) })),
       });
-    } else nodes.push({ type: "p", children: kids(el) });
+    } else nodes.push(...blocks(el, "p"));
   }
   numberLists(nodes);
-  return { nodes: nodes.length ? nodes : [{ type: "p", children: [{ text: "" }] }], images };
+  return { nodes: nodes.length ? nodes : [{ type: "p", children: [{ text: "" }] }], dropped: imgs.length - emitted };
 }
 
 /**
@@ -193,6 +235,19 @@ const Row = (p: Any) => h(SlateElement, { ...p, as: "tr" }, p.children);
 const spanned = (p: Any) => ({ ...p.attributes, colSpan: p.element.colSpan, rowSpan: p.element.rowSpan });
 const Cell = (p: Any) => h(SlateElement, { ...p, as: "td", attributes: spanned(p) }, p.children);
 const HeaderCell = (p: Any) => h(SlateElement, { ...p, as: "th", attributes: spanned(p) }, p.children);
+/** A picture at the size Word shows it, never wider than the page. */
+const Image = (p: Any) =>
+  h(
+    SlateElement,
+    { ...p, as: "figure", className: "pl-img", attributes: { ...p.attributes, style: { margin: "0.5em 0" } } },
+    h("img", {
+      src: p.element.url,
+      alt: p.element.alt ?? "",
+      width: p.element.width,
+      style: { maxWidth: "100%", height: "auto", display: "block", marginLeft: p.element.align ? "auto" : 0, marginRight: p.element.align === "center" ? "auto" : 0 },
+    }),
+    p.children,
+  );
 const as = (tag: string) => (p: Any) => h(SlateElement, { ...p, as: tag }, p.children);
 
 /**
@@ -239,6 +294,7 @@ const PLUGINS: Any[] = [
   Lk.BaseLinkPlugin.withComponent(Link),
   CB.BaseCodeBlockPlugin.withComponent(as("pre")),
   CB.BaseCodeLinePlugin.withComponent(as("div")),
+  M.BaseImagePlugin.withComponent(Image),
   T.BaseTablePlugin.withComponent(Table),
   T.BaseTableRowPlugin.withComponent(Row),
   T.BaseTableCellPlugin.withComponent(Cell),
@@ -251,22 +307,23 @@ export async function plateHtml(bytes: Uint8Array, pageCss: string) {
   const t0 = performance.now();
   await loadMammoth();
   const t1 = performance.now();
-  const { nodes: value, images } = await docxToNodes(bytes);
+  const { nodes: value, dropped } = await docxToNodes(bytes);
   const editor = createStaticEditor({ plugins: PLUGINS, value });
   const body = await serializeHtml(editor, {
     props: { className: "pl-content" } as Any,
     stripDataAttributes: true,
     preserveClassNames: ["pl-", "slate-"],
   });
+  const page = body.replace(/ data-slate-url="[^"]*"/g, "");
   const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" /><title>Plate · server-rendered</title>
 ${pageCss}
 <style>html,body{margin:0;height:100%}body{background:#eef1f5}.pl-scroll{height:100%;box-sizing:border-box}</style>
-</head><body><div class="pl-scroll"><div class="pl-page">${body}</div></div></body></html>`;
+</head><body><div class="pl-scroll"><div class="pl-page">${page}</div></div></body></html>`;
   return {
     html,
     initMs: Math.round(t1 - t0),
     renderMs: Math.round(performance.now() - t1),
-    ...(images ? { unpainted: [`${images} picture${images > 1 ? "s" : ""}`] } : {}),
+    ...(dropped ? { unpainted: [`${dropped} picture${dropped > 1 ? "s" : ""} in list items`] } : {}),
   };
 }
