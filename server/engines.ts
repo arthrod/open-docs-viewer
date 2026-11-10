@@ -2,7 +2,7 @@
  * The engines, read from the open-docs registry (one source of truth), with
  * how each is made view-only here.
  */
-export const OPEN_DOCS = "https://open-docs.val.run";
+export const OPEN_DOCS = "https://editors.benchmarks.law";
 /** The open-docs val's modules, for the server side (shells, registry). */
 export const OPEN_DOCS_ESM = "https://esm.town/v/arthrod/open-docs";
 

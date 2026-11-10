@@ -8,7 +8,7 @@ import { OPEN_DOCS } from "./engines.ts";
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-const ARENA = "https://editors-arena.val.run";
+const ARENA = "https://arena.benchmarks.law";
 const SOURCE = "https://www.val.town/x/arthrod/open-docs-viewer";
 
 /** Engines with GET /r/:slug server-rendered output. */
@@ -27,14 +27,14 @@ export const WORDMARK_HTML = `<a class="wm" href="/" title="All engines and resu
 
 const siteLinks = () =>
   `<a href="${OPEN_DOCS}/#editors">Editors</a>
-    <a href="${OPEN_DOCS}/#viewers">Viewers</a>
+    <a href="/">Viewers</a>
     <a href="/#measurements">Measurements</a>
     <a href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
     <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
 
 const siteLinksMenu = () =>
   `<a role="menuitem" href="${OPEN_DOCS}/#editors">Editors</a>
-        <a role="menuitem" href="${OPEN_DOCS}/#viewers">Viewers</a>
+        <a role="menuitem" href="/">Viewers</a>
         <a role="menuitem" href="/#measurements">Measurements</a>
         <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
         <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>

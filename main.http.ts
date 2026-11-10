@@ -19,7 +19,7 @@
  *
  * The engines' code is NOT copied: shells (head/body markup) are imported
  * from the open-docs val, and the browser loads each adapter straight from
- * open-docs.val.run (served with CORS).
+ * editors.benchmarks.law (served with CORS).
  */
 import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
@@ -78,7 +78,7 @@ const SHELL_TTL_MS = 5 * 60_000; // then re-resolve, so an open-docs deploy show
  * (`/v/arthrod/open-docs@471-main/...`). Deno caches modules by URL, so
  * importing the unversioned one keeps serving whatever version it first saw;
  * resolve the version first and import that exact URL. Adapters load live from
- * open-docs.val.run, so their shells must be the same version.
+ * editors.benchmarks.law, so their shells must be the same version.
  */
 async function currentShellUrl(slug: string): Promise<string> {
   const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual" });
@@ -124,7 +124,7 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   let res: Response | undefined;
   try {
     for (let hop = 0; ; hop++) {
-      res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://open-docs-viewer.val.run)" } });
+      res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://viewers.benchmarks.law)" } });
       if (res.status < 300 || res.status >= 400) break;
       await res.body?.cancel();
       const next = res.headers.get("location") ? publicUrl(new URL(res.headers.get("location")!, url).href) : null;

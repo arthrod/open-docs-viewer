@@ -2,7 +2,7 @@
 import subprocess, sys, json, random, statistics, re
 ENGINES = sys.argv[1].split(",")
 RUNS = int(sys.argv[2])
-BASE = "https://open-docs-viewer.val.run/r/"
+BASE = "https://viewers.benchmarks.law/r/"
 def hit(e):
     out = subprocess.run(["curl", "-s", "-o", "/dev/null", "-D", "-", "-w", "\n%{http_code} %{size_download} %{time_total}", f"{BASE}{e}?n={random.getrandbits(40):x}"], capture_output=True, text=True, timeout=120).stdout
     code, size, total = out.strip().splitlines()[-1].split()

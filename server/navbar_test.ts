@@ -62,7 +62,7 @@ Deno.test("landing: wordmark and site links with MENU chrome", () => {
   assertStringIncludes(html, `Editors`);
   assertStringIncludes(html, `Viewers`);
   assertStringIncludes(html, `Measurements`);
-  assertStringIncludes(html, `editors-arena.val.run`);
+  assertStringIncludes(html, `arena.benchmarks.law`);
 });
 
 Deno.test("Contact is the last item of both menus; crumb reads / viewers (#9)", () => {

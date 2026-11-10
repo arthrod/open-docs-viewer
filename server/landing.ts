@@ -56,7 +56,7 @@ ${landingNavBar()}
   <p class="lede">Twelve engines as <strong>view-only</strong> pages that all take one input: a public .docx URL. Microsoft's and Google's
   viewers fetch it and render on their own servers; for the eight open-source engines and Apryse and Nutrient,
   this val's Deno server fetches it and the browser renders it in the engine's own read-only mode. Every page is
-  measured cold by the same script. The editable versions live at <a href="https://open-docs.val.run">open-docs</a>.</p>
+  measured cold by the same script. The editable versions live at <a href="https://editors.benchmarks.law">open-docs</a>.</p>
   <form class="odv-form" action="/go" method="get" onsubmit="event.preventDefault(); const f=new FormData(this); location.href='/v/'+f.get('engine')+'?src='+encodeURIComponent(f.get('src'));">
     <div class="fld"><label for="odv-src">Public .docx URL</label><input id="odv-src" name="src" type="url" required value="${esc(defaultSrc)}" /></div>
     <div class="fld"><label for="odv-engine">Engine</label><select id="odv-engine" name="engine" aria-label="Engine">${options}</select></div>

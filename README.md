@@ -1,7 +1,7 @@
 # open-docs viewer
 
 [![Val Town](https://img.shields.io/badge/Val%20Town-open--docs--viewer-334155)](https://www.val.town/x/arthrod/open-docs-viewer)
-[![Live](https://img.shields.io/badge/live-open--docs--viewer.val.run-2557d6)](https://open-docs-viewer.val.run)
+[![Live](https://img.shields.io/badge/live-viewers.benchmarks.law-2557d6)](https://viewers.benchmarks.law)
 [![GitHub](https://img.shields.io/badge/github-arthrod%2Fopen--docs--viewer-181717)](https://github.com/arthrod/open-docs-viewer)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Engines](https://img.shields.io/badge/engines-arthrod%2Fopen--docs-0f172a)](https://github.com/arthrod/open-docs)
@@ -88,7 +88,7 @@ vt watch            # edit locally, deploys on save
 ```
 
 Engines' browser code is not copied: shells are imported from the open-docs val and adapters load from
-`open-docs.val.run`.
+`editors.benchmarks.law`.
 
 ## License
 
