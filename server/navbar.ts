@@ -33,13 +33,13 @@ const siteLinks = () =>
     <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
 
 const siteLinksMenu = () =>
-  `<a role="menuitem" href="${OPEN_DOCS}/#editors">Editors</a>
-        <a role="menuitem" href="${OPEN_DOCS}/#viewers">Viewers</a>
-        <a role="menuitem" href="/#measurements">Measurements</a>
-        <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
-        <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
+  `<a href="${OPEN_DOCS}/#editors">Editors</a>
+        <a href="${OPEN_DOCS}/#viewers">Viewers</a>
+        <a href="/#measurements">Measurements</a>
+        <a href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
+        <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
 
-const menuBtn = `<button class="od-btn od-menu-btn" id="od-more" type="button" title="Menu" aria-label="Menu" aria-haspopup="menu" aria-expanded="false" aria-controls="od-menu">
+const menuBtn = `<button class="od-btn od-menu-btn" id="od-more" type="button" title="Menu" aria-label="Menu" aria-expanded="false" aria-controls="od-menu">
         <span class="od-burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="od-menu-lbl">MENU</span>
       </button>`;
 
@@ -60,19 +60,19 @@ export function engineSwitcher(engines: Engine[], current: string, src: URL): st
 function viewerMenu(e: Engine, src: URL): string {
   const srcQ = `?src=${encodeURIComponent(src.href)}`;
   const server = SERVER_RENDER_SLUGS.has(e.slug)
-    ? `<a role="menuitem" href="/r/${e.slug}${srcQ}">This engine's server results →</a>`
+    ? `<a href="/r/${e.slug}${srcQ}">This engine's server results →</a>`
     : "";
-  return `      <div class="od-menu" id="od-menu" role="menu" hidden>
+  return `      <div class="od-menu" id="od-menu" hidden>
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Engine</div>
         <div class="od-menu-note"><span class="chip${e.proprietary ? " is-prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span><small>${esc(e.readOnly)}</small></div>
-        <button role="menuitem" type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
+        <button type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
         <hr />
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>
-        <a role="menuitem" href="/">All engines &amp; results</a>
+        <a href="/">All engines &amp; results</a>
         ${server}
-        <a role="menuitem" href="${OPEN_DOCS}/" target="_blank" rel="noopener">open-docs editors →</a>
-        <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Editors arena →</a>
-        <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
+        <a href="${OPEN_DOCS}/" target="_blank" rel="noopener">open-docs editors →</a>
+        <a href="${ARENA}" target="_blank" rel="noopener">Editors arena →</a>
+        <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
       </div>`;
 }
 
@@ -91,7 +91,7 @@ ${viewerMenu(e, src)}
 }
 
 function landingMenu(): string {
-  return `      <div class="od-menu" id="od-menu" role="menu" hidden>
+  return `      <div class="od-menu" id="od-menu" hidden>
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>
         ${siteLinksMenu()}
       </div>`;
@@ -145,7 +145,7 @@ export const NAVBAR_CSS = `
 .od-menu{position:absolute;right:0;top:40px;min-width:290px;max-height:calc(100dvh - 64px);overflow:auto;background:var(--surface);border:1px solid var(--ink);
   border-radius:0;box-shadow:var(--shadow-offset);padding:6px;display:flex;flex-direction:column;z-index:50}
 .od-menu[hidden]{display:none}
-.od-menu>button,.od-menu>a{font-family:var(--font-sans);font-size:14px;letter-spacing:-0.01em;text-transform:none;text-align:left;padding:8px 10px;border:0;background:none;
+.od-menu>button:not([hidden]),.od-menu>a{font-family:var(--font-sans);font-size:14px;letter-spacing:-0.01em;text-transform:none;text-align:left;padding:8px 10px;border:0;background:none;
   border-radius:0;color:var(--ink);text-decoration:none;cursor:pointer;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
 .od-menu>button:hover,.od-menu>a:hover{background:var(--mark)}
 .od-menu>button:focus-visible,.od-menu>a:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -165,13 +165,15 @@ export const NAVBAR_CSS = `
 .od-land-nav>a:hover{color:var(--ink);border-bottom-color:var(--mark)}
 @media(max-width:1180px){.od-bar .crumb{display:none}}
 @media(max-width:760px){
-  .od-status-chip{display:none}
+  .od-bar{flex-wrap:wrap}
+  .od-status-chip{order:1;flex:0 0 100%;max-width:none;white-space:normal;overflow:visible;overflow-wrap:anywhere}
   .od-menu-btn .od-menu-lbl{display:none}
   .od-menu-btn{width:32px;padding:0;justify-content:center}
   .od-engine-pick{display:inline-flex;position:relative;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--ink);background:var(--surface)}
   .od-engine-pick .od-pick-icon{display:block}
   .od-engine-pick::after{display:none}
   .od-engine-pick select{position:absolute;inset:0;width:100%;height:100%;min-width:0;max-width:none;opacity:0;padding:0}
+  .od-engine-pick:focus-within{outline:2px solid var(--ink);outline-offset:3px}
   .od-engine-pick:hover{background:var(--mark)}
   .od-land-nav{display:none}
 }

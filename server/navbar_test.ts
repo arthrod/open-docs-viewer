@@ -3,7 +3,6 @@ import { ENGINES } from "./engines.ts";
 import { landingPage } from "./landing.ts";
 import { viewPage } from "./render.ts";
 import { RESULTS } from "./results.ts";
-import { SERVER_RENDER_SLUGS } from "./navbar.ts";
 
 const SAMPLE_SRC =
   "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/showcase.docx";
@@ -45,10 +44,12 @@ Deno.test("view page: engine picker lists every engine and keeps src", () => {
 });
 
 Deno.test("view page: server results link only for server-rendered engines", () => {
+  // Independent route-support expectation: keep aligned with RENDERERS in main.http.ts.
+  const supportedSlugs = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft"];
   for (const e of ENGINES) {
     const html = viewPage(e, shell, src, absolutize);
     const link = `/r/${e.slug}?src=${esc(src.href)}`;
-    assertEquals(html.includes(link), SERVER_RENDER_SLUGS.has(e.slug), e.slug);
+    assertEquals(html.includes(link), supportedSlugs.includes(e.slug), e.slug);
   }
 });
 
@@ -63,4 +64,11 @@ Deno.test("landing: wordmark and site links with MENU chrome", () => {
   assertStringIncludes(html, `Viewers`);
   assertStringIncludes(html, `Measurements`);
   assertStringIncludes(html, `editors-arena.val.run`);
+});
+
+Deno.test("navbar: landing and viewer use disclosure semantics", () => {
+  for (const html of [landingPage(ENGINES, RESULTS, SAMPLE_SRC), viewPage(ENGINES[0]!, shell, src, absolutize)]) {
+    assertStringIncludes(html, `aria-expanded="false" aria-controls="od-menu"`);
+    assertEquals(/role="menu(?:item)?"|aria-haspopup/.test(html), false);
+  }
 });

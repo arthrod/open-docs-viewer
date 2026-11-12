@@ -28,7 +28,10 @@ function wireMenu() {
     if (!menu.hidden && !menu.contains(e.target as Node) && e.target !== more) closeMenu();
   });
   menu.addEventListener("click", (e) => {
-    if ((e.target as HTMLElement).closest("button, a")) closeMenu();
+    const item = (e.target as HTMLElement).closest("button, a");
+    if (!item) return;
+    closeMenu();
+    if (item.tagName === "BUTTON" && more.getClientRects().length > 0) more.focus();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !menu.hidden) {
