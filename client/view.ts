@@ -2,6 +2,10 @@
  * The view-only page's runner. Loaded after open-docs' lib/boot.ts (which
  * defines window.od) and before the engine's adapter module.
  *
+ * Chrome (sticky bar, re-measure button, stage layout) is in server/render.ts
+ * `viewPage`. This file only wires behaviour; keep ids #od-stage, #od-loading-detail,
+ * #od-remeasure and dataset odRendered / odRemeasured / odError stable.
+ *
  * It hands the adapter a ViewerContext (open-docs lib/kit.ts): the document,
  * fetched once from this val's /api/doc, and its public URL. The adapter
  * mounts read-only on it; when mount() didn't take the document, it is

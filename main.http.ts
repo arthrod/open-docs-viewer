@@ -24,7 +24,8 @@
 import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
 import { landingPage } from "./server/landing.ts";
-import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM, type Engine } from "./server/engines.ts";
+import { viewPage } from "./server/render.ts";
+import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
 import { currentResults } from "./server/results.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
@@ -34,9 +35,6 @@ export const DEFAULT_SRC =
 const MAX_BYTES = 25 * 1024 * 1024;
 
 const app = new Hono();
-
-const esc = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /** A public https URL, not a private or local address. */
 function publicUrl(raw: string | undefined): URL | null {
@@ -97,63 +95,12 @@ const shellOf = (slug: string) => {
   return p;
 };
 
-function viewPage(e: Engine, shell: { head?: string; body: string; entry: string; importMap?: Record<string, string> }, src: URL): string {
-  const imports = Object.fromEntries(
-    Object.entries(shell.importMap ?? {}).map(([k, v]) => [k, v.startsWith("/") ? OPEN_DOCS + v : v]),
-  );
-  const importMap = Object.keys(imports).length
-    ? `<script type="importmap">${JSON.stringify({ imports })}</script>`
-    : "";
-  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}`, openDocs: OPEN_DOCS };
-  return `<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${esc(e.name)} · open-docs viewer</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23334155'/><path d='M10 8h9l5 5v11H10z' fill='white'/></svg>" />
-${importMap}
-<link rel="preconnect" href="${OPEN_DOCS}" crossorigin />
-${absolutize(shell.head ?? "")}
-<style>
-  html, body { margin: 0; height: 100%; }
-  body { display: flex; flex-direction: column; height: 100dvh; font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #eef1f5; }
-  .vbar { flex: none; display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #fff; border-bottom: 1px solid #e3e6ec; white-space: nowrap; overflow: hidden; }
-  .vbar a { color: #334155; font-weight: 700; text-decoration: none; }
-  .vbar b { font-weight: 600; }
-  .pill { font-size: 11px; border-radius: 999px; padding: 1px 8px; background: #e0e7ff; color: #3730a3; }
-  .pill.prop { background: #fef3c7; color: #7c2d12; }
-  .note { color: #64748b; overflow: hidden; text-overflow: ellipsis; }
-  #od-loading-detail { margin-left: auto; color: #475569; font-variant-numeric: tabular-nums; }
-  #od-remeasure { font: 600 12px system-ui, sans-serif; border: 1px solid #d4d8e0; background: #fff; border-radius: 6px; padding: 3px 8px; cursor: pointer; color: #334155; }
-  #od-stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-  #od-stage > * { height: 100%; }
-  .verr { margin: 24px; padding: 16px; background: #fef2f2; color: #7f1d1d; border-radius: 8px; font: 12.5px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
-  @media (max-width: 640px) { .note { display: none; } }
-</style>
-<script type="module" src="${OPEN_DOCS}/lib/boot.ts"></script>
-</head>
-<body>
-  <header class="vbar">
-    <a href="/" title="All engines">open-docs viewer</a>
-    <b>${esc(e.name)}</b>
-    <span class="pill${e.proprietary ? " prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span>
-    <span class="note" title="${esc(e.readOnly)}">${esc(e.readOnly)}</span>
-    <span id="od-loading-detail" role="status" aria-live="polite">Loading…</span>
-    <button type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
-  </header>
-  <main id="od-stage">${shell.body}</main>
-  <script>window.__OD_VIEW = ${JSON.stringify(config).replace(/</g, "\\u003c")};</script>
-  <script type="module" src="/client/view.ts"></script>
-  <script type="module" src="${OPEN_DOCS}${shell.entry}"></script>
-</body></html>`;
-}
-
 app.get("/v/:slug", async (c) => {
   const e = ENGINES.find((x) => x.slug === c.req.param("slug"));
   if (!e) return c.text("unknown engine", 404);
   const src = publicUrl(c.req.query("src") ?? DEFAULT_SRC);
   if (!src) return c.text("src must be a public https URL", 400);
-  return c.html(viewPage(e, await shellOf(e.slug), src));
+  return c.html(viewPage(e, await shellOf(e.slug), src, absolutize));
 });
 
 const FETCH_DEADLINE_MS = 20_000;

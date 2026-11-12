@@ -24,6 +24,9 @@ export interface Results {
 }
 import BUNDLED from "../results/browser.json" with { type: "json" };
 
+const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
 /**
  * The cold browser benchmark lives in results/browser.json, written by
  * scripts/measure.py --results (locally via scripts/remeasure.sh, or by the
@@ -33,7 +36,7 @@ import BUNDLED from "../results/browser.json" with { type: "json" };
  */
 export const RESULTS: Results = BUNDLED as Results;
 export const RESULTS_URL = "https://raw.githubusercontent.com/arthrod/open-docs-viewer/main/results/browser.json";
-const RESULTS_TTL_MS = 5 * 60_000;
+const RESULTS_TTL_MS = 5 * 60 * 1000;
 let cached: { at: number; results: Results } | undefined;
 
 export async function currentResults(): Promise<Results> {
@@ -55,6 +58,30 @@ export async function currentResults(): Promise<Results> {
   return results;
 }
 
+/** KPI strip for the landing hero (cold benchmark + harness facts). */
+export function landingStatItems(
+  engineCount: number,
+  openCount: number,
+  serverRouteCount: number,
+  results: Results,
+): { value: string; label: string }[] {
+  const measured = results.measuredAt
+    ? results.measuredAt.replace(/T.*/, "").slice(0, 10)
+    : "pending";
+  return [
+    { value: String(engineCount), label: "Engines · same document URL and harness" },
+    { value: String(openCount), label: "Open source · rendered in your browser" },
+    { value: String(engineCount - openCount), label: "Proprietary · vendor servers or trial mode" },
+    { value: measured, label: `Cold browser table · last run (${serverRouteCount} also on server)` },
+  ];
+}
+
+export function statStripHtml(items: { value: string; label: string }[]): string {
+  return `<ul class="stats is-kpi odv-stats">${
+    items.map((i) => `<li class="stat"><b>${esc(i.value)}</b><span>${esc(i.label)}</span></li>`).join("")
+  }</ul>`;
+}
+
 /**
  * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl): the
  * first request to each engine right after a deploy (only the very first one
@@ -73,7 +100,8 @@ export interface ServerResult {
   warmRenderMs: number;
   bytes: number;
 }
-export const SERVER_MEASURED_AT = "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome)";
+export const SERVER_MEASURED_AT =
+  "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome)";
 export const SERVER_RESULTS: ServerResult[] = [
   {
     "slug": "docxodus",
@@ -85,7 +113,7 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 1103,
     "warmMs": 622,
     "warmRenderMs": 302,
-    "bytes": 58818
+    "bytes": 58818,
   },
   {
     "slug": "folio",
@@ -97,7 +125,7 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 337,
     "warmMs": 459,
     "warmRenderMs": 157,
-    "bytes": 207736
+    "bytes": 207736,
   },
   {
     "slug": "eigenpal",
@@ -109,7 +137,7 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 859,
     "warmMs": 791,
     "warmRenderMs": 574,
-    "bytes": 242255
+    "bytes": 242255,
   },
   {
     "slug": "plate",
@@ -121,7 +149,7 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 245,
     "warmMs": 448,
     "warmRenderMs": 133,
-    "bytes": 31504
+    "bytes": 31504,
   },
   {
     "slug": "docen",
@@ -133,7 +161,7 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 136,
     "warmMs": 257,
     "warmRenderMs": 36,
-    "bytes": 42737
+    "bytes": 42737,
   },
   {
     "slug": "wordcraft",
@@ -145,6 +173,6 @@ export const SERVER_RESULTS: ServerResult[] = [
     "firstRenderMs": 656,
     "warmMs": 550,
     "warmRenderMs": 218,
-    "bytes": 851493
-  }
+    "bytes": 851493,
+  },
 ];
