@@ -11,7 +11,8 @@
  * Shared viewer chrome CSS and the /v/<engine> page shell also live here.
  */
 import type { Engine } from "./engines.ts";
-import { OPEN_DOCS } from "./engines.ts";
+import { ENGINES, OPEN_DOCS } from "./engines.ts";
+import { NAVBAR_CSS, viewNavBar } from "./navbar.ts";
 
 /** Docxodus's paginator bundle (scripts/build-dx-paginate.sh), pinned and SRI-checked. */
 export const DX_PAGINATE_URL =
@@ -34,7 +35,7 @@ export const VIEWER_DS_CSS = `
   --bg:#fafaf8;--surface:#ffffff;--hover:#f2f2ee;--row-hover:#fcfcf6;--code-bg:#f1f1ee;
   --ink:#0a0a0a;--ink-prose:#1e1e1e;--ink-soft:#2a2a2a;--ink-body:#333333;--ink-quiet:#444444;
   --muted:#6b6b6b;--link-rule:#b5b5b0;--faint:#e8e8e5;--mark:#ffd400;--mark-text:var(--ink);
-  --del:#b4232f;--green-ink:#166b43;
+  --del:#b4232f;--ins:#2a6fdb;--green-ink:#166b43;
   --shadow-offset:7px 7px 0 #ffd400;
   --page-max:1180px;--px:clamp(20px,5vw,56px);
   --font-sans:"Libre Franklin",system-ui,-apple-system,sans-serif;
@@ -48,21 +49,12 @@ export const VIEWER_DS_CSS = `
 .wrap{max-width:var(--page-max);margin-inline:auto;padding-inline:var(--px)}
 .odv a{color:inherit}
 .odv a:focus-visible,.odv button:focus-visible,.odv-chrome button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.site-nav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:12px var(--px);
-  background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:saturate(140%) blur(10px);backdrop-filter:saturate(140%) blur(10px);
-  border-bottom:1px solid var(--ink)}
-.site-nav .wm{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-weight:700;font-size:13px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--ink);text-decoration:none}
-.site-nav .dot{color:color-mix(in srgb,var(--ink) 35%,transparent)}
-.site-nav .crumb{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.site-nav .crumb strong{color:var(--ink);font-weight:600}
+${NAVBAR_CSS}
 .odv-chrome .chip{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);
   border:1px solid var(--ink);padding:3px 9px;display:inline-block;background:var(--surface)}
 .odv-chrome .chip.is-prop{background:var(--mark);border-color:var(--ink)}
 .odv-chrome .note{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
   overflow:hidden;text-overflow:ellipsis;max-width:28ch}
-#od-loading-detail{margin-left:auto;font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);
-  font-variant-numeric:tabular-nums}
 .btn{font-family:var(--font-mono);font-size:13px;letter-spacing:0.04em;text-transform:uppercase;text-decoration:none;display:inline-flex;
   align-items:center;gap:9px;padding:12px 18px;cursor:pointer;border-radius:0}
 .btn-primary{background:var(--ink);color:var(--bg);border:1px solid var(--ink);transition:transform var(--t),background var(--t),color var(--t)}
@@ -187,16 +179,10 @@ ${absolutize(shell.head ?? "")}
 <script type="module" src="${OPEN_DOCS}/lib/boot.ts"></script>
 </head>
 <body class="odv-chrome-wrap">
-  <header class="odv-chrome site-nav">
-    <a href="/" class="wm" title="All engines">open-docs<span class="dot">·</span>viewer</a>
-    <span class="crumb"><strong>${esc(e.name)}</strong></span>
-    <span class="chip${e.proprietary ? " is-prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span>
-    <span class="note" title="${esc(e.readOnly)}">${esc(e.readOnly)}</span>
-    <span id="od-loading-detail" role="status" aria-live="polite">Loading…</span>
-    <button type="button" class="btn btn-ghost" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
-  </header>
+${viewNavBar(e, ENGINES, src)}
   <main id="od-stage">${shell.body}</main>
   <script>window.__OD_VIEW = ${JSON.stringify(config).replace(/</g, "\\u003c")};</script>
+  <script type="module" src="/client/nav.ts"></script>
   <script type="module" src="/client/view.ts"></script>
   <script type="module" src="${OPEN_DOCS}${shell.entry}"></script>
 </body></html>`;
