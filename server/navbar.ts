@@ -58,6 +58,16 @@ export function engineSwitcher(engines: Engine[], current: string, src: URL): st
     </label>`;
 }
 
+/** "/ Made by" menu section from the registry's makers (LinkedIn when verified, else GitHub). */
+function madeBy(e: Engine): string {
+  const ms = e.makers ?? [];
+  if (!ms.length) return "";
+  return `
+        <hr />
+        <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Made by</div>
+        ${ms.map((m) => `<a role="menuitem" href="${esc(m.linkedin ?? m.github ?? "#")}" target="_blank" rel="noopener">${esc(m.name)} →<small>${m.kind === "company" ? "Company" : "Developer"} · ${m.linkedin ? "LinkedIn" : "GitHub"}</small></a>`).join("\n        ")}`;
+}
+
 function viewerMenu(e: Engine, src: URL): string {
   const srcQ = `?src=${encodeURIComponent(src.href)}`;
   const server = SERVER_RENDER_SLUGS.has(e.slug)
@@ -66,7 +76,7 @@ function viewerMenu(e: Engine, src: URL): string {
   return `      <div class="od-menu" id="od-menu" role="menu" hidden>
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Engine</div>
         <div class="od-menu-note"><span class="chip${e.proprietary ? " is-prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span><small>${esc(e.readOnly)}</small></div>
-        <button role="menuitem" type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
+        <button role="menuitem" type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>${madeBy(e)}
         <hr />
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>
         <a role="menuitem" href="/">All engines &amp; results</a>
@@ -114,6 +124,7 @@ ${landingMenu()}
 
 /** Bar chrome CSS (wordmark, picker, menu). Merged into VIEWER_DS_CSS in render.ts. */
 export const NAVBAR_CSS = `
+body{margin:0}
 .site-nav .wm{display:inline-flex;align-items:center;gap:6px;flex:none;font-family:var(--font-mono);font-weight:700;font-size:13px;line-height:1.4;
   letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none;white-space:nowrap}
 .site-nav .wm:hover .ins{background-image:linear-gradient(var(--mark),var(--mark));background-repeat:no-repeat;background-size:100% .55em;background-position:0 78%}

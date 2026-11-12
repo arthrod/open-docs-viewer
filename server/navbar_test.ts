@@ -76,3 +76,15 @@ Deno.test("Contact is the last item of both menus; crumb reads / viewers (#9)", 
     assertStringIncludes(menu, `href="https://arthur.law/contact"`);
   }
 });
+
+Deno.test("view menu credits the makers under / Made by; Contact still last (#13)", () => {
+  const e = { ...ENGINES.find((x) => x.slug === "docxodus")!, makers: [
+    { name: "John Scrudato", kind: "person" as const, linkedin: "https://www.linkedin.com/in/john-scrudato/" },
+  ] };
+  const html = viewPage(e, shell, src, absolutize);
+  const menu = html.slice(html.indexOf(`id="od-menu"`));
+  assertStringIncludes(menu, "/ Made by");
+  assertStringIncludes(menu, `href="https://www.linkedin.com/in/john-scrudato/"`);
+  const items = [...menu.slice(0, menu.indexOf("</div>\n    </div>")).matchAll(/role="menuitem"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+  assertEquals(items.at(-1), "Contact →");
+});
