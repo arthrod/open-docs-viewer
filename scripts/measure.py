@@ -28,7 +28,7 @@ import asyncio, datetime, json, os, platform, random, statistics, sys, tempfile,
 
 from playwright.async_api import async_playwright
 
-BASE = "https://open-docs-viewer.val.run"
+BASE = "https://viewers.benchmarks.law"
 DOC = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/showcase.docx"
 TIMEOUT_S = 120
 ALL = ["apryse", "canvas-editor", "docen", "docxodus", "eigenpal", "folio", "google-viewer", "nutrient", "plate", "superdoc", "word-online", "wordcraft"]
