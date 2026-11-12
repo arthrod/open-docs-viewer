@@ -37,7 +37,8 @@ const siteLinksMenu = () =>
         <a role="menuitem" href="${OPEN_DOCS}/#viewers">Viewers</a>
         <a role="menuitem" href="/#measurements">Measurements</a>
         <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
-        <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
+        <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
+        <a role="menuitem" href="https://arthur.law/contact" target="_blank" rel="noopener">Contact →</a>`;
 
 const menuBtn = `<button class="od-btn od-menu-btn" id="od-more" type="button" title="Menu" aria-label="Menu" aria-haspopup="menu" aria-expanded="false" aria-controls="od-menu">
         <span class="od-burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="od-menu-lbl">MENU</span>
@@ -73,13 +74,14 @@ function viewerMenu(e: Engine, src: URL): string {
         <a role="menuitem" href="${OPEN_DOCS}/" target="_blank" rel="noopener">open-docs editors →</a>
         <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Editors arena →</a>
         <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
+        <a role="menuitem" href="https://arthur.law/contact" target="_blank" rel="noopener">Contact →</a>
       </div>`;
 }
 
 export function viewNavBar(e: Engine, engines: Engine[], src: URL): string {
   return `  <header class="site-nav od-bar odv-chrome">
     ${WORDMARK_HTML}
-    <span class="crumb">/ viewer</span>
+    <span class="crumb">/ viewers</span>
     <span class="od-spacer"></span>
     ${engineSwitcher(engines, e.slug, src)}
     <span id="od-loading-detail" class="od-status-chip" role="status" aria-live="polite">Loading…</span>
@@ -100,7 +102,7 @@ function landingMenu(): string {
 export function landingNavBar(): string {
   return `<header class="site-nav od-bar">
   ${WORDMARK_HTML}
-  <span class="crumb">/ viewer</span>
+  <span class="crumb">/ viewers</span>
   <span class="od-spacer"></span>
   <nav class="od-land-nav" aria-label="Site">${siteLinks()}</nav>
   <div class="od-menu-wrap">
