@@ -43,7 +43,7 @@ export const VIEWER_DS_CSS = `
 }
 .bl.odv,.odv-chrome-wrap{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:17px;line-height:1.6;letter-spacing:-0.01em;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-.bl.odv *,.bl.odv *::before,.bl.odv *::after,.odv-chrome-wrap *,.odv-chrome-wrap *::before,.odv-chrome-wrap *::after{box-sizing:border-box}
+.bl.odv *,.bl.odv *::before,.bl.odv *::after,.odv-chrome,.odv-chrome *,.odv-chrome *::before,.odv-chrome *::after,#od-stage > .verr{box-sizing:border-box}
 .bl.odv ::selection,.odv-chrome-wrap ::selection{background:var(--mark);color:var(--mark-text)}
 .wrap{max-width:var(--page-max);margin-inline:auto;padding-inline:var(--px)}
 .odv a{color:inherit}
