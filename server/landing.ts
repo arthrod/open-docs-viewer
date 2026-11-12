@@ -7,6 +7,7 @@ import {
   landingStatItems,
   statStripHtml,
 } from "./results.ts";
+import { landingNavBar } from "./navbar.ts";
 import { VIEWER_DS_CSS } from "./render.ts";
 
 const esc = (s: string) =>
@@ -45,12 +46,10 @@ export function landingPage(engines: Engine[], results: Results, defaultSrc: str
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>open-docs viewer · every .docx renderer, same document, same harness</title>
 <meta name="description" content="View-only pages for eight open-source and four proprietary .docx renderers, fed the same public document URL and measured cold the same way." />
-<style>${VIEWER_DS_CSS}</style></head><body>
+<style>${VIEWER_DS_CSS}</style>
+<script type="module" src="/client/nav.ts"></script></head><body>
 <div class="bl odv">
-<header class="site-nav">
-  <a href="/" class="wm">open-docs<span class="dot">·</span>viewer</a>
-  <span class="crumb">/ Overview</span>
-</header>
+${landingNavBar()}
 <div class="wrap">
 <header class="hero">
   <h1>Every .docx renderer, the same document, the same harness.</h1>
@@ -83,7 +82,7 @@ ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURICompon
 </tbody></table></div>
 </section>
 
-<section class="odv-section">
+<section class="odv-section" id="measurements">
   <div class="sec-label"><span class="sq"></span><span>/ Cold browser</span></div>
   <p class="fine">${
     results.measuredAt
