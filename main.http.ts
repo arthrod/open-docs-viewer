@@ -25,7 +25,7 @@ import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
 import { landingPage } from "./server/landing.ts";
 import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM, type Engine } from "./server/engines.ts";
-import { RESULTS } from "./server/results.ts";
+import { currentResults } from "./server/results.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -104,7 +104,7 @@ function viewPage(e: Engine, shell: { head?: string; body: string; entry: string
   const importMap = Object.keys(imports).length
     ? `<script type="importmap">${JSON.stringify({ imports })}</script>`
     : "";
-  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}` };
+  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}`, openDocs: OPEN_DOCS };
   return `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8" />
@@ -124,10 +124,16 @@ ${absolutize(shell.head ?? "")}
   .pill.prop { background: #fef3c7; color: #7c2d12; }
   .note { color: #64748b; overflow: hidden; text-overflow: ellipsis; }
   #od-loading-detail { margin-left: auto; color: #475569; font-variant-numeric: tabular-nums; }
+  #od-remeasure { font: 600 12px system-ui, sans-serif; border: 1px solid #d4d8e0; background: #fff; border-radius: 6px; padding: 3px 8px; cursor: pointer; color: #334155; }
   #od-stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
   #od-stage > * { height: 100%; }
   .verr { margin: 24px; padding: 16px; background: #fef2f2; color: #7f1d1d; border-radius: 8px; font: 12.5px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
-  @media (max-width: 640px) { .note { display: none; } }
+  @media (max-width: 640px) {
+    .vbar { flex-wrap: wrap; white-space: normal; overflow-wrap: anywhere; }
+    .vbar > * { min-width: 0; max-width: 100%; }
+    .note { display: none; }
+    #od-remeasure { flex-shrink: 0; }
+  }
 </style>
 <script type="module" src="${OPEN_DOCS}/lib/boot.ts"></script>
 </head>
@@ -138,6 +144,7 @@ ${absolutize(shell.head ?? "")}
     <span class="pill${e.proprietary ? " prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span>
     <span class="note" title="${esc(e.readOnly)}">${esc(e.readOnly)}</span>
     <span id="od-loading-detail" role="status" aria-live="polite">Loading…</span>
+    <button type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>
   </header>
   <main id="od-stage">${shell.body}</main>
   <script>window.__OD_VIEW = ${JSON.stringify(config).replace(/</g, "\\u003c")};</script>
@@ -304,9 +311,9 @@ app.get("/r/:engine", async (c) => {
 
 app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
 
-app.get("/results.json", (c) => c.json(RESULTS));
+app.get("/results.json", async (c) => c.json(await currentResults()));
 
-app.get("/", (c) => c.html(landingPage(ENGINES, RESULTS, DEFAULT_SRC)));
+app.get("/", async (c) => c.html(landingPage(ENGINES, await currentResults(), DEFAULT_SRC)));
 
 /**
  * Safety net: an engine that asks THIS origin for an open-docs path at run

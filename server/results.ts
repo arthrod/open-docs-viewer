@@ -22,157 +22,57 @@ export interface Results {
   document: string;
   engines: Record<string, EngineResult>;
 }
-export const RESULTS: Results = {
-  "measuredAt": "2026-11-09",
-  "environment": "Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Mac",
-  "document": "showcase.docx (47,871 B) with a never-seen ?n= per run",
-  "engines": {
-    "apryse": {
-      "renderedMs": 3477,
-      "runs": [
-        3477,
-        3123,
-        5282
-      ],
-      "bytes": 7296801,
-      "requests": 158,
-      "heapBytes": 21651080,
-      "how": "data-od-rendered"
-    },
-    "canvas-editor": {
-      "renderedMs": 963,
-      "runs": [
-        963,
-        970,
-        824
-      ],
-      "bytes": 609607,
-      "requests": 24,
-      "heapBytes": 9690980,
-      "how": "data-od-rendered"
-    },
-    "docen": {
-      "renderedMs": 1408,
-      "runs": [
-        1672,
-        1356,
-        1408
-      ],
-      "bytes": 1456529,
-      "requests": 327,
-      "heapBytes": 32098880,
-      "how": "data-od-rendered"
-    },
-    "docxodus": {
-      "renderedMs": 2816,
-      "runs": [
-        2816,
-        3308,
-        2042
-      ],
-      "bytes": 8100439,
-      "requests": 58,
-      "heapBytes": 8408300,
-      "how": "data-od-rendered"
-    },
-    "eigenpal": {
-      "renderedMs": 1197,
-      "runs": [
-        1197,
-        1584,
-        971
-      ],
-      "bytes": 5294825,
-      "requests": 200,
-      "heapBytes": 32266276,
-      "how": "data-od-rendered"
-    },
-    "folio": {
-      "renderedMs": 1124,
-      "runs": [
-        2279,
-        1081,
-        1124
-      ],
-      "bytes": 2193101,
-      "requests": 78,
-      "heapBytes": 21732176,
-      "how": "data-od-rendered"
-    },
-    "google-viewer": {
-      "renderedMs": 20838,
-      "runs": [
-        20927,
-        808,
-        20838
-      ],
-      "bytes": 1134168,
-      "requests": 27,
-      "heapBytes": 2143616,
-      "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering); google-viewer: 2 of 3 runs needed the 20 s retry"
-    },
-    "nutrient": {
-      "renderedMs": 4084,
-      "runs": [
-        4168,
-        3332,
-        4084
-      ],
-      "bytes": 25538995,
-      "requests": 98,
-      "heapBytes": 22391244,
-      "how": "data-od-rendered"
-    },
-    "plate": {
-      "renderedMs": 1394,
-      "runs": [
-        1394,
-        1095,
-        1522
-      ],
-      "bytes": 1079773,
-      "requests": 429,
-      "heapBytes": 26428324,
-      "how": "data-od-rendered"
-    },
-    "superdoc": {
-      "renderedMs": 2656,
-      "runs": [
-        3660,
-        2656,
-        2473
-      ],
-      "bytes": 9077099,
-      "requests": 24,
-      "heapBytes": 18602632,
-      "how": "data-od-rendered"
-    },
-    "word-online": {
-      "renderedMs": 769,
-      "runs": [
-        769,
-        584,
-        785
-      ],
-      "bytes": 1701729,
-      "requests": 66,
-      "heapBytes": 1758268,
-      "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering); google-viewer: 2 of 3 runs needed the 20 s retry"
-    },
-    "wordcraft": {
-      "renderedMs": 1675,
-      "runs": [
-        1675,
-        1555,
-        2743
-      ],
-      "bytes": 22699273,
-      "requests": 19,
-      "heapBytes": 3199356,
-      "how": "data-od-rendered"
-    }
+import BUNDLED from "../results/browser.json" with { type: "json" };
+
+/**
+ * The cold browser benchmark lives in results/browser.json, written by
+ * scripts/measure.py --results (locally via scripts/remeasure.sh, or by the
+ * "Re-measure" GitHub workflow, which commits it). The landing reads the
+ * latest committed copy from GitHub (5-minute cache), so a refresh shows up
+ * without redeploying; the copy bundled with this deploy is the fallback.
+ */
+export const RESULTS: Results = BUNDLED as Results;
+export const RESULTS_URL = "https://raw.githubusercontent.com/arthrod/open-docs-viewer/main/results/browser.json";
+const RESULTS_TTL_MS = 5 * 60_000;
+const FAILURE_TTL_MS = 30_000;
+let cached: { at: number; ttl: number; results: Results } | undefined;
+let pending: Promise<Results> | undefined;
+
+export async function currentResults(): Promise<Results> {
+  if (cached && Date.now() - cached.at < cached.ttl) return cached.results;
+  if (pending) return pending;
+  pending = fetchResults();
+  try {
+    return await pending;
+  } finally {
+    pending = undefined;
   }
-};
+}
+
+async function fetchResults(): Promise<Results> {
+  let results = RESULTS;
+  let ttl = FAILURE_TTL_MS;
+  try {
+    const res = await fetch(RESULTS_URL, { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      const json = await res.json() as Results;
+      // Only take it if it has the shape the page renders.
+      if (json && typeof json === "object" && !Array.isArray(json) &&
+          typeof json.measuredAt === "string" && json.engines &&
+          typeof json.engines === "object" && !Array.isArray(json.engines) &&
+          Object.keys(json.engines).length > 0) {
+        results = json;
+        ttl = RESULTS_TTL_MS;
+      }
+    } else {
+      await res.body?.cancel();
+    }
+  } catch {
+    // GitHub unreachable or slow: the bundled copy is still a real measurement.
+  }
+  cached = { at: Date.now(), ttl, results };
+  return results;
+}
 
 /**
  * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl): the
