@@ -89,7 +89,12 @@ async def one(pw, slug: str) -> dict:
 async def main():
     engines = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
     runs = int(sys.argv[2])
-    out_path = sys.argv[sys.argv.index("--results") + 1] if "--results" in sys.argv else None
+    out_path = None
+    if "--results" in sys.argv:
+        index = sys.argv.index("--results") + 1
+        if index >= len(sys.argv) or sys.argv[index].startswith("--"):
+            sys.exit("--results requires a path")
+        out_path = sys.argv[index]
     res: dict[str, list] = {e: [] for e in engines}
     async with async_playwright() as pw:
         for r in range(runs):
@@ -116,11 +121,16 @@ async def main():
 
 def write_results(path: str, summary: dict, runs: int) -> None:
     try:
-        prev = json.load(open(path))
-    except (OSError, ValueError):
+        with open(path) as f:
+            prev = json.load(f)
+    except json.JSONDecodeError as exc:
+        sys.exit(f"Cannot parse results file {path}: {exc}")
+    except OSError:
         prev = {"engines": {}}
     engines = dict(prev.get("engines", {}))
     for e, s in summary.items():
+        if s["renderedMs"] is None:
+            continue
         if e in FRAME and s["renderedMs"] is not None:
             s = {**s, "how": FRAME_HOW}
         engines[e] = s

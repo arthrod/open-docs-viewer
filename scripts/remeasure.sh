@@ -10,5 +10,9 @@ ENGINES="${1:-all}"
 RUNS="${2:-3}"
 uv run --with playwright python -I scripts/measure.py "$ENGINES" "$RUNS" --results results/browser.json > "/tmp/measure-$(date +%Y%m%d-%H%M%S).json"
 git add results/browser.json
+if git diff --cached --quiet -- results/browser.json; then
+  echo "results/browser.json is unchanged"
+  exit 0
+fi
 git commit -m "Re-measure: $ENGINES, $RUNS runs ($(date +%F))" -- results/browser.json
 git push

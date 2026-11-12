@@ -133,7 +133,7 @@
    "bytes": 1701729,
    "requests": 66,
    "heapBytes": 1758268,
-   "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering); google-viewer: 2 of 3 runs needed the 20 s retry"
+   "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
   },
   "wordcraft": {
    "renderedMs": 1675,

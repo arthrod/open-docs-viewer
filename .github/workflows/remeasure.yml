@@ -15,8 +15,7 @@ on:
   schedule:
     - cron: "17 6 * * 1" # Mondays 06:17 UTC
 
-permissions:
-  contents: write
+permissions: {}
 
 concurrency:
   group: remeasure
@@ -24,29 +23,40 @@ concurrency:
 
 jobs:
   measure:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@d0d8abe699bfb85fec6de9f7adb5ae17292296ff # v6
       - name: Install Google Chrome for Playwright
         run: uv run --with playwright python -m playwright install --with-deps chrome
       - name: Measure
         env:
+          ENGINES: ${{ inputs.engines || 'all' }}
+          RUNS: ${{ inputs.runs || '3' }}
           MEASURE_WHERE: from a GitHub Actions ubuntu-latest runner
         run: |
           xvfb-run -a uv run --with playwright python -I scripts/measure.py \
-            "${{ inputs.engines || 'all' }}" "${{ inputs.runs || '3' }}" \
+            "$ENGINES" "$RUNS" \
             --results results/browser.json > measure-raw.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: measure-raw
           path: measure-raw.json
       - name: Commit results
+        env:
+          ENGINES: ${{ inputs.engines || 'all' }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add results/browser.json
           git diff --cached --quiet && exit 0
-          git commit -m "Re-measure: ${{ inputs.engines || 'all' }} ($(date -u +%F), GitHub Actions)"
-          git push
+          git commit -m "Re-measure: $ENGINES ($(date -u +%F), GitHub Actions)"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          echo "::add-mask::$auth"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push

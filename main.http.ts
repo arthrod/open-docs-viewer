@@ -128,7 +128,12 @@ ${absolutize(shell.head ?? "")}
   #od-stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
   #od-stage > * { height: 100%; }
   .verr { margin: 24px; padding: 16px; background: #fef2f2; color: #7f1d1d; border-radius: 8px; font: 12.5px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
-  @media (max-width: 640px) { .note { display: none; } }
+  @media (max-width: 640px) {
+    .vbar { flex-wrap: wrap; white-space: normal; overflow-wrap: anywhere; }
+    .vbar > * { min-width: 0; max-width: 100%; }
+    .note { display: none; }
+    #od-remeasure { flex-shrink: 0; }
+  }
 </style>
 <script type="module" src="${OPEN_DOCS}/lib/boot.ts"></script>
 </head>

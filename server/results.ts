@@ -34,24 +34,43 @@ import BUNDLED from "../results/browser.json" with { type: "json" };
 export const RESULTS: Results = BUNDLED as Results;
 export const RESULTS_URL = "https://raw.githubusercontent.com/arthrod/open-docs-viewer/main/results/browser.json";
 const RESULTS_TTL_MS = 5 * 60_000;
-let cached: { at: number; results: Results } | undefined;
+const FAILURE_TTL_MS = 30_000;
+let cached: { at: number; ttl: number; results: Results } | undefined;
+let pending: Promise<Results> | undefined;
 
 export async function currentResults(): Promise<Results> {
-  if (cached && Date.now() - cached.at < RESULTS_TTL_MS) return cached.results;
+  if (cached && Date.now() - cached.at < cached.ttl) return cached.results;
+  if (pending) return pending;
+  pending = fetchResults();
+  try {
+    return await pending;
+  } finally {
+    pending = undefined;
+  }
+}
+
+async function fetchResults(): Promise<Results> {
   let results = RESULTS;
+  let ttl = FAILURE_TTL_MS;
   try {
     const res = await fetch(RESULTS_URL, { signal: AbortSignal.timeout(4000) });
     if (res.ok) {
       const json = await res.json() as Results;
       // Only take it if it has the shape the page renders.
-      if (json && typeof json === "object" && json.engines && typeof json.engines === "object") results = json;
+      if (json && typeof json === "object" && !Array.isArray(json) &&
+          typeof json.measuredAt === "string" && json.engines &&
+          typeof json.engines === "object" && !Array.isArray(json.engines) &&
+          Object.keys(json.engines).length > 0) {
+        results = json;
+        ttl = RESULTS_TTL_MS;
+      }
     } else {
       await res.body?.cancel();
     }
   } catch {
     // GitHub unreachable or slow: the bundled copy is still a real measurement.
   }
-  cached = { at: Date.now(), results };
+  cached = { at: Date.now(), ttl, results };
   return results;
 }
 
