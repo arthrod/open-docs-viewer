@@ -143,7 +143,7 @@ export const NAVBAR_CSS = `
 .od-menu-btn{flex:none}
 .od-burger{display:inline-flex;flex-direction:column;justify-content:space-between;width:14px;height:11px;flex:none}
 .od-burger i{display:block;height:1px;background:currentColor;width:100%}
-.od-menu-wrap{position:relative;flex:none}
+.od-menu-wrap{position:relative;flex:none;display:flex;align-items:center}
 .od-menu{position:absolute;right:0;top:40px;min-width:290px;max-height:calc(100dvh - 64px);overflow:auto;background:var(--surface);border:1px solid var(--ink);
   border-radius:0;box-shadow:var(--shadow-offset);padding:6px;display:flex;flex-direction:column;z-index:50}
 .od-menu[hidden]{display:none}
