@@ -72,14 +72,24 @@ function madeBy(e: Engine): string {
 /**
  * Browser | Server: the two ways this site renders the same document with the
  * same engine. `where` is the page being shown. An engine with no /r/ route
- * shows "Server" struck out and not a link.
+ * shows "Server" struck out and not a link. A vendor's embed viewer (Microsoft,
+ * Google) is the other way round: nothing renders in the visitor's browser, the
+ * vendor's servers do it, so "Server" is the current side and "Browser" is the
+ * one struck out.
  */
-export function renderToggle(slug: string, src: URL, where: "browser" | "server"): string {
+const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-viewer": "Google" };
+export function renderToggle(slug: string, src: URL, where: "browser" | "server", frame = false): string {
   const q = `?src=${encodeURIComponent(src.href)}`;
   const side = (label: string, href: string, title: string, on: boolean) =>
     on
       ? `<span class="on" aria-current="page" title="${title}">${label}</span>`
       : `<a href="${href}" title="${title}">${label}</a>`;
+  if (frame) {
+    const who = VENDOR[slug] ?? "the vendor";
+    return `<span class="od-seg" role="group" aria-label="Where the document is rendered">` +
+      `<span class="off" title="Nothing is rendered in your browser: this viewer has no browser engine">Browser</span>` +
+      `<span class="on" aria-current="page" title="Rendered on ${who}'s servers, not this site's; the frame shows their finished pages">Server</span></span>`;
+  }
   const browser = side("Browser", `/v/${slug}${q}`, "Rendered in your browser by the engine", where === "browser");
   const server = SERVER_RENDER_SLUGS.has(slug)
     ? side("Server", `/r/${slug}${q}`, "Rendered on this server; the browser gets finished pages", where === "server")
@@ -113,7 +123,7 @@ export function viewNavBar(e: Engine, engines: Engine[], src: URL): string {
     <span class="crumb">/ viewers</span>
     <span class="od-spacer"></span>
     ${engineSwitcher(engines, e.slug, src)}
-    ${renderToggle(e.slug, src, "browser")}
+    ${renderToggle(e.slug, src, "browser", e.frame)}
     <span id="od-loading-detail" class="od-status-chip" role="status" aria-live="polite">Loading…</span>
     <div class="od-menu-wrap">
       ${menuBtn}

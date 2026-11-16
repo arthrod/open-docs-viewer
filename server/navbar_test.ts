@@ -52,8 +52,19 @@ Deno.test("view page: server results link only for server-rendered engines", () 
   }
 });
 
+Deno.test("view page: a vendor's embed viewer is server-rendered, Browser struck out", () => {
+  const frames = ENGINES.filter((e) => e.frame);
+  assertEquals(frames.map((e) => e.slug).sort(), ["google-viewer", "word-online"]);
+  for (const e of frames) {
+    const html = viewPage(e, shell, src, absolutize);
+    assertStringIncludes(html, `<span class="off" title="Nothing is rendered in your browser`, e.slug);
+    assertStringIncludes(html, `servers, not this site's; the frame shows their finished pages">Server</span>`, e.slug);
+    assertEquals(html.includes(`title="Rendered in your browser by the engine"`), false, e.slug);
+  }
+});
+
 Deno.test("view page: Browser | Server toggle, Server a link only where a route exists", () => {
-  for (const e of ENGINES) {
+  for (const e of ENGINES.filter((e) => !e.frame)) {
     const html = viewPage(e, shell, src, absolutize);
     assertStringIncludes(html, `<span class="on" aria-current="page"`, e.slug);
     const link = `<a href="/r/${e.slug}?src=${esc(src.href)}" title="Rendered on this server`;
