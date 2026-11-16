@@ -9,6 +9,7 @@ import argparse
 import json
 import statistics
 import subprocess
+import time
 
 LH_CATS = {"performance": "performance", "accessibility": "accessibility", "best-practices": "bestPractices", "seo": "seo"}
 LH_AUDITS = {"first-contentful-paint": "fcpMs", "largest-contentful-paint": "lcpMs", "total-blocking-time": "tbtMs", "cumulative-layout-shift": "cls", "speed-index": "speedIndexMs"}
@@ -21,12 +22,26 @@ def pkill_args(profile: str) -> list[str]:
     return ["pkill", "-f", "--", f"--user-data-dir={profile}"]
 
 
-def end_chrome(profile: str) -> str | None:
-    """End the Chrome started on `profile`. Returns what went wrong, or None (1 = nothing matched: already gone)."""
+def end_chrome(profile: str, wait_s: float = 5.0) -> str | None:
+    """End the Chrome started on `profile` and see that it went. Returns what went wrong, or None.
+
+    pkill exiting 1 means nothing matched: it was already gone. After a
+    delivered signal the process is looked for until it is gone or `wait_s`
+    has passed; one that is still there is reported, so the caller can stop
+    instead of measuring the next page beside a leftover browser.
+    """
     p = subprocess.run(pkill_args(profile), capture_output=True)
-    if p.returncode in (0, 1):
+    if p.returncode == 1:
         return None
-    return f"pkill exited {p.returncode}: {(p.stderr or b'').decode(errors='replace').strip()[:120]}; that Chrome may still be running"
+    if p.returncode != 0:
+        return f"pkill exited {p.returncode}: {(p.stderr or b'').decode(errors='replace').strip()[:120]}; that Chrome may still be running"
+    deadline = time.monotonic() + wait_s
+    while True:
+        if subprocess.run(["pgrep", "-f", "--", f"--user-data-dir={profile}"], capture_output=True).returncode != 0:
+            return None
+        if time.monotonic() >= deadline:
+            return f"that Chrome is still running {wait_s:g} s after pkill"
+        time.sleep(0.2)
 
 
 def median(xs: list[dict], key: str) -> int | None:
@@ -202,18 +217,28 @@ def page_entry(xs: list[dict], limit_s: int) -> dict:
 
 
 def merge_pagespeed(result: dict, entries: dict, label: str | None, meta: dict) -> dict:
-    """Put a run's entries into the results file, with the provenance of the population they belong to.
+    """Put a run's entries into the results file, each with the provenance of the run that measured it.
 
-    The default table (`pages`) is described by the file's own date and
+    The default table (`pages`) is headed by the file's own date and
     environment; a labelled population (`docs.<label>`, the same pages on
-    another document) by `docsMeta.<label>`. Neither relabels the other.
+    another document) by `docsMeta.<label>`. A run of some pages only must not
+    redate the others: every entry carries its own `measuredAt`, `environment`
+    and `base`, and entries kept from before get the heading they were
+    published under.
     """
     if label:
+        rows = result.setdefault("docs", {}).setdefault(label, {})
+        old = result.get("docsMeta", {}).get(label) or {k: result[k] for k in PROVENANCE if k in result}
         result.setdefault("docsMeta", {})[label] = dict(meta)
-        result.setdefault("docs", {}).setdefault(label, {}).update(entries)
         for k, v in meta.items():
             result.setdefault(k, v)
     else:
+        rows = result.setdefault("pages", {})
+        old = {k: result[k] for k in PROVENANCE if k in result}
         result.update(meta)
-        result.setdefault("pages", {}).update(entries)
+    for row in rows.values():
+        for k, v in old.items():
+            row.setdefault(k, v)
+    for p, entry in entries.items():
+        rows[p] = {**entry, **{k: meta[k] for k in PROVENANCE}}
     return result

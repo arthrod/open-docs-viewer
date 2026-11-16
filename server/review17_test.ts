@@ -114,3 +114,12 @@ Deno.test("samples: a median beside a failed run shows that run's error", () => 
   assertStringIncludes(html, `<span class="odv-fail">1 of 2 runs failed</span>: curl exited 18 &lt;b&gt;`);
   assertStringIncludes(html, "<b>400 ms</b>"); // the median of the run that answered stays
 });
+
+Deno.test("Lighthouse: a page analysed in a different run from its table says when", () => {
+  const html = lighthouseSection(ENGINES, {
+    measuredAt: "2026-11-10", environment: "old",
+    pages: { "v/folio": { ...both(), measuredAt: "2026-11-10", environment: "old" }, "r/folio": { ...both(), measuredAt: "2026-11-16", environment: "new run" } },
+  });
+  assertStringIncludes(html, "measured 2026-11-16 · new run");
+  assertEquals((html.match(/odv-prov/g) ?? []).length, 1);
+});

@@ -142,6 +142,7 @@ async def main():
     runs = int(sys.argv[3])
     path = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else None
     raw = []
+    stopped = None
     async with async_playwright() as pw:
         for _ in range(runs):
             for d in docs:
@@ -149,6 +150,16 @@ async def main():
                     x = await one(pw, e, d)
                     raw.append(x)
                     print(json.dumps(x), file=sys.stderr, flush=True)
+                    if x.get("cleanup"):
+                        stopped = x["cleanup"]
+                        break
+                if stopped:
+                    break
+            if stopped:
+                # A Chrome that would not end is still using the machine: what was measured so far is
+                # written, and nothing more is measured beside it.
+                print(f"stopping: {stopped}", file=sys.stderr, flush=True)
+                break
     try:
         result = json.load(open(path)) if path else {}
     except (OSError, ValueError):
@@ -159,6 +170,8 @@ async def main():
     for d in docs:
         for e in engines:
             xs = [x for x in raw if x["engine"] == e and x["doc"] == d]
+            if not xs:
+                continue  # a stopped run never reached it: its entry stays as it was
             ok = [x for x in xs if "loadMs" in x]
             med = lambda k: int(statistics.median(x[k] for x in ok if k in x)) if any(k in x for x in ok) else None
             result.setdefault("docs", {}).setdefault(d, {})[e] = {

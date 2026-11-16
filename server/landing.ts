@@ -58,7 +58,12 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
 export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIGHTHOUSE): string {
   if (!Object.keys(lh.pages ?? {}).length) return "";
   const score = (n: number | null | undefined) => n == null ? "n/a" : `<b class="lh ${n >= 90 ? "lh-good" : n >= 50 ? "lh-mid" : "lh-bad"}">${n}</b>`;
-  const table = (pages: LighthouseResults["pages"], q: string) => {
+  const table = (pages: LighthouseResults["pages"], q: string, head: { measuredAt?: string | null; environment?: string }) => {
+  // A page analysed in another run than the table's heading (a partial re-run) says when.
+  const elsewhere = (p: { measuredAt?: string; environment?: string } | undefined) =>
+    p && ((p.measuredAt && p.measuredAt !== head.measuredAt) || (p.environment && p.environment !== head.environment))
+      ? `<div class="ro odv-prov">measured ${esc(p.measuredAt ?? "")} · ${esc(p.environment ?? "")}</div>`
+      : "";
   const psi = (path: string) => `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(`https://viewers.benchmarks.law/${path}${q}`)}`;
   const row = (e: Engine) => {
     const v = pages[`v/${e.slug}`], r = pages[`r/${e.slug}`];
@@ -74,12 +79,12 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
     };
     const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : "no server route"}</span>`
       : r.desktop.performance == null && r.mobile.performance == null ? `<span class="odv-fail">no result</span><div class="ro">${esc((r.desktop.error ?? r.mobile.error ?? "").slice(0, 60))}</div>`
-      : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}`;
+      : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}${elsewhere(r)}`;
     // The server route was measured on its own: keep its cell, say the browser page was not.
     if (!v) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7" class="ro">not measured yet</td><td class="n">${server}</td></tr>`;
     const d = v.desktop, m = v.mobile;
     if (d.performance == null && m.performance == null) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7"><span class="odv-fail">no result</span> <span class="ro">${esc((d.error ?? m.error ?? "").slice(0, 140))}</span></td><td class="n">${server}</td></tr>`;
-    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a><div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div>${partial(v)}</td>
+    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a><div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div>${partial(v)}${elsewhere(v)}</td>
 <td class="n">${score(d.performance)} · ${score(m.performance)}</td><td class="n">${ms(d.lcpMs)} · ${ms(m.lcpMs)}</td><td class="n">${ms(d.tbtMs)} · ${ms(m.tbtMs)}</td><td class="n hide-sm">${d.cls ?? "n/a"} · ${m.cls ?? "n/a"}</td>
 <td class="n hide-sm">${score(d.accessibility)}</td><td class="n hide-sm">${score(d.bestPractices)}</td><td class="n hide-sm">${score(d.seo)}</td><td class="n">${server}</td></tr>`;
   };
@@ -94,7 +99,7 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
   <p class="fine">PageSpeed gives a page a fixed time to load; an engine still working when it ends is scored on what it had drawn, and a page that had not answered gets no result.${
       lh.docsMeta?.["lorem-500"] ? ` Measured ${esc(lh.docsMeta["lorem-500"].measuredAt)} · ${esc(lh.docsMeta["lorem-500"].environment)}.` : ""
     }</p>
-  ${table(bigPages, `?src=${encodeURIComponent(sampleUrl(big))}`)}`
+  ${table(bigPages, `?src=${encodeURIComponent(sampleUrl(big))}`, lh.docsMeta?.["lorem-500"] ?? lh)}`
     : "";
   return `<section class="odv-section" id="lighthouse">
   <div class="sec-label"><span class="sq"></span><span>/ Lighthouse</span></div>
@@ -103,7 +108,7 @@ Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. Every cell reads
 <strong>LCP</strong>: largest contentful paint. <strong>TBT</strong>: total blocking time, how long the main thread was too busy to answer input. <strong>CLS</strong>: layout shift.
 Accessibility, best practices and SEO are the desktop scores. Lighthouse scores the page load, not how faithfully the document is drawn. For Microsoft's and Google's viewers it sees this site's frame page, not their servers' work.
 <strong>Server route</strong>: the performance score and LCP of the same engine's <code>/r/</code> page.</p>
-  ${table(lh.pages, "")}
+  ${table(lh.pages, "", lh)}
   ${bigTable}
 </section>`;
 }

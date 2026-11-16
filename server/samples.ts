@@ -113,13 +113,20 @@ export interface LighthousePage {
   performanceRuns: (number | null)[];
   error: string | null;
 }
+/** One page's medians per form factor, and the run that measured it when that is recorded. */
+export interface LighthouseEntry {
+  desktop: LighthousePage;
+  mobile: LighthousePage;
+  measuredAt?: string;
+  environment?: string;
+}
 export interface LighthouseResults {
   measuredAt: string | null;
   environment: string;
   /** "v/<slug>" and "r/<slug>" → medians, per form factor */
-  pages: Record<string, { desktop: LighthousePage; mobile: LighthousePage }>;
+  pages: Record<string, LighthouseEntry>;
   /** The same pages opening another sample: sample id → page → medians. */
-  docs?: Record<string, Record<string, { desktop: LighthousePage; mobile: LighthousePage }>>;
+  docs?: Record<string, Record<string, LighthouseEntry>>;
   /** When and how each `docs` population was measured, when it was measured apart from `pages`. */
   docsMeta?: Record<string, { measuredAt: string; environment: string }>;
 }

@@ -128,14 +128,23 @@ async def main():
     runs = ARGS.runs
     out_path = ARGS.results
     res: dict[str, list] = {e: [] for e in engines}
+    stopped = None
     async with async_playwright() as pw:
         for r in range(runs):
             for e in engines:
                 x = await one(pw, e)
                 res[e].append(x)
                 print(json.dumps(x), file=sys.stderr, flush=True)
+                if x.get("cleanup"):
+                    stopped = x["cleanup"]
+                    break
+            if stopped:
+                # A Chrome that would not end is still using the machine: what was measured so far is
+                # written, and nothing more is measured beside it.
+                print(f"stopping: {stopped}", file=sys.stderr, flush=True)
+                break
     # A run that rendered but lost a later reading keeps its time (measure_lib.engine_summary).
-    summary = {e: engine_summary(xs) for e, xs in res.items()}
+    summary = {e: engine_summary(xs) for e, xs in res.items() if xs}  # engines a stopped run never reached keep their entry
     print(json.dumps({"engines": summary, "raw": res}, indent=1))
     if out_path:
         write_results(out_path, summary, runs)

@@ -120,3 +120,45 @@ def test_a_labelled_population_keeps_its_own_provenance():
     meta = {"measuredAt": "2026-11-16", "environment": "new", "base": "https://x"}
     out = lib.merge_pagespeed(result, {"r/wordcraft": {}}, "lorem-500", meta)
     assert out["measuredAt"] == "2026-11-10" and out["docsMeta"]["lorem-500"] == meta
+
+
+def test_a_partial_pagespeed_rerun_does_not_redate_the_pages_it_did_not_measure():
+    old = {"measuredAt": "2026-11-10", "environment": "Lighthouse 13.5", "base": "https://x",
+           "pages": {"e/folio": {"desktop": {}}, "e/plate": {"desktop": {}}},
+           "docs": {"lorem-500": {"e/folio": {"desktop": {}}, "e/plate": {"desktop": {}}}},
+           "docsMeta": {"lorem-500": {"measuredAt": "2026-11-12", "environment": "Lighthouse 13.5b", "base": "https://x"}}}
+    meta = {"measuredAt": "2026-11-16", "environment": "Lighthouse 13.6", "base": "https://x"}
+    out = lib.merge_pagespeed(old, {"e/plate": {"mobile": {}}}, None, meta)
+    assert out["pages"]["e/plate"]["measuredAt"] == "2026-11-16" and out["pages"]["e/plate"]["environment"] == "Lighthouse 13.6"
+    assert out["pages"]["e/folio"]["measuredAt"] == "2026-11-10" and out["pages"]["e/folio"]["environment"] == "Lighthouse 13.5"
+    out = lib.merge_pagespeed(out, {"e/plate": {"mobile": {}}}, "lorem-500", meta)
+    rows = out["docs"]["lorem-500"]
+    assert rows["e/plate"]["measuredAt"] == "2026-11-16"
+    assert rows["e/folio"]["measuredAt"] == "2026-11-12" and rows["e/folio"]["environment"] == "Lighthouse 13.5b"
+
+
+def test_end_chrome_reports_a_chrome_that_survives_the_signal(monkeypatch):
+    calls = []
+
+    def run(args, **k):
+        calls.append(args[0])
+        return subprocess.CompletedProcess(args, 0, b"123\n", b"")  # pkill: signalled; pgrep: still there
+
+    monkeypatch.setattr(lib.subprocess, "run", run)
+    monkeypatch.setattr(lib.time, "sleep", lambda s: None)
+    left = lib.end_chrome("/tmp/p", wait_s=0.3)
+    assert "still running" in left and "pgrep" in calls
+
+
+def test_end_chrome_is_quiet_once_the_process_is_gone(monkeypatch):
+    seen = {"n": 0}
+
+    def run(args, **k):
+        if args[0] == "pkill":
+            return subprocess.CompletedProcess(args, 0, b"", b"")
+        seen["n"] += 1
+        return subprocess.CompletedProcess(args, 0 if seen["n"] < 2 else 1, b"", b"")  # gone on the second look
+
+    monkeypatch.setattr(lib.subprocess, "run", run)
+    monkeypatch.setattr(lib.time, "sleep", lambda s: None)
+    assert lib.end_chrome("/tmp/p", wait_s=5) is None
