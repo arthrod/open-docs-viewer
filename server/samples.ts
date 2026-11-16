@@ -61,6 +61,9 @@ export interface SampleServer {
   renderMs: number | null;
   bytes: number | null;
   pages: number | null;
+  /** Every run's total time (null = that run failed). */
+  runs?: (number | null)[];
+  /** A failed run's error; present beside a median when only some runs failed. */
   error?: string;
 }
 export interface SampleResults {
@@ -117,5 +120,7 @@ export interface LighthouseResults {
   pages: Record<string, { desktop: LighthousePage; mobile: LighthousePage }>;
   /** The same pages opening another sample: sample id → page → medians. */
   docs?: Record<string, Record<string, { desktop: LighthousePage; mobile: LighthousePage }>>;
+  /** When and how each `docs` population was measured, when it was measured apart from `pages`. */
+  docsMeta?: Record<string, { measuredAt: string; environment: string }>;
 }
 export const LIGHTHOUSE = LIGHTHOUSE_JSON as LighthouseResults;

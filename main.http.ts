@@ -29,6 +29,7 @@ import { landingPage } from "./server/landing.ts";
 import { viewPage } from "./server/render.ts";
 import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
 import { currentResults } from "./server/results.ts";
+import { serverToggle } from "./server/navbar.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -210,7 +211,8 @@ function lazy(load: () => Promise<Renderer>): Renderer {
   };
 }
 
-const RENDERERS: Record<string, Renderer> = {
+/** The engines with a server route. server/navbar.ts lists the same slugs for its links; a test compares the two. */
+export const RENDERERS: Record<string, Renderer> = {
   docxodus: lazy(async () => (await import("./server/render.ts")).docxodusHtml),
   folio: lazy(async () => (await import("./server/folio.ts")).folioHtml),
   wordcraft: lazy(async () => (await import("./server/wordcraft.ts")).wordcraftHtml),
@@ -227,7 +229,9 @@ const RENDERERS: Record<string, Renderer> = {
 };
 
 app.get("/r/:engine", async (c) => {
-  const render = RENDERERS[c.req.param("engine")];
+  const engine = c.req.param("engine");
+  // An own key only: "constructor" and the like are on every object and are not engines.
+  const render = Object.hasOwn(RENDERERS, engine) ? RENDERERS[engine] : undefined;
   if (!render) return c.text("no server renderer for that engine", 404);
   const src = publicUrl(c.req.query("src") ?? DEFAULT_SRC);
   if (!src) return c.text("src must be a public https URL", 400);
@@ -244,16 +248,17 @@ app.get("/r/:engine", async (c) => {
     // The pages are markup built from an untrusted document: no script from
     // it may run (a javascript: link in the .docx included). Only Docxodus's
     // page loads scripts, and only this Val's own (its paginator). Fonts and
-    // styles come from jsDelivr; images are inline, or WordCraft's page images from this Val.
+    // styles come from jsDelivr; images are inline, or WordCraft's page images from this Val
+    // ('self', so they also load when this is served over plain http on localhost).
     "content-security-policy":
-      `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
+      `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src 'self' data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
     "x-content-type-options": "nosniff",
   };
   if (pages !== undefined) headers["x-pages"] = String(pages);
   if (paginatedIn) headers["x-paginated-in"] = paginatedIn;
   // What a renderer laid out but this server does not paint yet.
   if (unpainted?.length) headers["x-unpainted"] = unpainted.join(", ");
-  return new Response(withToggle(html, c.req.param("engine"), src), { headers });
+  return new Response(serverToggle(html, engine, src), { headers });
 });
 
 /**
@@ -268,21 +273,6 @@ app.get("/r/wordcraft/page", async (c) => {
   const { wordcraftPage } = await import("./server/wordcraft.ts");
   return wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
 });
-
-/**
- * A server-rendered page is the engine's output and nothing else, so the way
- * back to the browser render is one fixed control in the corner, styled inline
- * (the page's CSP allows no script and no stylesheet of ours).
- */
-function withToggle(html: string, slug: string, src: URL): string {
-  const seg =
-    "display:inline-flex;align-items:center;height:30px;padding:0 10px;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;";
-  const bar = `<nav aria-label="Where the document is rendered" style="position:fixed;right:12px;bottom:12px;z-index:2147483647;display:inline-flex;border:1px solid #0a0a0a;background:#fff;box-shadow:4px 4px 0 #ffd400">` +
-    `<a href="/v/${slug}?src=${encodeURIComponent(src.href)}" title="Rendered in your browser by the engine" style="${seg}color:#0a0a0a">Browser</a>` +
-    `<span aria-current="page" title="Rendered on this server; the browser gets finished pages" style="${seg}background:#0a0a0a;color:#fff">Server</span></nav>`;
-  const at = html.lastIndexOf("</body>");
-  return at < 0 ? html + bar : html.slice(0, at) + bar + html.slice(at);
-}
 
 app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
 

@@ -87,14 +87,32 @@ export function renderToggle(slug: string, src: URL, where: "browser" | "server"
   if (frame) {
     const who = VENDOR[slug] ?? "the vendor";
     return `<span class="od-seg" role="group" aria-label="Where the document is rendered">` +
-      `<span class="off" title="Nothing is rendered in your browser: this viewer has no browser engine">Browser</span>` +
+      `<span class="off" aria-disabled="true" title="Nothing is rendered in your browser: this viewer has no browser engine">Browser<span class="od-sr"> (not available: nothing is rendered in your browser)</span></span>` +
       `<span class="on" aria-current="page" title="Rendered on ${who}'s servers, not this site's; the frame shows their finished pages">Server</span></span>`;
   }
   const browser = side("Browser", `/v/${slug}${q}`, "Rendered in your browser by the engine", where === "browser");
   const server = SERVER_RENDER_SLUGS.has(slug)
     ? side("Server", `/r/${slug}${q}`, "Rendered on this server; the browser gets finished pages", where === "server")
-    : `<span class="off" title="This engine has no server route on this site">Server</span>`;
+    : `<span class="off" aria-disabled="true" title="This engine has no server route on this site">Server<span class="od-sr"> (not available: this engine has no server route on this site)</span></span>`;
   return `<span class="od-seg" role="group" aria-label="Where the document is rendered">${browser}${server}</span>`;
+}
+
+/**
+ * A server-rendered page is the engine's output and nothing else, so the way
+ * back to the browser render is one fixed control in the corner, styled inline
+ * (the page's CSP allows no script and no stylesheet of ours). It goes before
+ * the document's closing body tag, in whatever case the engine wrote it, and
+ * is left off a printed page, where it would cover the last lines.
+ */
+export function serverToggle(html: string, slug: string, src: URL): string {
+  const seg =
+    "display:inline-flex;align-items:center;height:30px;padding:0 10px;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;";
+  const bar = `<style>@media print{nav[data-odv-toggle]{display:none!important}}</style>` +
+    `<nav data-odv-toggle aria-label="Where the document is rendered" style="position:fixed;right:12px;bottom:12px;z-index:2147483647;display:inline-flex;border:1px solid #0a0a0a;background:#fff;box-shadow:4px 4px 0 #ffd400">` +
+    `<a href="/v/${encodeURIComponent(slug)}?src=${encodeURIComponent(src.href)}" title="Rendered in your browser by the engine" style="${seg}color:#0a0a0a">Browser</a>` +
+    `<span aria-current="page" title="Rendered on this server; the browser gets finished pages" style="${seg}background:#0a0a0a;color:#fff">Server</span></nav>`;
+  const at = html.search(/<\/body\s*>(?![\s\S]*<\/body\s*>)/i);
+  return at < 0 ? html + bar : html.slice(0, at) + bar + html.slice(at);
 }
 
 function viewerMenu(e: Engine, src: URL): string {
@@ -183,6 +201,7 @@ body{margin:0}
 .od-seg>a:hover{background:var(--mark)}
 .od-seg>a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .od-seg>.off{color:var(--muted);text-decoration:line-through;cursor:not-allowed}
+.od-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .od-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:400;letter-spacing:.04em;
   text-transform:uppercase;line-height:1.2;height:32px;padding:0 10px;border-radius:0;border:1px solid var(--ink);background:var(--surface);color:var(--ink);
   cursor:pointer;white-space:nowrap;text-decoration:none}

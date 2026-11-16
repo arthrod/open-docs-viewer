@@ -158,7 +158,8 @@ export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; dr
     else if (t === "PRE") {
       nodes.push({
         type: "code_block",
-        children: (el.textContent ?? "").split("\n").map((line: string) => ({ type: "code_line", children: [{ text: line }] })),
+        // From the marked leaves, not textContent: a tracked change in a Code paragraph stays visible.
+        children: codeLines(leaves(el)),
       });
     } else if (t === "TABLE") {
       const cell = (c: Any) => {
@@ -305,4 +306,26 @@ ${pageCss}
     renderMs: Math.round(performance.now() - t1),
     ...(dropped ? { unpainted: [`${dropped} picture${dropped > 1 ? "s" : ""} in list items`] } : {}),
   };
+}
+
+
+/**
+ * A Code-style paragraph's leaves → Plate `code_line`s, one per line, every
+ * leaf keeping its marks. Reading the paragraph's `textContent` instead loses
+ * them, and with them a tracked change: `<pre><s>old</s><u>new</u></pre>`
+ * would read "oldnew" with nothing to show which word was deleted. (The same
+ * function as open-docs editors/plate/code-lines.ts.)
+ */
+export function codeLines(leaves: Any[]): Any[] {
+  const lines: Any[][] = [[]];
+  const add = (leaf: Any) => {
+    if (leaf.children) return leaf.children.forEach(add); // a link: a code line holds text only
+    const { text = "", ...marks } = leaf;
+    String(text).split("\n").forEach((part, i) => {
+      if (i) lines.push([]);
+      if (part) lines[lines.length - 1].push({ text: part, ...marks });
+    });
+  };
+  leaves.forEach(add);
+  return lines.map((children) => ({ type: "code_line", children: children.length ? children : [{ text: "" }] }));
 }

@@ -37,6 +37,14 @@ import asyncio, datetime, json, os, platform, random, statistics, subprocess, sy
 
 from playwright.async_api import async_playwright
 
+# These scripts are run with `python -I`, which leaves the script's folder off the import path.
+sys.path.insert(0, __file__.rsplit("/", 1)[0])
+from measure_lib import check_results_document, end_chrome, engine_summary, measure_args, renderer_rss, samples_shell
+
+# Parsed, and refused if it would mix documents in the main table, before any browser starts.
+ARGS = measure_args(sys.argv[1:])
+check_results_document(ARGS.doc, ARGS.results)
+
 BASE = "https://viewers.benchmarks.law"
 FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main"
 # --doc ID picks one; the default is the rich sample the published table uses.
@@ -45,22 +53,13 @@ DOCS = {
     "redline": ("redline.docx", "redline.docx (80,450 B): 23 tracked changes, 6 comments"),
     "lorem-500": ("lorem-500.docx", "lorem-500.docx (467,814 B): 500 pages in Microsoft Word"),
 }
-DOC_ID = sys.argv[sys.argv.index("--doc") + 1] if "--doc" in sys.argv else "showcase"
+DOC_ID = ARGS.doc
 DOC = f"{FIXTURES}/{DOCS[DOC_ID][0]}"
 TIMEOUT_S = 240
 ALL = ["apryse", "canvas-editor", "docen", "docxodus", "eigenpal", "folio", "google-viewer", "nutrient", "plate", "superdoc", "word-online", "wordcraft"]
 # Cross-origin frames: the page sees only the frame's load event.
 FRAME = {"google-viewer", "word-online"}
 FRAME_HOW = "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
-
-
-def renderer_rss(profile: str) -> int:
-    """RSS (bytes) of the renderer processes of the Chrome using `profile`."""
-    out = subprocess.run(["ps", "-axo", "pid=,ppid=,rss=,command="], capture_output=True, text=True).stdout
-    rows = [l.split(None, 3) for l in out.splitlines()]
-    rows = [(int(r[0]), int(r[1]), int(r[2]) * 1024, r[3]) for r in rows if len(r) == 4]
-    roots = {pid for pid, _, _, cmd in rows if f"--user-data-dir={profile}" in cmd and "--type=" not in cmd}
-    return sum(rss for _, ppid, rss, cmd in rows if ppid in roots and "--type=renderer" in cmd)
 
 
 async def one(pw, slug: str) -> dict:
@@ -117,14 +116,17 @@ async def one(pw, slug: str) -> dict:
         try:
             await asyncio.wait_for(ctx.close(), 20)
         except Exception:
-            subprocess.run(["pkill", "-f", f"--user-data-dir={profile}"])  # a renderer that never yields
+            left = end_chrome(profile)  # a renderer that never yields
+            if left:
+                out["cleanup"] = left
+                print(f"{slug}: {left}", file=sys.stderr, flush=True)
         return out
 
 
 async def main():
-    engines = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
-    runs = int(sys.argv[2])
-    out_path = sys.argv[sys.argv.index("--results") + 1] if "--results" in sys.argv else None
+    engines = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
+    runs = ARGS.runs
+    out_path = ARGS.results
     res: dict[str, list] = {e: [] for e in engines}
     async with async_playwright() as pw:
         for r in range(runs):
@@ -132,24 +134,13 @@ async def main():
                 x = await one(pw, e)
                 res[e].append(x)
                 print(json.dumps(x), file=sys.stderr, flush=True)
-    summary = {}
-    for e, xs in res.items():
-        ok = [x for x in xs if "renderedMs" in x]
-        med = lambda k: int(statistics.median(x[k] for x in ok)) if ok else None
-        summary[e] = {
-            "renderedMs": med("renderedMs"),
-            "runs": [x.get("renderedMs") for x in xs],
-            "bytes": med("bytes"),
-            "requests": med("requests"),
-            "heapBytes": med("heapBytes"),
-            "rendererRss": med("rendererRss"),
-            "how": "data-od-rendered" if ok else (xs[0].get("blocked") or xs[0].get("error")),
-        }
+    # A run that rendered but lost a later reading keeps its time (measure_lib.engine_summary).
+    summary = {e: engine_summary(xs) for e, xs in res.items()}
     print(json.dumps({"engines": summary, "raw": res}, indent=1))
     if out_path:
         write_results(out_path, summary, runs)
-    if "--samples" in sys.argv:
-        write_sample(sys.argv[sys.argv.index("--samples") + 1], summary, runs)
+    if ARGS.samples:
+        write_sample(ARGS.samples, summary, runs)
 
 
 def environment(runs: int) -> str:
@@ -163,10 +154,11 @@ def write_sample(path: str, summary: dict, runs: int) -> None:
         out = json.load(open(path))
     except (OSError, ValueError):
         out = {}
+    document = f"{DOCS[DOC_ID][1]} with a never-seen ?n= per run"
+    doc = samples_shell(out, DOC_ID, document)["samples"][DOC_ID]
     out["measuredAt"] = datetime.date.today().isoformat()
     out["environment"] = environment(runs)
-    doc = out.setdefault("samples", {}).setdefault(DOC_ID, {"browser": {}, "server": {}})
-    doc["document"] = f"{DOCS[DOC_ID][1]} with a never-seen ?n= per run"
+    doc["document"] = document
     for e, s in summary.items():
         if e in FRAME and s["renderedMs"] is not None:
             s = {**s, "how": FRAME_HOW}

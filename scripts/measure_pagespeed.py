@@ -23,6 +23,10 @@ import asyncio, datetime, json, os, statistics, sys, urllib.parse
 
 from playwright.async_api import async_playwright
 
+# These scripts are run with `python -I`, which leaves the script's folder off the import path.
+sys.path.insert(0, __file__.rsplit("/", 1)[0])
+from measure_lib import merge_pagespeed, page_entry, summarize
+
 BASE = sys.argv[1].rstrip("/")
 PAGES = sys.argv[2].split(",")
 RUNS = int(sys.argv[3])
@@ -33,9 +37,6 @@ QUERY = sys.argv[sys.argv.index("--query") + 1] if "--query" in sys.argv else ""
 LABEL = sys.argv[sys.argv.index("--label") + 1] if "--label" in sys.argv else None
 PARALLEL = int(os.environ.get("PSI_PARALLEL", "4"))
 LIMIT_S = 240
-CATS = {"performance": "performance", "accessibility": "accessibility", "best-practices": "bestPractices", "seo": "seo"}
-AUDITS = {"first-contentful-paint": "fcpMs", "largest-contentful-paint": "lcpMs", "total-blocking-time": "tbtMs", "cumulative-layout-shift": "cls", "speed-index": "speedIndexMs"}
-KEYS = [*CATS.values(), *AUDITS.values()]
 
 
 def reports(text: str) -> list[dict]:
@@ -65,29 +66,10 @@ def reports(text: str) -> list[dict]:
     return found
 
 
-def summarize(l: dict) -> dict:
-    out: dict = {"version": l.get("lighthouseVersion")}
-    if l.get("runtimeError"):
-        out["error"] = f"{l['runtimeError'].get('code')}: {l['runtimeError'].get('message', '')}"[:200]
-    final = l.get("finalDisplayedUrl") or l.get("finalUrl") or ""
-    if "challenge" in final or "Just a moment" in json.dumps(l.get("audits", {}).get("document-title", {})):
-        out["error"] = "the page Google got was a Cloudflare challenge"
-    for k, name in CATS.items():
-        s = l.get("categories", {}).get(k, {}).get("score")
-        if s is not None:
-            out[name] = round(s * 100)
-    for k, name in AUDITS.items():
-        v = l.get("audits", {}).get(k, {}).get("numericValue")
-        if v is not None:
-            out[name] = round(v, 3) if name == "cls" else round(v)
-    return out
-
-
 async def one(browser, page_path: str) -> dict:
     out: dict = {"page": page_path}
-    ctx = await browser.new_context(viewport={"width": 1300, "height": 900})
-    page = await ctx.new_page()
     got: dict[str, dict] = {}
+    ctx = None
 
     async def body(r):
         if "batchexecute" not in r.url:
@@ -98,8 +80,12 @@ async def one(browser, page_path: str) -> dict:
         except Exception:
             pass
 
-    page.on("response", lambda r: asyncio.ensure_future(body(r)))
     try:
+        # Inside the handler: a Chrome that died between jobs fails here, and that must be this
+        # job's error record, not an exception that loses every finished job's results.
+        ctx = await browser.new_context(viewport={"width": 1300, "height": 900})
+        page = await ctx.new_page()
+        page.on("response", lambda r: asyncio.ensure_future(body(r)))
         await page.goto("https://pagespeed.web.dev/analysis?url=" + urllib.parse.quote(f"{BASE}/{page_path}" + (f"?{QUERY}" if QUERY else ""), safe=""), timeout=60000)
         for _ in range(LIMIT_S):
             await page.wait_for_timeout(1000)
@@ -110,7 +96,12 @@ async def one(browser, page_path: str) -> dict:
         out.update(got)
     except Exception as e:
         out["error"] = f"{type(e).__name__}: {e}"[:200]
-    await ctx.close()
+    finally:
+        if ctx:
+            try:
+                await ctx.close()
+            except Exception:
+                pass  # the browser is gone: the error above already says so
     return out
 
 
@@ -134,23 +125,15 @@ async def main():
     except (OSError, ValueError):
         result = {}
     version = next((x[f]["version"] for x in raw for f in ("desktop", "mobile") if f in x and x[f].get("version")), "")
-    result.update({} if LABEL and "measuredAt" in result else {
+    meta = {
         "measuredAt": datetime.date.today().isoformat(),
         "environment": f"PageSpeed Insights (pagespeed.web.dev), Lighthouse {version} on Google's servers, {RUNS} analyses per page, median",
         "base": BASE,
-    })
-    for p in PAGES:
-        xs = [x for x in raw if x["page"] == p]
-        entry: dict = {}
-        for f in ("desktop", "mobile"):
-            fs = [x[f] for x in xs if f in x]
-            med = lambda k: (lambda v: None if not v else (round(statistics.median(v), 3) if k == "cls" else int(statistics.median(v))))([y[k] for y in fs if k in y])
-            entry[f] = {
-                **{k: med(k) for k in KEYS},
-                "performanceRuns": [x.get(f, {}).get("performance") for x in xs],
-                "error": next((y["error"] for y in fs if "error" in y), None) or next((x["error"] for x in xs if "error" in x and f not in x), None),
-            }
-        (result.setdefault("docs", {}).setdefault(LABEL, {}) if LABEL else result.setdefault("pages", {}))[p] = entry
+    }
+    # A rejected report has no numbers (summarize), each form factor has its own error (page_entry),
+    # and a --label run is dated on its own, not under the default table's date (merge_pagespeed).
+    entries = {p: page_entry([x for x in raw if x["page"] == p], LIMIT_S) for p in PAGES}
+    merge_pagespeed(result, entries, LABEL, meta)
     text = json.dumps(result, indent=1) + "\n"
     if OUT:
         os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)

@@ -7,9 +7,9 @@ import {
   landingStatItems,
   statStripHtml,
 } from "./results.ts";
-import { landingNavBar } from "./navbar.ts";
+import { landingNavBar, SERVER_RENDER_SLUGS } from "./navbar.ts";
 import { VIEWER_DS_CSS } from "./render.ts";
-import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
+import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, type LighthousePage, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -44,7 +44,7 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
   const vendors = engines.filter((e) => e.frame).map((e) => {
     const b = results.engines[e.slug];
     return `<tr><td><a href="/v/${e.slug}?src=${q}">${esc(e.name)}</a><div class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers; loaded = the frame's load event</div></td>
-<td class="n"><b>${ms(b?.renderedMs)}</b></td><td class="n hide-sm">n/a</td><td class="n">${mb(b?.heapBytes)}</td><td class="n">n/a</td><td class="n hide-sm">n/a</td><td class="n hide-sm">${mb(b?.bytes)}</td></tr>`;
+<td class="n"><b>${ms(b?.renderedMs)}</b></td><td class="n hide-sm">n/a</td><td class="n" title="The viewer runs in the vendor's cross-origin frame: its heap cannot be read from this page">n/a</td><td class="n">n/a</td><td class="n hide-sm">n/a</td><td class="n hide-sm">${mb(b?.bytes)}</td></tr>`;
   }).join("");
   return `<p class="fine"><strong>What the browser pays for a server render.</strong> The same routes opened in Chrome, rich sample. Measured ${esc(client.measuredAt ?? "")} · ${esc(client.environment)}.
 <strong>Loaded</strong>: navigation start to the end of the load event, so it includes the server's render and the download. <strong>JS heap</strong>: about an empty page's, because no engine script runs
@@ -62,13 +62,24 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
   const psi = (path: string) => `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(`https://viewers.benchmarks.law/${path}${q}`)}`;
   const row = (e: Engine) => {
     const v = pages[`v/${e.slug}`], r = pages[`r/${e.slug}`];
-    if (!v) return "";
-    const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : "no server route"}</span>`
+    if (!v && !r) return "";
+    // A median over fewer analyses than were run says so, with the reason the others gave.
+    const partial = (p: { desktop: LighthousePage; mobile: LighthousePage }) => {
+      const one = (f: string, x: LighthousePage) => {
+        const got = x.performanceRuns.filter((n) => n != null).length;
+        return got === x.performanceRuns.length ? "" : `${f} ${got}/${x.performanceRuns.length} analyses${x.error ? `: ${esc(x.error.slice(0, 110))}` : ""}`;
+      };
+      const text = [one("desktop", p.desktop), one("mobile", p.mobile)].filter(Boolean).join(" · ");
+      return text ? `<div class="ro odv-part">${text}</div>` : "";
+    };
+    const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : "no server route"}</span>`
       : r.desktop.performance == null && r.mobile.performance == null ? `<span class="odv-fail">no result</span><div class="ro">${esc((r.desktop.error ?? r.mobile.error ?? "").slice(0, 60))}</div>`
-      : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>`;
+      : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}`;
+    // The server route was measured on its own: keep its cell, say the browser page was not.
+    if (!v) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7" class="ro">not measured yet</td><td class="n">${server}</td></tr>`;
     const d = v.desktop, m = v.mobile;
     if (d.performance == null && m.performance == null) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7"><span class="odv-fail">no result</span> <span class="ro">${esc((d.error ?? m.error ?? "").slice(0, 140))}</span></td><td class="n">${server}</td></tr>`;
-    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a><div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div></td>
+    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a><div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div>${partial(v)}</td>
 <td class="n">${score(d.performance)} · ${score(m.performance)}</td><td class="n">${ms(d.lcpMs)} · ${ms(m.lcpMs)}</td><td class="n">${ms(d.tbtMs)} · ${ms(m.tbtMs)}</td><td class="n hide-sm">${d.cls ?? "n/a"} · ${m.cls ?? "n/a"}</td>
 <td class="n hide-sm">${score(d.accessibility)}</td><td class="n hide-sm">${score(d.bestPractices)}</td><td class="n hide-sm">${score(d.seo)}</td><td class="n">${server}</td></tr>`;
   };
@@ -80,7 +91,9 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
   const bigPages = lh.docs?.["lorem-500"];
   const bigTable = big && bigPages && Object.keys(bigPages).length
     ? `<h3 class="odv-h3" id="lighthouse-lorem-500">${esc(big.label)} <span class="ro">${esc(big.file)} · the same pages opening the long file</span></h3>
-  <p class="fine">PageSpeed gives a page a fixed time to load; an engine still working when it ends is scored on what it had drawn, and a page that had not answered gets no result.</p>
+  <p class="fine">PageSpeed gives a page a fixed time to load; an engine still working when it ends is scored on what it had drawn, and a page that had not answered gets no result.${
+      lh.docsMeta?.["lorem-500"] ? ` Measured ${esc(lh.docsMeta["lorem-500"].measuredAt)} · ${esc(lh.docsMeta["lorem-500"].environment)}.` : ""
+    }</p>
   ${table(bigPages, `?src=${encodeURIComponent(sampleUrl(big))}`)}`
     : "";
   return `<section class="odv-section" id="lighthouse">
@@ -113,7 +126,8 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         ? "n/a"
         : b.renderedMs == null
         ? `<span class="odv-fail" title="${esc(b.how ?? "")}">failed</span>`
-        : `<b>${ms(b.renderedMs)}</b>`;
+        // A vendor's cross-origin frame: all the page can time is the frame's load event.
+        : `<b>${ms(b.renderedMs)}</b>${e.frame ? ` <span class="ro">frame load</span>` : ""}`;
       const c = client.docs[s.id]?.[e.slug];
       const inBrowser = !c ? "" : c.loadMs == null
         ? `<div class="ro">in the browser: <span class="odv-fail">failed</span> ${esc(c.error ?? "")}</div>`
@@ -121,17 +135,21 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
       const server = e.frame
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v
-        ? `<span class="ro">no server route</span>`
+        // The route exists (the toggle links to it) but this file has no measurement of it yet.
+        ? `<span class="ro">${SERVER_RENDER_SLUGS.has(e.slug) ? "not measured on this file yet" : "no server route"}</span>`
         : v.code !== 200
         ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>`
         : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>${
           IMAGES_ON_DEMAND.has(e.slug) ? `<div class="ro">without its page images: each is rendered and sent when its page nears the viewport</div>` : ""
+        }${
+          // The median stands on the runs that answered; the one that did not is said, not dropped.
+          v.error ? `<div class="ro"><span class="odv-fail">${(v.runs ?? []).filter((x) => x == null).length} of ${(v.runs ?? []).length} runs failed</span>: ${esc(v.error.slice(0, 140))}</div>` : ""
         }${inBrowser}`;
       return `<tr>
       <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}</td>
       <td class="n">${browser}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
-      <td class="n">${mb(b?.heapBytes)}</td>
+      <td class="n">${e.frame ? "n/a" : mb(b?.heapBytes)}</td>
       <td class="n">${mb(b?.rendererRss)}</td>
       <td class="n hide-sm">${mb(b?.bytes)}</td>
       <td class="n">${server}</td>

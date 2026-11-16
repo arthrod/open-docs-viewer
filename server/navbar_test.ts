@@ -57,7 +57,7 @@ Deno.test("view page: a vendor's embed viewer is server-rendered, Browser struck
   assertEquals(frames.map((e) => e.slug).sort(), ["google-viewer", "word-online"]);
   for (const e of frames) {
     const html = viewPage(e, shell, src, absolutize);
-    assertStringIncludes(html, `<span class="off" title="Nothing is rendered in your browser`, e.slug);
+    assertStringIncludes(html, `<span class="off" aria-disabled="true" title="Nothing is rendered in your browser`, e.slug);
     assertStringIncludes(html, `servers, not this site's; the frame shows their finished pages">Server</span>`, e.slug);
     assertEquals(html.includes(`title="Rendered in your browser by the engine"`), false, e.slug);
   }
@@ -69,7 +69,8 @@ Deno.test("view page: Browser | Server toggle, Server a link only where a route 
     assertStringIncludes(html, `<span class="on" aria-current="page"`, e.slug);
     const link = `<a href="/r/${e.slug}?src=${esc(src.href)}" title="Rendered on this server`;
     assertEquals(html.includes(link), SERVER_RENDER_SLUGS.has(e.slug), e.slug);
-    assertEquals(html.includes(`<span class="off"`), !SERVER_RENDER_SLUGS.has(e.slug), e.slug);
+    // The toggle's own struck-out Server side, by its full opening tag: another `.off` elsewhere would not match.
+    assertEquals(html.includes(`<span class="off" aria-disabled="true" title="This engine has no server route on this site">Server`), !SERVER_RENDER_SLUGS.has(e.slug), e.slug);
   }
 });
 

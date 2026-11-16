@@ -32,6 +32,10 @@ import asyncio, datetime, json, os, platform, random, statistics, subprocess, sy
 
 from playwright.async_api import async_playwright
 
+# These scripts are run with `python -I`, which leaves the script's folder off the import path.
+sys.path.insert(0, __file__.rsplit("/", 1)[0])
+from measure_lib import end_chrome, renderer_rss
+
 BASE = os.environ.get("ODV_BASE", "https://viewers.benchmarks.law")
 FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main"
 ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc"]
@@ -39,12 +43,8 @@ TIMEOUT_S = int(os.environ.get("ODV_TIMEOUT_S", "360"))
 KEYS = ("loadMs", "paintMs", "heapBytes", "rendererRss", "domNodes", "bytes", "requests")
 
 
-def renderer_rss(profile: str) -> int:
-    out = subprocess.run(["ps", "-axo", "pid=,ppid=,rss=,command="], capture_output=True, text=True).stdout
-    rows = [l.split(None, 3) for l in out.splitlines()]
-    rows = [(int(r[0]), int(r[1]), int(r[2]) * 1024, r[3]) for r in rows if len(r) == 4]
-    roots = {pid for pid, _, _, cmd in rows if f"--user-data-dir={profile}" in cmd and "--type=" not in cmd}
-    return sum(rss for _, ppid, rss, cmd in rows if ppid in roots and "--type=renderer" in cmd)
+# Every picture that is not lazy has arrived (a page without pictures passes).
+EAGER_IMAGES_OK = """() => [...document.querySelectorAll('img:not([loading="lazy"])')].every(i => i.complete && i.naturalWidth > 0)"""
 
 
 async def whole(response) -> bool:
@@ -60,8 +60,7 @@ async def one(pw, slug: str, doc: str) -> dict:
     url = f"{BASE}/r/{slug}?src={urllib.parse.quote(src, safe='')}"
     out: dict = {"engine": slug, "doc": doc}
     with tempfile.TemporaryDirectory() as profile:
-        ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
-        page = ctx.pages[0] if ctx.pages else await ctx.new_page()
+        ctx = None
         sizes: list[int] = []
         status: list[int] = []
         main: list = []
@@ -73,10 +72,13 @@ async def one(pw, slug: str, doc: str) -> dict:
             except Exception:
                 sizes.append(0)
 
-        ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
-        page.on("response", lambda r: status.append(r.status) if r.url.startswith(f"{BASE}/r/") else None)
-        page.on("response", lambda r: main.append(r) if r.url == url else None)
         try:
+            # Inside the handler: a Chrome that fails to start is this run's error, not the end of the script.
+            ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
+            page = ctx.pages[0] if ctx.pages else await ctx.new_page()
+            ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
+            page.on("response", lambda r: status.append(r.status) if r.url.startswith(f"{BASE}/r/") else None)
+            page.on("response", lambda r: main.append(r) if r.url == url else None)
             await page.goto(url, wait_until="commit", timeout=TIMEOUT_S * 1000)
             deadline = time.monotonic() + TIMEOUT_S
             got = None
@@ -98,6 +100,10 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["error"] = f"no load event within {TIMEOUT_S} s"
             elif not await whole(main[0] if main else None):
                 out["error"] = "the page stopped partway: its HTML has no closing </html>"
+            elif not await asyncio.wait_for(page.evaluate(EAGER_IMAGES_OK), 30):
+                # The load event fires whether or not a picture arrived; a page whose first pages are
+                # missing did not load the document. Pictures marked lazy are not required.
+                out["error"] = "a page image that loads with the page failed"
             elif "Just a moment" in got["title"] or "Attention Required" in got["title"]:
                 out["error"] = "blocked: " + got["title"]
             else:
@@ -120,9 +126,13 @@ async def one(pw, slug: str, doc: str) -> dict:
         out["bytes"] = sum(sizes)
         out["requests"] = len(sizes)
         try:
-            await asyncio.wait_for(ctx.close(), 20)
+            if ctx:
+                await asyncio.wait_for(ctx.close(), 20)
         except Exception:
-            subprocess.run(["pkill", "-f", f"--user-data-dir={profile}"])
+            left = end_chrome(profile)
+            if left:
+                out["cleanup"] = left
+                print(f"{slug}/{doc}: {left}", file=sys.stderr, flush=True)
     return out
 
 

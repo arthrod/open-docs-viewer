@@ -15,14 +15,24 @@ recorded as code 0.
 the images are separate requests, made as each page nears the viewport;
 scripts/measure_server_client.py counts what a browser fetches at load.
 """
-import json, random, re, statistics, subprocess, sys, tempfile
+import json, random, re, subprocess, sys, tempfile
 
+# These scripts are run with `python -I`, which leaves the script's folder off the import path.
+sys.path.insert(0, __file__.rsplit("/", 1)[0])
+from measure_lib import classify, samples_shell, server_args, server_entry
+
+ARGS = server_args(sys.argv[1:])
 ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc"]
-ENGINES = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
-RUNS = int(sys.argv[2])
+ENGINES = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
+RUNS = ARGS.runs
 BASE = "https://viewers.benchmarks.law/r/"
 FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main"
-DOC = sys.argv[sys.argv.index("--doc") + 1] if "--doc" in sys.argv else None
+DOC = ARGS.doc
+DOCUMENTS = {
+    "showcase": "showcase.docx (47,871 B)",
+    "redline": "redline.docx (80,450 B): 23 tracked changes, 6 comments",
+    "lorem-500": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word",
+}
 LIMIT_S = 180
 
 
@@ -41,14 +51,11 @@ def hit(e):
         pages = re.search(r"(?im)^x-pages:\s*(\d+)", out)
         if pages:
             r["pages"] = int(pages.group(1))
-        if p.returncode == 28:
-            r["error"] = f"no complete answer within {LIMIT_S} s (curl timed out after {r['bytes']:,} B)"
-            r["code"] = 0
-        elif r["code"] == 200 and not open(body.name, "rb").read().rstrip().endswith(b"</html>"):
-            r["error"] = f"the answer stopped partway: {r['bytes']:,} B after {float(total):.0f} s, without the page's closing </html>"
-            r["code"] = 0
-        elif r["code"] != 200:
-            r["error"] = open(body.name, errors="replace").read(200).strip().splitlines()[0] if r["bytes"] else "empty body"
+        # Any failed transfer (not only a timeout), a page cut off partway, or a non-200 answer.
+        with open(body.name, "rb") as f:
+            status, error = classify(returncode=p.returncode, code=r["code"], size=r["bytes"], total=float(total), body=f.read(), limit_s=LIMIT_S)
+        if error:
+            r["httpCode"], r["code"], r["error"] = r["code"], status, error
         return r
 
 
@@ -60,22 +67,16 @@ for _ in range(RUNS):
         print(e, json.dumps(x), file=sys.stderr, flush=True)
 print(json.dumps(res))
 
-if "--samples" in sys.argv:
-    path = sys.argv[sys.argv.index("--samples") + 1]
+if ARGS.samples:
+    path = ARGS.samples
     try:
         out = json.load(open(path))
     except (OSError, ValueError):
         out = {}
-    doc = out.setdefault("samples", {}).setdefault(DOC or "showcase", {"browser": {}, "server": {}})
+    # The whole shape the landing reads, also when the file is new (measure_lib.samples_shell).
+    doc = samples_shell(out, DOC or "showcase", f"{DOCUMENTS[DOC or 'showcase']} with a never-seen ?n= per run")["samples"][DOC or "showcase"]
     for e, xs in res.items():
-        ok = [x for x in xs if x["code"] == 200]
-        med = lambda k: round(statistics.median(x[k] for x in ok if k in x)) if any(k in x for x in ok) else None
-        bad = next((x for x in xs if x["code"] != 200), None)
-        entry = {"code": 200 if ok else bad["code"], "totalMs": med("totalMs"), "renderMs": med("render"), "bytes": med("bytes"),
-                 "pages": med("pages"), "runs": [x["totalMs"] if x["code"] == 200 else None for x in xs]}
-        if bad:
-            entry["error"] = bad.get("error", f"HTTP {bad['code']}")
-        doc.setdefault("server", {})[e] = entry
+        doc["server"][e] = server_entry(xs)
     with open(path, "w") as f:
         f.write(json.dumps(out, indent=1) + "\n")
     print(f"wrote {path}", file=sys.stderr)
