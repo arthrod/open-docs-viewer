@@ -2,7 +2,27 @@
 /* eslint-disable */
 
 /**
- * Every page of `docx` as PNG bytes, rendered at `scale` (1.0 = 96 dpi CSS pixels).
+ * A document read and laid out once; its pages are rasterised one at a time.
+ */
+export class Doc {
+    free(): void;
+    [Symbol.dispose](): void;
+    /**
+     * Read `docx` and lay it out in Print view. Nothing is rasterised yet.
+     */
+    constructor(docx: Uint8Array);
+    /**
+     * Every page's size in points: width, height, width, height, …
+     */
+    page_sizes(): Float32Array;
+    /**
+     * Page `index` (from 0) as PNG bytes at `scale` pixels per point.
+     */
+    render_page(index: number, scale: number): Uint8Array;
+}
+
+/**
+ * Every page of `docx` as PNG bytes, rendered at `scale` pixels per point.
  */
 export function render_docx(docx: Uint8Array, scale: number): Array<any>;
 
@@ -10,10 +30,15 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
+    readonly __wbg_doc_free: (a: number, b: number) => void;
+    readonly doc_new: (a: number, b: number) => [number, number, number];
+    readonly doc_page_sizes: (a: number) => [number, number];
+    readonly doc_render_page: (a: number, b: number, c: number) => [number, number, number, number];
     readonly render_docx: (a: number, b: number, c: number) => [number, number, number];
     readonly __wbindgen_externrefs: WebAssembly.Table;
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __externref_table_dealloc: (a: number) => void;
+    readonly __wbindgen_free: (a: number, b: number, c: number) => void;
     readonly __wbindgen_start: () => void;
 }
 

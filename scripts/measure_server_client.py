@@ -18,6 +18,14 @@ Per run:
   domNodes    DOM nodes alive in the page
   bytes       response headers + bodies of every finished request
 
+A page whose HTML stops before its closing </html> (the server's answer was cut
+off; Chrome still fires the load event on what arrived) is recorded as an
+error, not as a load time.
+
+WordCraft's page loads its first two page images with the page and every other
+one as it nears the viewport, so its figures are for opening the document, not
+for having scrolled through all of it.
+
     uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 3 --out results/server-client.json
 """
 import asyncio, datetime, json, os, platform, random, statistics, subprocess, sys, tempfile, time, urllib.parse
@@ -39,6 +47,14 @@ def renderer_rss(profile: str) -> int:
     return sum(rss for _, ppid, rss, cmd in rows if ppid in roots and "--type=renderer" in cmd)
 
 
+async def whole(response) -> bool:
+    """Whether the page's HTML arrived to its end."""
+    try:
+        return (await asyncio.wait_for(response.body(), 120)).rstrip().endswith(b"</html>")
+    except Exception:
+        return False
+
+
 async def one(pw, slug: str, doc: str) -> dict:
     src = f"{FIXTURES}/{doc}.docx?n={random.getrandbits(48):x}"
     url = f"{BASE}/r/{slug}?src={urllib.parse.quote(src, safe='')}"
@@ -48,6 +64,7 @@ async def one(pw, slug: str, doc: str) -> dict:
         page = ctx.pages[0] if ctx.pages else await ctx.new_page()
         sizes: list[int] = []
         status: list[int] = []
+        main: list = []
 
         async def finished(req):
             try:
@@ -58,6 +75,7 @@ async def one(pw, slug: str, doc: str) -> dict:
 
         ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
         page.on("response", lambda r: status.append(r.status) if r.url.startswith(f"{BASE}/r/") else None)
+        page.on("response", lambda r: main.append(r) if r.url == url else None)
         try:
             await page.goto(url, wait_until="commit", timeout=TIMEOUT_S * 1000)
             deadline = time.monotonic() + TIMEOUT_S
@@ -78,6 +96,8 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["error"] = f"HTTP {status[0]}"
             elif not got:
                 out["error"] = f"no load event within {TIMEOUT_S} s"
+            elif not await whole(main[0] if main else None):
+                out["error"] = "the page stopped partway: its HTML has no closing </html>"
             elif "Just a moment" in got["title"] or "Attention Required" in got["title"]:
                 out["error"] = "blocked: " + got["title"]
             else:

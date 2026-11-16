@@ -55,7 +55,7 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 | docen | 1.12 s | 2.62 s, 1.12 s, 1.08 s | 18 MB | 367 MB | 1 MB | 362 ms (46 ms rendering), 55 KB, 4 pages |
 | docx-editor.dev | 945 ms | 1.49 s, 935 ms, 945 ms | 30 MB | 368 MB | 5 MB | 1.21 s (899 ms rendering), 326 KB, 3 pages |
 | folio | 1.11 s | 1.00 s, 1.11 s, 1.20 s | 26 MB | 365 MB | 2 MB | 671 ms (314 ms rendering), 250 KB, 3 pages |
-| WordCraft | 1.71 s | 1.98 s, 1.71 s, 1.50 s | 3 MB | 649 MB | 22 MB | 642 ms (309 ms rendering), 940 KB, 3 pages |
+| WordCraft | 1.71 s | 1.98 s, 1.71 s, 1.50 s | 3 MB | 649 MB | 22 MB | 287 ms (25 ms laying out), 3 KB + a page image per page viewed, 3 pages |
 | Word Online viewer | 662 ms (frame load) | 720 ms, 662 ms, 560 ms | n/a | 687 MB | 2 MB | no server route |
 | Google viewer | 2.01 s (frame load) | 1.10 s, failed, 2.92 s | n/a | 405 MB | 1 MB | no server route |
 | Apryse WebViewer | 3.92 s | 6.59 s, 3.92 s, 1.71 s | 21 MB | 456 MB | 7 MB | no server route |
@@ -72,7 +72,7 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 | docen | 2.48 s | 2.48 s, 2.35 s, 3.94 s | 22 MB | 561 MB | 2 MB | 2.45 s (1.26 s rendering), 5 MB, 623 pages |
 | docx-editor.dev | 1.30 s | 1.29 s, 2.04 s, 1.30 s | 151 MB | 646 MB | 5 MB | **failed**: HTTP 500 "socket hang up" |
 | folio | 2.11 s | 2.07 s, 2.73 s, 2.11 s | 56 MB | 957 MB | 3 MB | 6.58 s (5.78 s rendering), 29 MB, 500 pages |
-| WordCraft | 2.71 s | 3.02 s, 2.71 s, 2.35 s | 3 MB | 707 MB | 22 MB | 154.8 s (64.5 s rendering), 224 MB, 550 pages |
+| WordCraft | 2.71 s | 3.02 s, 2.71 s, 2.35 s | 3 MB | 707 MB | 22 MB | 1.28 s (791 ms laying out), 367 KB + a page image per page viewed, 550 pages |
 | Word Online viewer | 788 ms (frame load) | 824 ms, 786 ms, 788 ms | n/a | 670 MB | 2 MB | no server route |
 | Google viewer | 1.02 s (frame load) | 27.7 s, 975 ms, 1.02 s | n/a | 458 MB | 1 MB | no server route |
 | Apryse WebViewer | 1.98 s | 1.94 s, 1.98 s, 2.01 s | 27 MB | 526 MB | 7 MB | no server route |
@@ -96,7 +96,7 @@ listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-ch
 | `eigenpal` | docx-editor.dev | `@docx-editor.dev/core/export` layout (HarfBuzz, packaged metric-compatible fonts) → the editor's own `paintSemanticLayout` into a linkedom document | positioned pages |
 | `plate` | Plate | mammoth's import (as the editor adapter does) → `platejs/static` `serializeHtml`; pictures through `@platejs/media` at Word's width and alignment (read from `document.xml`, which mammoth drops) | flowing HTML |
 | `docen` | docen | `@docen/docx` parse → `@docen/layout` paginator with a font-file `measureText` (opentype.js) → SVG pages painted here | positioned pages |
-| `wordcraft` | WordCraft | its reader, layout and vello_cpu rasteriser compiled to wasm ([open-docs/tools/wordcraft-render](https://github.com/arthrod/open-docs/tree/main/tools/wordcraft-render)), fetched at a pinned commit and SHA-256-checked | PNG page images |
+| `wordcraft` | WordCraft | its reader, layout and vello_cpu rasteriser compiled to wasm ([open-docs/tools/wordcraft-render](https://github.com/arthrod/open-docs/tree/main/tools/wordcraft-render)), fetched at a pinned commit and SHA-256-checked. The page holds every page's size and one image URL per page; `/r/wordcraft/page` rasterises a page when the browser asks for its image | PNG page images, one request per page, made as the page nears the viewport |
 | `superdoc` | SuperDoc | `@superdoc/docx-engine/document-runtime` `openDocumentRuntime` (the engine's headless runtime, imported directly; that package is under SuperDoc's proprietary DOCX Engine licence, not the AGPL) → Document API `projectHtml` in `redline` review mode. **Not the paginated view**: no page breaks, colours or fonts, pictures become placeholders; what was downgraded is counted in `x-unpainted` | flowing HTML |
 
 Not offered, deliberately: SuperDoc's **paginated** view (its layout measures text through a browser canvas and paints
@@ -112,6 +112,14 @@ Known gaps, stated rather than hidden:
   once (`x-paginated-in: browser`; `Server-Timing` does not include it, ~65 ms in Chrome on the sample). That
   bundle is too large for a Val file: it is loaded from jsDelivr at a pinned commit of this repo, SRI-checked, and
   the page's CSP allows only that script and this Val's own (`scripts/build-dx-paginate.sh` rebuilds it).
+- WordCraft's page images are not in the page: the page is each page's size plus one image URL per page
+  (`loading="lazy"`, no script), and a page is rasterised (about 0.2 s, about 200 KB; 330 KB for a dense screen)
+  when the browser asks for it. Microsoft's and Google's viewers send their pages the same way. Its figures
+  here are therefore for opening the document: the server's time is reading and laying out, and the browser's
+  load is the page and its first two images. Nothing is stored: an image URL names the document's URL and
+  hash, and an isolate that has not seen the document fetches and lays it out again (about a second for 550
+  pages). Until 2026-11-16 every page was inline in one response: 522 MB for the 550 pages of
+  `lorem-500.docx`, which the platform closed after about 144 s with a third of it sent.
 - Plate is not a paginated editor; its output is one flowing page.
 - Plate's import (mammoth) drops colours and highlighting, in the editor too; pictures inside list items are
   counted in `x-unpainted`.
@@ -141,7 +149,7 @@ Measured 2026-11-16: Google Chrome (installed, headed) via Playwright, fresh pro
 | docx-editor.dev | 3.70 s | 19.8 s, 3.70 s, 1.89 s | 3.80 s | 706 KB | 258 MB | 1,046 | 1.1 MB |
 | Plate | 986 ms | 986 ms, 1.07 s, 858 ms | 1.06 s | 1.1 MB | 241 MB | 460 | 13 KB |
 | docen | 1.29 s | 22.3 s, 1.29 s, 586 ms | 940 ms | 706 KB | 254 MB | 301 | 1.1 MB |
-| WordCraft | 1.18 s | 1.08 s, 1.18 s, 1.33 s | 1.22 s | 1.1 MB | 248 MB | 36 | 466 KB |
+| WordCraft | 639 ms | 639 ms, 584 ms, 1.42 s | 324 ms | 1.2 MB | 280 MB | 36 | 174 KB |
 | SuperDoc | 989 ms | 1.81 s, 952 ms, 989 ms | 1.08 s | 1.1 MB | 241 MB | 231 | 3 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 769 ms | 769 ms, 584 ms, 785 ms | n/a | 1.7 MB | n/a | n/a | 1.6 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 20.8 s | 20.9 s, 808 ms, 20.8 s | n/a | 2.0 MB | n/a | n/a | 1.1 MB |
@@ -155,7 +163,7 @@ Measured 2026-11-16: Google Chrome (installed, headed) via Playwright, fresh pro
 | docx-editor.dev | 1.29 s | 1.30 s, 1.18 s, 1.29 s | 1.36 s | 689 KB | 259 MB | 1,264 | 1.1 MB |
 | Plate | 567 ms | 575 ms, 567 ms, 502 ms | 640 ms | 1.1 MB | 242 MB | 720 | 14 KB |
 | docen | 423 ms | 423 ms, 508 ms, 337 ms | 404 ms | 688 KB | 254 MB | 447 | 1.0 MB |
-| WordCraft | 671 ms | 541 ms, 671 ms, 904 ms | 720 ms | 1.1 MB | 251 MB | 36 | 560 KB |
+| WordCraft | 699 ms | 631 ms, 699 ms, 779 ms | 344 ms | 1.2 MB | 280 MB | 36 | 209 KB |
 | SuperDoc | 1.05 s | 1.10 s, 949 ms, 1.05 s | 1.12 s | 1.1 MB | 241 MB | 349 | 4 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 662 ms | 720 ms, 662 ms, 560 ms | n/a | 1.7 MB | 687 MB | n/a | 1.7 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 2.01 s | 1.10 s, failed, 2.92 s | n/a | 1.8 MB | 405 MB | n/a | 1.1 MB |
@@ -169,7 +177,7 @@ Measured 2026-11-16: Google Chrome (installed, headed) via Playwright, fresh pro
 | docx-editor.dev | **failed**: HTTP 500 | failed, failed, failed | | | | | |
 | Plate | 2.29 s | 1.80 s, 2.29 s, 2.38 s | 2.17 s | 689 KB | 348 MB | 15,415 | 508 KB |
 | docen | 4.20 s | 4.20 s, 4.54 s, 3.68 s | 2.24 s | 706 KB | 1650 MB | 36,966 | 1.1 MB |
-| WordCraft | 154.0 s | 149.9 s, 155.1 s, 154.0 s | 70.6 s | 1.6 MB | 207 MB | 418 | 105 MB |
+| WordCraft | 1.42 s | 1.26 s, 1.42 s, 2.61 s | 1.01 s | 1.2 MB | 245 MB | 1,130 | 387 KB |
 | SuperDoc | 6.94 s | 7.52 s, 6.56 s, 6.94 s | 7.00 s | 688 KB | 295 MB | 6,525 | 445 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 788 ms | 824 ms, 786 ms, 788 ms | n/a | 1.7 MB | 670 MB | n/a | 1.9 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 1.02 s | 27.7 s, 975 ms, 1.02 s | n/a | 1.7 MB | 458 MB | n/a | 1.1 MB |
@@ -211,7 +219,7 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | docx-editor.dev | 96 · 76 | 1.40 s · 6.49 s | 0 ms · 0 ms | 0.005 · 0.009 | 523 ms · 1.84 s | 885 ms · 2.94 s | 92 | 100 | 90 | 96/95/96 · 76/76/74 |
 | Plate | 100 · 100 | 244 ms · 801 ms | 0 ms · 0 ms | 0 · 0 | 244 ms · 801 ms | 546 ms · 1.05 s | 96 | 100 | 91 | 100/100/100 · 100/100/100 |
 | docen | 98 · 79 | 1.17 s · 5.90 s | 0 ms · 0 ms | 0 · 0 | 261 ms · 835 ms | 444 ms · 1.48 s | 97 | 100 | 90 | 98/97/98 · 79/76/100 |
-| WordCraft | 99 · 85 | 793 ms · 3.35 s | 0 ms · 0 ms | 0 · 0 | 793 ms · 3.35 s | 836 ms · 3.35 s | 97 | 100 | 91 | 99/99/99 · 85/85/85 |
+| WordCraft | 100 · 98 | 400 ms · 2.29 s | 0 ms · 0 ms | 0 · 0 | 243 ms · 792 ms | 632 ms · 792 ms | 97 | 100 | 91 | 100/100/100 · 97/98/98 |
 | SuperDoc | 100 · 100 | 213 ms · 766 ms | 0 ms · 0 ms | 0 · 0 | 213 ms · 766 ms | 782 ms · 1.78 s | 98 | 100 | 90 | 100/100/100 · 100/100/100 |
 
 **Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**
@@ -240,7 +248,7 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | docx-editor.dev | **no result**: PageSpeed gave no result within 240 s: the page never finished loading for it | | | | | | | | | |
 | Plate | 97 · 84 | 869 ms · 3.46 s | 18 ms · 6 ms | 0 · 0 | 869 ms · 3.46 s | 1.56 s · 3.46 s | 97 | 100 | 90 | 97/97/96 · 83/84/84 |
 | docen | 53 · 33 | 1.69 s · 7.40 s | 1.57 s · 3.31 s | 0 · 0 | 1.20 s · 4.69 s | 2.14 s · 5.65 s | 97 | 100 | 82 | 53/53/59 · 28/33/38 |
-| WordCraft | **no result**: PageSpeed gave no result within 240 s: the page never finished loading for it | | | | | | | | | |
+| WordCraft | 100 · 86 | 563 ms · 4.12 s | 0 ms · 0 ms | 0 · 0 | 271 ms · 845 ms | 818 ms · 1.98 s | 97 | 100 | 91 | 100/100/100 · 86/86/86 |
 | SuperDoc | 88 · 77 | 897 ms · 3.26 s | 0 ms · 0 ms | 0.0 · 0.0 | 897 ms · 3.26 s | 5.93 s · 15.2 s | 100 | 100 | 90 | 89/fail/88 · 77/fail/77 |
 <!-- lighthouse:end -->
 

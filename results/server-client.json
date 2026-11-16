@@ -79,17 +79,17 @@
     "error": null
    },
    "wordcraft": {
-    "loadMs": 1181,
-    "paintMs": 1224,
-    "heapBytes": 1189512,
-    "rendererRss": 259915776,
+    "loadMs": 639,
+    "paintMs": 324,
+    "heapBytes": 1213680,
+    "rendererRss": 293093376,
     "domNodes": 36,
-    "bytes": 477390,
-    "requests": 1,
+    "bytes": 178675,
+    "requests": 3,
     "runs": [
-     1082,
-     1181,
-     1328
+     639,
+     584,
+     1420
     ],
     "error": null
    },
@@ -186,17 +186,17 @@
     "error": null
    },
    "wordcraft": {
-    "loadMs": 671,
-    "paintMs": 720,
-    "heapBytes": 1189512,
-    "rendererRss": 262897664,
+    "loadMs": 699,
+    "paintMs": 344,
+    "heapBytes": 1213664,
+    "rendererRss": 293388288,
     "domNodes": 36,
-    "bytes": 573141,
-    "requests": 1,
+    "bytes": 214219,
+    "requests": 3,
     "runs": [
-     541,
-     671,
-     904
+     631,
+     699,
+     779
     ],
     "error": null
    },
@@ -293,17 +293,17 @@
     "error": null
    },
    "wordcraft": {
-    "loadMs": 154045,
-    "paintMs": 70584,
-    "heapBytes": 1643260,
-    "rendererRss": 216858624,
-    "domNodes": 418,
-    "bytes": 109782668,
-    "requests": 1,
+    "loadMs": 1421,
+    "paintMs": 1012,
+    "heapBytes": 1242976,
+    "rendererRss": 256655360,
+    "domNodes": 1130,
+    "bytes": 396757,
+    "requests": 3,
     "runs": [
-     149897,
-     155132,
-     154045
+     1256,
+     1421,
+     2612
     ],
     "error": null
    },

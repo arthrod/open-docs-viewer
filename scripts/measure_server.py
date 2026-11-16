@@ -7,7 +7,13 @@
 default, the rich sample). With --samples PATH the medians go into that file
 under samples.<doc>.server (server/samples.ts `SampleResults`). A run that
 fails keeps its HTTP status and the first line of the body; a run that never
-answers within 180 s is recorded as code 0.
+answers within 180 s, or whose page stops before its closing </html> (the
+connection was closed partway: HTTP 200 and the headers say nothing of it), is
+recorded as code 0.
+
+`bytes` is the page itself. WordCraft's page holds one image URL per page and
+the images are separate requests, made as each page nears the viewport;
+scripts/measure_server_client.py counts what a browser fetches at load.
 """
 import json, random, re, statistics, subprocess, sys, tempfile
 
@@ -37,6 +43,9 @@ def hit(e):
             r["pages"] = int(pages.group(1))
         if p.returncode == 28:
             r["error"] = f"no complete answer within {LIMIT_S} s (curl timed out after {r['bytes']:,} B)"
+            r["code"] = 0
+        elif r["code"] == 200 and not open(body.name, "rb").read().rstrip().endswith(b"</html>"):
+            r["error"] = f"the answer stopped partway: {r['bytes']:,} B after {float(total):.0f} s, without the page's closing </html>"
             r["code"] = 0
         elif r["code"] != 200:
             r["error"] = open(body.name, errors="replace").read(200).strip().splitlines()[0] if r["bytes"] else "empty body"

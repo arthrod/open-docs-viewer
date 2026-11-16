@@ -617,36 +617,36 @@
   },
   "r/wordcraft": {
    "desktop": {
-    "performance": 99,
+    "performance": 100,
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 793,
-    "lcpMs": 793,
+    "fcpMs": 243,
+    "lcpMs": 400,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 836,
+    "speedIndexMs": 632,
     "performanceRuns": [
-     99,
-     99,
-     99
+     100,
+     100,
+     100
     ],
     "error": null
    },
    "mobile": {
-    "performance": 85,
+    "performance": 98,
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 3348,
-    "lcpMs": 3353,
+    "fcpMs": 792,
+    "lcpMs": 2287,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 3348,
+    "speedIndexMs": 792,
     "performanceRuns": [
-     85,
-     85,
-     85
+     97,
+     98,
+     98
     ],
     "error": null
    }
@@ -1304,38 +1304,38 @@
    },
    "r/wordcraft": {
     "desktop": {
-     "performance": null,
-     "accessibility": null,
-     "bestPractices": null,
-     "seo": null,
-     "fcpMs": null,
-     "lcpMs": null,
-     "tbtMs": null,
-     "cls": null,
-     "speedIndexMs": null,
+     "performance": 100,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 271,
+     "lcpMs": 563,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 818,
      "performanceRuns": [
-      null,
-      null,
-      null
+      100,
+      100,
+      100
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+     "error": null
     },
     "mobile": {
-     "performance": null,
-     "accessibility": null,
-     "bestPractices": null,
-     "seo": null,
-     "fcpMs": null,
-     "lcpMs": null,
-     "tbtMs": null,
-     "cls": null,
-     "speedIndexMs": null,
+     "performance": 86,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 845,
+     "lcpMs": 4117,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 1978,
      "performanceRuns": [
-      null,
-      null,
-      null
+      86,
+      86,
+      86
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+     "error": null
     }
    },
    "r/superdoc": {

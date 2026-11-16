@@ -48,7 +48,7 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
   }).join("");
   return `<p class="fine"><strong>What the browser pays for a server render.</strong> The same routes opened in Chrome, rich sample. Measured ${esc(client.measuredAt ?? "")} · ${esc(client.environment)}.
 <strong>Loaded</strong>: navigation start to the end of the load event, so it includes the server's render and the download. <strong>JS heap</strong>: about an empty page's, because no engine script runs
-(Docxodus's paginator excepted). <strong>Renderer memory</strong>: every renderer process of that Chrome, Chrome's spare one included: compare rows with each other.</p>
+(Docxodus's paginator excepted). WordCraft's page loads its first two page images with the page and each other one as it nears the viewport, so its row is opening the document, not scrolling through it. <strong>Renderer memory</strong>: every renderer process of that Chrome, Chrome's spare one included: compare rows with each other.</p>
   <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">Loaded</th><th class="n hide-sm">First paint</th><th class="n">JS heap</th><th class="n">Renderer memory</th><th class="n hide-sm">DOM nodes</th><th class="n hide-sm">Downloaded</th></tr></thead>
 <tbody>${rows}</tbody>
 <tbody><tr class="odv-sep"><th colspan="7">Vendor viewers · also server renders, on the vendor's machines. Their page here is only a frame.</th></tr>${vendors}</tbody></table></div>`;
@@ -95,6 +95,9 @@ Accessibility, best practices and SEO are the desktop scores. Lighthouse scores 
 </section>`;
 }
 
+/** Routes whose page images are separate requests, made as each page nears the viewport (WordCraft). */
+const IMAGES_ON_DEMAND = new Set(SERVER_RESULTS.filter((r) => r.output === "images").map((r) => r.slug));
+
 export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RESULTS, client: ServerClientResults = SERVER_CLIENT): string {
   const tables = SAMPLES.filter((s) => res.samples[s.id]).map((s: Sample) => {
     const r = res.samples[s.id];
@@ -121,7 +124,9 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         ? `<span class="ro">no server route</span>`
         : v.code !== 200
         ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>`
-        : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>${inBrowser}`;
+        : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>${
+          IMAGES_ON_DEMAND.has(e.slug) ? `<div class="ro">without its page images: each is rendered and sent when its page nears the viewport</div>` : ""
+        }${inBrowser}`;
       return `<tr>
       <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}</td>
       <td class="n">${browser}</td>

@@ -224,14 +224,14 @@
     },
     "wordcraft": {
      "code": 200,
-     "totalMs": 642,
-     "renderMs": 309,
-     "bytes": 962517,
+     "totalMs": 287,
+     "renderMs": 25,
+     "bytes": 3426,
      "pages": 3,
      "runs": [
-      1285,
-      642,
-      569
+      287,
+      342,
+      280
      ]
     },
     "superdoc": {
@@ -472,14 +472,14 @@
     },
     "wordcraft": {
      "code": 200,
-     "totalMs": 154755,
-     "renderMs": 64544,
-     "bytes": 234422208,
+     "totalMs": 1282,
+     "renderMs": 791,
+     "bytes": 375545,
      "pages": 550,
      "runs": [
-      148820,
-      160633,
-      154755
+      1282,
+      995,
+      1366
      ]
     },
     "superdoc": {

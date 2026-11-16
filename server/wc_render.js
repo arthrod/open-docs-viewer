@@ -1,7 +1,64 @@
 /* @ts-self-types="./wc_render.d.ts" */
 
 /**
- * Every page of `docx` as PNG bytes, rendered at `scale` (1.0 = 96 dpi CSS pixels).
+ * A document read and laid out once; its pages are rasterised one at a time.
+ */
+export class Doc {
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        DocFinalization.unregister(this);
+        return ptr;
+    }
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_doc_free(ptr, 0);
+    }
+    /**
+     * Read `docx` and lay it out in Print view. Nothing is rasterised yet.
+     * @param {Uint8Array} docx
+     */
+    constructor(docx) {
+        const ptr0 = passArray8ToWasm0(docx, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        const ret = wasm.doc_new(ptr0, len0);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        this.__wbg_ptr = ret[0];
+        DocFinalization.register(this, this.__wbg_ptr, this);
+        return this;
+    }
+    /**
+     * Every page's size in points: width, height, width, height, …
+     * @returns {Float32Array}
+     */
+    page_sizes() {
+        const ret = wasm.doc_page_sizes(this.__wbg_ptr);
+        var v1 = getArrayF32FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 4, 4);
+        return v1;
+    }
+    /**
+     * Page `index` (from 0) as PNG bytes at `scale` pixels per point.
+     * @param {number} index
+     * @param {number} scale
+     * @returns {Uint8Array}
+     */
+    render_page(index, scale) {
+        const ret = wasm.doc_render_page(this.__wbg_ptr, index, scale);
+        if (ret[3]) {
+            throw takeFromExternrefTable0(ret[2]);
+        }
+        var v1 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+        return v1;
+    }
+}
+if (Symbol.dispose) Doc.prototype[Symbol.dispose] = Doc.prototype.free;
+
+/**
+ * Every page of `docx` as PNG bytes, rendered at `scale` pixels per point.
  * @param {Uint8Array} docx
  * @param {number} scale
  * @returns {Array<any>}
@@ -57,9 +114,26 @@ function __wbg_get_imports() {
     };
 }
 
+const DocFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_doc_free(ptr, 1));
+
+function getArrayF32FromWasm0(ptr, len) {
+    ptr = ptr >>> 0;
+    return getFloat32ArrayMemory0().subarray(ptr / 4, ptr / 4 + len);
+}
+
 function getArrayU8FromWasm0(ptr, len) {
     ptr = ptr >>> 0;
     return getUint8ArrayMemory0().subarray(ptr / 1, ptr / 1 + len);
+}
+
+let cachedFloat32ArrayMemory0 = null;
+function getFloat32ArrayMemory0() {
+    if (cachedFloat32ArrayMemory0 === null || cachedFloat32ArrayMemory0.byteLength === 0) {
+        cachedFloat32ArrayMemory0 = new Float32Array(wasm.memory.buffer);
+    }
+    return cachedFloat32ArrayMemory0;
 }
 
 function getStringFromWasm0(ptr, len) {
@@ -108,6 +182,7 @@ function __wbg_finalize_init(instance, module) {
     wasmInstance = instance;
     wasm = instance.exports;
     wasmModule = module;
+    cachedFloat32ArrayMemory0 = null;
     cachedUint8ArrayMemory0 = null;
     wasm.__wbindgen_start();
     return wasm;

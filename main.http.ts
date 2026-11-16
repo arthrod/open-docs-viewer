@@ -9,6 +9,8 @@
  *   GET /r/<engine>?src=<url>   server-rendered: the engine runs HERE and the browser
  *                               gets finished pages (docxodus, folio, eigenpal, plate,
  *                               docen, wordcraft, superdoc); timings in the Server-Timing header
+ *   GET /r/wordcraft/page?src=<url>&doc=<id>&n=<page>&s=<density>
+ *                               one page of WordCraft's server render, as a PNG
  *   GET /results.json           the measurements shown on /
  *
  * Apples to apples: Microsoft's and Google's viewers fetch a public URL on
@@ -184,7 +186,8 @@ type Rendered = {
   /** Where page breaks are computed, when not here. */
   paginatedIn?: "browser";
 };
-type Renderer = (bytes: Uint8Array) => Promise<Rendered>;
+/** `src` is where the document came from: WordCraft's page puts it in its image URLs. */
+type Renderer = (bytes: Uint8Array, src: URL) => Promise<Rendered>;
 
 /**
  * Each renderer's module is imported on its first request, and that import
@@ -194,7 +197,7 @@ type Renderer = (bytes: Uint8Array) => Promise<Rendered>;
  */
 function lazy(load: () => Promise<Renderer>): Renderer {
   let mod: Promise<Renderer> | undefined;
-  return async (bytes) => {
+  return async (bytes, src) => {
     const t0 = performance.now();
     mod ??= load().catch((e) => {
       mod = undefined;
@@ -202,7 +205,7 @@ function lazy(load: () => Promise<Renderer>): Renderer {
     });
     const render = await mod;
     const importMs = Math.round(performance.now() - t0);
-    const r = await render(bytes);
+    const r = await render(bytes, src);
     return { ...r, initMs: r.initMs + importMs };
   };
 }
@@ -232,7 +235,7 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
-  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = await render(got);
+  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = await render(got, src);
   const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
@@ -241,7 +244,7 @@ app.get("/r/:engine", async (c) => {
     // The pages are markup built from an untrusted document: no script from
     // it may run (a javascript: link in the .docx included). Only Docxodus's
     // page loads scripts, and only this Val's own (its paginator). Fonts and
-    // styles come from jsDelivr, images are inline.
+    // styles come from jsDelivr; images are inline, or WordCraft's page images from this Val.
     "content-security-policy":
       `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
     "x-content-type-options": "nosniff",
@@ -251,6 +254,19 @@ app.get("/r/:engine", async (c) => {
   // What a renderer laid out but this server does not paint yet.
   if (unpainted?.length) headers["x-unpainted"] = unpainted.join(", ");
   return new Response(withToggle(html, c.req.param("engine"), src), { headers });
+});
+
+/**
+ * One page image of WordCraft's server render. Its page (/r/wordcraft) holds
+ * one of these URLs per page and the browser asks for each as it comes near
+ * the viewport. The document is fetched again only by an isolate that does
+ * not hold its layout.
+ */
+app.get("/r/wordcraft/page", async (c) => {
+  const src = publicUrl(c.req.query("src"));
+  if (!src) return c.text("src must be a public https URL", 400);
+  const { wordcraftPage } = await import("./server/wordcraft.ts");
+  return wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
 });
 
 /**
