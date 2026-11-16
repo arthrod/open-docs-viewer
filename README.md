@@ -7,7 +7,7 @@
 [![Engines](https://img.shields.io/badge/engines-arthrod%2Fopen--docs-0f172a)](https://github.com/arthrod/open-docs)
 
 Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
-same public document URL, and measured the same way. Twelve engines render in the browser. Six of them also
+same public document URL, and measured the same way. Twelve engines render in the browser. Seven of them also
 render **on this Val's server**, the way Microsoft's and Google's viewers do: the server fetches the document,
 lays it out, paints it, and the browser receives finished pages.
 
@@ -49,7 +49,7 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 | --- | ---: | --- | ---: | ---: | ---: | --- |
 | canvas-editor | 1.09 s | 964 ms, 1.50 s, 1.09 s | 10 MB | 334 MB | 673 KB | no server route |
 | Docxodus | 1.70 s | 2.79 s, 1.40 s, 1.70 s | 7 MB | 374 MB | 8 MB | 1.09 s (543 ms rendering), 72 KB |
-| SuperDoc | 2.42 s | 2.47 s, 2.42 s, 2.21 s | 15 MB | 552 MB | 8 MB | no server route |
+| SuperDoc | 2.42 s | 2.47 s, 2.42 s, 2.21 s | 15 MB | 552 MB | 8 MB | 727 ms (488 ms rendering), 18 KB |
 | Plate | 1.72 s | 2.09 s, 1.69 s, 1.72 s | 11 MB | 307 MB | 1 MB | 467 ms (204 ms rendering), 37 KB |
 | docen | 1.12 s | 2.62 s, 1.12 s, 1.08 s | 18 MB | 367 MB | 1 MB | 362 ms (46 ms rendering), 55 KB, 4 pages |
 | docx-editor.dev | 945 ms | 1.49 s, 935 ms, 945 ms | 30 MB | 368 MB | 5 MB | 1.21 s (899 ms rendering), 326 KB, 3 pages |
@@ -66,7 +66,7 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 | --- | ---: | --- | ---: | ---: | ---: | --- |
 | canvas-editor | 13.5 s | 13.4 s, 13.5 s, 14.3 s | 1279 MB | 2292 MB | 1 MB | no server route |
 | Docxodus | 7.14 s | 5.65 s, 9.97 s, 7.14 s | 14 MB | 985 MB | 8 MB | 5.00 s (4.40 s rendering), 2 MB |
-| SuperDoc | 5.81 s | 5.71 s, 5.81 s, 6.63 s | 36 MB | 1106 MB | 8 MB | no server route |
+| SuperDoc | 5.81 s | 5.71 s, 5.81 s, 6.63 s | 36 MB | 1106 MB | 8 MB | 6.17 s (5.66 s rendering), 2 MB |
 | Plate | 21.1 s | 21.9 s, 21.1 s, 20.6 s | 82 MB | 454 MB | 1 MB | 2.34 s (875 ms rendering), 2 MB |
 | docen | 2.48 s | 2.48 s, 2.35 s, 3.94 s | 22 MB | 561 MB | 2 MB | 2.45 s (1.26 s rendering), 5 MB, 623 pages |
 | docx-editor.dev | 1.30 s | 1.29 s, 2.04 s, 1.30 s | 151 MB | 646 MB | 5 MB | **failed**: HTTP 500 "socket hang up" |
@@ -81,7 +81,8 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 Tracked changes on the server routes: Docxodus is asked for them
 (`renderTrackedChanges: true`); Plate's import (mammoth) has no revision model, so
 the document goes through open-docs' `lib/revisions.ts` first (inserted words
-underlined, deleted words struck), exactly as its editor adapter does. The other
+underlined, deleted words struck), exactly as its editor adapter does. SuperDoc's
+projection is asked for its `redline` review mode (`<ins>` and `<del>`). The other
 four are handed the original bytes. What each engine draws in the browser is
 listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-changes-what-each-engine-draws).
 
@@ -95,9 +96,10 @@ listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-ch
 | `plate` | Plate | mammoth's import (as the editor adapter does) → `platejs/static` `serializeHtml`; pictures through `@platejs/media` at Word's width and alignment (read from `document.xml`, which mammoth drops) | flowing HTML |
 | `docen` | docen | `@docen/docx` parse → `@docen/layout` paginator with a font-file `measureText` (opentype.js) → SVG pages painted here | positioned pages |
 | `wordcraft` | WordCraft | its reader, layout and vello_cpu rasteriser compiled to wasm ([open-docs/tools/wordcraft-render](https://github.com/arthrod/open-docs/tree/main/tools/wordcraft-render)), fetched at a pinned commit and SHA-256-checked | PNG page images |
+| `superdoc` | SuperDoc | `@superdoc/docx-engine/document-runtime` `openDocumentRuntime` (the engine's headless runtime, imported directly; that package is under SuperDoc's proprietary DOCX Engine licence, not the AGPL) → Document API `projectHtml` in `redline` review mode. **Not the paginated view**: no page breaks, colours or fonts, pictures become placeholders; what was downgraded is counted in `x-unpainted` | flowing HTML |
 
-Not offered, deliberately: **SuperDoc** (its layout measures text through a browser canvas and paints into the DOM;
-its SDK wraps a native binary), **canvas-editor** (DOM and canvas throughout), **Apryse** and **Nutrient** (their
+Not offered, deliberately: SuperDoc's **paginated** view (its layout measures text through a browser canvas and paints
+into the DOM; its SDK wraps a native binary), **canvas-editor** (DOM and canvas throughout), **Apryse** and **Nutrient** (their
 server products are native/Docker). Running those here would mean faking a browser.
 
 Known gaps, stated rather than hidden:
@@ -126,7 +128,7 @@ Two Deno workarounds, each scoped to one engine and commented in place:
 
 ## Measuring
 
-- Server routes: `python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft 5`
+- Server routes: `python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft,superdoc 5`
   (plain `curl`, a never-seen `?n=` per request, `Server-Timing` parsed). The numbers on `/` are the first
   request to each engine after a deploy, then the median of 5 warm requests.
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed

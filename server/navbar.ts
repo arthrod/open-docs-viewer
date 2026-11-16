@@ -19,6 +19,7 @@ export const SERVER_RENDER_SLUGS = new Set([
   "docen",
   "eigenpal",
   "plate",
+  "superdoc",
 ]);
 
 export const WORDMARK_HTML = `<a class="wm" href="/" title="All engines and results">

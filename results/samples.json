@@ -233,6 +233,18 @@
       642,
       569
      ]
+    },
+    "superdoc": {
+     "code": 200,
+     "totalMs": 727,
+     "renderMs": 488,
+     "bytes": 18543,
+     "pages": null,
+     "runs": [
+      829,
+      727,
+      679
+     ]
     }
    },
    "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments with a never-seen ?n= per run"
@@ -468,6 +480,18 @@
       148820,
       160633,
       154755
+     ]
+    },
+    "superdoc": {
+     "code": 200,
+     "totalMs": 6166,
+     "renderMs": 5658,
+     "bytes": 1643395,
+     "pages": null,
+     "runs": [
+      6031,
+      6166,
+      6557
      ]
     }
    },

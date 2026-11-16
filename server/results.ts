@@ -101,7 +101,7 @@ export interface ServerResult {
   bytes: number;
 }
 export const SERVER_MEASURED_AT =
-  "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome)";
+  "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome). SuperDoc added 2026-11-16";
 export const SERVER_RESULTS: ServerResult[] = [
   {
     "slug": "docxodus",
@@ -174,5 +174,17 @@ export const SERVER_RESULTS: ServerResult[] = [
     "warmMs": 550,
     "warmRenderMs": 218,
     "bytes": 851493,
+  },
+  {
+    "slug": "superdoc",
+    "name": "SuperDoc",
+    "how": "@superdoc/docx-engine headless runtime → Document API projectHtml (redline mode): semantic HTML, not its paginated view; no colours, pictures as placeholders",
+    "output": "html",
+    "firstMs": 2030,
+    "firstInitMs": 654,
+    "firstRenderMs": 770,
+    "warmMs": 604,
+    "warmRenderMs": 448,
+    "bytes": 6466,
   },
 ];

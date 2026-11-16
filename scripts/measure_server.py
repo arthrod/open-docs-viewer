@@ -1,6 +1,6 @@
 """Measure /r/<engine> on the viewer val with plain HTTP: total time, bytes, Server-Timing.
 
-    python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft 5
+    python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft,superdoc 5
     python3 scripts/measure_server.py all 5 --doc lorem-500 --samples results/samples.json
 
 --doc showcase|redline|lorem-500 picks the document (default: the val's own
@@ -11,7 +11,7 @@ answers within 180 s is recorded as code 0.
 """
 import json, random, re, statistics, subprocess, sys, tempfile
 
-ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft"]
+ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc"]
 ENGINES = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
 RUNS = int(sys.argv[2])
 BASE = "https://viewers.benchmarks.law/r/"

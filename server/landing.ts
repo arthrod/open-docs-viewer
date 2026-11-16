@@ -66,7 +66,7 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
 <strong>Cold render</strong>: navigation start to the page's own "document is showing" signal; on 500 pages an engine may still be laying out the pages below the first screen.
 <strong>JS heap</strong>: JavaScript objects of the top page only. <strong>Renderer memory</strong>: resident memory of every renderer process of that Chrome,
 which also counts WebAssembly memory, canvases, the DOM and cross-origin frames (Chrome's own spare renderer is in it too, so compare engines with each other rather than reading it as an absolute).
-<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; six engines have one.
+<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; seven engines have one (SuperDoc's sends unpaginated HTML).
 Whether an engine <em>draws</em> the redline's tracked changes is a different question from how fast it opens it: open each link and look.</p>
   ${tables.join("\n")}
 </section>`;
@@ -127,10 +127,10 @@ ${stats}
 
 <section class="odv-section">
   <div class="sec-label"><span class="sq"></span><span>/ Server render</span></div>
-  <p class="fine">Six engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
+  <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
 <strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot).
-<strong>Warm</strong>: median of 5. Server time for SuperDoc and canvas-editor is not offered: both need a real browser (canvas measuring, DOM painting).</p>
+<strong>Warm</strong>: median of 5. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. canvas-editor has no server route: it draws to a canvas throughout.</p>
   <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">First</th><th class="n hide-sm">init · render</th><th class="n">Warm</th><th class="n hide-sm">render</th><th class="n">Sent</th><th>How</th></tr></thead><tbody>
 ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${
     r.output === "images" ? "page images" : r.output === "pages" ? "positioned pages" : r.output === "browser-paginated" ? "pages; breaks computed in the browser" : "flowing HTML"

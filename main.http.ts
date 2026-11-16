@@ -8,7 +8,7 @@
  *                               Microsoft's and Google's servers fetch theirs)
  *   GET /r/<engine>?src=<url>   server-rendered: the engine runs HERE and the browser
  *                               gets finished pages (docxodus, folio, eigenpal, plate,
- *                               docen, wordcraft); timings in the Server-Timing header
+ *                               docen, wordcraft, superdoc); timings in the Server-Timing header
  *   GET /results.json           the measurements shown on /
  *
  * Apples to apples: Microsoft's and Google's viewers fetch a public URL on
@@ -212,6 +212,8 @@ const RENDERERS: Record<string, Renderer> = {
   folio: lazy(async () => (await import("./server/folio.ts")).folioHtml),
   wordcraft: lazy(async () => (await import("./server/wordcraft.ts")).wordcraftHtml),
   docen: lazy(async () => (await import("./server/docen.ts")).docenHtml),
+  // Unpaginated: SuperDoc's headless runtime and its HTML projection (see the file).
+  superdoc: lazy(async () => (await import("./server/superdoc.ts")).superdocHtml),
   // docx-editor.dev (its open-docs slug is "eigenpal").
   eigenpal: lazy(async () => (await import("./server/docx-editor.ts")).docxEditorHtml),
   // Styled with the open-docs Plate page's own CSS (its shell head).
