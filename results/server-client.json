@@ -1,0 +1,327 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64",
+ "docs": {
+  "showcase": {
+   "docxodus": {
+    "loadMs": 2042,
+    "paintMs": 1768,
+    "heapBytes": 2108004,
+    "rendererRss": 278069248,
+    "domNodes": 925,
+    "bytes": 60844,
+    "requests": 3,
+    "runs": [
+     4924,
+     2042,
+     1745
+    ],
+    "error": null
+   },
+   "folio": {
+    "loadMs": 1850,
+    "paintMs": 1740,
+    "heapBytes": 1209364,
+    "rendererRss": 260358144,
+    "domNodes": 478,
+    "bytes": 143008,
+    "requests": 7,
+    "runs": [
+     10469,
+     1850,
+     980
+    ],
+    "error": null
+   },
+   "eigenpal": {
+    "loadMs": 3698,
+    "paintMs": 3804,
+    "heapBytes": 722920,
+    "rendererRss": 270712832,
+    "domNodes": 1046,
+    "bytes": 1168201,
+    "requests": 7,
+    "runs": [
+     19795,
+     3698,
+     1885
+    ],
+    "error": null
+   },
+   "plate": {
+    "loadMs": 986,
+    "paintMs": 1064,
+    "heapBytes": 1187500,
+    "rendererRss": 253050880,
+    "domNodes": 460,
+    "bytes": 13788,
+    "requests": 1,
+    "runs": [
+     986,
+     1073,
+     858
+    ],
+    "error": null
+   },
+   "docen": {
+    "loadMs": 1287,
+    "paintMs": 940,
+    "heapBytes": 722936,
+    "rendererRss": 266518528,
+    "domNodes": 301,
+    "bytes": 1138933,
+    "requests": 6,
+    "runs": [
+     22254,
+     1287,
+     586
+    ],
+    "error": null
+   },
+   "wordcraft": {
+    "loadMs": 1181,
+    "paintMs": 1224,
+    "heapBytes": 1189512,
+    "rendererRss": 259915776,
+    "domNodes": 36,
+    "bytes": 477390,
+    "requests": 1,
+    "runs": [
+     1082,
+     1181,
+     1328
+    ],
+    "error": null
+   },
+   "superdoc": {
+    "loadMs": 989,
+    "paintMs": 1076,
+    "heapBytes": 1187468,
+    "rendererRss": 252739584,
+    "domNodes": 231,
+    "bytes": 3393,
+    "requests": 1,
+    "runs": [
+     1815,
+     952,
+     989
+    ],
+    "error": null
+   }
+  },
+  "redline": {
+   "docxodus": {
+    "loadMs": 1255,
+    "paintMs": 988,
+    "heapBytes": 2062096,
+    "rendererRss": 279740416,
+    "domNodes": 1235,
+    "bytes": 61974,
+    "requests": 3,
+    "runs": [
+     1255,
+     1383,
+     905
+    ],
+    "error": null
+   },
+   "folio": {
+    "loadMs": 671,
+    "paintMs": 640,
+    "heapBytes": 1189444,
+    "rendererRss": 262193152,
+    "domNodes": 661,
+    "bytes": 147656,
+    "requests": 7,
+    "runs": [
+     671,
+     823,
+     566
+    ],
+    "error": null
+   },
+   "eigenpal": {
+    "loadMs": 1291,
+    "paintMs": 1360,
+    "heapBytes": 705188,
+    "rendererRss": 271319040,
+    "domNodes": 1264,
+    "bytes": 1131553,
+    "requests": 7,
+    "runs": [
+     1296,
+     1180,
+     1291
+    ],
+    "error": null
+   },
+   "plate": {
+    "loadMs": 567,
+    "paintMs": 640,
+    "heapBytes": 1187500,
+    "rendererRss": 254083072,
+    "domNodes": 720,
+    "bytes": 14451,
+    "requests": 1,
+    "runs": [
+     575,
+     567,
+     502
+    ],
+    "error": null
+   },
+   "docen": {
+    "loadMs": 423,
+    "paintMs": 404,
+    "heapBytes": 705008,
+    "rendererRss": 266469376,
+    "domNodes": 447,
+    "bytes": 1093892,
+    "requests": 6,
+    "runs": [
+     423,
+     508,
+     337
+    ],
+    "error": null
+   },
+   "wordcraft": {
+    "loadMs": 671,
+    "paintMs": 720,
+    "heapBytes": 1189512,
+    "rendererRss": 262897664,
+    "domNodes": 36,
+    "bytes": 573141,
+    "requests": 1,
+    "runs": [
+     541,
+     671,
+     904
+    ],
+    "error": null
+   },
+   "superdoc": {
+    "loadMs": 1052,
+    "paintMs": 1124,
+    "heapBytes": 1187468,
+    "rendererRss": 252919808,
+    "domNodes": 349,
+    "bytes": 4417,
+    "requests": 1,
+    "runs": [
+     1103,
+     949,
+     1052
+    ],
+    "error": null
+   }
+  },
+  "lorem-500": {
+   "docxodus": {
+    "loadMs": 9950,
+    "paintMs": 4304,
+    "heapBytes": 2621540,
+    "rendererRss": 945373184,
+    "domNodes": 28444,
+    "bytes": 588650,
+    "requests": 3,
+    "runs": [
+     10089,
+     9447,
+     9950
+    ],
+    "error": null
+   },
+   "folio": {
+    "loadMs": 7017,
+    "paintMs": 5932,
+    "heapBytes": 754100,
+    "rendererRss": 547864576,
+    "domNodes": 93497,
+    "bytes": 1794542,
+    "requests": 3,
+    "runs": [
+     7017,
+     8478,
+     6730
+    ],
+    "error": null
+   },
+   "eigenpal": {
+    "loadMs": null,
+    "paintMs": null,
+    "heapBytes": null,
+    "rendererRss": null,
+    "domNodes": null,
+    "bytes": null,
+    "requests": null,
+    "runs": [
+     null,
+     null,
+     null
+    ],
+    "error": "HTTP 500"
+   },
+   "plate": {
+    "loadMs": 2292,
+    "paintMs": 2168,
+    "heapBytes": 705180,
+    "rendererRss": 364642304,
+    "domNodes": 15415,
+    "bytes": 520449,
+    "requests": 1,
+    "runs": [
+     1796,
+     2292,
+     2382
+    ],
+    "error": null
+   },
+   "docen": {
+    "loadMs": 4195,
+    "paintMs": 2244,
+    "heapBytes": 723404,
+    "rendererRss": 1730641920,
+    "domNodes": 36966,
+    "bytes": 1184526,
+    "requests": 3,
+    "runs": [
+     4195,
+     4535,
+     3681
+    ],
+    "error": null
+   },
+   "wordcraft": {
+    "loadMs": 154045,
+    "paintMs": 70584,
+    "heapBytes": 1643260,
+    "rendererRss": 216858624,
+    "domNodes": 418,
+    "bytes": 109782668,
+    "requests": 1,
+    "runs": [
+     149897,
+     155132,
+     154045
+    ],
+    "error": null
+   },
+   "superdoc": {
+    "loadMs": 6936,
+    "paintMs": 7000,
+    "heapBytes": 705000,
+    "rendererRss": 308985856,
+    "domNodes": 6525,
+    "bytes": 456094,
+    "requests": 1,
+    "runs": [
+     7522,
+     6557,
+     6936
+    ],
+    "error": null
+   }
+  }
+ }
+}

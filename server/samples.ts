@@ -4,6 +4,8 @@
  * editors at editors.benchmarks.law load from their Menu.
  */
 import BUNDLED from "../results/samples.json" with { type: "json" };
+import CLIENT from "../results/server-client.json" with { type: "json" };
+import LIGHTHOUSE_JSON from "../results/lighthouse.json" with { type: "json" };
 
 export const FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main";
 
@@ -72,3 +74,48 @@ export interface SampleResults {
 }
 
 export const SAMPLE_RESULTS = BUNDLED as SampleResults;
+
+/** What one /r/ page costs the browser that opens it (scripts/measure_server_client.py). */
+export interface ServerClient {
+  /** Navigation start → end of the load event: server render, download, parse, layout, picture decoding. */
+  loadMs: number | null;
+  paintMs: number | null;
+  heapBytes: number | null;
+  rendererRss: number | null;
+  domNodes: number | null;
+  bytes: number | null;
+  requests: number | null;
+  runs: (number | null)[];
+  error: string | null;
+}
+export interface ServerClientResults {
+  measuredAt: string | null;
+  environment: string;
+  /** sample id → engine slug → medians */
+  docs: Record<string, Record<string, ServerClient>>;
+}
+export const SERVER_CLIENT = CLIENT as ServerClientResults;
+
+/** Lighthouse, as PageSpeed Insights runs it, for one page and one form factor (scripts/measure_pagespeed.py). */
+export interface LighthousePage {
+  performance: number | null;
+  accessibility: number | null;
+  bestPractices: number | null;
+  seo: number | null;
+  fcpMs: number | null;
+  lcpMs: number | null;
+  tbtMs: number | null;
+  cls: number | null;
+  speedIndexMs: number | null;
+  performanceRuns: (number | null)[];
+  error: string | null;
+}
+export interface LighthouseResults {
+  measuredAt: string | null;
+  environment: string;
+  /** "v/<slug>" and "r/<slug>" → medians, per form factor */
+  pages: Record<string, { desktop: LighthousePage; mobile: LighthousePage }>;
+  /** The same pages opening another sample: sample id → page → medians. */
+  docs?: Record<string, Record<string, { desktop: LighthousePage; mobile: LighthousePage }>>;
+}
+export const LIGHTHOUSE = LIGHTHOUSE_JSON as LighthouseResults;

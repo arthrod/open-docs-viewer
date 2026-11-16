@@ -1,0 +1,1379 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 3 analyses per page, median",
+ "base": "https://viewers.benchmarks.law",
+ "pages": {
+  "v/docxodus": {
+   "desktop": {
+    "performance": 40,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 217,
+    "lcpMs": 6862,
+    "tbtMs": 898,
+    "cls": 0.001,
+    "speedIndexMs": 3212,
+    "performanceRuns": [
+     41,
+     40,
+     37
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 42,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 776,
+    "lcpMs": 40061,
+    "tbtMs": 1176,
+    "cls": 0.0,
+    "speedIndexMs": 10770,
+    "performanceRuns": [
+     42,
+     46,
+     38
+    ],
+    "error": null
+   }
+  },
+  "v/folio": {
+   "desktop": {
+    "performance": 54,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 451,
+    "lcpMs": 2815,
+    "tbtMs": 784,
+    "cls": 0.002,
+    "speedIndexMs": 2226,
+    "performanceRuns": [
+     56,
+     54,
+     51
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 49,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1655,
+    "lcpMs": 13662,
+    "tbtMs": 737,
+    "cls": 0,
+    "speedIndexMs": 7658,
+    "performanceRuns": [
+     42,
+     49,
+     50
+    ],
+    "error": null
+   }
+  },
+  "v/eigenpal": {
+   "desktop": {
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 449,
+    "lcpMs": 4819,
+    "tbtMs": 1529,
+    "cls": 0.001,
+    "speedIndexMs": 2800,
+    "performanceRuns": [
+     41,
+     41,
+     39
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 47,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1662,
+    "lcpMs": 28833,
+    "tbtMs": 700,
+    "cls": 0.0,
+    "speedIndexMs": 10169,
+    "performanceRuns": [
+     51,
+     47,
+     44
+    ],
+    "error": null
+   }
+  },
+  "v/plate": {
+   "desktop": {
+    "performance": 72,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 234,
+    "lcpMs": 1638,
+    "tbtMs": 505,
+    "cls": 0.002,
+    "speedIndexMs": 2355,
+    "performanceRuns": [
+     78,
+     46,
+     72
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 61,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 771,
+    "lcpMs": 8252,
+    "tbtMs": 506,
+    "cls": 0.0,
+    "speedIndexMs": 4305,
+    "performanceRuns": [
+     46,
+     61,
+     68
+    ],
+    "error": null
+   }
+  },
+  "v/docen": {
+   "desktop": {
+    "performance": 39,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 235,
+    "lcpMs": 2299,
+    "tbtMs": 699,
+    "cls": 0.288,
+    "speedIndexMs": 3675,
+    "performanceRuns": [
+     28,
+     44,
+     39
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 54,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 930,
+    "cls": 0.327,
+    "speedIndexMs": 7033,
+    "performanceRuns": [
+     52,
+     61,
+     54
+    ],
+    "error": null
+   }
+  },
+  "v/wordcraft": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 680,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 876,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 97,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 2631,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 2494,
+    "performanceRuns": [
+     97,
+     97,
+     96
+    ],
+    "error": null
+   }
+  },
+  "v/superdoc": {
+   "desktop": {
+    "performance": 50,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 453,
+    "lcpMs": 3254,
+    "tbtMs": 748,
+    "cls": 0.137,
+    "speedIndexMs": 1290,
+    "performanceRuns": [
+     50,
+     48,
+     60
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 49,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1672,
+    "lcpMs": 17474,
+    "tbtMs": 884,
+    "cls": 0.05,
+    "speedIndexMs": 5463,
+    "performanceRuns": [
+     45,
+     61,
+     49
+    ],
+    "error": null
+   }
+  },
+  "v/canvas-editor": {
+   "desktop": {
+    "performance": 98,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 80,
+    "fcpMs": 235,
+    "lcpMs": 235,
+    "tbtMs": 48,
+    "cls": 0.079,
+    "speedIndexMs": 764,
+    "performanceRuns": [
+     98,
+     98,
+     null
+    ],
+    "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+   },
+   "mobile": {
+    "performance": 97,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 800,
+    "lcpMs": 800,
+    "tbtMs": 179,
+    "cls": 0.008,
+    "speedIndexMs": 3220,
+    "performanceRuns": [
+     97,
+     97,
+     null
+    ],
+    "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+   }
+  },
+  "v/apryse": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 69,
+    "cls": 0.002,
+    "speedIndexMs": 229,
+    "performanceRuns": [
+     100,
+     100,
+     67
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 92,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 354,
+    "cls": 0.0,
+    "speedIndexMs": 773,
+    "performanceRuns": [
+     92,
+     98,
+     76
+    ],
+    "error": null
+   }
+  },
+  "v/nutrient": {
+   "desktop": {
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 546,
+    "cls": 0.002,
+    "speedIndexMs": 2538,
+    "performanceRuns": [
+     84,
+     72,
+     71
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 79,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 551,
+    "cls": 0.0,
+    "speedIndexMs": 6332,
+    "performanceRuns": [
+     87,
+     79,
+     79
+    ],
+    "error": null
+   }
+  },
+  "v/word-online": {
+   "desktop": {
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 223,
+    "lcpMs": 223,
+    "tbtMs": 0,
+    "cls": 0.003,
+    "speedIndexMs": 1955,
+    "performanceRuns": [
+     94,
+     96,
+     99
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 94,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 6397,
+    "performanceRuns": [
+     94,
+     97,
+     91
+    ],
+    "error": null
+   }
+  },
+  "v/google-viewer": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 221,
+    "lcpMs": 221,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 257,
+    "performanceRuns": [
+     100,
+     100,
+     99
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 60,
+    "cls": 0.0,
+    "speedIndexMs": 3501,
+    "performanceRuns": [
+     98,
+     99,
+     100
+    ],
+    "error": null
+   }
+  },
+  "r/docxodus": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 261,
+    "lcpMs": 521,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 809,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 99,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 924,
+    "lcpMs": 1847,
+    "tbtMs": 7,
+    "cls": 0,
+    "speedIndexMs": 2256,
+    "performanceRuns": [
+     99,
+     100,
+     99
+    ],
+    "error": null
+   }
+  },
+  "r/folio": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 299,
+    "lcpMs": 594,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 577,
+    "performanceRuns": [
+     100,
+     100,
+     99
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 99,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 968,
+    "lcpMs": 2136,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1474,
+    "performanceRuns": [
+     100,
+     99,
+     99
+    ],
+    "error": null
+   }
+  },
+  "r/eigenpal": {
+   "desktop": {
+    "performance": 96,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 523,
+    "lcpMs": 1403,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 885,
+    "performanceRuns": [
+     96,
+     95,
+     96
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 76,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1840,
+    "lcpMs": 6491,
+    "tbtMs": 0,
+    "cls": 0.009,
+    "speedIndexMs": 2941,
+    "performanceRuns": [
+     76,
+     76,
+     74
+    ],
+    "error": null
+   }
+  },
+  "r/plate": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 244,
+    "lcpMs": 244,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 546,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 801,
+    "lcpMs": 801,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1055,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   }
+  },
+  "r/docen": {
+   "desktop": {
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 261,
+    "lcpMs": 1172,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 444,
+    "performanceRuns": [
+     98,
+     97,
+     98
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 79,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 835,
+    "lcpMs": 5903,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1479,
+    "performanceRuns": [
+     79,
+     76,
+     100
+    ],
+    "error": null
+   }
+  },
+  "r/wordcraft": {
+   "desktop": {
+    "performance": 99,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 793,
+    "lcpMs": 793,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 836,
+    "performanceRuns": [
+     99,
+     99,
+     99
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 85,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 3348,
+    "lcpMs": 3353,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 3348,
+    "performanceRuns": [
+     85,
+     85,
+     85
+    ],
+    "error": null
+   }
+  },
+  "r/superdoc": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 782,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1783,
+    "performanceRuns": [
+     100,
+     100,
+     100
+    ],
+    "error": null
+   }
+  }
+ },
+ "docs": {
+  "lorem-500": {
+   "v/docxodus": {
+    "desktop": {
+     "performance": 35,
+     "accessibility": 96,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 215,
+     "lcpMs": 10411,
+     "tbtMs": 10052,
+     "cls": 0.001,
+     "speedIndexMs": 20679,
+     "performanceRuns": [
+      null,
+      35,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "mobile": {
+     "performance": 35,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 771,
+     "lcpMs": 42778,
+     "tbtMs": 10082,
+     "cls": 0.0,
+     "speedIndexMs": 42732,
+     "performanceRuns": [
+      35,
+      35,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    }
+   },
+   "v/folio": {
+    "desktop": {
+     "performance": 38,
+     "accessibility": 96,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 443,
+     "lcpMs": 4505,
+     "tbtMs": 4699,
+     "cls": 0.002,
+     "speedIndexMs": 6395,
+     "performanceRuns": [
+      36,
+      38,
+      39
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 34,
+     "accessibility": 92,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 1655,
+     "lcpMs": 18085,
+     "tbtMs": 9096,
+     "cls": 0.0,
+     "speedIndexMs": 20316,
+     "performanceRuns": [
+      34,
+      34,
+      34
+     ],
+     "error": null
+    }
+   },
+   "v/eigenpal": {
+    "desktop": {
+     "performance": 40,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 450,
+     "lcpMs": 5063,
+     "tbtMs": 877,
+     "cls": 0.001,
+     "speedIndexMs": 4355,
+     "performanceRuns": [
+      40,
+      42,
+      37
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 66,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 1662,
+     "lcpMs": 1662,
+     "tbtMs": 1130,
+     "cls": 0.0,
+     "speedIndexMs": 13086,
+     "performanceRuns": [
+      69,
+      66,
+      65
+     ],
+     "error": null
+    }
+   },
+   "v/plate": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    }
+   },
+   "v/docen": {
+    "desktop": {
+     "performance": 57,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 214,
+     "lcpMs": 2310,
+     "tbtMs": 578,
+     "cls": 0.002,
+     "speedIndexMs": 2446,
+     "performanceRuns": [
+      100,
+      57,
+      43
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 53,
+     "accessibility": 85,
+     "bestPractices": 88,
+     "seo": 91,
+     "fcpMs": 765,
+     "lcpMs": 767,
+     "tbtMs": 1160,
+     "cls": 0.327,
+     "speedIndexMs": 7872,
+     "performanceRuns": [
+      55,
+      44,
+      53
+     ],
+     "error": null
+    }
+   },
+   "v/wordcraft": {
+    "desktop": {
+     "performance": 99,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 218,
+     "lcpMs": 915,
+     "tbtMs": 0,
+     "cls": 0.002,
+     "speedIndexMs": 875,
+     "performanceRuns": [
+      99,
+      99,
+      99
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 84,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 765,
+     "lcpMs": 4543,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 2724,
+     "performanceRuns": [
+      83,
+      84,
+      84
+     ],
+     "error": null
+    }
+   },
+   "v/superdoc": {
+    "desktop": {
+     "performance": 59,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 459,
+     "lcpMs": 3545,
+     "tbtMs": 376,
+     "cls": 0.137,
+     "speedIndexMs": 1364,
+     "performanceRuns": [
+      58,
+      59,
+      59
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 59,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 1689,
+     "lcpMs": 19470,
+     "tbtMs": 418,
+     "cls": 0.05,
+     "speedIndexMs": 5355,
+     "performanceRuns": [
+      59,
+      58,
+      60
+     ],
+     "error": null
+    }
+   },
+   "v/canvas-editor": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    }
+   },
+   "v/apryse": {
+    "desktop": {
+     "performance": 63,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 213,
+     "lcpMs": 213,
+     "tbtMs": 1085,
+     "cls": 0.007,
+     "speedIndexMs": 3708,
+     "performanceRuns": [
+      65,
+      60,
+      63
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 69,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 766,
+     "lcpMs": 766,
+     "tbtMs": 1157,
+     "cls": 0.0,
+     "speedIndexMs": 8997,
+     "performanceRuns": [
+      57,
+      69,
+      69
+     ],
+     "error": null
+    }
+   },
+   "v/nutrient": {
+    "desktop": {
+     "performance": 81,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 219,
+     "lcpMs": 219,
+     "tbtMs": 316,
+     "cls": 0.002,
+     "speedIndexMs": 2498,
+     "performanceRuns": [
+      85,
+      81,
+      70
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 85,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 767,
+     "lcpMs": 767,
+     "tbtMs": 359,
+     "cls": 0.0,
+     "speedIndexMs": 6952,
+     "performanceRuns": [
+      87,
+      77,
+      85
+     ],
+     "error": null
+    }
+   },
+   "v/word-online": {
+    "desktop": {
+     "performance": 100,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 225,
+     "lcpMs": 225,
+     "tbtMs": 0,
+     "cls": 0.003,
+     "speedIndexMs": 1107,
+     "performanceRuns": [
+      100,
+      100,
+      94
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 99,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 780,
+     "lcpMs": 780,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 3106,
+     "performanceRuns": [
+      100,
+      99,
+      99
+     ],
+     "error": null
+    }
+   },
+   "v/google-viewer": {
+    "desktop": {
+     "performance": 93,
+     "accessibility": 100,
+     "bestPractices": 58,
+     "seo": 90,
+     "fcpMs": 222,
+     "lcpMs": 222,
+     "tbtMs": 119,
+     "cls": 0.002,
+     "speedIndexMs": 2091,
+     "performanceRuns": [
+      93,
+      100,
+      87
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 89,
+     "accessibility": 100,
+     "bestPractices": 58,
+     "seo": 91,
+     "fcpMs": 775,
+     "lcpMs": 775,
+     "tbtMs": 222,
+     "cls": 0.0,
+     "speedIndexMs": 7012,
+     "performanceRuns": [
+      80,
+      89,
+      95
+     ],
+     "error": null
+    }
+   },
+   "r/docxodus": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "mobile": {
+     "performance": 28,
+     "accessibility": 91,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3600,
+     "lcpMs": 9486,
+     "tbtMs": 10030,
+     "cls": 0,
+     "speedIndexMs": 35780,
+     "performanceRuns": [
+      28,
+      null,
+      null
+     ],
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+    }
+   },
+   "r/folio": {
+    "desktop": {
+     "performance": 54,
+     "accessibility": 74,
+     "bestPractices": null,
+     "seo": 80,
+     "fcpMs": 5364,
+     "lcpMs": 5620,
+     "tbtMs": 120,
+     "cls": 0,
+     "speedIndexMs": 7343,
+     "performanceRuns": [
+      54,
+      null,
+      null
+     ],
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+    },
+    "mobile": {
+     "performance": 30,
+     "accessibility": 74,
+     "bestPractices": null,
+     "seo": 80,
+     "fcpMs": 9944,
+     "lcpMs": 10969,
+     "tbtMs": 1338,
+     "cls": 0,
+     "speedIndexMs": 15195,
+     "performanceRuns": [
+      30,
+      null,
+      null
+     ],
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+    }
+   },
+   "r/eigenpal": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    }
+   },
+   "r/plate": {
+    "desktop": {
+     "performance": 97,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 869,
+     "lcpMs": 869,
+     "tbtMs": 18,
+     "cls": 0,
+     "speedIndexMs": 1561,
+     "performanceRuns": [
+      97,
+      97,
+      96
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 84,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3464,
+     "lcpMs": 3464,
+     "tbtMs": 6,
+     "cls": 0,
+     "speedIndexMs": 3464,
+     "performanceRuns": [
+      83,
+      84,
+      84
+     ],
+     "error": null
+    }
+   },
+   "r/docen": {
+    "desktop": {
+     "performance": 53,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 82,
+     "fcpMs": 1196,
+     "lcpMs": 1688,
+     "tbtMs": 1566,
+     "cls": 0,
+     "speedIndexMs": 2143,
+     "performanceRuns": [
+      53,
+      53,
+      59
+     ],
+     "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+    },
+    "mobile": {
+     "performance": 33,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 82,
+     "fcpMs": 4686,
+     "lcpMs": 7399,
+     "tbtMs": 3310,
+     "cls": 0,
+     "speedIndexMs": 5649,
+     "performanceRuns": [
+      28,
+      33,
+      38
+     ],
+     "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+    }
+   },
+   "r/wordcraft": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    }
+   },
+   "r/superdoc": {
+    "desktop": {
+     "performance": 88,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 897,
+     "lcpMs": 897,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 5927,
+     "performanceRuns": [
+      89,
+      null,
+      88
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "mobile": {
+     "performance": 77,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3258,
+     "lcpMs": 3258,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 15153,
+     "performanceRuns": [
+      77,
+      null,
+      77
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    }
+   }
+  }
+ }
+}

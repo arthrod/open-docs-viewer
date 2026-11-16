@@ -106,6 +106,8 @@ ${NAVBAR_CSS}
 .odv-h3{font-size:17px;margin:28px 0 10px}
 .odv-h3 .ro{display:block;font-family:var(--font-mono);font-size:10px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 .odv-fail{font-weight:600;color:#b42318}
+.lh-tbl td.n{white-space:nowrap}
+.lh-good{color:#0a7a3d}.lh-mid{color:#9a5b00}.lh-bad{color:#b42318}
 .odv-foot{margin:52px 0 44px;padding-top:22px;border-top:1px solid var(--ink);font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;
   text-transform:uppercase;color:var(--muted);line-height:1.6}
 .odv-foot a{text-decoration:underline;text-decoration-color:var(--link-rule);text-underline-offset:2px}
