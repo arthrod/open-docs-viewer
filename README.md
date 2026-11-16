@@ -252,6 +252,16 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | SuperDoc | 88 · 77 | 897 ms · 3.26 s | 0 ms · 0 ms | 0.0 · 0.0 | 897 ms · 3.26 s | 5.93 s · 15.2 s | 100 | 100 | 90 | 89/fail/88 · 77/fail/77 |
 <!-- lighthouse:end -->
 
+## Tests
+
+```sh
+deno check --allow-import main.http.ts
+deno test -A server/                                   # the WordCraft tests fetch the wasm module and the samples
+uv run --with pytest pytest scripts/tests              # the measurement scripts' logic (scripts/measure_lib.py)
+```
+
+`.github/workflows/ci.yml` runs the same on every pull request, with coverage.
+
 ## Measuring
 
 - Server routes: `python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft,superdoc 5`

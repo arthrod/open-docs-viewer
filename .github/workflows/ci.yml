@@ -1,0 +1,44 @@
+name: CI
+
+# Type-check the server and run every test, with coverage: Deno/TypeScript and
+# the Python measurement helpers. (The Re-measure workflow beside this one
+# runs the benchmark itself; it does not test anything.)
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deno:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check the server
+        run: deno check --allow-import main.http.ts
+      # The WordCraft tests fetch the wasm module (GitHub, pinned commit) and the sample documents (Hugging Face).
+      - name: Tests (type-checked) with coverage
+        run: deno test -A --coverage=cov server/
+      - name: Coverage
+        run: deno coverage cov
+
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Compile every script
+        run: uv run python -m compileall -q scripts
+      - name: Tests with coverage
+        run: uv run --with pytest --with pytest-cov pytest scripts/tests --cov=measure_lib --cov-report=term-missing
