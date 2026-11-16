@@ -9,6 +9,7 @@ import {
 } from "./results.ts";
 import { landingNavBar } from "./navbar.ts";
 import { VIEWER_DS_CSS } from "./render.ts";
+import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl } from "./samples.ts";
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -16,6 +17,60 @@ const ms = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1000 ? `${Math.round(n)} ms` : `${(n / 1000).toFixed(2)} s`;
 const mb = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
+
+/**
+ * The other documents (redline, 500 pages): one table per sample, the /v/
+ * page (browser) and the /r/ route (server) side by side. A cell that failed
+ * says so; nothing is left out because it looks bad.
+ */
+export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RESULTS): string {
+  const tables = SAMPLES.filter((s) => res.samples[s.id]).map((s: Sample) => {
+    const r = res.samples[s.id];
+    const src = encodeURIComponent(sampleUrl(s));
+    const row = (e: Engine) => {
+      const b = r.browser[e.slug], v = r.server[e.slug];
+      if (!b && !v) {
+        // Added to the registry after this measurement: say so, rather than a row of blanks.
+        return `<tr><td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a></td><td colspan="6" class="ro">not measured on this file yet</td></tr>`;
+      }
+      const runs = b?.runs ?? [];
+      const browser = !b
+        ? "n/a"
+        : b.renderedMs == null
+        ? `<span class="odv-fail" title="${esc(b.how ?? "")}">failed</span>`
+        : `<b>${ms(b.renderedMs)}</b>`;
+      const server = !v
+        ? `<span class="ro">no server route</span>`
+        : v.code !== 200
+        ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>`
+        : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>`;
+      return `<tr>
+      <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}</td>
+      <td class="n">${browser}</td>
+      <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
+      <td class="n">${mb(b?.heapBytes)}</td>
+      <td class="n">${mb(b?.rendererRss)}</td>
+      <td class="n hide-sm">${mb(b?.bytes)}</td>
+      <td class="n">${server}</td>
+    </tr>`;
+    };
+    return `<h3 class="odv-h3" id="sample-${s.id}">${esc(s.label)} <span class="ro">${esc(s.file)} · ${esc(s.note)}</span></h3>
+  <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">Cold render</th><th class="n hide-sm">Each run</th><th class="n">JS heap</th>
+    <th class="n">Renderer memory</th><th class="n hide-sm">Downloaded</th><th class="n">Server render</th></tr></thead>
+  <tbody>${engines.map(row).join("")}</tbody></table></div>`;
+  });
+  if (!tables.length) return "";
+  return `<section class="odv-section" id="samples">
+  <div class="sec-label"><span class="sq"></span><span>/ Other documents</span></div>
+  <p class="fine">The same harness on two harder files. Measured ${esc(res.measuredAt ?? "")} · ${esc(res.environment)}.
+<strong>Cold render</strong>: navigation start to the page's own "document is showing" signal; on 500 pages an engine may still be laying out the pages below the first screen.
+<strong>JS heap</strong>: JavaScript objects of the top page only. <strong>Renderer memory</strong>: resident memory of every renderer process of that Chrome,
+which also counts WebAssembly memory, canvases, the DOM and cross-origin frames (Chrome's own spare renderer is in it too, so compare engines with each other rather than reading it as an absolute).
+<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; six engines have one.
+Whether an engine <em>draws</em> the redline's tracked changes is a different question from how fast it opens it: open each link and look.</p>
+  ${tables.join("\n")}
+</section>`;
+}
 
 export function landingPage(engines: Engine[], results: Results, defaultSrc: string): string {
   const link = (e: Engine) => `/v/${e.slug}?src=${encodeURIComponent(defaultSrc)}`;
@@ -62,6 +117,9 @@ ${landingNavBar()}
     <div class="fld"><label for="odv-engine">Engine</label><select id="odv-engine" name="engine" aria-label="Engine">${options}</select></div>
     <button class="btn btn-primary" type="submit">View</button>
   </form>
+  <p class="odv-samples"><span>Samples</span>${
+    SAMPLES.map((s) => `<button type="button" class="btn btn-ghost" data-src="${esc(sampleUrl(s))}" title="${esc(s.note)}" onclick="document.getElementById('odv-src').value=this.dataset.src">${esc(s.label)}</button>`).join("")
+  }</p>
   <p class="fine">The URL goes to the engine you pick: to Microsoft or Google for theirs, to this val's server otherwise. Use only documents you are happy to publish.</p>
 </header>
 
@@ -98,6 +156,8 @@ Each engine page also has <strong>Re-measure now</strong> for your own browser, 
   <div class="table-wrap"><table class="tbl">${head}<tbody>${open.map(row).join("")}</tbody>
 <tbody><tr class="odv-sep"><th colspan="8">Proprietary · view-only by nature. Microsoft and Google render on their servers; Apryse and Nutrient run unlicensed in evaluation mode (watermarked).</th></tr>${prop.map(row).join("")}</tbody></table></div>
 </section>
+
+${samplesSection(engines)}
 
 <footer class="odv-foot">Source: <a href="https://www.val.town/x/arthrod/open-docs-viewer">val.town/x/arthrod/open-docs-viewer</a> · engines from <a href="https://github.com/arthrod/open-docs">github.com/arthrod/open-docs</a> · fixture: <a href="https://huggingface.co/datasets/arthrod/open-docs-fixtures">huggingface.co/datasets/arthrod/open-docs-fixtures</a></footer>
 </div>

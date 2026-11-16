@@ -26,6 +26,8 @@ import { parseHTML } from "npm:linkedom@0.18.12";
 // Shared with the open-docs browser adapter (tested there), pinned to one version.
 import { imageNode, type Picture, pictureLayout } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/pictures.ts";
 import { safeUrl } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/safe-url.ts";
+// Tracked changes as underline / strikethrough before mammoth sees them, as the editor adapter does.
+import { revisionsAsFormatting } from "https://esm.town/v/arthrod/open-docs@698-main/lib/revisions.ts";
 export { safeUrl };
 
 // deno-lint-ignore no-explicit-any
@@ -42,6 +44,7 @@ const STYLE_MAP = [
   "p[style-name='Intense Quote'] => blockquote > p:fresh",
   "p[style-name='Code'] => pre:separator('\\n')",
   "r[style-name='Code Char'] => code",
+  "u => u", // mammoth ignores underline unless told
 ];
 
 const isList = (el: Any) => el.tagName === "UL" || el.tagName === "OL";
@@ -81,6 +84,8 @@ export { loadMammoth };
 
 export async function docxToNodes(bytes: Uint8Array): Promise<{ nodes: Any[]; dropped: number }> {
   const mammoth = await loadMammoth();
+  // mammoth keeps inserted text and drops deleted text; make both visible first.
+  bytes = revisionsAsFormatting(bytes).bytes;
   const { value: html } = await mammoth.convertToHtml({ arrayBuffer: bytes.slice().buffer } as Any, { styleMap: STYLE_MAP });
   const { document } = parseHTML(`<!doctype html><html><body>${html}</body></html>`);
   const root: Any = document.body;

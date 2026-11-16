@@ -1,0 +1,477 @@
+{
+ "measuredAt": "2026-11-15",
+ "environment": "Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64",
+ "samples": {
+  "redline": {
+   "browser": {
+    "apryse": {
+     "renderedMs": 3924,
+     "runs": [
+      6593,
+      3924,
+      1712
+     ],
+     "bytes": 7447316,
+     "requests": 162,
+     "heapBytes": 21955744,
+     "rendererRss": 477888512,
+     "how": "data-od-rendered"
+    },
+    "canvas-editor": {
+     "renderedMs": 1091,
+     "runs": [
+      964,
+      1503,
+      1091
+     ],
+     "bytes": 689246,
+     "requests": 28,
+     "heapBytes": 10129996,
+     "rendererRss": 349765632,
+     "how": "data-od-rendered"
+    },
+    "docen": {
+     "renderedMs": 1121,
+     "runs": [
+      2621,
+      1121,
+      1078
+     ],
+     "bytes": 1527052,
+     "requests": 329,
+     "heapBytes": 18497236,
+     "rendererRss": 385122304,
+     "how": "data-od-rendered"
+    },
+    "docxodus": {
+     "renderedMs": 1696,
+     "runs": [
+      2794,
+      1398,
+      1696
+     ],
+     "bytes": 8154585,
+     "requests": 60,
+     "heapBytes": 7778768,
+     "rendererRss": 391823360,
+     "how": "data-od-rendered"
+    },
+    "eigenpal": {
+     "renderedMs": 945,
+     "runs": [
+      1493,
+      935,
+      945
+     ],
+     "bytes": 5331323,
+     "requests": 205,
+     "heapBytes": 31641904,
+     "rendererRss": 386072576,
+     "how": "data-od-rendered"
+    },
+    "folio": {
+     "renderedMs": 1115,
+     "runs": [
+      1004,
+      1115,
+      1196
+     ],
+     "bytes": 2295325,
+     "requests": 81,
+     "heapBytes": 26794080,
+     "rendererRss": 382599168,
+     "how": "data-od-rendered"
+    },
+    "google-viewer": {
+     "renderedMs": 2009,
+     "runs": [
+      1103,
+      null,
+      2915
+     ],
+     "bytes": 1197617,
+     "requests": 30,
+     "heapBytes": 1862528,
+     "rendererRss": 424427520,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
+    },
+    "nutrient": {
+     "renderedMs": 3176,
+     "runs": [
+      3176,
+      4214,
+      3042
+     ],
+     "bytes": 25640920,
+     "requests": 102,
+     "heapBytes": 22738288,
+     "rendererRss": 516947968,
+     "how": "data-od-rendered"
+    },
+    "plate": {
+     "renderedMs": 1717,
+     "runs": [
+      2086,
+      1689,
+      1717
+     ],
+     "bytes": 1149213,
+     "requests": 433,
+     "heapBytes": 11354580,
+     "rendererRss": 321634304,
+     "how": "data-od-rendered"
+    },
+    "superdoc": {
+     "renderedMs": 2421,
+     "runs": [
+      2467,
+      2421,
+      2208
+     ],
+     "bytes": 8299928,
+     "requests": 26,
+     "heapBytes": 15427312,
+     "rendererRss": 578666496,
+     "how": "data-od-rendered"
+    },
+    "word-online": {
+     "renderedMs": 662,
+     "runs": [
+      720,
+      662,
+      560
+     ],
+     "bytes": 1754276,
+     "requests": 70,
+     "heapBytes": 1770824,
+     "rendererRss": 720076800,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
+    },
+    "wordcraft": {
+     "renderedMs": 1707,
+     "runs": [
+      1982,
+      1707,
+      1502
+     ],
+     "bytes": 22953008,
+     "requests": 20,
+     "heapBytes": 3271288,
+     "rendererRss": 680738816,
+     "how": "data-od-rendered"
+    }
+   },
+   "server": {
+    "docxodus": {
+     "code": 200,
+     "totalMs": 1086,
+     "renderMs": 543,
+     "bytes": 73957,
+     "pages": null,
+     "runs": [
+      1862,
+      1086,
+      737
+     ]
+    },
+    "folio": {
+     "code": 200,
+     "totalMs": 671,
+     "renderMs": 314,
+     "bytes": 256182,
+     "pages": 3,
+     "runs": [
+      1132,
+      671,
+      497
+     ]
+    },
+    "eigenpal": {
+     "code": 200,
+     "totalMs": 1209,
+     "renderMs": 899,
+     "bytes": 333845,
+     "pages": 3,
+     "runs": [
+      1362,
+      1209,
+      1023
+     ]
+    },
+    "plate": {
+     "code": 200,
+     "totalMs": 467,
+     "renderMs": 204,
+     "bytes": 38020,
+     "pages": null,
+     "runs": [
+      939,
+      467,
+      467
+     ]
+    },
+    "docen": {
+     "code": 200,
+     "totalMs": 362,
+     "renderMs": 46,
+     "bytes": 56598,
+     "pages": 4,
+     "runs": [
+      754,
+      279,
+      362
+     ]
+    },
+    "wordcraft": {
+     "code": 200,
+     "totalMs": 642,
+     "renderMs": 309,
+     "bytes": 962517,
+     "pages": 3,
+     "runs": [
+      1285,
+      642,
+      569
+     ]
+    }
+   },
+   "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments with a never-seen ?n= per run"
+  },
+  "lorem-500": {
+   "browser": {
+    "apryse": {
+     "renderedMs": 1979,
+     "runs": [
+      1941,
+      1979,
+      2010
+     ],
+     "bytes": 7785700,
+     "requests": 161,
+     "heapBytes": 28157280,
+     "rendererRss": 551141376,
+     "how": "data-od-rendered"
+    },
+    "canvas-editor": {
+     "renderedMs": 13549,
+     "runs": [
+      13364,
+      13549,
+      14252
+     ],
+     "bytes": 1076511,
+     "requests": 28,
+     "heapBytes": 1341604740,
+     "rendererRss": 2403139584,
+     "how": "data-od-rendered"
+    },
+    "docen": {
+     "renderedMs": 2479,
+     "runs": [
+      2479,
+      2348,
+      3945
+     ],
+     "bytes": 1914127,
+     "requests": 329,
+     "heapBytes": 22698104,
+     "rendererRss": 588349440,
+     "how": "data-od-rendered"
+    },
+    "docxodus": {
+     "renderedMs": 7144,
+     "runs": [
+      5647,
+      9967,
+      7144
+     ],
+     "bytes": 8472541,
+     "requests": 59,
+     "heapBytes": 14229928,
+     "rendererRss": 1033289728,
+     "how": "data-od-rendered"
+    },
+    "eigenpal": {
+     "renderedMs": 1299,
+     "runs": [
+      1290,
+      2045,
+      1299
+     ],
+     "bytes": 5716147,
+     "requests": 204,
+     "heapBytes": 158515820,
+     "rendererRss": 677232640,
+     "how": "data-od-rendered"
+    },
+    "folio": {
+     "renderedMs": 2110,
+     "runs": [
+      2068,
+      2733,
+      2110
+     ],
+     "bytes": 2652254,
+     "requests": 78,
+     "heapBytes": 58974380,
+     "rendererRss": 1003012096,
+     "how": "data-od-rendered"
+    },
+    "google-viewer": {
+     "renderedMs": 1018,
+     "runs": [
+      27749,
+      975,
+      1018
+     ],
+     "bytes": 1168344,
+     "requests": 30,
+     "heapBytes": 1817048,
+     "rendererRss": 480493568,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
+    },
+    "nutrient": {
+     "renderedMs": 8199,
+     "runs": [
+      8638,
+      7910,
+      8199
+     ],
+     "bytes": 25925456,
+     "requests": 102,
+     "heapBytes": 29684844,
+     "rendererRss": 547864576,
+     "how": "data-od-rendered"
+    },
+    "plate": {
+     "renderedMs": 21138,
+     "runs": [
+      21913,
+      21138,
+      20608
+     ],
+     "bytes": 1537147,
+     "requests": 433,
+     "heapBytes": 85757300,
+     "rendererRss": 476495872,
+     "how": "data-od-rendered"
+    },
+    "superdoc": {
+     "renderedMs": 5811,
+     "runs": [
+      5712,
+      5811,
+      6629
+     ],
+     "bytes": 8684368,
+     "requests": 25,
+     "heapBytes": 38002836,
+     "rendererRss": 1160249344,
+     "how": "data-od-rendered"
+    },
+    "word-online": {
+     "renderedMs": 788,
+     "runs": [
+      824,
+      786,
+      788
+     ],
+     "bytes": 1981042,
+     "requests": 71,
+     "heapBytes": 1781040,
+     "rendererRss": 702054400,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
+    },
+    "wordcraft": {
+     "renderedMs": 2711,
+     "runs": [
+      3022,
+      2711,
+      2352
+     ],
+     "bytes": 23340307,
+     "requests": 20,
+     "heapBytes": 3272132,
+     "rendererRss": 741785600,
+     "how": "data-od-rendered"
+    }
+   },
+   "server": {
+    "docxodus": {
+     "code": 200,
+     "totalMs": 4998,
+     "renderMs": 4397,
+     "bytes": 2230977,
+     "pages": null,
+     "runs": [
+      4120,
+      6829,
+      4998
+     ]
+    },
+    "folio": {
+     "code": 200,
+     "totalMs": 6578,
+     "renderMs": 5775,
+     "bytes": 30026223,
+     "pages": 500,
+     "runs": [
+      6578,
+      9792,
+      6203
+     ]
+    },
+    "eigenpal": {
+     "code": 500,
+     "totalMs": null,
+     "renderMs": null,
+     "bytes": null,
+     "pages": null,
+     "runs": [
+      null,
+      null,
+      null
+     ],
+     "error": "\"socket hang up\""
+    },
+    "plate": {
+     "code": 200,
+     "totalMs": 2339,
+     "renderMs": 875,
+     "bytes": 2055771,
+     "pages": null,
+     "runs": [
+      2221,
+      2339,
+      2495
+     ]
+    },
+    "docen": {
+     "code": 200,
+     "totalMs": 2448,
+     "renderMs": 1256,
+     "bytes": 5003908,
+     "pages": 623,
+     "runs": [
+      2298,
+      2448,
+      2514
+     ]
+    },
+    "wordcraft": {
+     "code": 200,
+     "totalMs": 154755,
+     "renderMs": 64544,
+     "bytes": 234422208,
+     "pages": 550,
+     "runs": [
+      148820,
+      160633,
+      154755
+     ]
+    }
+   },
+   "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word with a never-seen ?n= per run"
+  }
+ }
+}

@@ -1,0 +1,74 @@
+/**
+ * The documents the bench offers besides whatever URL a visitor types: all in
+ * the Hugging Face dataset arthrod/open-docs-fixtures, the same files the
+ * editors at editors.benchmarks.law load from their Menu.
+ */
+import BUNDLED from "../results/samples.json" with { type: "json" };
+
+export const FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main";
+
+export interface Sample {
+  id: string;
+  file: string;
+  /** Short name for buttons and headings. */
+  label: string;
+  /** What it is for. */
+  note: string;
+}
+
+export const SAMPLES: Sample[] = [
+  {
+    id: "showcase",
+    file: "showcase.docx",
+    label: "Rich sample",
+    note: "3 pages: styles, lists, a table with a merged cell, a chart, header and footer",
+  },
+  {
+    id: "redline",
+    file: "redline.docx",
+    label: "Redline",
+    note: "the rich sample after two reviewers: 23 tracked changes and 6 comments",
+  },
+  {
+    id: "lorem-500",
+    file: "lorem-500.docx",
+    label: "500 pages",
+    note: "lorem ipsum, 50 chapters of 10 pages, 2,726 paragraphs (500 pages in Microsoft Word)",
+  },
+];
+
+export const sampleUrl = (s: Sample) => `${FIXTURES}/${s.file}`;
+
+/** One engine's /v/ page on one sample (scripts/measure.py --doc). */
+export interface SampleBrowser {
+  renderedMs: number | null;
+  runs: (number | null)[];
+  bytes: number | null;
+  requests: number | null;
+  heapBytes: number | null;
+  /** Resident memory of every renderer process of the Chrome that ran it. */
+  rendererRss?: number | null;
+  how: string | null;
+}
+/** One engine's /r/ route on one sample (scripts/measure_server.py --doc). */
+export interface SampleServer {
+  /** HTTP status of the median run (a failure keeps its status and `error`). */
+  code: number;
+  /** Median wall-clock ms, and the engine's own render time from Server-Timing. */
+  totalMs: number | null;
+  renderMs: number | null;
+  bytes: number | null;
+  pages: number | null;
+  error?: string;
+}
+export interface SampleResults {
+  measuredAt: string | null;
+  environment: string;
+  samples: Record<string, {
+    document: string;
+    browser: Record<string, SampleBrowser>;
+    server: Record<string, SampleServer>;
+  }>;
+}
+
+export const SAMPLE_RESULTS = BUNDLED as SampleResults;
