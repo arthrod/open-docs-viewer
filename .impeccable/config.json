@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-11-16T11:31:04.673Z",
+        "reason": "agent: the match is Roboto Mono, the monospace token of the benchmarks.law v2 design system (comment at server/render.ts:30), predates this session"
+      }
+    ]
+  }
+}

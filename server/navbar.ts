@@ -68,10 +68,28 @@ function madeBy(e: Engine): string {
         ${ms.map((m) => `<a role="menuitem" href="${esc(m.linkedin ?? m.github ?? "#")}" target="_blank" rel="noopener">${esc(m.name)} →<small>${m.kind === "company" ? "Company" : "Developer"} · ${m.linkedin ? "LinkedIn" : "GitHub"}</small></a>`).join("\n        ")}`;
 }
 
+/**
+ * Browser | Server: the two ways this site renders the same document with the
+ * same engine. `where` is the page being shown. An engine with no /r/ route
+ * shows "Server" struck out and not a link.
+ */
+export function renderToggle(slug: string, src: URL, where: "browser" | "server"): string {
+  const q = `?src=${encodeURIComponent(src.href)}`;
+  const side = (label: string, href: string, title: string, on: boolean) =>
+    on
+      ? `<span class="on" aria-current="page" title="${title}">${label}</span>`
+      : `<a href="${href}" title="${title}">${label}</a>`;
+  const browser = side("Browser", `/v/${slug}${q}`, "Rendered in your browser by the engine", where === "browser");
+  const server = SERVER_RENDER_SLUGS.has(slug)
+    ? side("Server", `/r/${slug}${q}`, "Rendered on this server; the browser gets finished pages", where === "server")
+    : `<span class="off" title="This engine has no server route on this site">Server</span>`;
+  return `<span class="od-seg" role="group" aria-label="Where the document is rendered">${browser}${server}</span>`;
+}
+
 function viewerMenu(e: Engine, src: URL): string {
   const srcQ = `?src=${encodeURIComponent(src.href)}`;
   const server = SERVER_RENDER_SLUGS.has(e.slug)
-    ? `<a role="menuitem" href="/r/${e.slug}${srcQ}">This engine's server results →</a>`
+    ? `<a role="menuitem" href="/r/${e.slug}${srcQ}">Server render of this document →<small>the engine runs on this server; the browser only gets the finished pages</small></a>`
     : "";
   return `      <div class="od-menu" id="od-menu" role="menu" hidden>
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Engine</div>
@@ -79,8 +97,8 @@ function viewerMenu(e: Engine, src: URL): string {
         <button role="menuitem" type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>${madeBy(e)}
         <hr />
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>
-        <a role="menuitem" href="/">All engines &amp; results</a>
         ${server}
+        <a role="menuitem" href="/">All engines &amp; results</a>
         <a role="menuitem" href="${OPEN_DOCS}/" target="_blank" rel="noopener">open-docs editors →</a>
         <a role="menuitem" href="${ARENA}" target="_blank" rel="noopener">Editors arena →</a>
         <a role="menuitem" href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
@@ -94,6 +112,7 @@ export function viewNavBar(e: Engine, engines: Engine[], src: URL): string {
     <span class="crumb">/ viewers</span>
     <span class="od-spacer"></span>
     ${engineSwitcher(engines, e.slug, src)}
+    ${renderToggle(e.slug, src, "browser")}
     <span id="od-loading-detail" class="od-status-chip" role="status" aria-live="polite">Loading…</span>
     <div class="od-menu-wrap">
       ${menuBtn}
@@ -145,6 +164,14 @@ body{margin:0}
 .od-switch select:hover{background:var(--hover)}
 .od-switch select:focus,.od-switch select:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .od-engine-pick .od-pick-icon{display:none;pointer-events:none}
+.od-seg{display:inline-flex;flex:none;height:32px;border:1px solid var(--ink);background:var(--surface)}
+.od-seg>*{display:inline-flex;align-items:center;padding:0 10px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink);text-decoration:none;white-space:nowrap}
+.od-seg>*+*{border-left:1px solid var(--ink)}
+.od-seg>.on{background:var(--ink);color:var(--surface)}
+.od-seg>a:hover{background:var(--mark)}
+.od-seg>a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.od-seg>.off{color:var(--muted);text-decoration:line-through;cursor:not-allowed}
 .od-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-mono);font-size:11px;font-weight:400;letter-spacing:.04em;
   text-transform:uppercase;line-height:1.2;height:32px;padding:0 10px;border-radius:0;border:1px solid var(--ink);background:var(--surface);color:var(--ink);
   cursor:pointer;white-space:nowrap;text-decoration:none}
@@ -179,6 +206,7 @@ body{margin:0}
 @media(max-width:1180px){.od-bar .crumb{display:none}}
 @media(max-width:760px){
   .od-status-chip{display:none}
+  .od-seg{display:none} /* no room beside the wordmark on a phone: the Menu's first Site item is the same link */
   .od-menu-btn .od-menu-lbl{display:none}
   .od-menu-btn{width:32px;padding:0;justify-content:center}
   .od-engine-pick{display:inline-flex;position:relative;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid var(--ink);background:var(--surface)}

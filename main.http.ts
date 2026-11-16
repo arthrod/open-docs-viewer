@@ -248,8 +248,23 @@ app.get("/r/:engine", async (c) => {
   if (paginatedIn) headers["x-paginated-in"] = paginatedIn;
   // What a renderer laid out but this server does not paint yet.
   if (unpainted?.length) headers["x-unpainted"] = unpainted.join(", ");
-  return new Response(html, { headers });
+  return new Response(withToggle(html, c.req.param("engine"), src), { headers });
 });
+
+/**
+ * A server-rendered page is the engine's output and nothing else, so the way
+ * back to the browser render is one fixed control in the corner, styled inline
+ * (the page's CSP allows no script and no stylesheet of ours).
+ */
+function withToggle(html: string, slug: string, src: URL): string {
+  const seg =
+    "display:inline-flex;align-items:center;height:30px;padding:0 10px;font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;";
+  const bar = `<nav aria-label="Where the document is rendered" style="position:fixed;right:12px;bottom:12px;z-index:2147483647;display:inline-flex;border:1px solid #0a0a0a;background:#fff;box-shadow:4px 4px 0 #ffd400">` +
+    `<a href="/v/${slug}?src=${encodeURIComponent(src.href)}" title="Rendered in your browser by the engine" style="${seg}color:#0a0a0a">Browser</a>` +
+    `<span aria-current="page" title="Rendered on this server; the browser gets finished pages" style="${seg}background:#0a0a0a;color:#fff">Server</span></nav>`;
+  const at = html.lastIndexOf("</body>");
+  return at < 0 ? html + bar : html.slice(0, at) + bar + html.slice(at);
+}
 
 app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
 
