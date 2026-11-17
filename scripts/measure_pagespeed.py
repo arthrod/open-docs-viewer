@@ -89,20 +89,24 @@ async def one(browser, page_path: str) -> dict:
         page = await ctx.new_page()
         page.on("response", lambda r: asyncio.ensure_future(body(r)))
         await page.goto("https://pagespeed.web.dev/analysis?url=" + urllib.parse.quote(f"{BASE}/{page_path}" + (f"?{QUERY}" if QUERY else ""), safe=""), timeout=60000)
-        refused = None
+        refused = seen = None
         for i in range(LIMIT_S):
             await page.wait_for_timeout(1000)
             if "mobile" in got and "desktop" in got:
                 break
             if i % 5 == 4 and not got:
                 try:
-                    refused = psi_refusal(await asyncio.wait_for(page.inner_text("body"), 10))
+                    now = psi_refusal(await asyncio.wait_for(page.inner_text("body"), 10))
                 except Exception:
-                    refused = None
-                if refused:
+                    now = None
+                # Believed only when two checks five seconds apart both show it: a message that
+                # PageSpeed shows and then replaces with a result must not end the wait.
+                if now and seen:
+                    refused = now
                     break
-        if refused and not got:
-            out["error"] = refused
+                seen = now
+        if refused and not ("mobile" in got and "desktop" in got):
+            out["error"] = refused  # also the reason for a form factor that is missing
         elif not got:
             out["error"] = f"PageSpeed gave no result within {LIMIT_S} s: the page never finished loading for it"
         out.update(got)
