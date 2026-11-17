@@ -63,7 +63,9 @@ export function privateIp(ip: string): boolean {
   if (g.slice(0, 4).every((x) => x === 0) && g[4] === 0xffff && g[5] === 0) return true; // ::ffff:0:a.b.c.d (translated)
   if (g[0] === 0x2002) return privateIp(`${g[1] >> 8}.${g[1] & 255}.${g[2] >> 8}.${g[2] & 255}`); // 6to4 carries an IPv4 address
   if (g[0] === 0x2001 && g[1] === 0xdb8) return true; // documentation
-  return (g[0] & 0xfe00) === 0xfc00 || (g[0] & 0xffc0) === 0xfe80 || (g[0] & 0xff00) === 0xff00; // unique local, link-local, multicast
+  // Global unicast is 2000::/3. Everything else is unique local, link-local, multicast, the
+  // deprecated site-local fec0::/10, or space that was never allocated: none of it is public.
+  return (g[0] & 0xe000) !== 0x2000;
 }
 
 /** Every address a name has. */

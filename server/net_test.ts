@@ -59,11 +59,13 @@ Deno.test("old and special IPv6 forms that carry or stand for a local address", 
 
 Deno.test("the edges of each range: the first and last address inside, and the nearest outside", () => {
   for (const ip of ["172.16.0.0", "172.31.255.255", "100.64.0.0", "100.127.255.255", "198.18.0.0", "198.19.255.255", "169.254.0.0", "169.254.255.255",
-    "fe80::", "febf:ffff::1", "fc00::", "fdff:ffff::1", "ff00::"]) {
+    "fe80::", "febf:ffff::1", "fc00::", "fdff:ffff::1", "ff00::",
+    // Outside 2000::/3 nothing is a global address: deprecated site-local, and space never allocated.
+    "fec0::1", "fbff:ffff::1", "fe00::1", "1fff::1", "4000::1", "100::1"]) {
     assertEquals(privateIp(ip), true, ip);
   }
   for (const ip of ["172.15.255.255", "172.32.0.0", "100.63.255.255", "100.128.0.0", "198.17.255.255", "198.20.0.0", "169.253.255.255", "169.255.0.0",
-    "fec0::1", "fbff:ffff::1", "fe00::1"]) {
+    "2000::1", "3fff:ffff::1"]) {
     assertEquals(privateIp(ip), false, ip);
   }
 });

@@ -354,3 +354,23 @@ def test_only_this_sites_own_console_line_marks_an_engine_failure():
     assert lib.summarize(report("  [open-docs] WordCraft failed to start"))["error"].startswith(lib.ENGINE_FAILED)
     for other in ("[open-docs-evil] something", "[open-docsx] y", "a library said [open-docs] in passing"):
         assert lib.summarize(report(other)).get("performance") == 100, other
+
+
+def test_end_chrome_looks_for_the_process_even_when_pkill_says_it_matched_nothing(monkeypatch):
+    """On procps, pkill exits 1 both for "no match" and for "matched, could not signal": pgrep tells them apart."""
+
+    def run(args, **k):
+        if args[0] == "pkill":
+            return subprocess.CompletedProcess(args, 1, b"", b"")
+        return subprocess.CompletedProcess(args, 0, b"123\n", b"")  # still there
+
+    monkeypatch.setattr(lib.subprocess, "run", run)
+    monkeypatch.setattr(lib.time, "sleep", lambda s: None)
+    assert "still running" in lib.end_chrome("/tmp/p", wait_s=0.2)
+
+
+def test_the_readme_generator_runs_isolated():
+    """The scripts are run with `python -I`, which leaves their folder off the import path: each must add it itself."""
+    root = Path(__file__).resolve().parents[2]
+    done = subprocess.run([sys.executable, "-I", str(root / "scripts" / "readme_tables.py"), "--check"], capture_output=True, text=True, cwd=root)
+    assert "ModuleNotFoundError" not in done.stderr and done.returncode in (0, 1), done.stderr[-300:]

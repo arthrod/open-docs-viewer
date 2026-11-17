@@ -34,9 +34,9 @@ def end_chrome(profile: str, wait_s: float = 5.0) -> str | None:
     instead of measuring the next page beside a leftover browser.
     """
     p = subprocess.run(pkill_args(profile), capture_output=True)
-    if p.returncode == 1:
-        return None
-    if p.returncode != 0:
+    # 1 is "nothing matched" on macOS; on procps it can also be "matched, none could be signalled".
+    # Either way the process is looked for below, so a Chrome that was not signalled is reported.
+    if p.returncode not in (0, 1):
         return f"pkill exited {p.returncode}: {(p.stderr or b'').decode(errors='replace').strip()[:120]}; that Chrome may still be running"
     deadline = time.monotonic() + wait_s
     while True:
