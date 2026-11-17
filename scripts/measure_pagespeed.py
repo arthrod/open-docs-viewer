@@ -25,7 +25,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import merge_pagespeed, page_entry, pagespeed_args, summarize
+from measure_lib import merge_pagespeed, page_entry, pagespeed_args, summarize, psi_refusal
 
 # Parsed before any browser starts.
 ARGS = pagespeed_args(sys.argv[1:])
@@ -85,15 +85,25 @@ async def one(browser, page_path: str) -> dict:
     try:
         # Inside the handler: a Chrome that died between jobs fails here, and that must be this
         # job's error record, not an exception that loses every finished job's results.
-        ctx = await browser.new_context(viewport={"width": 1300, "height": 900})
+        ctx = await browser.new_context(viewport={"width": 1300, "height": 900}, locale="en-US")
         page = await ctx.new_page()
         page.on("response", lambda r: asyncio.ensure_future(body(r)))
         await page.goto("https://pagespeed.web.dev/analysis?url=" + urllib.parse.quote(f"{BASE}/{page_path}" + (f"?{QUERY}" if QUERY else ""), safe=""), timeout=60000)
-        for _ in range(LIMIT_S):
+        refused = None
+        for i in range(LIMIT_S):
             await page.wait_for_timeout(1000)
             if "mobile" in got and "desktop" in got:
                 break
-        if not got:
+            if i % 5 == 4 and not got:
+                try:
+                    refused = psi_refusal(await asyncio.wait_for(page.inner_text("body"), 10))
+                except Exception:
+                    refused = None
+                if refused:
+                    break
+        if refused and not got:
+            out["error"] = refused
+        elif not got:
             out["error"] = f"PageSpeed gave no result within {LIMIT_S} s: the page never finished loading for it"
         out.update(got)
     except Exception as e:

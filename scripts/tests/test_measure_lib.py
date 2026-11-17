@@ -232,3 +232,9 @@ def test_the_heading_names_the_chrome_version_the_runs_recorded():
     assert lib.chrome_note([{"chrome": "Chrome/157.0.1.2"}, {"chrome": "Chrome/158.0.0.1"}]) == "Google Chrome 157.0.1.2 and 158.0.0.1"
     assert lib.chrome_note([{"engine": "x"}]) == "Google Chrome"
     assert lib.chrome_note([{"chrome": "HeadlessChrome/141.0.7390.66"}]) == "Google Chrome headless 141.0.7390.66"
+
+
+def test_pagespeed_refusing_an_address_is_told_apart_from_a_page_that_never_loaded():
+    said = "PageSpeed Insights\nUnable to resolve https://x.example/r/a?src=https://h/f.docx. Try checking the URL for validity.\nAnalyze"
+    assert lib.psi_refusal(said).startswith("PageSpeed refused the address: Unable to resolve https://x.example")
+    assert lib.psi_refusal("Performance\n77\nFirst Contentful Paint") is None

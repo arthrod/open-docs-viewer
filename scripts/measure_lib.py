@@ -180,6 +180,23 @@ def server_entry(xs: list[dict]) -> dict:
     return entry
 
 
+PSI_REFUSALS = ("Unable to resolve", "Lighthouse returned error", "Oops! Something went wrong", "Unable to process request")
+
+
+def psi_refusal(text: str) -> str | None:
+    """PageSpeed's own words when it would not analyse the address at all, or None.
+
+    Such an answer carries no report, so waiting for one ends at the time limit; recorded as
+    "never finished loading", it blamed the page for what PageSpeed's first fetch decided
+    (it gives a slow first byte, such as a 6 s server render, very little time).
+    """
+    for line in text.splitlines():
+        line = " ".join(line.split())
+        if any(k in line for k in PSI_REFUSALS):
+            return "PageSpeed refused the address: " + line[:160]
+    return None
+
+
 def summarize(l: dict) -> dict:
     """One Lighthouse report. A report Lighthouse or we rejected keeps its reason and none of its numbers."""
     out: dict = {"version": l.get("lighthouseVersion")}
