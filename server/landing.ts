@@ -247,7 +247,7 @@ ${stats}
   <div class="sec-label"><span class="sq"></span><span>/ Server render</span></div>
   <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
-<strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot).
+<strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot). It is one request per engine, not a median, and moves from one deploy to the next.
 <strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. canvas-editor has no server route: it draws to a canvas throughout.</p>
   <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">First</th><th class="n hide-sm">init · render</th><th class="n">Warm</th><th class="n hide-sm">render</th><th class="n">Sent</th><th>How</th></tr></thead><tbody>
 ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${
