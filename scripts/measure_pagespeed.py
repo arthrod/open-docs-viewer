@@ -130,7 +130,7 @@ async def main():
     version = next((x[f]["version"] for x in raw for f in ("desktop", "mobile") if f in x and x[f].get("version")), "")
     meta = {
         "measuredAt": datetime.date.today().isoformat(),
-        "environment": f"PageSpeed Insights (pagespeed.web.dev), Lighthouse {version} on Google's servers, {RUNS} analyses per page, median",
+        "environment": f"PageSpeed Insights (pagespeed.web.dev), Lighthouse {version} on Google's servers, {RUNS} analyses per page and form factor, median of those that gave a result",
         "base": BASE,
     }
     # A rejected report has no numbers (summarize), each form factor has its own error (page_entry),

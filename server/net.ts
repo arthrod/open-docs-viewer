@@ -27,7 +27,7 @@ const inBlock = (n: number, base: string, bits: number) => (n >>> (32 - bits)) =
 // Loopback, private, link-local (cloud metadata lives at 169.254.169.254), carrier NAT, benchmarking, multicast, reserved.
 const V4_PRIVATE: [string, number][] = [
   ["0.0.0.0", 8], ["10.0.0.0", 8], ["100.64.0.0", 10], ["127.0.0.0", 8], ["169.254.0.0", 16], ["172.16.0.0", 12],
-  ["192.0.0.0", 24], ["192.168.0.0", 16], ["198.18.0.0", 15], ["224.0.0.0", 3],
+  ["192.0.0.0", 24], ["192.0.2.0", 24], ["192.168.0.0", 16], ["198.18.0.0", 15], ["198.51.100.0", 24], ["203.0.113.0", 24], ["224.0.0.0", 3],
 ];
 
 /** IPv6 text as eight 16-bit groups, or null. Accepts `::` and a dotted IPv4 tail. */
@@ -58,17 +58,21 @@ export function privateIp(ip: string): boolean {
   const embedded = () => privateIp(`${g[6] >> 8}.${g[6] & 255}.${g[7] >> 8}.${g[7] & 255}`);
   if (g.slice(0, 5).every((x) => x === 0) && g[5] === 0xffff) return embedded(); // ::ffff:a.b.c.d
   if (g[0] === 0x64 && g[1] === 0xff9b && g.slice(2, 6).every((x) => x === 0)) return embedded(); // 64:ff9b::/96 (NAT64)
-  if (g.slice(0, 7).every((x) => x === 0)) return true; // :: and ::1
+  if (g[0] === 0x64 && g[1] === 0xff9b && g[2] === 1) return true; // 64:ff9b:1::/48, NAT64 for local use
+  if (g.slice(0, 6).every((x) => x === 0)) return true; // ::, ::1 and the old IPv4-compatible ::a.b.c.d
+  if (g.slice(0, 4).every((x) => x === 0) && g[4] === 0xffff && g[5] === 0) return true; // ::ffff:0:a.b.c.d (translated)
+  if (g[0] === 0x2002) return privateIp(`${g[1] >> 8}.${g[1] & 255}.${g[2] >> 8}.${g[2] & 255}`); // 6to4 carries an IPv4 address
+  if (g[0] === 0x2001 && g[1] === 0xdb8) return true; // documentation
   return (g[0] & 0xfe00) === 0xfc00 || (g[0] & 0xffc0) === 0xfe80 || (g[0] & 0xff00) === 0xff00; // unique local, link-local, multicast
 }
 
 /** Every address a name has. */
 export type Lookup = (host: string) => Promise<string[]>;
 
-/** A and AAAA records from Cloudflare's resolver over HTTPS (a Val cannot open a DNS socket). */
-export const dohLookup: Lookup = async (host) => {
+/** A and AAAA records from a public resolver's JSON API over HTTPS (a Val cannot open a DNS socket). */
+const doh = (api: string): Lookup => async (host) => {
   const ask = async (type: "A" | "AAAA") => {
-    const res = await fetch(`https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(host)}&type=${type}`, {
+    const res = await fetch(`${api}?name=${encodeURIComponent(host)}&type=${type}`, {
       headers: { accept: "application/dns-json" },
       signal: AbortSignal.timeout(2000),
     });
@@ -79,15 +83,18 @@ export const dohLookup: Lookup = async (host) => {
   };
   return (await Promise.all([ask("A"), ask("AAAA")])).flat();
 };
+/** Cloudflare's resolver, and Google's when Cloudflare's cannot be reached. */
+export const dohLookup: Lookup = (host) => doh("https://cloudflare-dns.com/dns-query")(host).catch(() => doh("https://dns.google/resolve")(host));
 
-const FRESH_MS = 10 * 60 * 1000;
+const FRESH_MS = 60 * 1000;
 const SEEN = new Map<string, { ok: boolean; at: number }>();
 
 /**
  * False when `host` has an address that is not public. An answer is kept for
- * ten minutes per isolate, so a document host costs one lookup, not one per
- * request. A resolver that cannot be reached does not close the site: the name
- * is allowed (it was already checked by its spelling) and nothing is kept.
+ * one minute per isolate, so a page and its images cost one lookup. When no
+ * resolver can be reached the name is REFUSED: allowing it would quietly turn
+ * the check off, and two independent resolvers being down together is rare.
+ * Nothing is kept in that case, so the next request asks again.
  */
 export async function resolvesPublic(host: string, lookup: Lookup = dohLookup, seen = SEEN): Promise<boolean> {
   const hit = seen.get(host);
@@ -96,7 +103,7 @@ export async function resolvesPublic(host: string, lookup: Lookup = dohLookup, s
   try {
     ips = await lookup(host);
   } catch {
-    return true;
+    return false;
   }
   const ok = !ips.some(privateIp);
   seen.set(host, { ok, at: Date.now() });

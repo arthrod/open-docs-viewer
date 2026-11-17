@@ -268,8 +268,8 @@ ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURICompon
       ? `Measured ${esc(results.measuredAt)} · ${esc(results.environment)} · document: <code>${esc(results.document)}</code>.`
       : "Not measured yet."
   }
-<strong>Cold render</strong>: navigation start to the document on screen (the page's own signal, the document's title as text, or a rendered page image, whichever comes first), median of the runs.
-<strong>Downloaded</strong>: every request in every frame, headers plus bodies. <strong>JS heap</strong>: the page plus every out-of-process frame.
+<strong>Cold render</strong>: navigation start to the document on screen (the page's own signal, set two frames after the engine shows it), median of the runs.
+<strong>Downloaded</strong>: every request that finished, in every frame, headers plus bodies. <strong>JS heap</strong>: this page's JavaScript objects only; a vendor's cross-origin frame is not in it.
 Each run is a fresh browser and a document URL no engine has seen, so no vendor cache can answer it.
 <strong>Refreshing</strong>: the table is <a href="https://github.com/arthrod/open-docs-viewer/blob/main/results/browser.json">results/browser.json</a>, re-measured by the
 <a href="https://github.com/arthrod/open-docs-viewer/actions/workflows/remeasure.yml">Re-measure workflow</a> (on demand and weekly) or <code>scripts/remeasure.sh</code>, and read here within 5 minutes.

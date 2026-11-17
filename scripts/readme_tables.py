@@ -101,8 +101,9 @@ def server_block(data: dict) -> str:
             continue
         first = ms(r.get("firstMs")) + (" (already loaded: not a first request)" if r.get("firstCold") is False and r.get("firstMs") is not None else "")
         note = f" **A request failed**: {cell(r['error'])}" if r.get("error") else ""
+        sent = mb(r.get("bytes")) + (" + a page image per page viewed" if e in IMAGES else "")
         out.append(f"| {dated(NAMES[e], r, data)}{note} | {first} | {ms(r.get('firstInitMs'))} · {ms(r.get('firstRenderMs'))} | {ms(r.get('warmMs'))} | "
-                   f"{ms(r.get('warmRenderMs'))} | {each(r.get('warmRuns')) if r.get('warmRuns') else 'n/a'} | {mb(r.get('bytes'))} |")
+                   f"{ms(r.get('warmRenderMs'))} | {each(r.get('warmRuns')) if r.get('warmRuns') else 'n/a'} | {sent} |")
     return "\n".join(out)
 
 
@@ -122,7 +123,8 @@ def server_cell(e: str, x: dict | None) -> str:
 
 def samples_block(data: dict) -> str:
     """The other documents: the /v/ page and the /r/ route side by side (results/samples.json)."""
-    out = [said(data, " Server routes: timed with curl, as their own rows say in the file."), ""]
+    stamped = any(x.get("environment") for d in data["samples"].values() for x in d.get("server", {}).values())
+    out = [said(data, " Server routes: timed with curl, as their own rows say in the file." if stamped else " Server routes: timed with curl."), ""]
     for doc, title in DOCS[1:]:
         d = data["samples"].get(doc)
         if not d:

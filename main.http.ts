@@ -133,7 +133,7 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   let res: Response | undefined;
   try {
     for (let hop = 0; ; hop++) {
-      if (!(await resolvesPublic(url.hostname))) return fail(422, "the document URL points to an address that is not public");
+      if (!(await resolvesPublic(url.hostname))) return fail(422, "the document URL points to an address that is not public, or its address could not be checked");
       res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://viewers.benchmarks.law)" } });
       if (res.status < 300 || res.status >= 400) break;
       await res.body?.cancel();

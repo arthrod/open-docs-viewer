@@ -42,7 +42,7 @@ engine, the `/v/` page and the `/r/` route side by side
 ([`results/samples.json`](results/samples.json)):
 
 <!-- samples:start -->
-Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64. Server routes: timed with curl, as their own rows say in the file.
+Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64. Server routes: timed with curl.
 
 **Redline (`redline.docx`)**
 
@@ -304,7 +304,7 @@ Measured 2026-11-16: curl, a new connection and a never-seen ?n= per request, 5 
 | docx-editor.dev | 1.75 s | 203 ms · 887 ms | 758 ms | 492 ms | 714 ms, 835 ms, 758 ms, 882 ms, 681 ms | 238 KB |
 | Plate | 1.05 s | 307 ms · 259 ms | 372 ms | 174 ms | 866 ms, 469 ms, 372 ms, 370 ms, 358 ms | 32 KB |
 | docen | 920 ms | 643 ms · 128 ms | 220 ms | 28 ms | 220 ms, 189 ms, 243 ms, 285 ms, 178 ms | 43 KB |
-| WordCraft | 671 ms | 337 ms · 125 ms | 202 ms | 21 ms | 270 ms, 276 ms, 180 ms, 202 ms, 188 ms | 3 KB |
+| WordCraft | 671 ms | 337 ms · 125 ms | 202 ms | 21 ms | 270 ms, 276 ms, 180 ms, 202 ms, 188 ms | 3 KB + a page image per page viewed |
 | SuperDoc | 1.32 s | 530 ms · 626 ms | 631 ms | 436 ms | 631 ms, 760 ms, 666 ms, 595 ms, 590 ms | 7 KB |
 <!-- server:end -->
 
@@ -314,7 +314,9 @@ How each is measured:
 - Server routes: `python3 scripts/measure_server.py all 5 --first-warm results/server.json`, run straight after a
   deploy (plain `curl`, a new connection and a never-seen `?n=` per request, `Server-Timing` parsed). The numbers
   on `/` are the first request to each engine after that deploy, then the median of the 5 warm requests. A route
-  whose first request reports no init time had already been asked: it is marked as not a first request.
+  whose first request reports no init time had already been asked: it is marked as not a first request. This one is
+  run by hand from the machine that deployed (no workflow can be "straight after a deploy"), and every total includes
+  DNS, TLS and connecting, because each request is a new `curl`.
 - What a server route costs the browser: `uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 3 --out results/server-client.json`
   opens each `/r/` route in the installed Chrome (fresh profile per run) and records the load event, first paint,
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.

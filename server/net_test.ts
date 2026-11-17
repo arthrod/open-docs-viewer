@@ -32,14 +32,27 @@ Deno.test("a public name that resolves to a local address is refused (127.0.0.1.
   assertEquals(await resolvesPublic("ok.example", lookup, new Map()), true);
 });
 
-Deno.test("a name is looked up once while its answer is fresh, and a resolver that is down does not close the site", async () => {
+Deno.test("a name is looked up once while its answer is fresh; when no resolver answers, the name is refused and asked again", async () => {
   const cache = new Map();
   const { asked, lookup } = table({ "ok.example": ["1.1.1.1"], "down.example": new Error("resolver down") });
   assertEquals(await resolvesPublic("ok.example", lookup, cache), true);
   assertEquals(await resolvesPublic("ok.example", lookup, cache), true);
   assertEquals(asked, ["ok.example"]);
-  assertEquals(await resolvesPublic("down.example", lookup, cache), true); // could not be checked: allowed, and not remembered
-  assertEquals(await resolvesPublic("down.example", lookup, cache), true);
+  assertEquals(await resolvesPublic("down.example", lookup, cache), false); // could not be checked: refused, and not remembered
+  assertEquals(await resolvesPublic("down.example", lookup, cache), false);
   assertEquals(asked.filter((h) => h === "down.example").length, 2);
   assertEquals(await resolvesPublic("nothing.example", lookup, cache), true); // no address at all: the fetch itself will fail
+});
+
+Deno.test("an answer that is no longer fresh is asked for again", async () => {
+  const cache = new Map([["flip.example", { ok: true, at: Date.now() - 61_000 }]]);
+  const { lookup } = table({ "flip.example": ["127.0.0.1"] });
+  assertEquals(await resolvesPublic("flip.example", lookup, cache), false);
+});
+
+Deno.test("old and special IPv6 forms that carry or stand for a local address", () => {
+  for (const ip of ["::127.0.0.1", "::ffff:0:127.0.0.1", "64:ff9b:1::127.0.0.1", "2002:7f00:1::", "2002:a00:1::1", "2001:db8::1", "192.0.2.1", "198.51.100.7", "203.0.113.9"]) {
+    assertEquals(privateIp(ip), true, ip);
+  }
+  assertEquals(privateIp("2002:808:808::1"), false); // 6to4 of 8.8.8.8
 });
