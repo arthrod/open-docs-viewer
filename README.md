@@ -20,7 +20,7 @@ lays it out, paints it, and the browser receives finished pages.
 | `GET /v/<engine>?src=<url>` | view-only page: the engine runs in the browser, in its own read-only mode (Microsoft's and Google's viewers: a frame onto their server render) |
 | `GET /r/<engine>?src=<url>` | **server-rendered**: the engine runs here; timings in `Server-Timing` (`fetch`, `init`, `render`), page count in `x-pages`, anything laid out but not painted in `x-unpainted` |
 | `GET /api/doc?src=<url>` | this server fetches the document (https only, no private hosts, every redirect re-checked, ≤ 25 MB read in chunks, 20 s deadline, must be a zip); refusals are 4xx with the reason as text |
-| `GET /results.json` | the browser-side measurements |
+| `GET /results.json` | the published cold browser benchmark, using the same GitHub refresh and bundled fallback as the landing page |
 
 `src` defaults to the rich sample on Hugging Face:
 [`arthrod/open-docs-fixtures/showcase.docx`](https://huggingface.co/datasets/arthrod/open-docs-fixtures).
@@ -388,13 +388,27 @@ How each is measured:
   (`--doc showcase|redline|lorem-500`). Besides the JS heap, each browser run records **renderer memory**: the
   resident memory of every renderer process of that Chrome (`ps`), which also counts WebAssembly memory, canvases,
   the DOM and cross-origin frames. A server run that fails keeps its HTTP status and the reason.
-- Refreshing the published table: the landing reads [`results/browser.json`](results/browser.json) from GitHub
-  (5-minute cache; the copy bundled with the deploy is the fallback). Re-measure with
-  `scripts/remeasure.sh [engines|all] [runs]` (runs `measure.py --results results/browser.json`, commits, pushes) or
-  the [Re-measure workflow](.github/workflows/remeasure.yml) (on demand and Mondays 06:17 UTC; headed Chrome on a
-  macOS runner, commits the file; the schedule runs only from the default branch). Engines not re-measured keep their previous entry.
-- In the page: every `/v/<engine>` page has **Re-measure now**, which reads JS heap, bytes and files loaded again with
-  open-docs' own `lib/metrics.ts`, as the page is at that moment (nothing is stored).
+- Refreshing the published table: the landing and `/results.json` read
+  [`results/browser.json`](results/browser.json) from GitHub with a 5-minute cache. Requests return the
+  held results immediately (initially the bundled copy) while an expired cache refreshes in the background;
+  a subsequent request sees the fetched file. A failed fetch uses the bundled copy.
+  Re-measure with `scripts/remeasure.sh [engines|all] [runs]` (defaults: `all`, `3`) or the
+  [Re-measure workflow](.github/workflows/remeasure.yml) (on demand and Mondays 06:17 UTC; headed Chrome on a
+  macOS runner; the schedule runs only from the default branch). Both update `results/browser.json`, save
+  raw runs under `results/raw/`, regenerate the README tables, and commit and push those files.
+  Engines not re-measured keep their previous entry, date and environment; measured failures are published
+  with their reason. Local publishing requires `uv`, installed Google Chrome, Python 3, and Git push access.
+  To write results without publishing, run:
+
+  ```sh
+  uv run --with playwright python -I scripts/measure.py plate,folio 1 --results results/browser.json
+  python3 scripts/readme_tables.py
+  ```
+
+- In the page: after a `/v/<engine>` document loads, open **Menu → Re-measure now** to read JS heap,
+  bytes and files loaded with open-docs' `lib/metrics.ts`. The status shows these current readings and a
+  timestamp alongside the original render time; clicking does not reload or time a new cold render.
+  These readings stay in the page and do not update the published benchmark.
 
 ## Development
 
