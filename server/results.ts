@@ -15,6 +15,9 @@ export interface EngineResult {
   heapBytes: number | null;
   /** How "rendered" was detected in the median run. */
   how: string | null;
+  /** When and how this engine was measured, when the file records it per engine (a partial re-run). */
+  measuredAt?: string;
+  environment?: string;
 }
 export interface Results {
   measuredAt: string | null;
@@ -23,6 +26,7 @@ export interface Results {
   engines: Record<string, EngineResult>;
 }
 import BUNDLED from "../results/browser.json" with { type: "json" };
+import SERVER_BUNDLED from "../results/server.json" with { type: "json" };
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -83,108 +87,96 @@ export function statStripHtml(items: { value: string; label: string }[]): string
 }
 
 /**
- * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl): the
- * first request to each engine right after a deploy (only the very first one
- * also paid the isolate's boot), then the median of 5 warm requests. Times
- * are wall clock from this machine; render/init come from Server-Timing.
+ * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl) by
+ * scripts/measure_server.py --first-warm, which writes results/server.json:
+ * the first request to each engine right after a deploy (only the very first
+ * one also paid the isolate's boot), then the median of the warm requests.
+ * Times are wall clock from the measuring machine; render/init come from
+ * Server-Timing.
  */
 export interface ServerResult {
   slug: string;
   name: string;
   how: string;
   output: "html" | "pages" | "images" | "browser-paginated";
-  firstMs: number;
-  firstInitMs: number;
-  firstRenderMs: number;
-  warmMs: number;
-  warmRenderMs: number;
-  bytes: number;
+  /** The first request to the route after a deploy. */
+  firstMs: number | null;
+  firstInitMs: number | null;
+  firstRenderMs: number | null;
+  /** False when that request found the engine already loaded (init 0): it was not a first request. */
+  firstCold?: boolean;
+  /** Median of the warm requests. */
+  warmMs: number | null;
+  warmRenderMs: number | null;
+  bytes: number | null;
+  /** Every warm request's total time (null = it failed). */
+  warmRuns?: (number | null)[];
+  /** A failed request's error. */
+  error?: string;
+  /** When this route was measured, when the file records it per route. */
+  measuredAt?: string;
+  environment?: string;
 }
-export const SERVER_MEASURED_AT =
-  "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome). SuperDoc added 2026-11-16";
-export const SERVER_RESULTS: ServerResult[] = [
+/** The engines with a server route: what runs, and what the browser is sent. */
+export const SERVER_ROUTES: Pick<ServerResult, "slug" | "name" | "how" | "output">[] = [
   {
     "slug": "docxodus",
     "name": "Docxodus",
     "how": "docxodus/core convertDocxToHtml in Paginated mode (.NET in wasm) here; its own paginateHtml flows it into pages in the browser",
-    "output": "browser-paginated",
-    "firstMs": 2231,
-    "firstInitMs": 235,
-    "firstRenderMs": 1103,
-    "warmMs": 622,
-    "warmRenderMs": 302,
-    "bytes": 58818,
+    "output": "browser-paginated"
   },
   {
     "slug": "folio",
     "name": "folio",
-    "how": "@stll/folio-core headless layout → display list → its HTML backend: absolutely positioned pages",
-    "output": "pages",
-    "firstMs": 1556,
-    "firstInitMs": 449,
-    "firstRenderMs": 337,
-    "warmMs": 459,
-    "warmRenderMs": 157,
-    "bytes": 207736,
+    "how": "@stll/folio-core headless layout \u2192 display list \u2192 its HTML backend: absolutely positioned pages",
+    "output": "pages"
   },
   {
     "slug": "eigenpal",
     "name": "docx-editor.dev",
-    "how": "@docx-editor.dev/core/export layout (HarfBuzz) → the editor's own painter into linkedom",
-    "output": "pages",
-    "firstMs": 1192,
-    "firstInitMs": 90,
-    "firstRenderMs": 859,
-    "warmMs": 791,
-    "warmRenderMs": 574,
-    "bytes": 242255,
+    "how": "@docx-editor.dev/core/export layout (HarfBuzz) \u2192 the editor's own painter into linkedom",
+    "output": "pages"
   },
   {
     "slug": "plate",
     "name": "Plate",
     "how": "platejs/static serializeHtml (react-dom/server) after mammoth's import, pictures via @platejs/media: one flowing page",
-    "output": "html",
-    "firstMs": 893,
-    "firstInitMs": 355,
-    "firstRenderMs": 245,
-    "warmMs": 448,
-    "warmRenderMs": 133,
-    "bytes": 31504,
+    "output": "html"
   },
   {
     "slug": "docen",
     "name": "docen",
-    "how": "@docen/layout's paginator with a font-file measureText → SVG pages painted here (no headers/footers yet)",
-    "output": "pages",
-    "firstMs": 716,
-    "firstInitMs": 380,
-    "firstRenderMs": 136,
-    "warmMs": 257,
-    "warmRenderMs": 36,
-    "bytes": 42737,
+    "how": "@docen/layout's paginator with a font-file measureText \u2192 SVG pages painted here (no headers/footers yet)",
+    "output": "pages"
   },
   {
     "slug": "wordcraft",
     "name": "WordCraft",
     "how": "WordCraft's reader, layout and vello_cpu rasteriser compiled to wasm. The page holds each page's size and one image URL per page; a PNG is rasterised (about 0.2 s) when the browser asks for it, as its page nears the viewport. Render and Sent are the page without its images (measured 2026-11-16)",
-    "output": "images",
-    "firstMs": 930,
-    "firstInitMs": 185,
-    "firstRenderMs": 167,
-    "warmMs": 255,
-    "warmRenderMs": 23,
-    "bytes": 3266,
+    "output": "images"
   },
   {
     "slug": "superdoc",
     "name": "SuperDoc",
-    "how": "@superdoc/docx-engine headless runtime → Document API projectHtml (redline mode): semantic HTML, not its paginated view; no colours, pictures as placeholders",
-    "output": "html",
-    "firstMs": 2030,
-    "firstInitMs": 654,
-    "firstRenderMs": 770,
-    "warmMs": 604,
-    "warmRenderMs": 448,
-    "bytes": 6466,
-  },
+    "how": "@superdoc/docx-engine headless runtime \u2192 Document API projectHtml (redline mode): semantic HTML, not its paginated view; no colours, pictures as placeholders",
+    "output": "html"
+  }
 ];
+
+/** The file scripts/measure_server.py --first-warm writes. */
+export interface ServerMeasurements {
+  measuredAt: string | null;
+  environment: string;
+  document?: string;
+  engines: Record<string, Partial<Pick<ServerResult, "firstMs" | "firstInitMs" | "firstRenderMs" | "firstCold" | "warmMs" | "warmRenderMs" | "bytes" | "warmRuns" | "error">>>;
+}
+const SERVER_FILE = SERVER_BUNDLED as ServerMeasurements;
+const NO_FIGURES = { firstMs: null, firstInitMs: null, firstRenderMs: null, warmMs: null, warmRenderMs: null, bytes: null };
+
+/** Each route with its figures from results/server.json; a route the file does not hold has none. */
+export const serverResults = (file: ServerMeasurements = SERVER_FILE): ServerResult[] =>
+  SERVER_ROUTES.map((r) => ({ ...r, ...NO_FIGURES, ...(file.engines?.[r.slug] ?? {}) }));
+export const SERVER_RESULTS: ServerResult[] = serverResults();
+/** The heading of that file: a row measured on another day says so. */
+export const SERVER_FILE_HEAD = { measuredAt: SERVER_FILE.measuredAt };
+export const SERVER_MEASURED_AT = [SERVER_FILE.measuredAt, SERVER_FILE.environment, SERVER_FILE.document].filter(Boolean).join(", ");

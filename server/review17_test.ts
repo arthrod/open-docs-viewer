@@ -123,3 +123,24 @@ Deno.test("Lighthouse: a page analysed in a different run from its table says wh
   assertStringIncludes(html, "measured 2026-11-16 · new run");
   assertEquals((html.match(/odv-prov/g) ?? []).length, 1);
 });
+
+Deno.test("the server table reads its figures from the results file; a route the file lacks has none", async () => {
+  const { serverResults, SERVER_ROUTES } = await import("./results.ts");
+  const rows = serverResults({ measuredAt: "2026-11-16", environment: "curl", engines: { folio: { firstMs: 1500, warmMs: 450, bytes: 9, firstCold: false } } });
+  assertEquals(rows.length, SERVER_ROUTES.length);
+  const folio = rows.find((r) => r.slug === "folio")!;
+  assertEquals([folio.firstMs, folio.warmMs, folio.firstCold, folio.name], [1500, 450, false, "folio"]);
+  assertEquals(rows.find((r) => r.slug === "plate")!.warmMs, null);
+});
+
+Deno.test("samples: a row measured on another day than the table says so", () => {
+  const html = samplesSection(ENGINES, {
+    measuredAt: "2026-11-16", environment: "test",
+    samples: { redline: { document: "redline.docx",
+      browser: { folio: { ...browserRow, measuredAt: "2026-11-10" }, plate: { ...browserRow, measuredAt: "2026-11-16" } },
+      server: { folio: { code: 200, totalMs: 400, renderMs: 200, bytes: 9, pages: 3, runs: [400], measuredAt: "2026-11-12" } } } },
+  }, noClient);
+  assertStringIncludes(html, "measured 2026-11-10");
+  assertStringIncludes(html, "measured 2026-11-12");
+  assertEquals((html.match(/odv-prov/g) ?? []).length, 2);
+});

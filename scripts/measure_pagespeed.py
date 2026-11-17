@@ -25,16 +25,18 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import merge_pagespeed, page_entry, summarize
+from measure_lib import merge_pagespeed, page_entry, pagespeed_args, summarize
 
-BASE = sys.argv[1].rstrip("/")
-PAGES = sys.argv[2].split(",")
-RUNS = int(sys.argv[3])
-OUT = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else None
+# Parsed before any browser starts.
+ARGS = pagespeed_args(sys.argv[1:])
+BASE = ARGS.base.rstrip("/")
+PAGES = ARGS.pages.split(",")
+RUNS = ARGS.runs
+OUT = ARGS.out
 # --query "src=<url>" is appended to every page; with --label NAME the medians go under docs.NAME
 # (the same pages opening another document) and the default table is left alone.
-QUERY = sys.argv[sys.argv.index("--query") + 1] if "--query" in sys.argv else ""
-LABEL = sys.argv[sys.argv.index("--label") + 1] if "--label" in sys.argv else None
+QUERY = ARGS.query
+LABEL = ARGS.label
 PARALLEL = int(os.environ.get("PSI_PARALLEL", "4"))
 LIMIT_S = 240
 
@@ -99,9 +101,10 @@ async def one(browser, page_path: str) -> dict:
     finally:
         if ctx:
             try:
-                await ctx.close()
+                # Bounded: a context that never closes would hold this job, and with it the whole run.
+                await asyncio.wait_for(ctx.close(), 20)
             except Exception:
-                pass  # the browser is gone: the error above already says so
+                pass  # the browser is gone or stuck: the error above says so, and the other jobs go on
     return out
 
 

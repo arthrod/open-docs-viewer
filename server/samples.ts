@@ -51,6 +51,9 @@ export interface SampleBrowser {
   /** Resident memory of every renderer process of the Chrome that ran it. */
   rendererRss?: number | null;
   how: string | null;
+  /** When this row was measured, when the file records it per row (a partial re-run). */
+  measuredAt?: string;
+  environment?: string;
 }
 /** One engine's /r/ route on one sample (scripts/measure_server.py --doc). */
 export interface SampleServer {
@@ -65,6 +68,9 @@ export interface SampleServer {
   runs?: (number | null)[];
   /** A failed run's error; present beside a median when only some runs failed. */
   error?: string;
+  /** When and how this route was timed (curl): the file's heading describes the browser rows. */
+  measuredAt?: string;
+  environment?: string;
 }
 export interface SampleResults {
   measuredAt: string | null;
@@ -90,6 +96,9 @@ export interface ServerClient {
   requests: number | null;
   runs: (number | null)[];
   error: string | null;
+  /** When this row was measured, when the file records it per row (a partial re-run). */
+  measuredAt?: string;
+  environment?: string;
 }
 export interface ServerClientResults {
   measuredAt: string | null;

@@ -1,0 +1,133 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores",
+ "document": "showcase.docx (47,871 B)",
+ "engines": {
+  "docxodus": {
+   "firstMs": 3065,
+   "firstInitMs": 172,
+   "firstRenderMs": 837,
+   "firstCold": true,
+   "warmMs": 532,
+   "warmRenderMs": 277,
+   "bytes": 62692,
+   "warmRuns": [
+    1176,
+    442,
+    457,
+    532,
+    1701
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "folio": {
+   "firstMs": 2282,
+   "firstInitMs": 720,
+   "firstRenderMs": 339,
+   "firstCold": true,
+   "warmMs": 374,
+   "warmRenderMs": 174,
+   "bytes": 208770,
+   "warmRuns": [
+    422,
+    765,
+    355,
+    351,
+    374
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "eigenpal": {
+   "firstMs": 1750,
+   "firstInitMs": 203,
+   "firstRenderMs": 887,
+   "firstCold": true,
+   "warmMs": 758,
+   "warmRenderMs": 492,
+   "bytes": 243292,
+   "warmRuns": [
+    714,
+    835,
+    758,
+    882,
+    681
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "plate": {
+   "firstMs": 1052,
+   "firstInitMs": 307,
+   "firstRenderMs": 259,
+   "firstCold": true,
+   "warmMs": 372,
+   "warmRenderMs": 174,
+   "bytes": 32966,
+   "warmRuns": [
+    866,
+    469,
+    372,
+    370,
+    358
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "docen": {
+   "firstMs": 920,
+   "firstInitMs": 643,
+   "firstRenderMs": 128,
+   "firstCold": true,
+   "warmMs": 220,
+   "warmRenderMs": 28,
+   "bytes": 43771,
+   "warmRuns": [
+    220,
+    189,
+    243,
+    285,
+    178
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "wordcraft": {
+   "firstMs": 671,
+   "firstInitMs": 337,
+   "firstRenderMs": 125,
+   "firstCold": true,
+   "warmMs": 202,
+   "warmRenderMs": 21,
+   "bytes": 3355,
+   "warmRuns": [
+    270,
+    276,
+    180,
+    202,
+    188
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  },
+  "superdoc": {
+   "firstMs": 1316,
+   "firstInitMs": 530,
+   "firstRenderMs": 626,
+   "firstCold": true,
+   "warmMs": 631,
+   "warmRenderMs": 436,
+   "bytes": 6840,
+   "warmRuns": [
+    631,
+    760,
+    666,
+    595,
+    590
+   ],
+   "measuredAt": "2026-11-16",
+   "environment": "curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores"
+  }
+ }
+}

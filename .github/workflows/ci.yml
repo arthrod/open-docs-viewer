@@ -41,4 +41,4 @@ jobs:
       - name: Compile every script
         run: uv run python -m compileall -q scripts
       - name: Tests with coverage
-        run: uv run --with pytest --with pytest-cov pytest scripts/tests --cov=measure_lib --cov-report=term-missing
+        run: uv run --with pytest --with pytest-cov pytest scripts/tests --cov=measure_lib --cov=readme_tables --cov-report=term-missing

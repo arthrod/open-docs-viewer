@@ -34,7 +34,10 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import end_chrome, renderer_rss
+from measure_lib import client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw
+
+# Parsed before any browser starts.
+ARGS = client_args(sys.argv[1:])
 
 BASE = os.environ.get("ODV_BASE", "https://viewers.benchmarks.law")
 FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main"
@@ -58,7 +61,7 @@ async def whole(response) -> bool:
 async def one(pw, slug: str, doc: str) -> dict:
     src = f"{FIXTURES}/{doc}.docx?n={random.getrandbits(48):x}"
     url = f"{BASE}/r/{slug}?src={urllib.parse.quote(src, safe='')}"
-    out: dict = {"engine": slug, "doc": doc}
+    out: dict = {"engine": slug, "doc": doc, **machine_load()}
     with tempfile.TemporaryDirectory() as profile:
         ctx = None
         sizes: list[int] = []
@@ -137,10 +140,10 @@ async def one(pw, slug: str, doc: str) -> dict:
 
 
 async def main():
-    engines = ALL if sys.argv[1] == "all" else sys.argv[1].split(",")
-    docs = sys.argv[2].split(",")
-    runs = int(sys.argv[3])
-    path = sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else None
+    engines = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
+    docs = ARGS.docs.split(",")
+    runs = ARGS.runs
+    path = ARGS.out
     raw = []
     stopped = None
     async with async_playwright() as pw:
@@ -165,8 +168,16 @@ async def main():
     except (OSError, ValueError):
         result = {}
     where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
-    result["measuredAt"] = datetime.date.today().isoformat()
-    result["environment"] = f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs} runs, median; {where}"
+    meta = {
+        "measuredAt": datetime.date.today().isoformat(),
+        "environment": f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}",
+    }
+    write_raw(ARGS.raw, meta, raw)
+    # Rows not measured in this run keep the date and environment they were published under.
+    old = {k: result.get(k) for k in ("measuredAt", "environment")}
+    for rows in result.get("docs", {}).values():
+        stamp_rows(rows, {}, old, meta)
+    result.update(meta)
     for d in docs:
         for e in engines:
             xs = [x for x in raw if x["engine"] == e and x["doc"] == d]
@@ -178,6 +189,7 @@ async def main():
                 **{k: med(k) for k in KEYS},
                 "runs": [x.get("loadMs") for x in xs],
                 "error": next((x["error"] for x in xs if "error" in x), None),
+                **meta,
             }
     text = json.dumps(result, indent=1) + "\n"
     if path:

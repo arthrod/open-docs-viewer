@@ -1,4 +1,5 @@
 """uv run --with pytest pytest scripts/tests"""
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -162,3 +163,65 @@ def test_end_chrome_is_quiet_once_the_process_is_gone(monkeypatch):
     monkeypatch.setattr(lib.subprocess, "run", run)
     monkeypatch.setattr(lib.time, "sleep", lambda s: None)
     assert lib.end_chrome("/tmp/p", wait_s=5) is None
+
+
+def test_every_run_can_say_how_busy_the_machine_was():
+    m = lib.machine_load()
+    assert m["cores"] >= 1 and m["load1"] >= 0
+    assert lib.load_note([{"load1": 2.0, "cores": 12}, {"load1": 9.5, "cores": 12}, {"load1": 3.0, "cores": 12}]) == "machine load (1-minute average) median 3.0, highest 9.5, on 12 cores"
+    assert lib.load_note([{"engine": "folio"}]) == ""
+
+
+def test_the_heading_says_how_many_runs_were_really_made():
+    full = [{"engine": e, "sample": "redline"} for e in ("a", "b") for _ in range(3)]
+    assert lib.runs_note(3, full) == "3 runs"
+    assert lib.runs_note(3, full[:4]) == "1 to 3 runs (3 asked; the measuring stopped early)"
+    assert lib.runs_note(3, full[:3]) == "3 runs"
+    assert lib.runs_note(3, [full[0], full[3]]) == "1 runs (3 asked; the measuring stopped early)"
+
+
+def test_pagespeed_options_are_parsed_before_anything_runs():
+    a = lib.pagespeed_args(["https://x.example", "e/folio,e/plate", "3", "--query", "open=a.docx", "--label", "lorem-500", "--out", "o.json"])
+    assert (a.base, a.pages, a.runs, a.query, a.label, a.out) == ("https://x.example", "e/folio,e/plate", 3, "open=a.docx", "lorem-500", "o.json")
+    for bad in ([], ["https://x.example"], ["https://x.example", "e/folio", "0"], ["https://x.example", "e/folio", "3", "--out"]):
+        with pytest.raises(SystemExit):
+            lib.pagespeed_args(bad)
+
+
+def test_a_partial_run_stamps_its_rows_and_leaves_the_others_under_their_own_date():
+    rows = {"folio": {"renderedMs": 1}, "plate": {"renderedMs": 2, "measuredAt": "2026-11-01", "environment": "older still"}}
+    old = {"measuredAt": "2026-11-09", "environment": "3 runs"}
+    meta = {"measuredAt": "2026-11-16", "environment": "5 runs"}
+    out = lib.stamp_rows(rows, {"docen": {"renderedMs": 3}, "folio": {"renderedMs": 9}}, old, meta)
+    assert out["folio"] == {"renderedMs": 9, **meta}
+    assert out["docen"] == {"renderedMs": 3, **meta}
+    assert out["plate"]["measuredAt"] == "2026-11-01"  # already stamped: kept
+    kept = lib.stamp_rows({"apryse": {"renderedMs": 5}}, {}, old, meta)
+    assert kept["apryse"] == {"renderedMs": 5, **old}
+    assert lib.stamp_rows({"apryse": {"renderedMs": 5}}, {}, {"measuredAt": None, "environment": ""}, meta)["apryse"] == {"renderedMs": 5}
+
+
+def test_client_options_are_parsed_before_anything_runs(tmp_path):
+    a = lib.client_args(["all", "showcase,lorem-500", "3", "--out", "o.json", "--raw", "r.json"])
+    assert (a.engines, a.docs, a.runs, a.out, a.raw) == ("all", "showcase,lorem-500", 3, "o.json", "r.json")
+    for bad in ([], ["all"], ["all", "showcase", "0"], ["all", "nope", "3"], ["all", "showcase", "3", "--out"]):
+        with pytest.raises(SystemExit):
+            lib.client_args(bad)
+    lib.write_raw(str(tmp_path / "raw" / "x.json"), {"measuredAt": "2026-11-16"}, [{"engine": "folio"}])
+    assert json.loads((tmp_path / "raw" / "x.json").read_text()) == {"measuredAt": "2026-11-16", "raw": [{"engine": "folio"}]}
+    lib.write_raw(None, {}, [])
+
+
+def test_the_first_request_and_the_warm_ones_make_one_row():
+    first = {"code": 200, "totalMs": 2231, "init": 235.4, "render": 1103.2, "bytes": 58818}
+    warm = [{"code": 200, "totalMs": t, "init": 0, "render": r, "bytes": 58818} for t, r in ((700, 320), (622, 302), (600, 290))]
+    row = lib.first_warm_entry(first, warm)
+    assert row == {"firstMs": 2231, "firstInitMs": 235, "firstRenderMs": 1103, "firstCold": True, "warmMs": 622, "warmRenderMs": 302, "bytes": 58818, "warmRuns": [700, 622, 600]}
+
+
+def test_a_first_request_that_found_the_engine_loaded_is_not_called_cold_and_failures_are_kept():
+    warmish = lib.first_warm_entry({"code": 200, "totalMs": 500, "init": 0, "render": 300, "bytes": 1}, [{"code": 200, "totalMs": 480, "render": 290, "bytes": 1}])
+    assert warmish["firstCold"] is False
+    bad = lib.first_warm_entry({"code": 0, "totalMs": 180000, "error": "no answer within 180 s"}, [{"code": 200, "totalMs": 400, "render": 100, "bytes": 5}, {"code": 500, "totalMs": 90, "error": "HTTP 500: boom"}])
+    assert bad["firstMs"] is None and bad["firstCold"] is False and bad["warmMs"] == 400 and bad["warmRuns"] == [400, None]
+    assert bad["error"] == "no answer within 180 s"

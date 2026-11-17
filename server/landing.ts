@@ -2,6 +2,7 @@
 import type { Engine } from "./engines.ts";
 import {
   type Results,
+  SERVER_FILE_HEAD,
   SERVER_MEASURED_AT,
   SERVER_RESULTS,
   landingStatItems,
@@ -15,6 +16,9 @@ const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const ms = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1000 ? `${Math.round(n)} ms` : `${(n / 1000).toFixed(2)} s`;
+/** Said under a figure measured on another day than its table's heading (a partial re-run). */
+const when = (row: { measuredAt?: string } | undefined, head: { measuredAt?: string | null }) =>
+  row?.measuredAt && row.measuredAt !== head.measuredAt ? `<div class="ro odv-prov">measured ${esc(row.measuredAt)}</div>` : "";
 const mb = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
 
@@ -32,13 +36,13 @@ const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-vie
  * row is the /v/ page that frames them).
  */
 export function serverClientTable(engines: Engine[], results: Results, defaultSrc: string, client: ServerClientResults = SERVER_CLIENT): string {
-  const doc = client.docs.showcase ?? {};
+  const doc = client.docs?.showcase ?? {};
   const q = encodeURIComponent(defaultSrc);
   const rows = SERVER_RESULTS.map((r) => {
     const c = doc[r.slug];
     if (!c) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6" class="ro">not measured yet</td></tr>`;
     if (c.loadMs == null) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6"><span class="odv-fail">failed</span> <span class="ro">${esc(c.error ?? "")}</span></td></tr>`;
-    return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td class="n"><b>${ms(c.loadMs)}</b></td><td class="n hide-sm">${ms(c.paintMs)}</td>
+    return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a>${when(c, client)}</td><td class="n"><b>${ms(c.loadMs)}</b></td><td class="n hide-sm">${ms(c.paintMs)}</td>
 <td class="n">${mb(c.heapBytes)}</td><td class="n">${mb(c.rendererRss)}</td><td class="n hide-sm">${c.domNodes?.toLocaleString("en-US") ?? "n/a"}</td><td class="n hide-sm">${mb(c.bytes)}</td></tr>`;
   }).join("");
   const vendors = engines.filter((e) => e.frame).map((e) => {
@@ -132,11 +136,11 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         : b.renderedMs == null
         ? `<span class="odv-fail" title="${esc(b.how ?? "")}">failed</span>`
         // A vendor's cross-origin frame: all the page can time is the frame's load event.
-        : `<b>${ms(b.renderedMs)}</b>${e.frame ? ` <span class="ro">frame load</span>` : ""}`;
-      const c = client.docs[s.id]?.[e.slug];
+        : `<b>${ms(b.renderedMs)}</b>${e.frame ? ` <span class="ro">frame load</span>` : ""}${when(b, res)}`;
+      const c = client.docs?.[s.id]?.[e.slug];
       const inBrowser = !c ? "" : c.loadMs == null
         ? `<div class="ro">in the browser: <span class="odv-fail">failed</span> ${esc(c.error ?? "")}</div>`
-        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)} · memory ${mb(c.rendererRss)}</div>`;
+        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
       const server = e.frame
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v
@@ -149,7 +153,7 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         }${
           // The median stands on the runs that answered; the one that did not is said, not dropped.
           v.error ? `<div class="ro"><span class="odv-fail">${(v.runs ?? []).filter((x) => x == null).length} of ${(v.runs ?? []).length} runs failed</span>: ${esc(v.error.slice(0, 140))}</div>` : ""
-        }${inBrowser}`;
+        }${when(v, res)}${inBrowser}`;
       return `<tr>
       <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}</td>
       <td class="n">${browser}</td>
@@ -188,7 +192,7 @@ export function landingPage(engines: Engine[], results: Results, defaultSrc: str
     const failed = runs.filter((x) => x == null).length;
     return `<tr>
       <td><a href="${link(e)}">${esc(e.name)}</a><div class="ro">${esc(e.readOnly)}</div></td>
-      <td class="n"><b>${ms(r?.renderedMs)}</b></td>
+      <td class="n"><b>${ms(r?.renderedMs)}</b>${when(r, results)}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
       <td class="n">${mb(r?.bytes)}</td>
       <td class="n hide-sm">${r?.requests ?? "n/a"}</td>
@@ -237,12 +241,14 @@ ${stats}
   <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
 <strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot).
-<strong>Warm</strong>: median of 5. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. canvas-editor has no server route: it draws to a canvas throughout.</p>
+<strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. canvas-editor has no server route: it draws to a canvas throughout.</p>
   <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">First</th><th class="n hide-sm">init · render</th><th class="n">Warm</th><th class="n hide-sm">render</th><th class="n">Sent</th><th>How</th></tr></thead><tbody>
 ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${
     r.output === "images" ? "page images" : r.output === "pages" ? "positioned pages" : r.output === "browser-paginated" ? "pages; breaks computed in the browser" : "flowing HTML"
   }</div></td>
-<td class="n"><b>${ms(r.firstMs)}</b></td><td class="n hide-sm">${ms(r.firstInitMs)} · ${ms(r.firstRenderMs)}</td><td class="n"><b>${ms(r.warmMs)}</b></td><td class="n hide-sm">${ms(r.warmRenderMs)}</td>
+<td class="n"><b>${ms(r.firstMs)}</b>${r.firstCold === false && r.firstMs != null ? `<div class="ro">already loaded: not a first request</div>` : ""}${
+    r.error ? `<div class="ro"><span class="odv-fail">a request failed</span>: ${esc(r.error.slice(0, 140))}</div>` : ""
+  }${when(r, SERVER_FILE_HEAD)}</td><td class="n hide-sm">${ms(r.firstInitMs)} · ${ms(r.firstRenderMs)}</td><td class="n"><b>${ms(r.warmMs)}</b></td><td class="n hide-sm">${ms(r.warmRenderMs)}</td>
 <td class="n">${mb(r.bytes)}</td><td class="ro">${esc(r.how)}</td></tr>`).join("")}
 </tbody></table></div>
   ${serverClientTable(engines, results, defaultSrc)}

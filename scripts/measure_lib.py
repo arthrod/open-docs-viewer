@@ -7,6 +7,7 @@ Chrome's renderers, and how a Chrome that will not close is ended.
 """
 import argparse
 import json
+import os
 import statistics
 import subprocess
 import time
@@ -121,6 +122,7 @@ def measure_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--doc", choices=DOC_IDS, default="showcase")
     p.add_argument("--results", metavar="PATH", help="also write the main table (rich sample only)")
     p.add_argument("--samples", metavar="PATH", help="merge into samples.<doc>.browser of this file")
+    p.add_argument("--raw", metavar="PATH", help="write every run to this file")
     return p.parse_args(argv)
 
 
@@ -131,6 +133,8 @@ def server_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("runs", type=_runs)
     p.add_argument("--doc", choices=DOC_IDS, default=None, help="default: the val's own default document (the rich sample)")
     p.add_argument("--samples", metavar="PATH", help="merge into samples.<doc>.server of this file")
+    p.add_argument("--first-warm", metavar="PATH", dest="first_warm", help="right after a deploy: one first request per route, then RUNS warm ones, into this file (results/server.json)")
+    p.add_argument("--raw", metavar="PATH", help="write every run to this file")
     return p.parse_args(argv)
 
 
@@ -242,3 +246,120 @@ def merge_pagespeed(result: dict, entries: dict, label: str | None, meta: dict) 
     for p, entry in entries.items():
         rows[p] = {**entry, **{k: meta[k] for k in PROVENANCE}}
     return result
+
+
+def machine_load() -> dict:
+    """How busy the machine is right now: the 1-minute load average and the core count.
+
+    A timing taken while other work holds the processors is slower than the
+    engine is; every run records this so a reader can tell.
+    """
+    return {"load1": round(os.getloadavg()[0], 2), "cores": os.cpu_count() or 1}
+
+
+def load_note(runs: list[dict]) -> str:
+    """One phrase for the environment line: the load the runs were taken under."""
+    loads = sorted(r["load1"] for r in runs if isinstance(r.get("load1"), (int, float)))
+    if not loads:
+        return ""
+    cores = next((r["cores"] for r in runs if r.get("cores")), None)
+    return f"machine load (1-minute average) median {statistics.median(loads):.1f}, highest {loads[-1]:.1f}" + (f", on {cores} cores" if cores else "")
+
+
+def runs_note(asked: int, raw: list[dict], key: str = "engine") -> str:
+    """"3 runs" when every engine got the runs asked for; otherwise what was actually made."""
+    per: dict = {}
+    for r in raw:
+        k = (r.get(key), r.get("sample") or r.get("doc"))
+        per[k] = per.get(k, 0) + 1
+    counts = sorted(set(per.values()))
+    if not counts or counts == [asked]:
+        return f"{asked} runs"
+    return f"{counts[0]} to {counts[-1]} runs ({asked} asked; the measuring stopped early)" if len(counts) > 1 else f"{counts[0]} runs ({asked} asked; the measuring stopped early)"
+
+
+def pagespeed_args(argv: list[str]) -> argparse.Namespace:
+    """scripts/measure_pagespeed.py's command line."""
+    p = argparse.ArgumentParser(description="PageSpeed Insights on pages of one site, several analyses each.")
+    p.add_argument("base", help="the site, e.g. https://viewers.benchmarks.law")
+    p.add_argument("pages", help="comma-separated paths under it, e.g. v/docxodus,r/docxodus")
+    p.add_argument("runs", type=_positive, help="analyses per page and form factor")
+    p.add_argument("--out", metavar="PATH", help="merge the medians into this results file")
+    p.add_argument("--query", default="", help='appended to every page, e.g. "src=<docx url>"')
+    p.add_argument("--label", help="with --query: file the medians under docs.<label>, leaving the default table alone")
+    return p.parse_args(argv)
+
+
+def _positive(v: str) -> int:
+    """A count of at least one."""
+    n = int(v)
+    if n < 1:
+        raise argparse.ArgumentTypeError("must be at least 1")
+    return n
+
+
+def client_args(argv: list[str]) -> argparse.Namespace:
+    """scripts/measure_server_client.py's command line."""
+    p = argparse.ArgumentParser(description="What a server-rendered page (/r/) costs the browser.")
+    p.add_argument("engines", help='comma-separated slugs, or "all"')
+    p.add_argument("docs", help="comma-separated documents: " + ", ".join(DOC_IDS))
+    p.add_argument("runs", type=_positive, help="cold runs per engine and document")
+    p.add_argument("--out", metavar="PATH", help="merge the medians into this results file")
+    p.add_argument("--raw", metavar="PATH", help="write every run to this file")
+    a = p.parse_args(argv)
+    unknown = [d for d in a.docs.split(",") if d not in DOC_IDS]
+    if unknown:
+        p.error(f"unknown document: {', '.join(unknown)}")
+    return a
+
+
+def stamp_rows(rows: dict, entries: dict, old: dict, meta: dict) -> dict:
+    """Put a run's entries into `rows`, each with the date and environment of the run that measured it.
+
+    A run of some engines only must not redate the others: rows kept from
+    before get the heading they were published under (`old`; nothing when the
+    file had none), and the file's heading can then be set to this run's.
+    """
+    for row in rows.values():
+        if isinstance(row, dict):
+            for k, v in old.items():
+                if v:
+                    row.setdefault(k, v)
+    for name, entry in entries.items():
+        rows[name] = {**entry, **meta}
+    return rows
+
+
+def write_raw(path: str | None, meta: dict, raw: list[dict]) -> None:
+    """Every run of a measurement, in a file of its own beside the medians."""
+    if not path:
+        return
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w") as f:
+        f.write(json.dumps({**meta, "raw": raw}, indent=1) + "\n")
+
+
+def first_warm_entry(first: dict, warm: list[dict]) -> dict:
+    """One /r/ route's row of the landing's server table: its first request after a deploy, then the warm ones.
+
+    `firstCold` is False when the first request found the engine already
+    loaded (its init time is 0): then it was not a first request, and the
+    figure is a warm one that must not be read as a cold start.
+    """
+    ok = [x for x in warm if x["code"] == 200]
+    med = lambda k: (lambda v: round(statistics.median(v)) if v else None)([x[k] for x in ok if x.get(k) is not None])  # noqa: E731
+    good = first["code"] == 200
+    entry = {
+        "firstMs": first["totalMs"] if good else None,
+        "firstInitMs": round(first["init"]) if good and first.get("init") is not None else None,
+        "firstRenderMs": round(first["render"]) if good and first.get("render") is not None else None,
+        "firstCold": bool(good and (first.get("init") or 0) > 0),
+        "warmMs": med("totalMs"),
+        "warmRenderMs": med("render"),
+        "bytes": med("bytes"),
+        "warmRuns": [x["totalMs"] if x["code"] == 200 else None for x in warm],
+    }
+    bad = next((x for x in [first, *warm] if x["code"] != 200), None)
+    if bad:
+        entry["error"] = bad.get("error", f"HTTP {bad['code']}")
+    return entry

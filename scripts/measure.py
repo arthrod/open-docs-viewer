@@ -15,6 +15,8 @@ Per run:
   rendererRss resident memory of every renderer process of that Chrome (`ps`),
               read at the same moment: unlike the JS heap it includes
               WebAssembly memory, canvases, the DOM and cross-origin frames
+  load1, cores the machine's 1-minute load average when the run started, and its
+              core count: a timing taken on a busy machine is slower than the engine
 
 If Cloudflare (in front of val.run) shows a challenge, the run is recorded as
 blocked; nothing here tries to get past it.
@@ -39,7 +41,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, end_chrome, engine_summary, measure_args, renderer_rss, samples_shell
+from measure_lib import check_results_document, end_chrome, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, write_raw
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -78,7 +80,7 @@ async def one(pw, slug: str) -> dict:
                 sizes.append(0)
 
         ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
-        out: dict = {"engine": slug}
+        out: dict = {"engine": slug, **machine_load()}
         try:
             await page.goto(url, wait_until="commit", timeout=TIMEOUT_S * 1000)
             deadline = time.monotonic() + TIMEOUT_S
@@ -145,51 +147,53 @@ async def main():
                 break
     # A run that rendered but lost a later reading keeps its time (measure_lib.engine_summary).
     summary = {e: engine_summary(xs) for e, xs in res.items() if xs}  # engines a stopped run never reached keep their entry
+    raw = [x for xs in res.values() for x in xs]
+    meta = {"measuredAt": datetime.date.today().isoformat(), "environment": environment(runs, raw)}
     print(json.dumps({"engines": summary, "raw": res}, indent=1))
+    write_raw(ARGS.raw, {**meta, "document": DOCS[DOC_ID][1]}, raw)
     if out_path:
-        write_results(out_path, summary, runs)
+        write_results(out_path, summary, meta)
     if ARGS.samples:
-        write_sample(ARGS.samples, summary, runs)
+        write_sample(ARGS.samples, summary, meta)
 
 
-def environment(runs: int) -> str:
+def environment(runs: int, raw: list[dict]) -> str:
     where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
-    return f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs} runs, median; {where}"
+    return f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}"
 
 
-def write_sample(path: str, summary: dict, runs: int) -> None:
+def write_sample(path: str, summary: dict, meta: dict) -> None:
     """Merge this run into results/samples.json under samples.<doc>.browser."""
     try:
         out = json.load(open(path))
     except (OSError, ValueError):
         out = {}
     document = f"{DOCS[DOC_ID][1]} with a never-seen ?n= per run"
+    old = {k: out.get(k) for k in ("measuredAt", "environment")}
     doc = samples_shell(out, DOC_ID, document)["samples"][DOC_ID]
-    out["measuredAt"] = datetime.date.today().isoformat()
-    out["environment"] = environment(runs)
     doc["document"] = document
-    for e, s in summary.items():
-        if e in FRAME and s["renderedMs"] is not None:
-            s = {**s, "how": FRAME_HOW}
-        doc.setdefault("browser", {})[e] = s
+    framed = {e: ({**s, "how": FRAME_HOW} if e in FRAME and s["renderedMs"] is not None else s) for e, s in summary.items()}
+    # Every browser row of every document in the file was published under the old heading: each
+    # keeps it, the rows of this run get this run's, and then the heading can change.
+    for other in out["samples"].values():
+        stamp_rows(other.setdefault("browser", {}), {}, old, meta)
+    stamp_rows(doc["browser"], framed, old, meta)
+    out.update(meta)
     with open(path, "w") as f:
         f.write(json.dumps(out, indent=1) + "\n")
     print(f"wrote {path}", file=sys.stderr)
 
 
-def write_results(path: str, summary: dict, runs: int) -> None:
+def write_results(path: str, summary: dict, meta: dict) -> None:
     try:
         prev = json.load(open(path))
     except (OSError, ValueError):
         prev = {"engines": {}}
-    engines = dict(prev.get("engines", {}))
-    for e, s in summary.items():
-        if e in FRAME and s["renderedMs"] is not None:
-            s = {**s, "how": FRAME_HOW}
-        engines[e] = s
+    framed = {e: ({**s, "how": FRAME_HOW} if e in FRAME and s["renderedMs"] is not None else s) for e, s in summary.items()}
+    # Engines not measured in this run keep the date and environment they were published under.
+    engines = stamp_rows(dict(prev.get("engines", {})), framed, {k: prev.get(k) for k in ("measuredAt", "environment")}, meta)
     out = {
-        "measuredAt": datetime.date.today().isoformat(),
-        "environment": environment(runs),
+        **meta,
         "document": f"{DOCS[DOC_ID][1]} with a never-seen ?n= per run",
         "engines": dict(sorted(engines.items())),
     }
