@@ -111,7 +111,10 @@ export function serverToggle(html: string, slug: string, src: URL): string {
     `<nav data-odv-toggle aria-label="Where the document is rendered" style="position:fixed;right:12px;bottom:12px;z-index:2147483647;display:inline-flex;border:1px solid #0a0a0a;background:#fff;box-shadow:4px 4px 0 #ffd400">` +
     `<a href="/v/${encodeURIComponent(slug)}?src=${encodeURIComponent(src.href)}" title="Rendered in your browser by the engine" style="${seg}color:#0a0a0a">Browser</a>` +
     `<span aria-current="page" title="Rendered on this server; the browser gets finished pages" style="${seg}background:#0a0a0a;color:#fff">Server</span></nav>`;
-  const at = html.search(/<\/body\s*>(?![\s\S]*<\/body\s*>)/i);
+  // The last closing body tag, found in one pass: a lookahead for "no later one" re-reads the rest
+  // of the page at every candidate, which took seconds on a 29 MB page that names the tag often.
+  let at = -1;
+  for (const m of html.matchAll(/<\/body\s*>/gi)) at = m.index;
   return at < 0 ? html + bar : html.slice(0, at) + bar + html.slice(at);
 }
 

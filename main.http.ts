@@ -30,6 +30,8 @@ import { viewPage } from "./server/render.ts";
 import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
 import { currentResults } from "./server/results.ts";
 import { serverToggle } from "./server/navbar.ts";
+import { resolvesPublic } from "./server/net.ts";
+import { renderFailure } from "./server/failure.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -109,7 +111,8 @@ app.get("/v/:slug", async (c) => {
 const FETCH_DEADLINE_MS = 20_000;
 const MAX_REDIRECTS = 5;
 // 4xx, not 502/504: Val Town's edge replaces 5xx bodies with "error code: 5xx", which would hide why.
-const fail = (status: number, msg: string) => new Response(msg, { status });
+// Never cached: the next request may find the document there.
+const fail = (status: number, msg: string) => new Response(msg, { status, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
 
 /**
  * Fetch a public .docx on this server (shared by /api/doc and /r/*).
@@ -118,8 +121,11 @@ const fail = (status: number, msg: string) => new Response(msg, { status });
  * literal-IP hosts) instead of letting fetch follow it; the body is read in
  * chunks and abandoned the moment it passes 25 MB, whatever the headers
  * claim; headers and body share one deadline.
- * Not covered: a public name that resolves to a private address — Val Town's
- * egress is the boundary there; this code has no connect-time IP check.
+ * A public name that resolves to a private address (127.0.0.1.nip.io) is
+ * refused at every hop by asking a public resolver first (server/net.ts).
+ * Not covered: a DNS server that answers that check and the connection
+ * differently (rebinding); a Val has no connect-time IP check, so Val Town's
+ * egress is the boundary there.
  */
 async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   const signal = AbortSignal.timeout(FETCH_DEADLINE_MS);
@@ -127,6 +133,7 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   let res: Response | undefined;
   try {
     for (let hop = 0; ; hop++) {
+      if (!(await resolvesPublic(url.hostname))) return fail(422, "the document URL points to an address that is not public");
       res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://viewers.benchmarks.law)" } });
       if (res.status < 300 || res.status >= 400) break;
       await res.body?.cancel();
@@ -167,7 +174,9 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
     return bytes;
   } catch (e) {
     if (signal.aborted) return fail(408, `the document did not arrive within ${FETCH_DEADLINE_MS / 1000}s`);
-    throw e;
+    // A host that does not exist, a refused connection, a broken TLS handshake: the document's
+    // address is what failed. Thrown onwards, Val Town would answer 500 with the stack trace.
+    return fail(422, `the document could not be fetched: ${((e as Error)?.message ?? String(e)).split("\n")[0].slice(0, 200)}`);
   }
 }
 
@@ -239,7 +248,15 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
-  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = await render(got, src);
+  let rendered: Rendered;
+  try {
+    rendered = await render(got, src);
+  } catch (err) {
+    // A zip that is not a .docx, or a document the engine cannot read.
+    console.error(`/r/${engine} ${src.href}:`, err);
+    return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
+  }
+  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = rendered;
   const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
@@ -271,7 +288,12 @@ app.get("/r/wordcraft/page", async (c) => {
   const src = publicUrl(c.req.query("src"));
   if (!src) return c.text("src must be a public https URL", 400);
   const { wordcraftPage } = await import("./server/wordcraft.ts");
-  return wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
+  try {
+    return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
+  } catch (err) {
+    console.error(`/r/wordcraft/page ${src.href}:`, err);
+    return renderFailure("WordCraft", err);
+  }
 });
 
 app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
@@ -295,8 +317,12 @@ app.get("*", async (c) => {
   return new Response(res.body, { status: res.status, headers });
 });
 
-// Unwrap Hono errors to see original error details.
-app.onError((err) => Promise.reject(err));
+// Anything a route did not answer for itself: logged whole (Val Town's logs), answered in one line.
+// Rejecting here made Val Town send the error's stack trace to the visitor.
+app.onError((err, c) => {
+  console.error(`${c.req.method} ${c.req.path}:`, err);
+  return new Response("this page could not be made; the error is in the server's log", { status: 500, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
+});
 
 export default app.fetch;
 

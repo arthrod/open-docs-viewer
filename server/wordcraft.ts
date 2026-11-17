@@ -46,7 +46,7 @@ const sha256 = async (b: Uint8Array) => hex(await crypto.subtle.digest("SHA-256"
 let ready: Promise<void> | undefined;
 function load() {
   ready ??= (async () => {
-    const res = await fetch(WASM_GZ);
+    const res = await fetch(WASM_GZ, { signal: AbortSignal.timeout(30_000) }); // a download that hangs would hold every request for this module
     if (!res.ok) throw new Error(`WordCraft wasm: HTTP ${res.status}`);
     const gz = await res.arrayBuffer();
     const got = hex(await crypto.subtle.digest("SHA-256", gz));
@@ -88,10 +88,10 @@ function evict(p: Promise<Laid>) {
 
 /** The layout of `bytes`: the one kept under `id`, or a new one when there is none (or `anew`). */
 function layOut(id: string, bytes: Uint8Array, anew = false): Promise<Laid> {
-  let hit = anew ? undefined : laid.get(id);
-  const replaced = hit ? undefined : laid.get(id);
-  laid.delete(id);
-  if (replaced) evict(replaced);
+  const kept = laid.get(id);
+  let hit = anew ? undefined : kept;
+  laid.delete(id); // set again below, which also makes it the most recently used
+  if (anew && kept) evict(kept); // laid out anew: the one it replaces is released
   if (!hit) {
     hit = (async () => {
       const t0 = performance.now();
