@@ -41,7 +41,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
+from measure_lib import check_results_document, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -194,10 +194,7 @@ def write_sample(path: str, summary: dict, meta: dict) -> None:
 
 
 def write_results(path: str, summary: dict, meta: dict) -> None:
-    try:
-        prev = json.load(open(path))
-    except (OSError, ValueError):
-        prev = {"engines": {}}
+    prev = read_results(path)
     framed = {e: ({**s, "how": FRAME_HOW} if e in FRAME and s["renderedMs"] is not None else s) for e, s in summary.items()}
     # Engines not measured in this run keep the date and environment they were published under.
     engines = stamp_rows(dict(prev.get("engines", {})), framed, {k: prev.get(k) for k in ("measuredAt", "environment")}, meta)

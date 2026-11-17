@@ -46,21 +46,37 @@ export const RESULTS: Results = BUNDLED as Results;
 export const RESULTS_URL = "https://raw.githubusercontent.com/arthrod/open-docs-viewer/main/results/browser.json";
 const RESULTS_TTL_MS = 5 * 60 * 1000;
 let cached: { at: number; results: Results } | undefined;
+let pending: Promise<Results> | undefined;
 
+/** The published results: GitHub's copy when it can be had and has the shape the page renders, else the bundled one. */
 export async function currentResults(): Promise<Results> {
   if (cached && Date.now() - cached.at < RESULTS_TTL_MS) return cached.results;
+  // Requests that arrive together share one fetch.
+  pending ??= fetchResults().finally(() => (pending = undefined));
+  return pending;
+}
+
+/** Forget what was fetched, as a fresh isolate would start (tests). */
+export function forgetResults() {
+  cached = undefined;
+  pending = undefined;
+}
+
+const isRecord = (x: unknown): x is Record<string, unknown> => !!x && typeof x === "object" && !Array.isArray(x);
+
+async function fetchResults(): Promise<Results> {
   let results = RESULTS;
   try {
     const res = await fetch(RESULTS_URL, { signal: AbortSignal.timeout(4000) });
     if (res.ok) {
-      const json = await res.json() as Results;
-      // Only take it if it has the shape the page renders.
-      if (json && typeof json === "object" && json.engines && typeof json.engines === "object") results = json;
+      const json: unknown = await res.json();
+      // Only take it if it has the shape the page renders: a dated file with at least one engine.
+      if (isRecord(json) && typeof json.measuredAt === "string" && isRecord(json.engines) && Object.keys(json.engines).length > 0) results = json as unknown as Results;
     } else {
       await res.body?.cancel();
     }
   } catch {
-    // GitHub unreachable or slow: the bundled copy is still a real measurement.
+    // GitHub unreachable or slow, or not JSON: the bundled copy is still a real measurement.
   }
   cached = { at: Date.now(), results };
   return results;
