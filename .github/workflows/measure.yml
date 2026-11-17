@@ -15,7 +15,7 @@ on:
     inputs:
       runs:
         description: "Cold runs per engine on the long documents (the rich sample gets 5)"
-        default: "3"
+        default: "5"
 
 permissions:
   contents: read

@@ -32,7 +32,7 @@ import { currentResults } from "./server/results.ts";
 import { serverToggle } from "./server/navbar.ts";
 import { fetchFailure, publicUrl, resolvesPublic } from "./server/net.ts";
 import { renderFailure } from "./server/failure.ts";
-import { Busy, turns } from "./server/queue.ts";
+import { Busy, TookTooLong, turns } from "./server/queue.ts";
 import { tooLarge } from "./server/docx-size.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
@@ -228,6 +228,13 @@ export const RENDERERS: Record<string, Renderer> = {
 
 // One render at a time in this isolate, and at most six waiting (server/queue.ts).
 const renderTurn = turns(6);
+/** The answer to a render that got no turn, or held one too long: 503, to be tried again; never cached. */
+const busyAnswer = (err: unknown): Response | null =>
+  err instanceof Busy
+    ? new Response("this server is rendering other documents: try again in a moment", { status: 503, headers: { "retry-after": "10", "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" } })
+    : err instanceof TookTooLong
+    ? new Response(`${err.message}: try again, or open it in the browser render`, { status: 503, headers: { "retry-after": "30", "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" } })
+    : null;
 
 app.get("/r/:engine", async (c) => {
   const engine = c.req.param("engine");
@@ -250,9 +257,8 @@ app.get("/r/:engine", async (c) => {
     rendered = turn.value;
     queueMs = turn.waitedMs;
   } catch (err) {
-    if (err instanceof Busy) {
-      return c.text("this server is rendering other documents: try again in a moment", 503, { "retry-after": "10", "cache-control": "no-store" });
-    }
+    const busy = busyAnswer(err);
+    if (busy) return busy;
     // A zip that is not a .docx, or a document the engine cannot read.
     console.error(`/r/${engine}`, JSON.stringify(src.href), err);
     return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
@@ -291,8 +297,10 @@ app.get("/r/wordcraft/page", async (c) => {
   if (!src) return c.text("src must be a public https URL", 400);
   const { wordcraftPage } = await import("./server/wordcraft.ts");
   try {
-    return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
+    return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src), (job) => renderTurn(job).then((t) => t.value));
   } catch (err) {
+    const busy = busyAnswer(err);
+    if (busy) return busy;
     console.error("/r/wordcraft/page", JSON.stringify(src.href), err);
     return renderFailure("WordCraft", err);
   }

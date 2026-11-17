@@ -1,5 +1,5 @@
 import { assertEquals, assertRejects } from "jsr:@std/assert@1";
-import { Busy, turns } from "./queue.ts";
+import { Busy, TookTooLong, turns } from "./queue.ts";
 
 Deno.test("renders run one at a time, in the order asked, and each learns how long it waited", async () => {
   const run = turns(8);
@@ -32,4 +32,20 @@ Deno.test("past the limit of waiting renders, a new one is refused at once and t
   await assertRejects(() => run(slow), Busy);
   assertEquals((await Promise.all([first, second, third])).map((x) => x.value), [1, 1, 1]);
   assertEquals((await run(slow)).value, 1); // room again
+});
+
+Deno.test("a render that never ends gives its turn back after the limit, and the next ones run", async () => {
+  const run = turns(6, 40);
+  const stuck = run(() => new Promise<string>(() => {}));
+  const next = run(() => Promise.resolve("next"));
+  const err = await assertRejects(() => stuck, TookTooLong);
+  assertEquals(err.message.includes("40"), false); // said in seconds, for the reader of the answer
+  assertEquals((await next).value, "next");
+  assertEquals((await run(() => Promise.resolve("later"))).waitedMs < 30, true); // the counter is right again
+});
+
+Deno.test("a render that ends in time is not cut short, and its own failure is its own", async () => {
+  const run = turns(6, 200);
+  assertEquals((await run(async () => { await new Promise((r) => setTimeout(r, 20)); return "ok"; })).value, "ok");
+  await assertRejects(() => run(() => Promise.reject(new Error("boom"))), Error, "boom");
 });

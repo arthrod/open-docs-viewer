@@ -16,12 +16,25 @@ export class Busy extends Error {
   }
 }
 
+/** Thrown when a render held its turn longer than the queue allows. */
+export class TookTooLong extends Error {
+  constructor(public limitMs: number) {
+    super(`the render did not finish within ${Math.round(limitMs / 1000)} s`);
+  }
+}
+
 /**
  * A queue: `run(job)` starts `job` when every earlier one has ended, and
  * resolves with its value and how long it waited for its turn. With `limit`
  * jobs already waiting, `run` rejects with `Busy` without queueing.
+ *
+ * A job that has not ended after `turnMs` gives its turn back and `run`
+ * rejects with `TookTooLong`: without that, one render waiting on something
+ * that never answers would hold every later one (six would wait for ever,
+ * the rest would be refused) until the isolate restarted. The job itself is
+ * not stopped (nothing can stop it); it only stops holding the others.
  */
-export function turns(limit: number) {
+export function turns(limit: number, turnMs = 120_000) {
   let last: Promise<unknown> = Promise.resolve();
   let pending = 0; // the one running, and those waiting behind it
   return async function run<T>(job: () => Promise<T>): Promise<{ value: T; waitedMs: number }> {
@@ -34,7 +47,13 @@ export function turns(limit: number) {
     try {
       await before;
       const waitedMs = Math.round(performance.now() - asked);
-      return { value: await job(), waitedMs };
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      const late = new Promise<never>((_, reject) => (timer = setTimeout(() => reject(new TookTooLong(turnMs)), turnMs)));
+      try {
+        return { value: await Promise.race([job(), late]), waitedMs };
+      } finally {
+        clearTimeout(timer);
+      }
     } finally {
       pending--;
       done();

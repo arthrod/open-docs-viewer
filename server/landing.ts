@@ -119,7 +119,7 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
 Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. Every cell reads <strong>desktop · mobile</strong>; mobile emulates a mid-range phone on slow 4G. Scores are 0 to 100.
 <strong>LCP</strong>: largest contentful paint. <strong>TBT</strong>: total blocking time, how long the main thread was too busy to answer input. <strong>CLS</strong>: layout shift.
 Accessibility, best practices and SEO are the desktop scores. Lighthouse scores the page load, not how faithfully the document is drawn. For Microsoft's and Google's viewers it sees this site's frame page, not their servers' work.
-An engine that could not start on Google's machine has no score (a failed page paints fast, and its score would flatter it): WordCraft's and Nutrient's engines, 60 and 70 MB, do not download there.
+An engine that could not start on Google's machine has no score (a failed page paints fast, and its score would flatter it): WordCraft's and Nutrient's engines (22 and 24 MB over the network) do not download there.
 <strong>Server route</strong>: the performance score and LCP of the same engine's <code>/r/</code> page.</p>
   ${table(lh.pages, "", lh)}
   ${bigTable}

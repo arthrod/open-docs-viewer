@@ -338,3 +338,19 @@ def test_an_init_of_a_millisecond_or_two_is_an_engine_already_loaded():
     row = lib.first_warm_entry(first, warm)
     assert row["warmColdRuns"] == 1 and row["warmMs"] == 183
     assert lib.first_warm_entry({"code": 200, "totalMs": 180, "init": 2, "render": 20, "bytes": 1}, warm)["firstCold"] is False
+
+
+def test_a_malformed_report_is_summarised_not_thrown():
+    """A thrown summary was swallowed by the caller, and the analysis then read as 'no result within 240 s'."""
+    for audits in (None, [], {"errors-in-console": None}, {"errors-in-console": {"details": {"items": None}}},
+                   {"errors-in-console": {"details": {"items": {"a": 1}}}}, {"errors-in-console": {"details": {"items": ["text", 3, None]}}}):
+        out = lib.summarize({"lighthouseVersion": "13", "audits": audits, "categories": {"performance": {"score": 0.5}}})
+        assert out.get("performance") == 50 and "error" not in out, audits
+
+
+def test_only_this_sites_own_console_line_marks_an_engine_failure():
+    report = lambda text: {"audits": {"errors-in-console": {"details": {"items": [{"description": text}]}}}, "categories": {"performance": {"score": 1}}}  # noqa: E731 - a one-line fixture
+    assert lib.summarize(report("[open-docs-viewer] TypeError: Failed to fetch"))["error"].startswith(lib.ENGINE_FAILED)
+    assert lib.summarize(report("  [open-docs] WordCraft failed to start"))["error"].startswith(lib.ENGINE_FAILED)
+    for other in ("[open-docs-evil] something", "[open-docsx] y", "a library said [open-docs] in passing"):
+        assert lib.summarize(report(other)).get("performance") == 100, other

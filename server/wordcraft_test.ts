@@ -114,3 +114,40 @@ Deno.test("a layout pushed out by newer documents is released at once, and its p
   await res.body?.cancel();
   assertEquals(fetched, 1); // laid out again from the document, not read from freed memory
 });
+
+Deno.test("page images asked for together take one turn of the render queue for their layout, and none once it is kept", async () => {
+  const bytes = await bytesOf("redline");
+  const { html } = await wordcraftHtml(bytes, new URL(`${FIXTURES}/redline.docx`));
+  const doc = pageUrls(html)[0].searchParams.get("doc")!;
+  await forgetLayouts(); // as a fresh isolate
+  let turnsTaken = 0;
+  const turn = async <T>(job: () => Promise<T>) => {
+    turnsTaken++;
+    await new Promise((r) => setTimeout(r, 10)); // as if waiting behind another render
+    return job();
+  };
+  const get = () => Promise.resolve(bytes);
+  const all = await Promise.all(["1", "2", "3"].map((n) => wordcraftPage({ doc, n, s: "1" }, get, turn)));
+  assertEquals(all.map((r) => r.status), [200, 200, 200]);
+  for (const r of all) await r.body?.cancel();
+  assertEquals(turnsTaken, 1);
+  const again = await wordcraftPage({ doc, n: "2", s: "1" }, get, turn);
+  await again.body?.cancel();
+  assertEquals(turnsTaken, 1); // the layout is kept: a page from it is drawn without a turn
+});
+
+Deno.test("a refused turn is the page request's refusal, and the next request asks again", async () => {
+  const bytes = await bytesOf("redline");
+  const { html } = await wordcraftHtml(bytes, new URL(`${FIXTURES}/redline.docx`));
+  const doc = pageUrls(html)[0].searchParams.get("doc")!;
+  await forgetLayouts();
+  let refuse = true;
+  const turn = <T>(job: () => Promise<T>) => (refuse ? Promise.reject(new Error("busy")) : job());
+  let threw = "";
+  try { await wordcraftPage({ doc, n: "1", s: "1" }, () => Promise.resolve(bytes), turn); } catch (e) { threw = (e as Error).message; }
+  assertEquals(threw, "busy");
+  refuse = false;
+  const ok = await wordcraftPage({ doc, n: "1", s: "1" }, () => Promise.resolve(bytes), turn);
+  assertEquals(ok.status, 200);
+  await ok.body?.cancel();
+});

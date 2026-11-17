@@ -4,7 +4,17 @@
  * engine that cannot hold it is asked to (main.http.ts).
  */
 
-/** The uncompressed size in bytes of the part called `name`, or null when the zip has no such part or cannot be read. */
+/**
+ * The uncompressed size in bytes of the part called `name`, as the zip's
+ * directory declares it, or null when the zip has no such part or cannot be
+ * read. Names are compared the way readers differ about them (case, a leading
+ * `./` or `/`, backslashes), and of several parts with that name the largest
+ * counts: whichever one an engine takes, it is not larger than this.
+ *
+ * It is a guard for honest documents. The directory is the sender's word: a
+ * crafted zip can declare less than it holds, and a zip64 directory is not
+ * read. Unpacking under a hostile document is not what this protects against.
+ */
 export function partSize(zip: Uint8Array, name: string): number | null {
   const v = new DataView(zip.buffer, zip.byteOffset, zip.byteLength);
   // The end record is the last 22 bytes, or earlier when the zip carries a comment (at most 65535 bytes).
@@ -18,15 +28,18 @@ export function partSize(zip: Uint8Array, name: string): number | null {
   if (end < 0) return null;
   const count = v.getUint16(end + 10, true);
   let at = v.getUint32(end + 16, true);
-  const want = new TextEncoder().encode(name);
+  const plain = (s: string) => s.replaceAll("\\", "/").replace(/^(\.?\/)+/, "").toLowerCase();
+  const want = plain(name);
+  const td = new TextDecoder();
+  let largest: number | null = null;
   for (let k = 0; k < count; k++) {
-    if (at + 46 > zip.length || v.getUint32(at, true) !== 0x02014b50) return null;
+    if (at + 46 > zip.length || v.getUint32(at, true) !== 0x02014b50) return largest;
     const nameLen = v.getUint16(at + 28, true), extra = v.getUint16(at + 30, true), comment = v.getUint16(at + 32, true);
-    if (at + 46 + nameLen > zip.length) return null;
-    if (nameLen === want.length && want.every((b, i) => zip[at + 46 + i] === b)) return v.getUint32(at + 24, true);
+    if (at + 46 + nameLen > zip.length) return largest;
+    if (plain(td.decode(zip.subarray(at + 46, at + 46 + nameLen))) === want) largest = Math.max(largest ?? 0, v.getUint32(at + 24, true));
     at += 46 + nameLen + extra + comment;
   }
-  return null;
+  return largest;
 }
 
 /**
@@ -47,5 +60,7 @@ export function tooLarge(engine: string, docx: Uint8Array, limits = RENDER_LIMIT
   const size = partSize(docx, "word/document.xml");
   if (size == null || size <= limit) return null;
   const mb = (n: number) => (n / 1e6).toFixed(1);
-  return `this document is too large for this engine's server render (its text and structure unpack to ${mb(size)} MB; the limit is ${mb(limit)} MB): larger ones end the server process. Open it in the browser render instead.`;
+  // Never "1.0 MB; the limit is 1.0 MB" for a document a byte over.
+  const said = mb(size) === mb(limit) ? `just over ${mb(limit)}` : mb(size);
+  return `this document is too large for this engine's server render (its text and structure unpack to ${said} MB; the limit is ${mb(limit)} MB): larger ones end the server process. Open it in the browser render instead.`;
 }

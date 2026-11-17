@@ -140,12 +140,20 @@ CPU/memory limits per render (a hostile .docx, e.g. a zip bomb, can exhaust the 
 **One render at a time.** A server process that runs out of memory ends, and takes every request it was answering
 with it. Two guards (2026-11-16):
 - Renders take turns within a process (`server/queue.ts`); the wait is reported as `queue` in `Server-Timing`, and
-  with six already waiting the answer is `503` with `Retry-After`. Before this, 24 simultaneous requests for the
-  500-page sample got five `"socket hang up"` answers and five folio pages cut off at 4 MB of 30; after it, 24 of
-  24 and 32 of 32 whole pages. Val Town runs several processes, so this bounds each one, not the site.
-- docx-editor.dev's route refuses a document whose `word/document.xml` is over 1 MB (`server/docx-size.ts`), with
-  HTTP 422: its exporter ends the process on the 500-page sample (1.8 MB). Only 20 KB (renders) and 1.8 MB (ends
-  the process) were tried, so the limit is a guard between the two, not a measured capacity.
+  with six already waiting the answer is `503` with `Retry-After`. A render that has not ended after two minutes
+  gives its turn back (`503`), so one that waits on something that never answers cannot hold the rest for ever.
+  Before the queue, 24 simultaneous `curl` requests for the 500-page sample got five `"socket hang up"` answers
+  and five folio pages cut off at 4 MB of 30 (seen once, by hand; that output was not kept). After it, 32
+  simultaneous requests all got whole pages (`results/raw/2026-11-16-burst-32-after-queue.txt`). What the queue
+  bounds is the renders of one process: Val Town runs several processes, and the document is fetched (up to
+  25 MB each) before a request asks for its turn, so simultaneous fetches are not bounded by it.
+  WordCraft's page images draw from a layout that is already kept without a turn; a layout that is not kept is
+  made in a turn, one per document however many of its pages are asked for together.
+- docx-editor.dev's route refuses a document whose `word/document.xml` is over 1 MB as the zip's directory
+  declares it (`server/docx-size.ts`), with HTTP 422: its exporter ends the process on the 500-page sample
+  (1.8 MB). Only 20 KB (renders) and 1.8 MB (ends the process) were tried, so the limit is a guard between the
+  two, not a measured capacity. It is a guard for honest documents: a crafted zip can declare less than it holds
+  (see "Not covered" above).
 
 Two Deno workarounds, each scoped to one engine and commented in place:
 `server/plate.ts` restores the `__proto__` setter mammoth needs (what `--unsafe-proto` does);
@@ -270,7 +278,7 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 
 Read the Lighthouse tables with care:
 
-- **WordCraft and Nutrient have no browser score.** On Google's machine their engines (about 60 and 70 MB) do not
+- **WordCraft and Nutrient have no browser score.** On Google's machine their engines (22 and 24 MB over the network: "Downloaded" in the main table) do not
   download and the page shows its error box, which paints fast: the scores published before 2026-11-16 (WordCraft
   100) were of that failure page. The script now reads the page's own console error from the report and records
   such an analysis as a failure. Why the download fails there is not known; it works in a browser and with `curl`.
@@ -280,7 +288,8 @@ Read the Lighthouse tables with care:
   server route that takes seconds to send its first byte.
 - **The 500-page server routes were analysed one at a time.** Analysed four at a time (as before 2026-11-16),
   simultaneous renders ended the server process and PageSpeed got error answers; see "one render at a time" below.
-- **Microsoft's viewer sends pages ten at a time** as the reader scrolls, so its scores and its "frame load"
+- **Microsoft's viewer sends pages ten at a time** as the reader scrolls (seen in its network requests on
+  2026-11-16: the first answer holds pages 1 to 10 of the 500), so its scores and its "frame load"
   timings on the 500 pages are for the first ten pages, not the document.
 
 ## Tests
@@ -346,9 +355,11 @@ How each is measured:
   whose first request reports no init time had already been asked: it is marked as not a first request. This one is
   run by hand from the machine that deployed (no workflow can be "straight after a deploy"), and every total includes
   DNS, TLS and connecting, because each request is a new `curl`. The first-request column is ONE request per engine
-  per deploy, not a median: two deploys on 2026-11-16 gave Docxodus 3.07 s and then 1.47 s. Val Town also runs more
-  than one copy of the val, so a "warm" request sometimes lands on a copy that has not loaded the engine yet (its
-  `init` is then not 0); the median of five absorbs it, and every request is in the raw file.
+  per deploy, not a median: four deploys on 2026-11-16 and 17 gave Docxodus 3.07 s, 1.47 s, 2.23 s and 1.84 s
+  (`git log -p results/server.json`). Val Town also runs more than one copy of the val, so a "warm" request
+  sometimes lands on a copy that has not loaded the engine yet (its `init` is then 100 ms or more, not 0 to 2):
+  such a request is listed with the others, counted in its row, and left out of the warm medians; every request
+  is in the raw file.
 - What a server route costs the browser: `uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 3 --out results/server-client.json`
   opens each `/r/` route in the installed Chrome (fresh profile per run) and records the load event, first paint,
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
@@ -363,8 +374,10 @@ How each is measured:
   figures came from, and it is not idle (a load average of 2 to 9 on 3 cores, part of it Chrome itself; a fresh
   runner starts far busier, which the workflow now waits out). It is used because it runs none of our other work
   and anyone can repeat the run. Read the figures as that machine's; what carries to another machine is the
-  order between engines, not the seconds. The same engines on the 5-core run were close to the Mac's figures
-  (folio 1.16 s against 1.12 s, Nutrient 4.57 s against 4.08 s on the rich sample).
+  order between engines, not the seconds. The same engines on the 5-core run
+  (`results/raw/2026-11-16-runner-5-cores-browser-showcase.json`, not what the tables show) were close to the
+  Mac's figures, which are this file's main table at commit `0741aba` (folio 1.16 s against 1.12 s, Nutrient
+  4.57 s against 4.08 s).
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,

@@ -130,6 +130,7 @@ export async function forgetLayouts() {
   const all = [...laid.values()];
   laid.clear();
   fetching.clear();
+  laying.clear();
   all.forEach(evict);
   await Promise.allSettled(all);
   released = 0;
@@ -165,6 +166,9 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
   return { html, pages: count, initMs, renderMs: layoutMs };
 }
 
+/** Layouts waiting for, or holding, their turn of the render queue for the page route, by document id. */
+const laying = new Map<string, Promise<Laid>>();
+
 /** A refusal in plain text, never cached. */
 const refuse = (status: number, msg: string) => new Response(msg, { status, headers: { "cache-control": "no-store" } });
 
@@ -172,10 +176,19 @@ const refuse = (status: number, msg: string) => new Response(msg, { status, head
  * One page as a PNG. `getBytes` fetches the document, and is only called when
  * this isolate does not hold its layout; a Response from it (the fetch
  * failed) is passed through.
+ *
+ * Laying a document out is the memory-heavy part (the 550-page sample: about
+ * a second and hundreds of MB), so a layout this isolate does not hold is
+ * made inside `turn`: the caller's turn of the render queue, so that it does
+ * not run beside another engine's render. The page requests that arrive
+ * together for one document share that one turn. Drawing a page from a kept
+ * layout takes no turn: it is small, and waiting behind a 20-second render of
+ * another document would leave the reader looking at empty pages.
  */
 export async function wordcraftPage(
   q: { doc?: string; n?: string; s?: string },
   getBytes: () => Promise<Uint8Array | Response>,
+  turn: <T>(job: () => Promise<T>) => Promise<T> = (job) => job(),
 ): Promise<Response> {
   if (!q.doc || !/^[0-9a-f]{16}$/.test(q.doc)) return refuse(400, "doc must be 16 hex digits");
   if (!q.n || !/^[1-9]\d{0,5}$/.test(q.n)) return refuse(400, "n must be a page number, from 1");
@@ -197,7 +210,14 @@ export async function wordcraftPage(
     if ((await sha256(bytes)).slice(0, 16) !== id) {
       return refuse(409, "the document at that URL is no longer the one this page was made from: reload the page");
     }
-    hit = layOut(id, bytes);
+    let queued = laying.get(id);
+    if (!queued) {
+      // layOut is called when the turn comes, not before: a layout waiting for its turn is not
+      // in `laid`, so a render that holds the turn never waits on one queued behind itself.
+      queued = turn(() => layOut(id, bytes)).finally(() => laying.delete(id));
+      laying.set(id, queued);
+    }
+    hit = queued;
   } else hit = layOut(id, new Uint8Array()); // already laid out: only moves it to most recently used
   const t1 = performance.now();
   const n = Number(q.n);
