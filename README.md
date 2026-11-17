@@ -333,17 +333,17 @@ Measured 2026-11-17: Google Chrome 157.0.8103.79 (installed, headed) via Playwri
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 22.7, highest 26.0, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 1.84 s | 172 ms · 837 ms | 464 ms | 286 ms | 459 ms, 1.33 s, 468 ms, 474 ms, 446 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
-| folio | 881 ms | 353 ms · 329 ms | 418 ms | 163 ms | 418 ms, 357 ms, 418 ms, 521 ms, 358 ms | 204 KB |
-| docx-editor.dev | 1.53 s | 114 ms · 1.05 s | 758 ms | 552 ms | 1.05 s, 774 ms, 742 ms, 805 ms, 684 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
-| Plate | 787 ms | 150 ms · 215 ms | 346 ms | 164 ms | 646 ms, 323 ms, 412 ms, 339 ms, 354 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
-| docen | 666 ms | 373 ms · 108 ms | 205 ms | 26 ms | 216 ms, 194 ms, 191 ms, 761 ms, 229 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
-| WordCraft | 557 ms | 267 ms · 129 ms | 183 ms | 22 ms | 512 ms, 178 ms, 152 ms, 332 ms, 188 ms (1 reached a process that had not loaded the engine: not in the median) | 3 KB + a page image per page viewed |
-| SuperDoc | 1.52 s | 629 ms · 617 ms | 639 ms | 451 ms | 647 ms, 631 ms, 731 ms, 1.39 s, 582 ms (1 reached a process that had not loaded the engine: not in the median) | 7 KB |
+| Docxodus | 2.78 s | 179 ms · 882 ms | 491 ms | 280 ms | 606 ms, 458 ms, 491 ms, 556 ms, 462 ms | 61 KB |
+| folio | 1.88 s | 496 ms · 317 ms | 355 ms | 155 ms | 771 ms, 359 ms, 393 ms, 351 ms, 326 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
+| docx-editor.dev | 1.20 s | 119 ms · 895 ms | 703 ms | 504 ms | 733 ms, 703 ms, 752 ms, 690 ms, 686 ms | 238 KB |
+| Plate | 727 ms | 139 ms · 234 ms | 333 ms | 139 ms | 502 ms, 324 ms, 343 ms, 318 ms, 333 ms | 32 KB |
+| docen | 875 ms | 488 ms · 126 ms | 250 ms | 38 ms | 594 ms, 237 ms, 248 ms, 253 ms, 260 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
+| WordCraft | 791 ms | 331 ms · 172 ms | 193 ms | 23 ms | 247 ms, 505 ms, 166 ms, 212 ms, 174 ms (1 reached a process that had not loaded the engine: not in the median) | 3 KB + a page image per page viewed |
+| SuperDoc | 1.41 s | 547 ms · 649 ms | 660 ms | 460 ms | 656 ms, 630 ms, 1.40 s, 676 ms, 663 ms (1 reached a process that had not loaded the engine: not in the median) | 7 KB |
 <!-- server:end -->
 
 How each is measured:
@@ -355,7 +355,7 @@ How each is measured:
   whose first request reports no init time had already been asked: it is marked as not a first request. This one is
   run by hand from the machine that deployed (no workflow can be "straight after a deploy"), and every total includes
   DNS, TLS and connecting, because each request is a new `curl`. The first-request column is ONE request per engine
-  per deploy, not a median: four deploys on 2026-11-16 and 17 gave Docxodus 3.07 s, 1.47 s, 2.23 s and 1.84 s
+  per deploy, not a median: five deploys on 2026-11-16 and 17 gave Docxodus 3.07 s, 1.47 s, 2.23 s, 1.84 s and 2.78 s
   (`git log -p results/server.json`). Val Town also runs more than one copy of the val, so a "warm" request
   sometimes lands on a copy that has not loaded the engine yet (its `init` is then 100 ms or more, not 0 to 2):
   such a request is listed with the others, counted in its row, and left out of the warm medians; every request
