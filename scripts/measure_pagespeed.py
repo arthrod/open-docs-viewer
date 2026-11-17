@@ -137,6 +137,11 @@ async def main():
     # and a --label run is dated on its own, not under the default table's date (merge_pagespeed).
     entries = {p: page_entry([x for x in raw if x["page"] == p], LIMIT_S) for p in PAGES}
     merge_pagespeed(result, entries, LABEL, meta)
+    if ARGS.raw:
+        # Every analysis, beside the medians: a page whose analyses disagree can be read run by run.
+        os.makedirs(os.path.dirname(ARGS.raw) or ".", exist_ok=True)
+        with open(ARGS.raw, "w") as f:
+            f.write(json.dumps({**meta, "query": QUERY, "raw": raw}, indent=1) + "\n")
     text = json.dumps(result, indent=1) + "\n"
     if OUT:
         os.makedirs(os.path.dirname(OUT) or ".", exist_ok=True)

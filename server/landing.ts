@@ -78,7 +78,14 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
         const got = x.performanceRuns.filter((n) => n != null).length;
         return got === x.performanceRuns.length ? "" : `${f} ${got}/${x.performanceRuns.length} analyses${x.error ? `: ${esc(x.error.slice(0, 110))}` : ""}`;
       };
-      const text = [one("desktop", p.desktop), one("mobile", p.mobile)].filter(Boolean).join(" · ");
+      // Analyses that differ by 10 points or more: a median of a few of them moves from day to day.
+      const spread = (f: string, x: LighthousePage) => {
+        const runs = (x.performanceRuns ?? []).filter((n): n is number => typeof n === "number");
+        if (runs.length < 2) return "";
+        const lo = Math.min(...runs), hi = Math.max(...runs);
+        return hi - lo >= 10 ? `${f} analyses ranged ${lo} to ${hi}` : "";
+      };
+      const text = [one("desktop", p.desktop), one("mobile", p.mobile), spread("desktop", p.desktop), spread("mobile", p.mobile)].filter(Boolean).join(" · ");
       return text ? `<div class="ro odv-part">${text}</div>` : "";
     };
     const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : "no server route"}</span>`

@@ -144,3 +144,12 @@ Deno.test("samples: a row measured on another day than the table says so", () =>
   assertStringIncludes(html, "measured 2026-11-12");
   assertEquals((html.match(/odv-prov/g) ?? []).length, 2);
 });
+
+Deno.test("Lighthouse: a page whose analyses disagree shows their range beside the median", () => {
+  const wide = { ...lh(), performance: 71, performanceRuns: [79, 44, 71] };
+  const tight = { ...lh(), performance: 98, performanceRuns: [97, 98, 98] };
+  const html = lighthouseSection(ENGINES, { measuredAt: "2026-11-16", environment: "x", pages: { "v/folio": both(tight, wide), "r/folio": both(wide, tight), "v/docen": both(tight, tight) } });
+  assertStringIncludes(html, "mobile analyses ranged 44 to 79");
+  assertStringIncludes(html, "desktop analyses ranged 44 to 79");
+  assertEquals((html.match(/analyses ranged/g) ?? []).length, 2);
+});

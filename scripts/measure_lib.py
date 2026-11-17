@@ -287,6 +287,7 @@ def pagespeed_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--out", metavar="PATH", help="merge the medians into this results file")
     p.add_argument("--query", default="", help='appended to every page, e.g. "src=<docx url>"')
     p.add_argument("--label", help="with --query: file the medians under docs.<label>, leaving the default table alone")
+    p.add_argument("--raw", metavar="PATH", help="write every analysis to this file")
     return p.parse_args(argv)
 
 
