@@ -197,6 +197,9 @@ def psi_refusal(text: str) -> str | None:
     return None
 
 
+ENGINE_FAILED = "the engine failed on Google's machine, so there is no score"
+
+
 def summarize(l: dict) -> dict:
     """One Lighthouse report. A report Lighthouse or we rejected keeps its reason and none of its numbers."""
     out: dict = {"version": l.get("lighthouseVersion")}
@@ -211,7 +214,7 @@ def summarize(l: dict) -> dict:
     logged = [str(i.get("description", "")) for i in (l.get("audits", {}).get("errors-in-console", {}).get("details") or {}).get("items", [])]
     own = [d for d in logged if d.startswith("[open-docs")]
     if own:
-        out["error"] = "the engine failed on Google's machine, so there is no score: " + " ".join(own[0].split())[:160]
+        out["error"] = ENGINE_FAILED + ": " + " ".join(own[0].split())[:160]
     if "error" in out:
         return out
     for k, name in LH_CATS.items():
@@ -236,6 +239,13 @@ def page_entry(xs: list[dict], limit_s: int) -> dict:
             return None if not v else (round(statistics.median(v), 3) if k == "cls" else int(statistics.median(v)))
 
         missing = next((x.get("error") or f"PageSpeed gave no {f} result within {limit_s} s" for x in xs if f not in x), None)
+        # The engine failed in most analyses: the few that "passed" most likely scored the same
+        # failing page before it logged its error, so they are not published as the engine's score.
+        broke = [y["error"] for y in fs if str(y.get("error", "")).startswith(ENGINE_FAILED)]
+        scored = [y for y in fs if y.get("performance") is not None]
+        if broke and len(broke) >= len(scored):
+            entry[f] = {**{k: None for k in LH_KEYS}, "performanceRuns": [None for _ in xs], "error": broke[0]}
+            continue
         entry[f] = {
             **{k: med(k) for k in LH_KEYS},
             "performanceRuns": [x.get(f, {}).get("performance") for x in xs],

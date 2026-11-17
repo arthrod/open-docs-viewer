@@ -249,3 +249,14 @@ def test_a_report_of_a_page_whose_engine_failed_has_no_score():
     assert "performance" not in got and "WordCraft failed to start" in got["error"]
     report["audits"]["errors-in-console"]["details"]["items"].pop()
     assert lib.summarize(report)["performance"] == 100  # another site's 404 is not the engine failing
+
+
+def test_a_page_whose_engine_failed_in_most_analyses_publishes_no_score():
+    failed = {"error": lib.ENGINE_FAILED + ": [open-docs] X failed to start"}
+    ok = {"performance": 86, "lcpMs": 200}
+    xs = [{"desktop": failed, "mobile": failed}, {"desktop": ok, "mobile": failed}, {"desktop": failed, "mobile": failed}]
+    e = lib.page_entry(xs, 240)
+    assert e["desktop"]["performance"] is None and e["desktop"]["performanceRuns"] == [None, None, None]
+    assert e["desktop"]["error"].startswith(lib.ENGINE_FAILED)
+    mostly_fine = lib.page_entry([{"desktop": ok}, {"desktop": ok}, {"desktop": failed}], 240)
+    assert mostly_fine["desktop"]["performance"] == 86
