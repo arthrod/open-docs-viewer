@@ -8,6 +8,7 @@ for NAME in browser, server, samples, server-client and lighthouse. They are
 never edited by hand: a table typed beside its data goes stale.
 """
 import json
+import math
 import re
 import sys
 
@@ -26,18 +27,28 @@ IMAGES = {"wordcraft"}
 DOCS = (("showcase", "Rich sample (`showcase.docx`)"), ("redline", "Redline (`redline.docx`)"), ("lorem-500", "500 pages (`lorem-500.docx`)"))
 
 
+def rnd(x: float) -> int:
+    """Round half up, as the landing page's Math.round does: Python's round() sends 84.5 to 84."""
+    return math.floor(x + 0.5)
+
+
+def num(x) -> str:
+    """A number as JavaScript prints it: 0.0 is "0"."""
+    return str(int(x)) if isinstance(x, float) and x.is_integer() else str(x)
+
+
 def ms(n) -> str:
     """A duration."""
     if n is None:
         return "n/a"
-    return f"{round(n)} ms" if n < 1000 else f"{n / 1000:.2f} s" if n < 10000 else f"{n / 1000:.1f} s"
+    return f"{rnd(n)} ms" if n < 1000 else f"{n / 1000:.2f} s" if n < 10000 else f"{n / 1000:.1f} s"
 
 
 def mb(n) -> str:
     """A size in bytes."""
     if n is None:
         return "n/a"
-    return f"{round(n / 1024)} KB" if n < 1048576 else f"{n / 1048576:.1f} MB" if n < 10485760 else f"{round(n / 1048576)} MB"
+    return f"{rnd(n / 1024)} KB" if n < 1048576 else f"{n / 1048576:.1f} MB" if n < 10485760 else f"{rnd(n / 1048576)} MB"
 
 
 def cell(text) -> str:
@@ -177,7 +188,7 @@ def lighthouse_line(label: str, r: dict, head: dict) -> str:
     two = lambda k, f=str: f"{'n/a' if d.get(k) is None else f(d[k])} · {'n/a' if m.get(k) is None else f(m[k])}"
     runs = lambda x: "/".join("fail" if v is None else str(v) for v in x.get("performanceRuns") or [])
     one = lambda k: d[k] if d.get(k) is not None else "n/a"
-    return (f"| {label} | {two('performance')} | {two('lcpMs', ms)} | {two('tbtMs', ms)} | {two('cls')} | {two('fcpMs', ms)} | "
+    return (f"| {label} | {two('performance')} | {two('lcpMs', ms)} | {two('tbtMs', ms)} | {two('cls', num)} | {two('fcpMs', ms)} | "
             f"{two('speedIndexMs', ms)} | {one('accessibility')} | {one('bestPractices')} | {one('seo')} | {runs(d)} · {runs(m)} |")
 
 

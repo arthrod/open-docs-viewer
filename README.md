@@ -67,7 +67,7 @@ Measured 2026-11-15: Google Chrome (installed, headed) via Playwright, fresh pro
 | --- | ---: | --- | ---: | ---: | ---: | --- |
 | canvas-editor | 13.5 s | 13.4 s, 13.5 s, 14.3 s | 1279 MB | 2292 MB | 1.0 MB | no server route |
 | Docxodus | 7.14 s | 5.65 s, 9.97 s, 7.14 s | 14 MB | 985 MB | 8.1 MB | 5.00 s (4.40 s rendering), 2.1 MB |
-| SuperDoc | 5.81 s | 5.71 s, 5.81 s, 6.63 s | 36 MB | 1106 MB | 8.3 MB | 6.17 s (5.66 s rendering), 1.6 MB |
+| SuperDoc | 5.81 s | 5.71 s, 5.81 s, 6.63 s | 36 MB | 1107 MB | 8.3 MB | 6.17 s (5.66 s rendering), 1.6 MB |
 | Plate | 21.1 s | 21.9 s, 21.1 s, 20.6 s | 82 MB | 454 MB | 1.5 MB | 2.34 s (875 ms rendering), 2.0 MB |
 | docen | 2.48 s | 2.48 s, 2.35 s, 3.94 s | 22 MB | 561 MB | 1.8 MB | 2.45 s (1.26 s rendering), 4.8 MB, 623 pages |
 | docx-editor.dev | 1.30 s | 1.29 s, 2.04 s, 1.30 s | 151 MB | 646 MB | 5.5 MB | **failed**: "socket hang up" |
@@ -199,24 +199,24 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 
 | Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Docxodus | 40 · 42 | 6.86 s · 40.1 s | 898 ms · 1.18 s | 0.001 · 0.0 | 217 ms · 776 ms | 3.21 s · 10.8 s | 95 | 100 | 91 | 41/40/37 · 42/46/38 |
+| Docxodus | 40 · 42 | 6.86 s · 40.1 s | 898 ms · 1.18 s | 0.001 · 0 | 217 ms · 776 ms | 3.21 s · 10.8 s | 95 | 100 | 91 | 41/40/37 · 42/46/38 |
 | folio | 54 · 49 | 2.81 s · 13.7 s | 784 ms · 737 ms | 0.002 · 0 | 451 ms · 1.66 s | 2.23 s · 7.66 s | 92 | 96 | 82 | 56/54/51 · 42/49/50 |
-| docx-editor.dev | 41 · 47 | 4.82 s · 28.8 s | 1.53 s · 700 ms | 0.001 · 0.0 | 449 ms · 1.66 s | 2.80 s · 10.2 s | 100 | 100 | 90 | 41/41/39 · 51/47/44 |
-| Plate | 72 · 61 | 1.64 s · 8.25 s | 505 ms · 506 ms | 0.002 · 0.0 | 234 ms · 771 ms | 2.35 s · 4.30 s | 98 | 100 | 91 | 78/46/72 · 46/61/68 |
+| docx-editor.dev | 41 · 47 | 4.82 s · 28.8 s | 1.53 s · 700 ms | 0.001 · 0 | 449 ms · 1.66 s | 2.80 s · 10.2 s | 100 | 100 | 90 | 41/41/39 · 51/47/44 |
+| Plate | 72 · 61 | 1.64 s · 8.25 s | 505 ms · 506 ms | 0.002 · 0 | 234 ms · 771 ms | 2.35 s · 4.30 s | 98 | 100 | 91 | 78/46/72 · 46/61/68 |
 | docen | 39 · 54 | 2.30 s · 767 ms | 699 ms · 930 ms | 0.288 · 0.327 | 235 ms · 767 ms | 3.67 s · 7.03 s | 82 | 88 | 90 | 28/44/39 · 52/61/54 |
-| WordCraft | 100 · 97 | 680 ms · 2.63 s | 0 ms · 0 ms | 0.002 · 0.0 | 213 ms · 769 ms | 876 ms · 2.49 s | 100 | 96 | 90 | 100/100/100 · 97/97/96 |
+| WordCraft | 100 · 97 | 680 ms · 2.63 s | 0 ms · 0 ms | 0.002 · 0 | 213 ms · 769 ms | 876 ms · 2.49 s | 100 | 96 | 90 | 100/100/100 · 97/97/96 |
 | SuperDoc | 50 · 49 | 3.25 s · 17.5 s | 748 ms · 884 ms | 0.137 · 0.05 | 453 ms · 1.67 s | 1.29 s · 5.46 s | 94 | 100 | 90 | 50/48/60 · 45/61/49 |
 | canvas-editor | 98 · 97 | 235 ms · 800 ms | 48 ms · 179 ms | 0.079 · 0.008 | 235 ms · 800 ms | 764 ms · 3.22 s | 94 | 100 | 80 | 98/98/fail · 97/97/fail |
-| Apryse WebViewer | 100 · 92 | 215 ms · 765 ms | 69 ms · 354 ms | 0.002 · 0.0 | 215 ms · 765 ms | 229 ms · 773 ms | 100 | 96 | 90 | 100/100/67 · 92/98/76 |
-| Nutrient | 72 · 79 | 218 ms · 767 ms | 546 ms · 551 ms | 0.002 · 0.0 | 218 ms · 767 ms | 2.54 s · 6.33 s | 100 | 96 | 90 | 84/72/71 · 87/79/79 |
-| Word Online viewer | 96 · 94 | 223 ms · 773 ms | 0 ms · 0 ms | 0.003 · 0.0 | 223 ms · 773 ms | 1.96 s · 6.40 s | 100 | 73 | 90 | 94/96/99 · 94/97/91 |
-| Google viewer | 100 · 99 | 221 ms · 773 ms | 0 ms · 60 ms | 0.002 · 0.0 | 221 ms · 773 ms | 257 ms · 3.50 s | 100 | 100 | 90 | 100/100/99 · 98/99/100 |
+| Apryse WebViewer | 100 · 92 | 215 ms · 765 ms | 69 ms · 354 ms | 0.002 · 0 | 215 ms · 765 ms | 229 ms · 773 ms | 100 | 96 | 90 | 100/100/67 · 92/98/76 |
+| Nutrient | 72 · 79 | 218 ms · 767 ms | 546 ms · 551 ms | 0.002 · 0 | 218 ms · 767 ms | 2.54 s · 6.33 s | 100 | 96 | 90 | 84/72/71 · 87/79/79 |
+| Word Online viewer | 96 · 94 | 223 ms · 773 ms | 0 ms · 0 ms | 0.003 · 0 | 223 ms · 773 ms | 1.96 s · 6.40 s | 100 | 73 | 90 | 94/96/99 · 94/97/91 |
+| Google viewer | 100 · 99 | 221 ms · 773 ms | 0 ms · 60 ms | 0.002 · 0 | 221 ms · 773 ms | 257 ms · 3.50 s | 100 | 100 | 90 | 100/100/99 · 98/99/100 |
 
 **Server-rendered pages (`/r/`), rich sample**
 
 | Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Docxodus | 100 · 99 | 521 ms · 1.85 s | 0 ms · 7 ms | 0.0 · 0 | 261 ms · 924 ms | 809 ms · 2.26 s | 90 | 100 | 91 | 100/100/100 · 99/100/99 |
+| Docxodus | 100 · 99 | 521 ms · 1.85 s | 0 ms · 7 ms | 0 · 0 | 261 ms · 924 ms | 809 ms · 2.26 s | 90 | 100 | 91 | 100/100/100 · 99/100/99 |
 | folio | 100 · 99 | 594 ms · 2.14 s | 0 ms · 0 ms | 0 · 0 | 299 ms · 968 ms | 577 ms · 1.47 s | 70 | 100 | 82 | 100/100/99 · 100/99/99 |
 | docx-editor.dev | 96 · 76 | 1.40 s · 6.49 s | 0 ms · 0 ms | 0.005 · 0.009 | 523 ms · 1.84 s | 885 ms · 2.94 s | 92 | 100 | 90 | 96/95/96 · 76/76/74 |
 | Plate | 100 · 100 | 244 ms · 801 ms | 0 ms · 0 ms | 0 · 0 | 244 ms · 801 ms | 546 ms · 1.05 s | 96 | 100 | 91 | 100/100/100 · 100/100/100 |
@@ -228,18 +228,18 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 
 | Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| Docxodus | 35 · 35 | 10.4 s · 42.8 s | 10.1 s · 10.1 s | 0.001 · 0.0 | 215 ms · 771 ms | 20.7 s · 42.7 s | 96 | 100 | 90 | fail/35/fail · 35/35/fail |
-| folio | 38 · 34 | 4.50 s · 18.1 s | 4.70 s · 9.10 s | 0.002 · 0.0 | 443 ms · 1.66 s | 6.39 s · 20.3 s | 96 | 96 | 91 | 36/38/39 · 34/34/34 |
-| docx-editor.dev | 40 · 66 | 5.06 s · 1.66 s | 877 ms · 1.13 s | 0.001 · 0.0 | 450 ms · 1.66 s | 4.36 s · 13.1 s | 100 | 100 | 90 | 40/42/37 · 69/66/65 |
+| Docxodus | 35 · 35 | 10.4 s · 42.8 s | 10.1 s · 10.1 s | 0.001 · 0 | 215 ms · 771 ms | 20.7 s · 42.7 s | 96 | 100 | 90 | fail/35/fail · 35/35/fail |
+| folio | 38 · 34 | 4.50 s · 18.1 s | 4.70 s · 9.10 s | 0.002 · 0 | 443 ms · 1.66 s | 6.39 s · 20.3 s | 96 | 96 | 91 | 36/38/39 · 34/34/34 |
+| docx-editor.dev | 40 · 66 | 5.06 s · 1.66 s | 877 ms · 1.13 s | 0.001 · 0 | 450 ms · 1.66 s | 4.36 s · 13.1 s | 100 | 100 | 90 | 40/42/37 · 69/66/65 |
 | Plate | **no result**: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding. | | | | | | | | | |
 | docen | 57 · 53 | 2.31 s · 767 ms | 578 ms · 1.16 s | 0.002 · 0.327 | 214 ms · 765 ms | 2.45 s · 7.87 s | 100 | 96 | 90 | 100/57/43 · 55/44/53 |
-| WordCraft | 99 · 84 | 915 ms · 4.54 s | 0 ms · 0 ms | 0.002 · 0.0 | 218 ms · 765 ms | 875 ms · 2.72 s | 100 | 96 | 90 | 99/99/99 · 83/84/84 |
+| WordCraft | 99 · 84 | 915 ms · 4.54 s | 0 ms · 0 ms | 0.002 · 0 | 218 ms · 765 ms | 875 ms · 2.72 s | 100 | 96 | 90 | 99/99/99 · 83/84/84 |
 | SuperDoc | 59 · 59 | 3.54 s · 19.5 s | 376 ms · 418 ms | 0.137 · 0.05 | 459 ms · 1.69 s | 1.36 s · 5.36 s | 100 | 100 | 90 | 58/59/59 · 59/58/60 |
 | canvas-editor | **no result**: PageSpeed gave no result within 240 s: the page never finished loading for it | | | | | | | | | |
-| Apryse WebViewer | 63 · 69 | 213 ms · 766 ms | 1.08 s · 1.16 s | 0.007 · 0.0 | 213 ms · 766 ms | 3.71 s · 9.00 s | 100 | 96 | 90 | 65/60/63 · 57/69/69 |
-| Nutrient | 81 · 85 | 219 ms · 767 ms | 316 ms · 359 ms | 0.002 · 0.0 | 219 ms · 767 ms | 2.50 s · 6.95 s | 100 | 96 | 90 | 85/81/70 · 87/77/85 |
-| Word Online viewer | 100 · 99 | 225 ms · 780 ms | 0 ms · 0 ms | 0.003 · 0.0 | 225 ms · 780 ms | 1.11 s · 3.11 s | 100 | 100 | 90 | 100/100/94 · 100/99/99 |
-| Google viewer | 93 · 89 | 222 ms · 775 ms | 119 ms · 222 ms | 0.002 · 0.0 | 222 ms · 775 ms | 2.09 s · 7.01 s | 100 | 58 | 90 | 93/100/87 · 80/89/95 |
+| Apryse WebViewer | 63 · 69 | 213 ms · 766 ms | 1.08 s · 1.16 s | 0.007 · 0 | 213 ms · 766 ms | 3.71 s · 9.00 s | 100 | 96 | 90 | 65/60/63 · 57/69/69 |
+| Nutrient | 81 · 85 | 219 ms · 767 ms | 316 ms · 359 ms | 0.002 · 0 | 219 ms · 767 ms | 2.50 s · 6.95 s | 100 | 96 | 90 | 85/81/70 · 87/77/85 |
+| Word Online viewer | 100 · 99 | 225 ms · 780 ms | 0 ms · 0 ms | 0.003 · 0 | 225 ms · 780 ms | 1.11 s · 3.11 s | 100 | 100 | 90 | 100/100/94 · 100/99/99 |
+| Google viewer | 93 · 89 | 222 ms · 775 ms | 119 ms · 222 ms | 0.002 · 0 | 222 ms · 775 ms | 2.09 s · 7.01 s | 100 | 58 | 90 | 93/100/87 · 80/89/95 |
 
 **Server-rendered pages (`/r/`), 500 pages**
 
@@ -251,7 +251,7 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | Plate | 97 · 84 | 869 ms · 3.46 s | 18 ms · 6 ms | 0 · 0 | 869 ms · 3.46 s | 1.56 s · 3.46 s | 97 | 100 | 90 | 97/97/96 · 83/84/84 |
 | docen | 53 · 33 | 1.69 s · 7.40 s | 1.57 s · 3.31 s | 0 · 0 | 1.20 s · 4.69 s | 2.14 s · 5.65 s | 97 | 100 | 82 | 53/53/59 · 28/33/38 |
 | WordCraft | 100 · 86 | 563 ms · 4.12 s | 0 ms · 0 ms | 0 · 0 | 271 ms · 845 ms | 818 ms · 1.98 s | 97 | 100 | 91 | 100/100/100 · 86/86/86 |
-| SuperDoc | 88 · 77 | 897 ms · 3.26 s | 0 ms · 0 ms | 0.0 · 0.0 | 897 ms · 3.26 s | 5.93 s · 15.2 s | 100 | 100 | 90 | 89/fail/88 · 77/fail/77 |
+| SuperDoc | 88 · 77 | 897 ms · 3.26 s | 0 ms · 0 ms | 0 · 0 | 897 ms · 3.26 s | 5.93 s · 15.2 s | 100 | 100 | 90 | 89/fail/88 · 77/fail/77 |
 <!-- lighthouse:end -->
 
 ## Tests
