@@ -1,9 +1,9 @@
 name: Measure
 
-# Every browser timing of this site, on a machine that does nothing else: a
-# GitHub-hosted macOS runner (Apple silicon), the installed Google Chrome,
-# headed. A timing taken on a busy laptop is slower than the engine; here the
-# load average recorded with every run shows the machine was idle.
+# Every browser timing of this site, on a machine that runs none of our other
+# work: a GitHub-hosted macOS runner (Apple silicon, 3 cores), the installed
+# Google Chrome, headed. It is slower than a laptop and not idle (load average
+# 2 to 8 on 3 cores); the load recorded with every run shows how busy it was.
 #
 # Runs when a branch named measure/<anything> is pushed (a workflow that is not
 # on the default branch cannot be started by hand), or by hand once it is. The
@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 150
     env:
       MEASURE_WHERE: from a GitHub Actions macos-latest runner (Apple silicon)
-      RUNS: ${{ inputs.runs || '3' }}
+      RUNS: ${{ inputs.runs || '5' }}
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6

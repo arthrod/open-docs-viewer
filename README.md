@@ -326,6 +326,10 @@ How each is measured:
   [Measure workflow](.github/workflows/measure.yml) (push a branch named `measure/<anything>`), because a timing
   taken on a laptop that is doing other work is slower than the engine. Every run records the machine's load
   average, so the files show it.
+  That runner is a 3-core virtual machine: slower than a recent laptop (about half the speed of the
+  M-series Mac the earlier figures came from) and not idle (its load average sits around 2 to 8 on 3 cores, part
+  of it Chrome itself). It is used because it runs none of our other work and anyone can repeat the run. Read the
+  figures as that machine's; what carries to another machine is the order between engines, not the seconds.
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,

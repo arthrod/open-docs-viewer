@@ -18,9 +18,10 @@ Per run:
   domNodes    DOM nodes alive in the page
   bytes       response headers + bodies of every finished request
 
-A page whose HTML stops before its closing </html> (the server's answer was cut
-off; Chrome still fires the load event on what arrived) is recorded as an
-error, not as a load time.
+A page whose end did not arrive (the server's answer was cut off; Chrome still
+fires the load event on what arrived) is recorded as an error, not as a load
+time. The end is known by the server's own Browser/Server control, which it
+writes straight before the closing body tag.
 
 WordCraft's page loads its first two page images with the page and every other
 one as it nears the viewport, so its figures are for opening the document, not
@@ -50,10 +51,17 @@ KEYS = ("loadMs", "paintMs", "heapBytes", "rendererRss", "domNodes", "bytes", "r
 EAGER_IMAGES_OK = """() => [...document.querySelectorAll('img:not([loading="lazy"])')].every(i => i.complete && i.naturalWidth > 0)"""
 
 
-async def whole(response) -> bool:
+# The server puts its Browser/Server control straight before the page's closing body tag
+# (server/navbar.ts): when that control is in the DOM, everything before it arrived. Read from
+# the DOM, not from Chrome's copy of the response: on a GitHub runner Chrome could not hand back
+# folio's 30 MB page, and a page that had arrived whole was recorded as cut off (2026-11-17).
+TAIL_ARRIVED = "() => !!document.querySelector('nav[data-odv-toggle]')"
+
+
+async def whole(page) -> bool:
     """Whether the page's HTML arrived to its end."""
     try:
-        return (await asyncio.wait_for(response.body(), 120)).rstrip().endswith(b"</html>")
+        return bool(await asyncio.wait_for(page.evaluate(TAIL_ARRIVED), 60))
     except Exception:
         return False
 
@@ -66,7 +74,6 @@ async def one(pw, slug: str, doc: str) -> dict:
         ctx = None
         sizes: list[int] = []
         status: list[int] = []
-        main: list = []
 
         async def finished(req):
             try:
@@ -81,7 +88,6 @@ async def one(pw, slug: str, doc: str) -> dict:
             page = ctx.pages[0] if ctx.pages else await ctx.new_page()
             ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
             page.on("response", lambda r: status.append(r.status) if r.url.startswith(f"{BASE}/r/") else None)
-            page.on("response", lambda r: main.append(r) if r.url == url else None)
             await page.goto(url, wait_until="commit", timeout=TIMEOUT_S * 1000)
             deadline = time.monotonic() + TIMEOUT_S
             got = None
@@ -101,8 +107,8 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["error"] = f"HTTP {status[0]}"
             elif not got:
                 out["error"] = f"no load event within {TIMEOUT_S} s"
-            elif not await whole(main[0] if main else None):
-                out["error"] = "the page stopped partway: its HTML has no closing </html>"
+            elif not await whole(page):
+                out["error"] = "the page stopped partway: its end did not arrive"
             elif not await asyncio.wait_for(page.evaluate(EAGER_IMAGES_OK), 30):
                 # The load event fires whether or not a picture arrived; a page whose first pages are
                 # missing did not load the document. Pictures marked lazy are not required.
