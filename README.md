@@ -295,17 +295,17 @@ Measured 2026-11-09: Google Chrome (installed, headed) via Playwright, fresh pro
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-16: curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-16: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.3, highest 9.6, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 3.06 s | 172 ms · 837 ms | 532 ms | 277 ms | 1.18 s, 442 ms, 457 ms, 532 ms, 1.70 s | 61 KB |
-| folio | 2.28 s | 720 ms · 339 ms | 374 ms | 174 ms | 422 ms, 765 ms, 355 ms, 351 ms, 374 ms | 204 KB |
-| docx-editor.dev | 1.75 s | 203 ms · 887 ms | 758 ms | 492 ms | 714 ms, 835 ms, 758 ms, 882 ms, 681 ms | 238 KB |
-| Plate | 1.05 s | 307 ms · 259 ms | 372 ms | 174 ms | 866 ms, 469 ms, 372 ms, 370 ms, 358 ms | 32 KB |
-| docen | 920 ms | 643 ms · 128 ms | 220 ms | 28 ms | 220 ms, 189 ms, 243 ms, 285 ms, 178 ms | 43 KB |
-| WordCraft | 671 ms | 337 ms · 125 ms | 202 ms | 21 ms | 270 ms, 276 ms, 180 ms, 202 ms, 188 ms | 3 KB + a page image per page viewed |
-| SuperDoc | 1.32 s | 530 ms · 626 ms | 631 ms | 436 ms | 631 ms, 760 ms, 666 ms, 595 ms, 590 ms | 7 KB |
+| Docxodus | 1.47 s | 165 ms · 843 ms | 566 ms | 328 ms | 1.26 s, 598 ms, 566 ms, 566 ms, 468 ms | 61 KB |
+| folio | 1.98 s | 434 ms · 365 ms | 374 ms | 183 ms | 517 ms, 371 ms, 784 ms, 374 ms, 344 ms | 204 KB |
+| docx-editor.dev | 1.21 s | 117 ms · 866 ms | 763 ms | 564 ms | 744 ms, 654 ms, 1.35 s, 791 ms, 763 ms | 238 KB |
+| Plate | 710 ms | 132 ms · 222 ms | 337 ms | 143 ms | 312 ms, 337 ms, 333 ms, 352 ms, 688 ms | 32 KB |
+| docen | 955 ms | 365 ms · 107 ms | 305 ms | 41 ms | 288 ms, 786 ms, 318 ms, 197 ms, 305 ms | 43 KB |
+| WordCraft | 886 ms | 271 ms · 305 ms | 223 ms | 21 ms | 1.09 s, 178 ms, 223 ms, 637 ms, 178 ms | 3 KB + a page image per page viewed |
+| SuperDoc | 1.38 s | 540 ms · 636 ms | 664 ms | 494 ms | 668 ms, 547 ms, 1.67 s, 664 ms, 614 ms | 7 KB |
 <!-- server:end -->
 
 How each is measured:
@@ -316,7 +316,10 @@ How each is measured:
   on `/` are the first request to each engine after that deploy, then the median of the 5 warm requests. A route
   whose first request reports no init time had already been asked: it is marked as not a first request. This one is
   run by hand from the machine that deployed (no workflow can be "straight after a deploy"), and every total includes
-  DNS, TLS and connecting, because each request is a new `curl`.
+  DNS, TLS and connecting, because each request is a new `curl`. The first-request column is ONE request per engine
+  per deploy, not a median: two deploys on 2026-11-16 gave Docxodus 3.07 s and then 1.47 s. Val Town also runs more
+  than one copy of the val, so a "warm" request sometimes lands on a copy that has not loaded the engine yet (its
+  `init` is then not 0); the median of five absorbs it, and every request is in the raw file.
 - What a server route costs the browser: `uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 3 --out results/server-client.json`
   opens each `/r/` route in the installed Chrome (fresh profile per run) and records the load event, first paint,
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
