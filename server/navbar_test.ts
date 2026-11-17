@@ -3,7 +3,7 @@ import { ENGINES } from "./engines.ts";
 import { landingPage } from "./landing.ts";
 import { viewPage } from "./render.ts";
 import { RESULTS } from "./results.ts";
-import { SERVER_RENDER_SLUGS } from "./navbar.ts";
+import { goTarget, SERVER_RENDER_SLUGS } from "./navbar.ts";
 
 const SAMPLE_SRC =
   "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/showcase.docx";
@@ -118,13 +118,35 @@ Deno.test("navbar: the menu is a disclosure, not an ARIA menu (it has no arrow-k
   }
 });
 
-Deno.test("the site's box model applies to its own bar and error box, never to what an engine draws", () => {
+Deno.test("a /v page gives an engine the page the editors site gives it: border-box, a plain 13px body, no brand type", () => {
   const html = viewPage(ENGINES[0]!, shell, src, absolutize);
-  assertEquals(html.includes(".odv-chrome-wrap *"), false);
-  assertStringIncludes(html, ".odv-chrome *,");
-  assertStringIncludes(html, "#od-stage > .verr{box-sizing:border-box}");
+  // As open-docs' `* { box-sizing: border-box }`: Plate's adapter lays its page out under it.
+  assertStringIncludes(html, ".odv-chrome-wrap *,");
+  assertStringIncludes(html, ".odv-chrome-wrap{background:var(--bg);font-family:system-ui,-apple-system,sans-serif;font-size:13px;line-height:1.45}");
+  // Brand type is on the bar and the error box, not on the body an engine inherits from.
+  const body = html.match(/\.odv-chrome-wrap\{[^}]*\}/g)!.join("");
+  assertEquals(/letter-spacing|font-smoothing|var\(--font-sans\)|color:var\(--ink\)/.test(body), false);
+  assertStringIncludes(html, ".bl.odv,.odv-chrome,#od-stage > .verr{color:var(--ink);font-family:var(--font-sans)");
+  assertEquals(/html\.odv-view body\{[^}]*color:/.test(html), false);
+});
+
+Deno.test("the long separator row of a table may wrap", () => {
+  assertStringIncludes(viewPage(ENGINES[0]!, shell, src, absolutize), ".tbl tr.odv-sep th{white-space:normal;");
 });
 
 Deno.test("a menu button that is hidden stays hidden", () => {
   assertStringIncludes(viewPage(ENGINES[0]!, shell, src, absolutize), ".od-menu>button:not([hidden]),.od-menu>a{");
+});
+
+Deno.test("the status is readable on a phone, and whole on hover when it is cut", () => {
+  const html = viewPage(ENGINES[0]!, shell, src, absolutize);
+  const phone = html.slice(html.indexOf("@media(max-width:760px){"));
+  assertEquals(phone.includes(".od-status-chip{display:none}"), false);
+  assertStringIncludes(phone, ".od-status-chip{order:1;flex:0 0 100%;");
+});
+
+Deno.test("without script, the landing's form still reaches the engine's page", () => {
+  assertEquals(goTarget("folio", "https://example.com/a.docx", ENGINES), "/v/folio?src=https%3A%2F%2Fexample.com%2Fa.docx");
+  assertEquals(goTarget("nope", "https://example.com/a.docx", ENGINES), null);
+  assertEquals(goTarget("folio", "", ENGINES), null);
 });

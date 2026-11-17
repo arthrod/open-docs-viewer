@@ -6,7 +6,8 @@ function openMenu() {
   if (!menu || !menu.hidden) return;
   menu.hidden = false;
   $("od-more")?.setAttribute("aria-expanded", "true");
-  (menu.querySelector("button, a") as HTMLElement | null)?.focus({ preventScroll: true });
+  // The first item that can take focus: "Re-measure now" is hidden until the page has rendered.
+  (menu.querySelector("button:not([hidden]):not([disabled]), a") as HTMLElement | null)?.focus({ preventScroll: true });
 }
 
 function closeMenu() {

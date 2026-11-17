@@ -18,7 +18,11 @@ const od = (window as any).od;
 // deno-lint-ignore no-explicit-any
 const cfg = (window as any).__OD_VIEW as Config;
 const statusEl = document.getElementById("od-loading-detail")!;
-const status = (s: string) => (statusEl.textContent = s);
+// The chip cuts a long line with an ellipsis: the whole text is also its title.
+const status = (s: string) => {
+  statusEl.textContent = s;
+  statusEl.title = s;
+};
 
 let doc: Promise<Uint8Array> | undefined;
 const fetchDoc = () =>

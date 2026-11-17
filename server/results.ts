@@ -49,11 +49,15 @@ let cached: { at: number; results: Results } | undefined;
 let pending: Promise<Results> | undefined;
 
 /** The published results: GitHub's copy when it can be had and has the shape the page renders, else the bundled one. */
-export async function currentResults(): Promise<Results> {
-  if (cached && Date.now() - cached.at < RESULTS_TTL_MS) return cached.results;
-  // Requests that arrive together share one fetch.
+export function currentResults(): Promise<Results> {
+  if (cached && Date.now() - cached.at < RESULTS_TTL_MS) return Promise.resolve(cached.results);
+  // Requests that arrive together share one fetch, and none of them waits for it: the page is
+  // answered with what is held (the last fetched file, or the bundled one, itself a real
+  // measurement), and the next request gets the fetched file. Waiting cost the landing up to
+  // four seconds whenever GitHub was slow.
   pending ??= fetchResults().finally(() => (pending = undefined));
-  return pending;
+  pending.catch(() => {});
+  return Promise.resolve(cached?.results ?? RESULTS);
 }
 
 /** Forget what was fetched, as a fresh isolate would start (tests). */

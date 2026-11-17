@@ -29,7 +29,7 @@ import { landingPage } from "./server/landing.ts";
 import { viewPage } from "./server/render.ts";
 import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
 import { currentResults } from "./server/results.ts";
-import { serverToggle } from "./server/navbar.ts";
+import { goTarget, serverToggle } from "./server/navbar.ts";
 import { fetchFailure, publicUrl, resolvesPublic } from "./server/net.ts";
 import { renderFailure } from "./server/failure.ts";
 import { Busy, TookTooLong, turns } from "./server/queue.ts";
@@ -311,6 +311,9 @@ app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
 app.get("/results.json", async (c) => c.json(await currentResults()));
 
 app.get("/", async (c) => c.html(landingPage(ENGINES, await currentResults(), DEFAULT_SRC)));
+
+/** The landing's form without its script (`action="/go"`): to the engine's page, or back to the landing. */
+app.get("/go", (c) => c.redirect(goTarget(c.req.query("engine"), c.req.query("src"), ENGINES) ?? "/", 303));
 
 /**
  * Safety net: an engine that asks THIS origin for an open-docs path at run
