@@ -205,6 +205,13 @@ def summarize(l: dict) -> dict:
     final = l.get("finalDisplayedUrl") or l.get("finalUrl") or ""
     if "challenge" in final or "Just a moment" in json.dumps(l.get("audits", {}).get("document-title", {})):
         out["error"] = "the page Google got was a Cloudflare challenge"
+    # The page's own console.error when its engine or its document failed ("[open-docs] WordCraft
+    # failed to start"): Lighthouse then scores the error box, and scores it well, because an error
+    # box paints fast. PageSpeed gave WordCraft 100 for a page showing "failed to start" (2026-11-16).
+    logged = [str(i.get("description", "")) for i in (l.get("audits", {}).get("errors-in-console", {}).get("details") or {}).get("items", [])]
+    own = [d for d in logged if d.startswith("[open-docs")]
+    if own:
+        out["error"] = "the engine failed on Google's machine, so there is no score: " + " ".join(own[0].split())[:160]
     if "error" in out:
         return out
     for k, name in LH_CATS.items():

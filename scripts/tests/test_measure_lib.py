@@ -238,3 +238,14 @@ def test_pagespeed_refusing_an_address_is_told_apart_from_a_page_that_never_load
     said = "PageSpeed Insights\nUnable to resolve https://x.example/r/a?src=https://h/f.docx. Try checking the URL for validity.\nAnalyze"
     assert lib.psi_refusal(said).startswith("PageSpeed refused the address: Unable to resolve https://x.example")
     assert lib.psi_refusal("Performance\n77\nFirst Contentful Paint") is None
+
+
+def test_a_report_of_a_page_whose_engine_failed_has_no_score():
+    report = {"lighthouseVersion": "13", "categories": {"performance": {"score": 1}},
+              "audits": {"errors-in-console": {"details": {"items": [
+                  {"description": "Failed to load resource: 404"},
+                  {"description": "[open-docs] WordCraft failed to start TypeError: Failed to fetch"}]}}}}
+    got = lib.summarize(report)
+    assert "performance" not in got and "WordCraft failed to start" in got["error"]
+    report["audits"]["errors-in-console"]["details"]["items"].pop()
+    assert lib.summarize(report)["performance"] == 100  # another site's 404 is not the engine failing
