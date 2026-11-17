@@ -322,17 +322,17 @@ Measured 2026-11-09: Google Chrome (installed, headed) via Playwright, fresh pro
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-16: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.3, highest 9.6, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-16: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.7, highest 11.0, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 1.47 s | 165 ms · 843 ms | 566 ms | 328 ms | 1.26 s, 598 ms, 566 ms, 566 ms, 468 ms | 61 KB |
-| folio | 1.98 s | 434 ms · 365 ms | 374 ms | 183 ms | 517 ms, 371 ms, 784 ms, 374 ms, 344 ms | 204 KB |
-| docx-editor.dev | 1.21 s | 117 ms · 866 ms | 763 ms | 564 ms | 744 ms, 654 ms, 1.35 s, 791 ms, 763 ms | 238 KB |
-| Plate | 710 ms | 132 ms · 222 ms | 337 ms | 143 ms | 312 ms, 337 ms, 333 ms, 352 ms, 688 ms | 32 KB |
-| docen | 955 ms | 365 ms · 107 ms | 305 ms | 41 ms | 288 ms, 786 ms, 318 ms, 197 ms, 305 ms | 43 KB |
-| WordCraft | 886 ms | 271 ms · 305 ms | 223 ms | 21 ms | 1.09 s, 178 ms, 223 ms, 637 ms, 178 ms | 3 KB + a page image per page viewed |
-| SuperDoc | 1.38 s | 540 ms · 636 ms | 664 ms | 494 ms | 668 ms, 547 ms, 1.67 s, 664 ms, 614 ms | 7 KB |
+| Docxodus | 2.23 s | 364 ms · 1.22 s | 568 ms | 305 ms | 1.38 s, 578 ms, 452 ms, 480 ms, 568 ms | 61 KB |
+| folio | 1.30 s | 535 ms · 401 ms | 439 ms | 179 ms | 455 ms, 351 ms, 439 ms, 364 ms, 904 ms | 204 KB |
+| docx-editor.dev | 1.65 s | 124 ms · 1.23 s | 793 ms | 531 ms | 1.07 s, 810 ms, 793 ms, 721 ms, 774 ms | 238 KB |
+| Plate | 923 ms | 235 ms · 269 ms | 335 ms | 142 ms | 486 ms, 1.37 s, 327 ms, 335 ms, 325 ms | 32 KB |
+| docen | 703 ms | 370 ms · 131 ms | 246 ms | 39 ms | 263 ms, 212 ms, 196 ms, 1.43 s, 246 ms | 43 KB |
+| WordCraft | 538 ms | 230 ms · 166 ms | 210 ms | 22 ms | 236 ms, 210 ms, 235 ms, 186 ms, 198 ms | 3 KB + a page image per page viewed |
+| SuperDoc | 1.55 s | 540 ms · 748 ms | 645 ms | 433 ms | 678 ms, 645 ms, 572 ms, 602 ms, 646 ms | 7 KB |
 <!-- server:end -->
 
 How each is measured:
