@@ -1639,7 +1639,7 @@
  "docsMeta": {
   "lorem-500": {
    "measuredAt": "2026-11-16",
-   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 2 analyses per page and form factor, median of those that gave a result",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
    "base": "https://viewers.benchmarks.law"
   }
  }

@@ -153,3 +153,27 @@ Deno.test("Lighthouse: a page whose analyses disagree shows their range beside t
   assertStringIncludes(html, "desktop analyses ranged 44 to 79");
   assertEquals((html.match(/analyses ranged/g) ?? []).length, 2);
 });
+
+Deno.test("Lighthouse: the 500-page table is shown when only it was measured", () => {
+  const html = lighthouseSection(ENGINES, { measuredAt: null, environment: "", pages: {}, docs: { "lorem-500": { "v/folio": both() } }, docsMeta: { "lorem-500": { measuredAt: "2026-11-16", environment: "new run" } } });
+  assertStringIncludes(html, "Measured 2026-11-16 · new run");
+  assertStringIncludes(html, "/v/folio");
+});
+
+Deno.test("samples: what the server page cost the browser is shown even where curl has no result, or a failed one", () => {
+  const client: ServerClientResults = { measuredAt: "2026-11-16", environment: "t", docs: { redline: {
+    folio: { loadMs: 900, heapBytes: 2 * 1048576, rendererRss: 80 * 1048576, runs: [900] },
+    plate: { loadMs: 700, heapBytes: 2 * 1048576, rendererRss: 70 * 1048576, runs: [700] },
+    docen: { loadMs: 600, heapBytes: 2 * 1048576, rendererRss: 60 * 1048576, runs: [600] },
+  } } } as unknown as ServerClientResults;
+  const html = samplesSection(ENGINES, samples({ plate: { code: 500, totalMs: null, renderMs: null, bytes: null, pages: null, runs: [null], error: "HTTP 500" } }, { folio: browserRow, plate: browserRow }), client);
+  const cell = (slug: string) => { const r = html.slice(html.indexOf(`/v/${slug}?`)); return r.slice(0, r.indexOf("</tr>")); };
+  assertStringIncludes(cell("folio"), "in the browser: loaded 900 ms"); // no curl result
+  assertStringIncludes(cell("plate"), "in the browser: loaded 700 ms"); // a failed curl result
+  assertStringIncludes(cell("docen"), "in the browser: loaded 600 ms"); // neither browser page nor curl: still a row
+});
+
+Deno.test("samples: a run that failed says why, beside the median of the runs that rendered", () => {
+  const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, runs: [800, null, 810], failed: "not rendered within 240s <i>" } as typeof browserRow }), noClient);
+  assertStringIncludes(html, "1 of 3 runs failed</span>: not rendered within 240s &lt;i&gt;");
+});

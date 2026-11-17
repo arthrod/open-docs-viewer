@@ -20,8 +20,9 @@ on:
 permissions:
   contents: write
 
+# The same group as measure.yml: two jobs asking the same Val at once would time each other.
 concurrency:
-  group: remeasure
+  group: measure
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +40,7 @@ jobs:
         run: |
           uv run --with playwright python -I scripts/measure.py \
             "${{ inputs.engines || 'all' }}" "${{ inputs.runs || '3' }}" \
-            --results results/browser.json --raw "results/raw/$(date +%F)-browser-showcase.json" > measure-raw.json
+            --results results/browser.json --raw "results/raw/$(date -u +%FT%H%M%SZ)-browser-showcase.json" > measure-raw.json
           python3 scripts/readme_tables.py
       - uses: actions/upload-artifact@v4
         with:

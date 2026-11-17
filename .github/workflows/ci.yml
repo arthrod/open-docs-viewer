@@ -40,5 +40,9 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - name: Compile every script
         run: uv run python -m compileall -q scripts
+      - name: Lint (ruff.toml says for what)
+        run: uvx ruff check scripts
+      - name: Type-check
+        run: uv run --with playwright --with pytest --with pyrefly pyrefly check scripts/*.py scripts/tests/*.py
       - name: Tests with coverage
         run: uv run --with pytest --with pytest-cov pytest scripts/tests --cov=measure_lib --cov=readme_tables --cov-report=term-missing

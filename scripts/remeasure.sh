@@ -8,7 +8,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 ENGINES="${1:-all}"
 RUNS="${2:-3}"
-uv run --with playwright python -I scripts/measure.py "$ENGINES" "$RUNS" --results results/browser.json --raw "results/raw/$(date +%F)-browser-showcase.json" > /dev/null
+# A file per invocation: a run of some engines must not overwrite the raw runs of the others' medians.
+uv run --with playwright python -I scripts/measure.py "$ENGINES" "$RUNS" --results results/browser.json --raw "results/raw/$(date -u +%FT%H%M%SZ)-browser-showcase.json" > /dev/null
 # The README's tables are written from the files: left stale, the test that compares them fails.
 python3 scripts/readme_tables.py
 git add results/browser.json results/raw README.md

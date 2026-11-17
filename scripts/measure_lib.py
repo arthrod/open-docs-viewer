@@ -26,7 +26,8 @@ def pkill_args(profile: str) -> list[str]:
 def end_chrome(profile: str, wait_s: float = 5.0) -> str | None:
     """End the Chrome started on `profile` and see that it went. Returns what went wrong, or None.
 
-    pkill exiting 1 means nothing matched: it was already gone. After a
+    pkill exiting 1 means nothing matched: it was already gone (pgrep likewise;
+    2 and 3 are errors of the tool, reported). After a
     delivered signal the process is looked for until it is gone or `wait_s`
     has passed; one that is still there is reported, so the caller can stop
     instead of measuring the next page beside a leftover browser.
@@ -38,8 +39,11 @@ def end_chrome(profile: str, wait_s: float = 5.0) -> str | None:
         return f"pkill exited {p.returncode}: {(p.stderr or b'').decode(errors='replace').strip()[:120]}; that Chrome may still be running"
     deadline = time.monotonic() + wait_s
     while True:
-        if subprocess.run(["pgrep", "-f", "--", f"--user-data-dir={profile}"], capture_output=True).returncode != 0:
-            return None
+        g = subprocess.run(["pgrep", "-f", "--", f"--user-data-dir={profile}"], capture_output=True)
+        if g.returncode == 1:
+            return None  # nothing matched: it is gone
+        if g.returncode != 0:  # 2 or 3: pgrep itself failed, which is not proof that Chrome went
+            return f"pgrep exited {g.returncode}: {(g.stderr or b'').decode(errors='replace').strip()[:120]}; that Chrome may still be running"
         if time.monotonic() >= deadline:
             return f"that Chrome is still running {wait_s:g} s after pkill"
         time.sleep(0.2)
@@ -82,7 +86,8 @@ def engine_summary(xs: list[dict]) -> dict:
 
     A run that rendered but lost a later reading (heap, renderer memory) keeps
     its time; the missing metric is skipped for the median and the run's error
-    is kept as `incomplete`.
+    is kept as `incomplete`. A run that did not render keeps its reason as
+    `failed`, beside the median of the runs that did.
     """
     ok = [x for x in xs if "renderedMs" in x]
     return {
@@ -94,6 +99,7 @@ def engine_summary(xs: list[dict]) -> dict:
         "rendererRss": median(ok, "rendererRss"),
         "how": "data-od-rendered" if ok else (xs[0].get("blocked") or xs[0].get("error")),
         "incomplete": next((x["error"] for x in ok if x.get("error")), None),
+        "failed": next((x.get("blocked") or x.get("error") or "no answer" for x in xs if "renderedMs" not in x), None),
     }
 
 
@@ -172,7 +178,7 @@ def server_entry(xs: list[dict]) -> dict:
     """One /r/ route on one sample, from its runs: medians of the successful ones, and a failed run's error beside them."""
     ok = [x for x in xs if x["code"] == 200]
     bad = next((x for x in xs if x["code"] != 200), None)
-    med = lambda k: (lambda v: round(statistics.median(v)) if v else None)([x[k] for x in ok if x.get(k) is not None])  # noqa: E731
+    med = lambda k: (lambda v: round(statistics.median(v)) if v else None)([x[k] for x in ok if x.get(k) is not None])  # noqa: E731 - a two-line formatter, used on the next lines only
     entry = {"code": 200 if ok else bad["code"], "totalMs": med("totalMs"), "renderMs": med("render"), "bytes": med("bytes"),
              "pages": med("pages"), "runs": [x["totalMs"] if x["code"] == 200 else None for x in xs]}
     if bad:
@@ -261,19 +267,33 @@ def merge_pagespeed(result: dict, entries: dict, label: str | None, meta: dict) 
     environment; a labelled population (`docs.<label>`, the same pages on
     another document) by `docsMeta.<label>`. A run of some pages only must not
     redate the others: every entry carries its own `measuredAt`, `environment`
-    and `base`, and entries kept from before get the heading they were
-    published under.
+    and `base`, entries kept from before get the heading they were published
+    under, and the heading itself changes only with a run of every page.
     """
+    root = {k: result[k] for k in PROVENANCE if k in result}
     if label:
         rows = result.setdefault("docs", {}).setdefault(label, {})
-        old = result.get("docsMeta", {}).get(label) or {k: result[k] for k in PROVENANCE if k in result}
-        result.setdefault("docsMeta", {})[label] = dict(meta)
-        for k, v in meta.items():
-            result.setdefault(k, v)
+        old = result.get("docsMeta", {}).get(label) or root
     else:
         rows = result.setdefault("pages", {})
-        old = {k: result[k] for k in PROVENANCE if k in result}
+        old = root
+        # A labelled population from before docsMeta was published under this heading: it keeps it,
+        # or a later run of the default table would redate it.
+        for doc in result.get("docs", {}):
+            result.setdefault("docsMeta", {}).setdefault(doc, dict(root))
+    # The table's heading is the run that measured the whole table. A run of some of its pages
+    # (two analyses of one page, once) must not head rows that had five: its own rows say theirs.
+    whole = set(rows) <= set(entries)
+    if label:
+        heads = result.setdefault("docsMeta", {})
+        heads[label] = dict(meta) if whole else heads.get(label) or dict(old or meta)
+        for k, v in meta.items():
+            result.setdefault(k, v)
+    elif whole:
         result.update(meta)
+    else:
+        for k, v in meta.items():
+            result.setdefault(k, v)
     for row in rows.values():
         for k, v in old.items():
             row.setdefault(k, v)
@@ -380,9 +400,19 @@ def first_warm_entry(first: dict, warm: list[dict]) -> dict:
     `firstCold` is False when the first request found the engine already
     loaded (its init time is 0): then it was not a first request, and the
     figure is a warm one that must not be read as a cold start.
+    `warmColdRuns` counts the warm requests left out of the warm medians.
     """
     ok = [x for x in warm if x["code"] == 200]
-    med = lambda k: (lambda v: round(statistics.median(v)) if v else None)([x[k] for x in ok if x.get(k) is not None])  # noqa: E731
+    # Several processes serve the site: a later request can land on one that has not loaded the
+    # engine (its init time is not 0). That is another first request, not a warm one: it is listed
+    # with the others and counted, and the warm medians stand on the requests that found it loaded.
+    cold = [x for x in ok if (x.get("init") or 0) > 0]
+    settled = [x for x in ok if not (x.get("init") or 0) > 0]
+
+    def med(k: str, xs: list[dict] = settled) -> int | None:
+        v = [x[k] for x in xs if x.get(k) is not None]
+        return round(statistics.median(v)) if v else None
+
     good = first["code"] == 200
     entry = {
         "firstMs": first["totalMs"] if good else None,
@@ -391,8 +421,9 @@ def first_warm_entry(first: dict, warm: list[dict]) -> dict:
         "firstCold": bool(good and (first.get("init") or 0) > 0),
         "warmMs": med("totalMs"),
         "warmRenderMs": med("render"),
-        "bytes": med("bytes"),
+        "bytes": med("bytes", ok),
         "warmRuns": [x["totalMs"] if x["code"] == 200 else None for x in warm],
+        "warmColdRuns": len(cold),
     }
     bad = next((x for x in [first, *warm] if x["code"] != 200), None)
     if bad:

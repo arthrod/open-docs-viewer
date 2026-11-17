@@ -29,7 +29,7 @@ for having scrolled through all of it.
 
     uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 3 --out results/server-client.json
 """
-import asyncio, datetime, json, os, platform, random, statistics, subprocess, sys, tempfile, time, urllib.parse
+import asyncio, datetime, json, os, platform, random, statistics, sys, tempfile, time, urllib.parse
 
 from playwright.async_api import async_playwright
 

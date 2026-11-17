@@ -39,6 +39,16 @@ jobs:
           [ -d "/Applications/Google Chrome.app" ] || uv run --with playwright python -m playwright install chrome
           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --version
           sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize
+      - name: Wait for the machine to calm down
+        # A fresh runner is still busy with its own start-up (a load average of 30 on 3 cores was
+        # recorded in the first pass of 2026-11-17): wait for under 2 per core, five minutes at most.
+        run: |
+          for i in $(seq 30); do
+            load=$(sysctl -n vm.loadavg | awk '{print $2}')
+            echo "load average $load"
+            awk -v l="$load" -v c="$(sysctl -n hw.ncpu)" 'BEGIN { exit !(l < 2 * c) }' && break
+            sleep 10
+          done
       # One after another: two Chromes at once, or two jobs asking the same Val, would time each other.
       - name: Browser pages, rich sample
         run: uv run --with playwright python -I scripts/measure.py all 5 --results results/browser.json --raw "results/raw/$(date +%F)-browser-showcase.json" > /dev/null
@@ -48,8 +58,8 @@ jobs:
         run: uv run --with playwright python -I scripts/measure.py all "$RUNS" --doc lorem-500 --samples results/samples.json --raw "results/raw/$(date +%F)-browser-lorem-500.json" > /dev/null
       - name: Server routes with curl, redline and 500 pages
         run: |
-          python3 -I scripts/measure_server.py all 5 --doc redline --samples results/samples.json --raw "results/raw/$(date +%F)-server-redline.json" > /dev/null
-          python3 -I scripts/measure_server.py all 5 --doc lorem-500 --samples results/samples.json --raw "results/raw/$(date +%F)-server-lorem-500.json" > /dev/null
+          python3 -I scripts/measure_server.py all "$RUNS" --doc redline --samples results/samples.json --raw "results/raw/$(date +%F)-server-redline.json" > /dev/null
+          python3 -I scripts/measure_server.py all "$RUNS" --doc lorem-500 --samples results/samples.json --raw "results/raw/$(date +%F)-server-lorem-500.json" > /dev/null
       - name: What a server render costs the browser
         run: uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 "$RUNS" --out results/server-client.json --raw "results/raw/$(date +%F)-server-client.json"
       - name: README tables from the new files

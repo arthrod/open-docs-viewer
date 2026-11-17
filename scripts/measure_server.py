@@ -87,7 +87,7 @@ raw = [*({**x, "first": True} for x in FIRST.values()), *warm]
 where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
 META = {
     "measuredAt": datetime.date.today().isoformat(),
-    "environment": f"curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, {runs_note(RUNS, warm)}, median; {where}; {load_note(warm)}",
+    "environment": f"curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, {runs_note(RUNS, warm)}, median; {where}; {load_note(raw)}",
 }
 write_raw(ARGS.raw, {**META, "document": DOCUMENTS[DOC or "showcase"]}, raw)
 

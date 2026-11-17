@@ -87,6 +87,8 @@ const doh = (api: string): Lookup => async (host) => {
 export const dohLookup: Lookup = (host) => doh("https://cloudflare-dns.com/dns-query")(host).catch(() => doh("https://dns.google/resolve")(host));
 
 const FRESH_MS = 60 * 1000;
+/** How many names' answers one isolate keeps: anyone can ask about any name, so the table is bounded. */
+export const MAX_SEEN = 2000;
 const SEEN = new Map<string, { ok: boolean; at: number }>();
 
 /**
@@ -95,6 +97,11 @@ const SEEN = new Map<string, { ok: boolean; at: number }>();
  * resolver can be reached the name is REFUSED: allowing it would quietly turn
  * the check off, and two independent resolvers being down together is rare.
  * Nothing is kept in that case, so the next request asks again.
+ *
+ * A name the public resolver has NO address for is refused too: the fetch
+ * uses the host's own resolver, which may know names the public one does not
+ * (a service inside the host's network), and "no private address among none"
+ * would let exactly those through.
  */
 export async function resolvesPublic(host: string, lookup: Lookup = dohLookup, seen = SEEN): Promise<boolean> {
   const hit = seen.get(host);
@@ -105,7 +112,45 @@ export async function resolvesPublic(host: string, lookup: Lookup = dohLookup, s
   } catch {
     return false;
   }
-  const ok = !ips.some(privateIp);
+  const ok = ips.length > 0 && !ips.some(privateIp);
+  seen.delete(host); // re-inserted last: the map's order is the order answers were kept in
+  if (seen.size >= MAX_SEEN) seen.delete(seen.keys().next().value!);
   seen.set(host, { ok, at: Date.now() });
   return ok;
+}
+
+/**
+ * A document's address: https, by name, and not a local name. A trailing dot
+ * (`localhost.`, the same host written as a fully qualified name) does not
+ * get a name past the list; the address itself is returned unchanged.
+ */
+export function publicUrl(raw: string | undefined): URL | null {
+  if (!raw) return null;
+  let u: URL;
+  try {
+    u = new URL(raw);
+  } catch {
+    return null;
+  }
+  if (u.protocol !== "https:") return null;
+  const h = u.hostname.toLowerCase().replace(/\.+$/, "");
+  if (!h || h === "localhost" || h.endsWith(".localhost") || h.endsWith(".internal") || h.endsWith(".local")) return null;
+  // Literal IPs (v4 or v6) are refused outright: documents come by name.
+  if (/^[\d.]+$/.test(h) || h.includes(":") || h.startsWith("[")) return null;
+  return u;
+}
+
+/**
+ * Why fetching a document failed, in one of five fixed phrases. The runtime's
+ * own text names the stage and the address it reached ("tcp connect error ...
+ * 10.0.0.5:8443"), which would let a caller probe what answers where; the
+ * full error goes to the log instead.
+ */
+export function fetchFailure(e: unknown): string {
+  const m = (e instanceof Error ? e.message : String(e)).toLowerCase();
+  if (/dns|lookup|name or service not known|nodename|no such host/.test(m)) return "its host name could not be found";
+  if (/certificate|tls|handshake|ssl/.test(m)) return "its TLS certificate or handshake was not accepted";
+  if (/refused/.test(m)) return "the connection was refused";
+  if (/reset|closed|eof|broken pipe|incomplete/.test(m)) return "the connection was closed before the document arrived";
+  return "the connection failed";
 }

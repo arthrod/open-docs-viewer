@@ -60,7 +60,8 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
 
 /** PageSpeed Insights, every engine: its /v/ page, and its /r/ page where it has one. */
 export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIGHTHOUSE): string {
-  if (!Object.keys(lh.pages ?? {}).length) return "";
+  // Either table is enough to show the section: the 500 pages can be analysed on their own.
+  if (!Object.keys(lh.pages ?? {}).length && !Object.keys(lh.docs?.["lorem-500"] ?? {}).length) return "";
   const score = (n: number | null | undefined) => n == null ? "n/a" : `<b class="lh ${n >= 90 ? "lh-good" : n >= 50 ? "lh-mid" : "lh-bad"}">${n}</b>`;
   const table = (pages: LighthouseResults["pages"], q: string, head: { measuredAt?: string | null; environment?: string }) => {
   // A page analysed in another run than the table's heading (a partial re-run) says when.
@@ -134,7 +135,8 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
     const src = encodeURIComponent(sampleUrl(s));
     const row = (e: Engine) => {
       const b = r.browser[e.slug], v = r.server[e.slug];
-      if (!b && !v) {
+      const c = client.docs?.[s.id]?.[e.slug];
+      if (!b && !v && !c) {
         // Added to the registry after this measurement: say so, rather than a row of blanks.
         return `<tr><td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a></td><td colspan="6" class="ro">not measured on this file yet</td></tr>`;
       }
@@ -145,7 +147,7 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         ? `<span class="odv-fail" title="${esc(b.how ?? "")}">failed</span>`
         // A vendor's cross-origin frame: all the page can time is the frame's load event.
         : `<b>${ms(b.renderedMs)}</b>${e.frame ? ` <span class="ro">frame load</span>` : ""}${when(b, res)}`;
-      const c = client.docs?.[s.id]?.[e.slug];
+      // Chrome's reading of the server page is its own measurement: shown whatever curl got.
       const inBrowser = !c ? "" : c.loadMs == null
         ? `<div class="ro">in the browser: <span class="odv-fail">failed</span> ${esc(c.error ?? "")}</div>`
         : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
@@ -153,9 +155,9 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v
         // The route exists (the toggle links to it) but this file has no measurement of it yet.
-        ? `<span class="ro">${SERVER_RENDER_SLUGS.has(e.slug) ? "not measured on this file yet" : "no server route"}</span>`
+        ? `<span class="ro">${SERVER_RENDER_SLUGS.has(e.slug) ? "not measured on this file yet" : "no server route"}</span>${inBrowser}`
         : v.code !== 200
-        ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>`
+        ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>${inBrowser}`
         : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>${
           IMAGES_ON_DEMAND.has(e.slug) ? `<div class="ro">without its page images: each is rendered and sent when its page nears the viewport</div>` : ""
         }${
@@ -163,7 +165,10 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
           v.error ? `<div class="ro"><span class="odv-fail">${(v.runs ?? []).filter((x) => x == null).length} of ${(v.runs ?? []).length} runs failed</span>: ${esc(v.error.slice(0, 140))}</div>` : ""
         }${when(v, res)}${inBrowser}`;
       return `<tr>
-      <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}</td>
+      <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}${
+        // The median stands on the runs that rendered; the one that did not is said, with its reason.
+        b && b.renderedMs != null && b.failed ? `<div class="ro"><span class="odv-fail">${runs.filter((x) => x == null).length} of ${runs.length} runs failed</span>: ${esc(b.failed.slice(0, 140))}</div>` : ""
+      }</td>
       <td class="n">${browser}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
       <td class="n">${e.frame ? "n/a" : mb(b?.heapBytes)}</td>
@@ -256,7 +261,9 @@ ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURICompon
   }</div></td>
 <td class="n"><b>${ms(r.firstMs)}</b>${r.firstCold === false && r.firstMs != null ? `<div class="ro">already loaded: not a first request</div>` : ""}${
     r.error ? `<div class="ro"><span class="odv-fail">a request failed</span>: ${esc(r.error.slice(0, 140))}</div>` : ""
-  }${when(r, SERVER_FILE_HEAD)}</td><td class="n hide-sm">${ms(r.firstInitMs)} · ${ms(r.firstRenderMs)}</td><td class="n"><b>${ms(r.warmMs)}</b></td><td class="n hide-sm">${ms(r.warmRenderMs)}</td>
+  }${when(r, SERVER_FILE_HEAD)}</td><td class="n hide-sm">${ms(r.firstInitMs)} · ${ms(r.firstRenderMs)}</td><td class="n"><b>${ms(r.warmMs)}</b>${
+    r.warmColdRuns ? `<div class="ro">${r.warmColdRuns} of ${(r.warmRuns ?? []).length} reached a process that had not loaded the engine: not in the median</div>` : ""
+  }</td><td class="n hide-sm">${ms(r.warmRenderMs)}</td>
 <td class="n">${mb(r.bytes)}</td><td class="ro">${esc(r.how)}</td></tr>`).join("")}
 </tbody></table></div>
   ${serverClientTable(engines, results, defaultSrc)}

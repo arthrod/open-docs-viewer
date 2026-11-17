@@ -56,14 +56,18 @@ def cell(text) -> str:
     return str(text).splitlines()[0].replace("|", "\\|")[:160] if str(text) else ""
 
 
-def each(runs) -> str:
-    """Every run's time, in the order they were made."""
-    return ", ".join("failed" if t is None else ms(t) for t in runs or []) or "n/a"
+def each(runs, failed=None) -> str:
+    """Every run's time, in the order they were made, and why a failed one failed when that is recorded."""
+    text = ", ".join("failed" if t is None else ms(t) for t in runs or []) or "n/a"
+    return f"{text} (failed: {cell(failed)})" if failed and any(t is None for t in runs or []) else text
 
 
 def dated(name: str, row: dict, head: dict) -> str:
-    """The row's name, with its own date when it was measured apart from its table."""
-    return f"{name} (measured {row['measuredAt']})" if row.get("measuredAt") and row["measuredAt"] != head.get("measuredAt") else name
+    """The row's name, with its own date when it was measured apart from its table, and its environment when that differs."""
+    when, where = row.get("measuredAt") or head.get("measuredAt"), row.get("environment") or head.get("environment")
+    if where != head.get("environment"):
+        return f"{name} (measured {when}: {str(where).replace('|', chr(92) + '|')})"
+    return f"{name} (measured {when})" if when != head.get("measuredAt") else name
 
 
 def said(head: dict, more: str = "") -> str:
@@ -85,7 +89,7 @@ def browser_block(data: dict) -> str:
             out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | |")
             continue
         frame = e in FRAMES
-        out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'))} | {mb(r.get('bytes'))} | "
+        out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'))} | {mb(r.get('bytes'))} | "
                    f"{r.get('requests') if r.get('requests') is not None else 'n/a'} | {'n/a' if frame else mb(r.get('heapBytes'))} | {mb(r.get('rendererRss'))} |")
     return "\n".join(out)
 
@@ -102,8 +106,10 @@ def server_block(data: dict) -> str:
         first = ms(r.get("firstMs")) + (" (already loaded: not a first request)" if r.get("firstCold") is False and r.get("firstMs") is not None else "")
         note = f" **A request failed**: {cell(r['error'])}" if r.get("error") else ""
         sent = mb(r.get("bytes")) + (" + a page image per page viewed" if e in IMAGES else "")
+        cold = r.get("warmColdRuns") or 0
+        runs = (each(r.get("warmRuns")) if r.get("warmRuns") else "n/a") + (f" ({cold} reached a process that had not loaded the engine: not in the median)" if cold else "")
         out.append(f"| {dated(NAMES[e], r, data)}{note} | {first} | {ms(r.get('firstInitMs'))} · {ms(r.get('firstRenderMs'))} | {ms(r.get('warmMs'))} | "
-                   f"{ms(r.get('warmRenderMs'))} | {each(r.get('warmRuns')) if r.get('warmRuns') else 'n/a'} | {sent} |")
+                   f"{ms(r.get('warmRenderMs'))} | {runs} | {sent} |")
     return "\n".join(out)
 
 
@@ -124,24 +130,32 @@ def server_cell(e: str, x: dict | None) -> str:
 def samples_block(data: dict) -> str:
     """The other documents: the /v/ page and the /r/ route side by side (results/samples.json)."""
     stamped = any(x.get("environment") for d in data["samples"].values() for x in d.get("server", {}).values())
-    out = [said(data, " Server routes: timed with curl, as their own rows say in the file." if stamped else " Server routes: timed with curl."), ""]
+    out = ["Server routes: timed with curl, as their own rows say in the file." if stamped else "Server routes: timed with curl.", ""]
     for doc, title in DOCS[1:]:
         d = data["samples"].get(doc)
         if not d:
             continue
-        out += [f"**{title}**", "", "| Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |",
+        # Each document is its own pass, with its own load: its table is headed by the run most of
+        # its rows come from, and a row from another run says so.
+        stamps = [(r.get("measuredAt"), r.get("environment")) for r in d.get("browser", {}).values() if r.get("environment")]
+        head = dict(zip(("measuredAt", "environment"), max(set(stamps), key=stamps.count))) if stamps else data
+        out += [f"**{title}**", "", said(head), "", "| Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |",
                 "| --- | ---: | --- | ---: | ---: | ---: | --- |"]
         for e in NAMES:
-            r = d["browser"].get(e)
-            if not r:
-                continue
+            r = d.get("browser", {}).get(e)
             frame = e in FRAMES
-            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_cell(e, d["server"].get(e))
-            name = dated(NAMES[e], r, data)
+            if not r:
+                # Measured with curl only (measure_server.py --samples before the browser pass): the
+                # server cell is a result, and dropping the row would hide it.
+                if d.get("server", {}).get(e):
+                    out.append(f"| {NAMES[e]} | not measured | n/a | n/a | n/a | n/a | {server_cell(e, d['server'][e])} |")
+                continue
+            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_cell(e, d.get("server", {}).get(e))
+            name = dated(NAMES[e], r, head)
             if r.get("renderedMs") is None:
                 out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | {srv} |")
                 continue
-            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'))} | {'n/a' if frame else mb(r.get('heapBytes'))} | "
+            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'))} | {'n/a' if frame else mb(r.get('heapBytes'))} | "
                        f"{mb(r.get('rendererRss'))} | {mb(r.get('bytes'))} | {srv} |")
         out.append("")
     return "\n".join(out).rstrip()
@@ -190,8 +204,10 @@ def lighthouse_line(label: str, r: dict, head: dict) -> str:
     two = lambda k, f=str: f"{'n/a' if d.get(k) is None else f(d[k])} · {'n/a' if m.get(k) is None else f(m[k])}"
     runs = lambda x: "/".join("fail" if v is None else str(v) for v in x.get("performanceRuns") or [])
     one = lambda k: d[k] if d.get(k) is not None else "n/a"
+    # Why an analysis, or a whole form factor, has no result: said beside the scores, not dropped.
+    why = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error") and any(v is None for v in x.get("performanceRuns") or [None]))
     return (f"| {label} | {two('performance')} | {two('lcpMs', ms)} | {two('tbtMs', ms)} | {two('cls', num)} | {two('fcpMs', ms)} | "
-            f"{two('speedIndexMs', ms)} | {one('accessibility')} | {one('bestPractices')} | {one('seo')} | {runs(d)} · {runs(m)} |")
+            f"{two('speedIndexMs', ms)} | {one('accessibility')} | {one('bestPractices')} | {one('seo')} | {runs(d)} · {runs(m)}{f' ({why})' if why else ''} |")
 
 
 def lighthouse_block(data: dict) -> str:

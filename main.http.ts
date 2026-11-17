@@ -30,7 +30,7 @@ import { viewPage } from "./server/render.ts";
 import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
 import { currentResults } from "./server/results.ts";
 import { serverToggle } from "./server/navbar.ts";
-import { resolvesPublic } from "./server/net.ts";
+import { fetchFailure, publicUrl, resolvesPublic } from "./server/net.ts";
 import { renderFailure } from "./server/failure.ts";
 import { Busy, turns } from "./server/queue.ts";
 import { tooLarge } from "./server/docx-size.ts";
@@ -42,23 +42,6 @@ export const DEFAULT_SRC =
 const MAX_BYTES = 25 * 1024 * 1024;
 
 const app = new Hono();
-
-/** A public https URL, not a private or local address. */
-function publicUrl(raw: string | undefined): URL | null {
-  if (!raw) return null;
-  let u: URL;
-  try {
-    u = new URL(raw);
-  } catch {
-    return null;
-  }
-  if (u.protocol !== "https:") return null;
-  const h = u.hostname.toLowerCase();
-  if (h === "localhost" || h.endsWith(".localhost") || h.endsWith(".internal") || h.endsWith(".local")) return null;
-  // Literal IPs (v4 or v6) are refused outright: documents come by name.
-  if (/^[\d.]+$/.test(h) || h.includes(":") || h.startsWith("[")) return null;
-  return u;
-}
 
 app.get("/api/doc", async (c) => {
   const src = publicUrl(c.req.query("src"));
@@ -88,7 +71,9 @@ const SHELL_TTL_MS = 5 * 60_000; // then re-resolve, so an open-docs deploy show
  * editors.benchmarks.law, so their shells must be the same version.
  */
 async function currentShellUrl(slug: string): Promise<string> {
-  const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual" });
+  // Bounded: Plate's server render waits on this inside its turn of the render queue, and a
+  // fetch that never settles would hold the turn (and, six renders later, answer 503 to all).
+  const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual", signal: AbortSignal.timeout(10_000) });
   await res.body?.cancel();
   const loc = res.headers.get("location");
   return loc ? new URL(loc, OPEN_DOCS_ESM).href : `${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`;
@@ -178,7 +163,9 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
     if (signal.aborted) return fail(408, `the document did not arrive within ${FETCH_DEADLINE_MS / 1000}s`);
     // A host that does not exist, a refused connection, a broken TLS handshake: the document's
     // address is what failed. Thrown onwards, Val Town would answer 500 with the stack trace.
-    return fail(422, `the document could not be fetched: ${((e as Error)?.message ?? String(e)).split("\n")[0].slice(0, 200)}`);
+    // Said in a fixed phrase: the runtime's text names the stage and the address it reached.
+    console.error("fetchDocx", JSON.stringify(url.hostname), JSON.stringify(String((e as Error)?.message ?? e).slice(0, 300)));
+    return fail(422, `the document could not be fetched: ${fetchFailure(e)}`);
   }
 }
 
@@ -267,7 +254,7 @@ app.get("/r/:engine", async (c) => {
       return c.text("this server is rendering other documents: try again in a moment", 503, { "retry-after": "10", "cache-control": "no-store" });
     }
     // A zip that is not a .docx, or a document the engine cannot read.
-    console.error(`/r/${engine} ${src.href}:`, err);
+    console.error(`/r/${engine}`, JSON.stringify(src.href), err);
     return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
   }
   const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = rendered;
@@ -306,7 +293,7 @@ app.get("/r/wordcraft/page", async (c) => {
   try {
     return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src));
   } catch (err) {
-    console.error(`/r/wordcraft/page ${src.href}:`, err);
+    console.error("/r/wordcraft/page", JSON.stringify(src.href), err);
     return renderFailure("WordCraft", err);
   }
 });
@@ -335,7 +322,7 @@ app.get("*", async (c) => {
 // Anything a route did not answer for itself: logged whole (Val Town's logs), answered in one line.
 // Rejecting here made Val Town send the error's stack trace to the visitor.
 app.onError((err, c) => {
-  console.error(`${c.req.method} ${c.req.path}:`, err);
+  console.error(c.req.method, JSON.stringify(c.req.path), err);
   return new Response("this page could not be made; the error is in the server's log", { status: 500, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
 });
 

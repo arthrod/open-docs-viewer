@@ -15,6 +15,8 @@ export interface EngineResult {
   heapBytes: number | null;
   /** How "rendered" was detected in the median run. */
   how: string | null;
+  /** Why a run did not render, when one did not and others did. */
+  failed?: string | null;
   /** When and how this engine was measured, when the file records it per engine (a partial re-run). */
   measuredAt?: string;
   environment?: string;
@@ -111,6 +113,8 @@ export interface ServerResult {
   bytes: number | null;
   /** Every warm request's total time (null = it failed). */
   warmRuns?: (number | null)[];
+  /** How many warm requests reached a process that had not loaded the engine: listed, not in the medians. */
+  warmColdRuns?: number;
   /** A failed request's error. */
   error?: string;
   /** When this route was measured, when the file records it per route. */
@@ -168,7 +172,7 @@ export interface ServerMeasurements {
   measuredAt: string | null;
   environment: string;
   document?: string;
-  engines: Record<string, Partial<Pick<ServerResult, "firstMs" | "firstInitMs" | "firstRenderMs" | "firstCold" | "warmMs" | "warmRenderMs" | "bytes" | "warmRuns" | "error">>>;
+  engines: Record<string, Partial<Pick<ServerResult, "firstMs" | "firstInitMs" | "firstRenderMs" | "firstCold" | "warmMs" | "warmRenderMs" | "bytes" | "warmRuns" | "warmColdRuns" | "error">>>;
 }
 const SERVER_FILE = SERVER_BUNDLED as ServerMeasurements;
 const NO_FIGURES = { firstMs: null, firstInitMs: null, firstRenderMs: null, warmMs: null, warmRenderMs: null, bytes: null };

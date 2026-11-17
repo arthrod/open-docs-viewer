@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import readme_tables as rt  # noqa: E402
+import readme_tables as rt  # noqa: E402 - sys.path is set above so the sibling module imports
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -66,3 +66,24 @@ def test_server_client_and_lighthouse_blocks_and_missing_markers():
     assert lh.count("| Docxodus |") == 2 and "| Docxodus | 100 · n/a |" in lh
     with pytest.raises(SystemExit):
         rt.put("no markers", "browser", "x")
+
+
+def test_a_sample_with_only_a_server_result_still_has_its_row():
+    data = {"measuredAt": "2026-11-16", "environment": "test", "samples": {"redline": {
+        "browser": {}, "server": {"folio": {"code": 200, "totalMs": 800, "renderMs": 300, "bytes": 2 << 20, "runs": [800]}}}}}
+    out = rt.samples_block(data)
+    assert "| folio | not measured | n/a | n/a | n/a | n/a | 800 ms (300 ms rendering), 2.0 MB |" in out
+
+
+def test_a_lighthouse_row_says_why_a_form_factor_or_an_analysis_has_no_result():
+    page = {"performance": 66, "accessibility": 96, "bestPractices": 100, "seo": 90, "fcpMs": 230, "lcpMs": 1072, "tbtMs": 828, "cls": 0.006, "speedIndexMs": 2292, "performanceRuns": [66, 66], "error": None}
+    none = {k: None for k in page} | {"performanceRuns": [None, None], "error": "PageSpeed gave no result within 240 s | really"}
+    some = {**page, "performanceRuns": [66, None], "error": "PAGE_HUNG: it stopped"}
+    line = rt.lighthouse_line("folio", {"desktop": some, "mobile": none}, {})
+    assert line.endswith("| 66/fail · fail/fail (desktop: PAGE_HUNG: it stopped; mobile: PageSpeed gave no result within 240 s \\| really) |")
+    assert rt.lighthouse_line("folio", {"desktop": page, "mobile": page}, {}).endswith("| 66/66 · 66/66 |")
+
+
+def test_a_browser_row_says_why_a_run_failed_beside_the_median_of_the_others():
+    data = {"measuredAt": "2026-11-16", "environment": "test", "engines": {"folio": {"renderedMs": 510, "runs": [500, None, 520], "bytes": 1 << 20, "requests": 9, "heapBytes": 5 << 20, "rendererRss": 90 << 20, "failed": "not rendered within 240s"}}}
+    assert "| 500 ms, failed, 520 ms (failed: not rendered within 240s) |" in rt.browser_block(data)

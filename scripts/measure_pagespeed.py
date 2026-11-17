@@ -19,7 +19,7 @@ Per page and form factor: the four category scores (0-100), First Contentful
 Paint, Largest Contentful Paint, Total Blocking Time, Cumulative Layout
 Shift, Speed Index.
 """
-import asyncio, datetime, json, os, statistics, sys, urllib.parse
+import asyncio, datetime, json, os, sys, urllib.parse
 
 from playwright.async_api import async_playwright
 
@@ -113,8 +113,10 @@ async def one(browser, page_path: str) -> dict:
             try:
                 # Bounded: a context that never closes would hold this job, and with it the whole run.
                 await asyncio.wait_for(ctx.close(), 20)
-            except Exception:
-                pass  # the browser is gone or stuck: the error above says so, and the other jobs go on
+            except Exception as e:
+                # The browser is gone or stuck; the other jobs go on. Kept in the raw file: a context
+                # that would not close explains a later job that found no browser.
+                out["cleanupError"] = f"{type(e).__name__}: {e}"[:200]
     return out
 
 

@@ -51,6 +51,8 @@ export interface SampleBrowser {
   /** Resident memory of every renderer process of the Chrome that ran it. */
   rendererRss?: number | null;
   how: string | null;
+  /** Why a run did not render, when one did not and others did. */
+  failed?: string | null;
   /** When this row was measured, when the file records it per row (a partial re-run). */
   measuredAt?: string;
   environment?: string;

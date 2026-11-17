@@ -35,7 +35,7 @@ renders (server/results.ts `Results`); engines not measured in this run keep
 their previous entry from PATH. scripts/remeasure.sh and the "Re-measure"
 GitHub workflow use this.
 """
-import asyncio, datetime, json, os, platform, random, statistics, subprocess, sys, tempfile, time, urllib.parse
+import asyncio, datetime, json, os, platform, random, sys, tempfile, time, urllib.parse
 
 from playwright.async_api import async_playwright
 
@@ -135,7 +135,12 @@ async def main():
     async with async_playwright() as pw:
         for r in range(runs):
             for e in engines:
-                x = await one(pw, e)
+                try:
+                    x = await one(pw, e)
+                except Exception as ex:
+                    # A Chrome that would not start, or gave no page: this run failed, and the runs
+                    # already made are still written (one() only catches what happens after setup).
+                    x = {"engine": e, **machine_load(), "error": f"{type(ex).__name__}: {ex}"[:300]}
                 res[e].append(x)
                 print(json.dumps(x), file=sys.stderr, flush=True)
                 if x.get("cleanup"):

@@ -216,7 +216,7 @@ def test_the_first_request_and_the_warm_ones_make_one_row():
     first = {"code": 200, "totalMs": 2231, "init": 235.4, "render": 1103.2, "bytes": 58818}
     warm = [{"code": 200, "totalMs": t, "init": 0, "render": r, "bytes": 58818} for t, r in ((700, 320), (622, 302), (600, 290))]
     row = lib.first_warm_entry(first, warm)
-    assert row == {"firstMs": 2231, "firstInitMs": 235, "firstRenderMs": 1103, "firstCold": True, "warmMs": 622, "warmRenderMs": 302, "bytes": 58818, "warmRuns": [700, 622, 600]}
+    assert row == {"firstMs": 2231, "firstInitMs": 235, "firstRenderMs": 1103, "firstCold": True, "warmMs": 622, "warmRenderMs": 302, "bytes": 58818, "warmRuns": [700, 622, 600], "warmColdRuns": 0}
 
 
 def test_a_first_request_that_found_the_engine_loaded_is_not_called_cold_and_failures_are_kept():
@@ -260,3 +260,72 @@ def test_a_page_whose_engine_failed_in_most_analyses_publishes_no_score():
     assert e["desktop"]["error"].startswith(lib.ENGINE_FAILED)
     mostly_fine = lib.page_entry([{"desktop": ok}, {"desktop": ok}, {"desktop": failed}], 240)
     assert mostly_fine["desktop"]["performance"] == 86
+
+
+def test_a_partial_rerun_keeps_the_heading_of_the_run_that_measured_the_table():
+    """Two analyses of one page must not head a table whose other rows had five (the 500-page caption once said so)."""
+    five = {"measuredAt": "2026-11-16", "environment": "5 analyses", "base": "b"}
+    two = {"measuredAt": "2026-11-16", "environment": "2 analyses", "base": "b"}
+    out = lib.merge_pagespeed({"pages": {}}, {"r/folio": {}, "r/eigenpal": {}}, "lorem-500", five)
+    out = lib.merge_pagespeed(out, {"r/eigenpal": {}}, "lorem-500", two)
+    assert out["docsMeta"]["lorem-500"]["environment"] == "5 analyses"
+    assert out["docs"]["lorem-500"]["r/eigenpal"]["environment"] == "2 analyses"
+    assert out["docs"]["lorem-500"]["r/folio"]["environment"] == "5 analyses"
+    # A run of every page of the table does head it.
+    out = lib.merge_pagespeed(out, {"r/folio": {}, "r/eigenpal": {}}, "lorem-500", two)
+    assert out["docsMeta"]["lorem-500"]["environment"] == "2 analyses"
+    # The default table follows the same rule.
+    root = lib.merge_pagespeed({"pages": {}}, {"v/a": {}, "v/b": {}}, None, five)
+    root = lib.merge_pagespeed(root, {"v/a": {}}, None, two)
+    assert root["environment"] == "5 analyses" and root["pages"]["v/a"]["environment"] == "2 analyses"
+
+
+def test_a_default_table_rerun_does_not_redate_a_legacy_labelled_population():
+    """A file from before docsMeta: its 500-page rows were published under the root heading of that day."""
+    result = {"measuredAt": "2026-11-10", "environment": "old", "base": "b",
+              "pages": {"v/a": {"desktop": {}}}, "docs": {"lorem-500": {"v/a": {"desktop": {}}, "v/b": {"desktop": {}}}}}
+    lib.merge_pagespeed(result, {"v/a": {"desktop": {}}}, None, {"measuredAt": "2026-11-16", "environment": "new", "base": "b"})
+    assert result["measuredAt"] == "2026-11-16"
+    assert result["docsMeta"]["lorem-500"]["measuredAt"] == "2026-11-10"
+    lib.merge_pagespeed(result, {"v/a": {"desktop": {}}}, "lorem-500", {"measuredAt": "2026-11-17", "environment": "newer", "base": "b"})
+    assert result["docs"]["lorem-500"]["v/b"]["measuredAt"] == "2026-11-10"
+
+
+def test_end_chrome_reports_a_pgrep_that_could_not_run(monkeypatch):
+    """pgrep exits 1 for no match and 2 or 3 for an error: an error is not proof that Chrome went."""
+
+    def run(args, **k):
+        if args[0] == "pkill":
+            return subprocess.CompletedProcess(args, 0, b"", b"")
+        return subprocess.CompletedProcess(args, 3, b"", b"cannot read the process table")
+
+    monkeypatch.setattr(lib.subprocess, "run", run)
+    monkeypatch.setattr(lib.time, "sleep", lambda s: None)
+    left = lib.end_chrome("/tmp/p", wait_s=5)
+    assert "pgrep exited 3" in left and "cannot read the process table" in left
+
+
+def test_a_warm_request_that_reached_an_unloaded_process_is_not_a_warm_one():
+    """Val Town runs several processes: a later request can land on one that has not loaded the engine yet."""
+    first = {"code": 200, "totalMs": 2000, "init": 400, "render": 900, "bytes": 10}
+    warm = [{"code": 200, "totalMs": t, "init": i, "render": r, "bytes": 10} for t, i, r in ((1383, 568, 500), (578, 0, 280), (452, 0, 270), (480, 0, 272), (700, 163, 300))]
+    row = lib.first_warm_entry(first, warm)
+    assert row["warmMs"] == 480 and row["warmRenderMs"] == 272
+    assert row["warmColdRuns"] == 2 and row["warmRuns"] == [1383, 578, 452, 480, 700]
+    # Every warm request cold: there is no warm figure, and that is said by the count.
+    none = lib.first_warm_entry(first, [{"code": 200, "totalMs": 900, "init": 300, "render": 400, "bytes": 10}])
+    assert none["warmMs"] is None and none["warmColdRuns"] == 1
+
+
+def test_a_run_that_failed_keeps_its_reason_beside_the_runs_that_rendered():
+    row = lib.engine_summary([{"renderedMs": 500, "bytes": 1}, {"error": "not rendered within 240s"}, {"renderedMs": 520, "bytes": 1}])
+    assert row["renderedMs"] == 510 and row["how"] == "data-od-rendered"
+    assert row["failed"] == "not rendered within 240s"
+    assert lib.engine_summary([{"renderedMs": 500}])["failed"] is None
+
+
+@pytest.mark.parametrize("parse", [lib.measure_args, lib.server_args])
+def test_invalid_measure_options_are_refused_by_both_parsers(parse):
+    for args in (["all", "3", "--doc"], ["all", "0"], ["all", "3", "--doc", "nope"]):
+        with pytest.raises(SystemExit):
+            parse(args)

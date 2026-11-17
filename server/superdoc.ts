@@ -22,8 +22,8 @@ box-shadow:0 1px 3px rgba(16,24,40,.12),0 8px 24px rgba(16,24,40,.06);font:11pt/
 h1{font-size:16pt}h2{font-size:13pt}h3{font-size:12pt}
 table{border-collapse:collapse;margin:8px 0}td,th{border:1px solid #999;padding:3px 7px;vertical-align:top}
 ul,ol{padding-left:24px}pre{white-space:pre-wrap}
-ins{color:#2a6fdb;text-decoration:underline}del{color:#b4232f;text-decoration:line-through}
-[data-superdoc-change-side="inserted"]{color:#2a6fdb;text-decoration:underline}[data-superdoc-change-side="deleted"]{color:#b4232f;text-decoration:line-through}
+ins{color:#2565c9;text-decoration:underline}del{color:#b4232f;text-decoration:line-through}
+[data-superdoc-change-side="inserted"]{color:#2565c9;text-decoration:underline}[data-superdoc-change-side="deleted"]{color:#b4232f;text-decoration:line-through}
 tr[data-superdoc-change-side="inserted"]>*{background:#eaf2ff}tr[data-superdoc-change-side="deleted"]>*{background:#fdecee}
 [data-superdoc-placeholder]{color:#6b6b6b;font:9pt ui-monospace,monospace}`;
 
