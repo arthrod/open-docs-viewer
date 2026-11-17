@@ -33,6 +33,7 @@ import { serverToggle } from "./server/navbar.ts";
 import { resolvesPublic } from "./server/net.ts";
 import { renderFailure } from "./server/failure.ts";
 import { Busy, turns } from "./server/queue.ts";
+import { tooLarge } from "./server/docx-size.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -252,6 +253,9 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
+  // Refused before the engine sees it: a render that ends the isolate takes other requests with it.
+  const refused = tooLarge(engine, got);
+  if (refused) return c.text(refused, 422, { "cache-control": "no-store" });
   let rendered: Rendered;
   let queueMs = 0;
   try {
