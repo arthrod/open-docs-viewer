@@ -102,4 +102,7 @@ Deno.test("why a fetch failed is said in our words, never the runtime's (which n
   assertEquals(fetchFailure(new TypeError("client error (Connect): tcp connect error: Connection refused (os error 111)")), "the connection was refused");
   assertEquals(fetchFailure(new Error("something else about 10.0.0.5:8443")), "the connection failed");
   assertEquals(fetchFailure("a string"), "the connection failed");
+  // Deno says "fetch failed" and keeps the reason in the cause: that is where it is read from.
+  assertEquals(fetchFailure(new TypeError("fetch failed", { cause: new Error("client error (Connect): invalid peer certificate: certificate expired") })), "its TLS certificate or handshake was not accepted");
+  assertEquals(fetchFailure(new TypeError("fetch failed", { cause: new Error("dns error: failed to lookup address information") })), "its host name could not be found");
 });

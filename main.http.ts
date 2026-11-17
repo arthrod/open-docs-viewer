@@ -164,7 +164,7 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
     // A host that does not exist, a refused connection, a broken TLS handshake: the document's
     // address is what failed. Thrown onwards, Val Town would answer 500 with the stack trace.
     // Said in a fixed phrase: the runtime's text names the stage and the address it reached.
-    console.error("fetchDocx", JSON.stringify(url.hostname), JSON.stringify(String((e as Error)?.message ?? e).slice(0, 300)));
+    console.error("fetchDocx", JSON.stringify(url.hostname), JSON.stringify(`${(e as Error)?.message ?? e} | ${((e as Error)?.cause as Error)?.message ?? ""}`.slice(0, 400)));
     return fail(422, `the document could not be fetched: ${fetchFailure(e)}`);
   }
 }

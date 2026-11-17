@@ -147,7 +147,10 @@ export function publicUrl(raw: string | undefined): URL | null {
  * full error goes to the log instead.
  */
 export function fetchFailure(e: unknown): string {
-  const m = (e instanceof Error ? e.message : String(e)).toLowerCase();
+  // Deno's fetch throws "fetch failed" and keeps the reason in `cause`: read the whole chain.
+  let m = "";
+  for (let c: unknown = e, i = 0; c != null && i < 5; c = (c as { cause?: unknown }).cause, i++) m += ` ${c instanceof Error ? c.message : String(c)}`;
+  m = m.toLowerCase();
   if (/dns|lookup|name or service not known|nodename|no such host/.test(m)) return "its host name could not be found";
   if (/certificate|tls|handshake|ssl/.test(m)) return "its TLS certificate or handshake was not accepted";
   if (/refused/.test(m)) return "the connection was refused";
