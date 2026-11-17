@@ -112,11 +112,11 @@ function layOut(id: string, bytes: Uint8Array, anew = false): Promise<Laid> {
 }
 
 /** Run `fn` on a layout that cannot be freed under it. */
-async function using<T>(p: Promise<Laid>, fn: (l: Laid) => T): Promise<T> {
+async function using<T>(p: Promise<Laid>, fn: (l: Laid) => T | Promise<T>): Promise<T> {
   const l = await p;
   l.users++;
   try {
-    return fn(l);
+    return await fn(l); // awaited: were `fn` ever asynchronous, the layout stays held until it ends
   } finally {
     l.users--;
     release(l);
@@ -162,8 +162,10 @@ export async function wordcraftHtml(bytes: Uint8Array, src: URL) {
 <meta name="viewport" content="width=device-width, initial-scale=1" /><title>WordCraft · server-rendered</title>
 <style>html,body{margin:0}body{background:#eef1f5;padding:24px 0;display:flex;flex-direction:column;align-items:center;gap:16px}
 img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0 8px 24px rgba(16,24,40,.06);max-width:calc(100vw - 16px);height:auto}</style>
-</head><body>${pages.join("\n")}</body></html>`;
-  return { html, pages: count, initMs, renderMs: layoutMs };
+</head><body>${pages.join("\n")}
+<script src="/client/wc-retry.js" defer></script></body></html>`;
+  // The page holds no markup from the document, only images of it: this Val's own retry script may run.
+  return { html, pages: count, initMs, renderMs: layoutMs, scriptSrc: "'self'" };
 }
 
 /** Layouts waiting for, or holding, their turn of the render queue for the page route, by document id. */

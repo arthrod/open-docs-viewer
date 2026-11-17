@@ -167,7 +167,8 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
       return `<tr>
       <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}${
         // The median stands on the runs that rendered; the one that did not is said, with its reason.
-        b && b.renderedMs != null && b.failed ? `<div class="ro"><span class="odv-fail">${runs.filter((x) => x == null).length} of ${runs.length} runs failed</span>: ${esc(b.failed.slice(0, 140))}</div>` : ""
+        (b && b.renderedMs != null && b.failed ? `<div class="ro"><span class="odv-fail">${runs.filter((x) => x == null).length} of ${runs.length} runs failed</span>: ${esc(b.failed.slice(0, 140))}</div>` : "") +
+        (b?.incomplete ? `<div class="ro"><span class="odv-fail">a later reading failed</span>: ${esc(b.incomplete.slice(0, 140))}</div>` : "")
       }</td>
       <td class="n">${browser}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
@@ -204,7 +205,9 @@ export function landingPage(engines: Engine[], results: Results, defaultSrc: str
     const runs = r?.runs ?? [];
     const failed = runs.filter((x) => x == null).length;
     return `<tr>
-      <td><a href="${link(e)}">${esc(e.name)}</a><div class="ro">${esc(e.readOnly)}</div></td>
+      <td><a href="${link(e)}">${esc(e.name)}</a><div class="ro">${esc(e.readOnly)}</div>${
+      r?.renderedMs != null && r.failed && failed ? `<div class="ro"><span class="odv-fail">${failed} of ${runs.length} runs failed</span>: ${esc(r.failed.slice(0, 140))}</div>` : ""
+    }${r?.incomplete ? `<div class="ro"><span class="odv-fail">a later reading failed</span>: ${esc(r.incomplete.slice(0, 140))}</div>` : ""}</td>
       <td class="n"><b>${ms(r?.renderedMs)}</b>${when(r, results)}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
       <td class="n">${mb(r?.bytes)}</td>

@@ -151,3 +151,12 @@ Deno.test("a refused turn is the page request's refusal, and the next request as
   assertEquals(ok.status, 200);
   await ok.body?.cancel();
 });
+
+Deno.test("the page loads this Val's retry script for page images, and says so to the caller for the CSP", async () => {
+  const bytes = await bytesOf("redline");
+  const out = await wordcraftHtml(bytes, new URL(`${FIXTURES}/redline.docx`));
+  assert(out.html.includes('<script src="/client/wc-retry.js" defer></script>'));
+  assertEquals(out.scriptSrc, "'self'");
+  const js = await Deno.readTextFile(new URL("../client/wc-retry.js", import.meta.url));
+  assert(js.includes('"error"') && js.includes("n >= 3"));
+});

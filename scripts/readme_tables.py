@@ -56,10 +56,11 @@ def cell(text) -> str:
     return str(text).splitlines()[0].replace("|", "\\|")[:160] if str(text) else ""
 
 
-def each(runs, failed=None) -> str:
-    """Every run's time, in the order they were made, and why a failed one failed when that is recorded."""
+def each(runs, failed=None, incomplete=None) -> str:
+    """Every run's time, in the order they were made; why a failed one failed, and what a run that rendered then lost."""
     text = ", ".join("failed" if t is None else ms(t) for t in runs or []) or "n/a"
-    return f"{text} (failed: {cell(failed)})" if failed and any(t is None for t in runs or []) else text
+    why = ([f"failed: {cell(failed)}"] if failed and any(t is None for t in runs or []) else []) + ([f"a later reading failed: {cell(incomplete)}"] if incomplete else [])
+    return f"{text} ({'; '.join(why)})" if why else text
 
 
 def dated(name: str, row: dict, head: dict) -> str:
@@ -89,7 +90,7 @@ def browser_block(data: dict) -> str:
             out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | |")
             continue
         frame = e in FRAMES
-        out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'))} | {mb(r.get('bytes'))} | "
+        out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'), r.get('incomplete'))} | {mb(r.get('bytes'))} | "
                    f"{r.get('requests') if r.get('requests') is not None else 'n/a'} | {'n/a' if frame else mb(r.get('heapBytes'))} | {mb(r.get('rendererRss'))} |")
     return "\n".join(out)
 
@@ -138,7 +139,7 @@ def samples_block(data: dict) -> str:
         # Each document is its own pass, with its own load: its table is headed by the run most of
         # its rows come from, and a row from another run says so.
         stamps = [(r.get("measuredAt"), r.get("environment")) for r in d.get("browser", {}).values() if r.get("environment")]
-        head = dict(zip(("measuredAt", "environment"), max(set(stamps), key=stamps.count))) if stamps else data
+        head = dict(zip(("measuredAt", "environment"), max(dict.fromkeys(stamps), key=stamps.count))) if stamps else data
         out += [f"**{title}**", "", said(head), "", "| Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |",
                 "| --- | ---: | --- | ---: | ---: | ---: | --- |"]
         for e in NAMES:
@@ -155,7 +156,7 @@ def samples_block(data: dict) -> str:
             if r.get("renderedMs") is None:
                 out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | {srv} |")
                 continue
-            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'))} | {'n/a' if frame else mb(r.get('heapBytes'))} | "
+            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'), r.get('incomplete'))} | {'n/a' if frame else mb(r.get('heapBytes'))} | "
                        f"{mb(r.get('rendererRss'))} | {mb(r.get('bytes'))} | {srv} |")
         out.append("")
     return "\n".join(out).rstrip()
@@ -199,10 +200,15 @@ def lighthouse_line(label: str, r: dict, head: dict) -> str:
     """One page's row: desktop · mobile in each cell."""
     d, m = r.get("desktop") or {}, r.get("mobile") or {}
     label = dated(label, r, head)
-    if d.get("performance") is None and m.get("performance") is None:
-        return f"| {label} | **no result**: {cell(d.get('error') or m.get('error') or 'PageSpeed gave no score')} | | | | | | | | | |"
-    two = lambda k, f=str: f"{'n/a' if d.get(k) is None else f(d[k])} · {'n/a' if m.get(k) is None else f(m[k])}"
     runs = lambda x: "/".join("fail" if v is None else str(v) for v in x.get("performanceRuns") or [])
+    if d.get("performance") is None and m.get("performance") is None:
+        # Both reasons, and every analysis: desktop and mobile often fail differently.
+        reasons = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error")) or "PageSpeed gave no score"
+        if d.get("error") and d.get("error") == m.get("error"):
+            reasons = cell(d["error"])
+        listed = f"{runs(d)} · {runs(m)}" if d.get("performanceRuns") or m.get("performanceRuns") else ""
+        return f"| {label} | **no result**: {reasons} | | | | | | | | | {listed} |"
+    two = lambda k, f=str: f"{'n/a' if d.get(k) is None else f(d[k])} · {'n/a' if m.get(k) is None else f(m[k])}"
     one = lambda k: d[k] if d.get(k) is not None else "n/a"
     # Why an analysis, or a whole form factor, has no result: said beside the scores, not dropped.
     why = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error") and any(v is None for v in x.get("performanceRuns") or [None]))

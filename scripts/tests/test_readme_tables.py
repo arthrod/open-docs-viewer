@@ -87,3 +87,25 @@ def test_a_lighthouse_row_says_why_a_form_factor_or_an_analysis_has_no_result():
 def test_a_browser_row_says_why_a_run_failed_beside_the_median_of_the_others():
     data = {"measuredAt": "2026-11-16", "environment": "test", "engines": {"folio": {"renderedMs": 510, "runs": [500, None, 520], "bytes": 1 << 20, "requests": 9, "heapBytes": 5 << 20, "rendererRss": 90 << 20, "failed": "not rendered within 240s"}}}
     assert "| 500 ms, failed, 520 ms (failed: not rendered within 240s) |" in rt.browser_block(data)
+
+
+def test_a_sample_table_with_two_equal_groups_of_rows_is_headed_the_same_every_time():
+    """`max(set(...))` chose between tied headings by set order, which differs between Python processes."""
+    a, b = "env A", "env B"
+    row = lambda env: {"renderedMs": 100, "runs": [100], "measuredAt": "2026-11-17", "environment": env}  # noqa: E731 - a one-line fixture
+    engines = list(rt.NAMES)[:4]
+    data = {"measuredAt": "2026-11-17", "environment": a, "samples": {"redline": {"browser": {e: row(b if i < 2 else a) for i, e in enumerate(engines)}, "server": {}}}}
+    block = rt.samples_block(data)
+    assert f"{b}." in block.split("| Engine")[0], "the heading is the first of the tied groups, in the file's order"
+
+
+def test_a_lighthouse_row_with_no_score_at_all_lists_every_analysis_and_both_reasons():
+    none = lambda why: {"performance": None, "performanceRuns": [None, None], "error": why}  # noqa: E731 - a one-line fixture
+    line = rt.lighthouse_line("X", {"desktop": none("PAGE_HUNG: a"), "mobile": none("NO_FCP: b")}, {})
+    assert "**no result**" in line and "fail/fail · fail/fail" in line and "desktop: PAGE_HUNG: a" in line and "mobile: NO_FCP: b" in line
+
+
+def test_a_browser_row_says_when_a_reading_after_rendering_failed():
+    data = {"measuredAt": "2026-11-17", "environment": "e", "engines": {"folio": {"renderedMs": 100, "runs": [100, None], "failed": "not rendered", "incomplete": "TimeoutError: heap"}}}
+    line = [l for l in rt.browser_block(data).splitlines() if l.startswith("| folio")][0]
+    assert "failed: not rendered" in line and "a later reading failed: TimeoutError: heap" in line

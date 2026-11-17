@@ -6,6 +6,8 @@ already published, what counts as a failed transfer, which processes are a
 Chrome's renderers, and how a Chrome that will not close is ended.
 """
 import argparse
+import asyncio
+import datetime
 import json
 import os
 import re
@@ -24,15 +26,50 @@ def pkill_args(profile: str) -> list[str]:
     return ["pkill", "-f", "--", f"--user-data-dir={profile}"]
 
 
+async def close_context(ctx, profile: str, wait_s: float = 20) -> str | None:
+    """Close a Playwright context, and end its Chrome if it will not close. Returns what went wrong, or None.
+
+    Used on every way out of a run, the setup failures included: a context
+    whose page could not be opened still has a Chrome behind it.
+    """
+    try:
+        await asyncio.wait_for(ctx.close(), wait_s)
+        return None
+    except Exception:
+        return end_chrome(profile)  # a renderer that never yields does not close either
+
+
+def stopped_path(path: str | None, now: datetime.datetime | None = None) -> str | None:
+    """Where a run that was stopped early writes its runs: beside `path`, never over it.
+
+    The medians file keeps the earlier entries of the engines such a run never
+    reached; were the day's raw file overwritten, those entries would have no
+    runs behind them.
+    """
+    if not path:
+        return path
+    stamp = (now or datetime.datetime.now(datetime.timezone.utc)).strftime("%H%M%SZ")
+    root, ext = os.path.splitext(path)
+    return f"{root}-stopped-{stamp}{ext}"
+
+
 def end_chrome(profile: str, wait_s: float = 5.0) -> str | None:
     """End the Chrome started on `profile` and see that it went. Returns what went wrong, or None.
 
-    pkill exiting 1 means nothing matched: it was already gone (pgrep likewise;
-    2 and 3 are errors of the tool, reported). After a
-    delivered signal the process is looked for until it is gone or `wait_s`
-    has passed; one that is still there is reported, so the caller can stop
-    instead of measuring the next page beside a leftover browser.
+    After pkill the process is looked for with pgrep until it is gone (pgrep
+    exits 1) or `wait_s` has passed; one that is still there is reported, so
+    the caller can stop instead of measuring the next page beside a leftover
+    browser. pkill's own exit 1 proves nothing (on procps it is also "matched,
+    none could be signalled"), a tool that fails (exit 2 or 3) or cannot be
+    started at all is reported the same way: none of them shows that Chrome went.
     """
+    try:
+        return _end_chrome(profile, wait_s)
+    except OSError as e:  # pkill or pgrep could not be started
+        return f"{type(e).__name__}: {e}"[:160] + "; that Chrome may still be running"
+
+
+def _end_chrome(profile: str, wait_s: float) -> str | None:
     p = subprocess.run(pkill_args(profile), capture_output=True)
     # 1 is "nothing matched" on macOS; on procps it can also be "matched, none could be signalled".
     # Either way the process is looked for below, so a Chrome that was not signalled is reported.

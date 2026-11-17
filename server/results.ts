@@ -17,6 +17,8 @@ export interface EngineResult {
   how: string | null;
   /** Why a run did not render, when one did not and others did. */
   failed?: string | null;
+  /** What a run that rendered then failed to read (its time is kept). */
+  incomplete?: string | null;
   /** When and how this engine was measured, when the file records it per engine (a partial re-run). */
   measuredAt?: string;
   environment?: string;

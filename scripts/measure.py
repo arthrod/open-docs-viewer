@@ -41,7 +41,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, chrome_note, end_chrome, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, write_raw
+from measure_lib import check_results_document, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -69,7 +69,12 @@ async def one(pw, slug: str) -> dict:
     url = f"{BASE}/v/{slug}?src={urllib.parse.quote(src, safe='')}"
     with tempfile.TemporaryDirectory() as profile:
         ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
-        page = ctx.pages[0] if ctx.pages else await ctx.new_page()
+        try:
+            page = ctx.pages[0] if ctx.pages else await ctx.new_page()
+        except Exception as e:
+            # Chrome started and gave no page: it is still there, and is closed like any other run's.
+            left = await close_context(ctx, profile)
+            return {"engine": slug, **machine_load(), "error": f"{type(e).__name__}: {e}"[:300], **({"cleanup": left} if left else {})}
         sizes: list[int] = []
 
         async def finished(req):
@@ -116,13 +121,10 @@ async def one(pw, slug: str) -> dict:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)
         out["requests"] = len(sizes)
-        try:
-            await asyncio.wait_for(ctx.close(), 20)
-        except Exception:
-            left = end_chrome(profile)  # a renderer that never yields
-            if left:
-                out["cleanup"] = left
-                print(f"{slug}: {left}", file=sys.stderr, flush=True)
+        left = await close_context(ctx, profile)
+        if left:
+            out["cleanup"] = left
+            print(f"{slug}: {left}", file=sys.stderr, flush=True)
         return out
 
 
@@ -156,7 +158,8 @@ async def main():
     raw = [x for xs in res.values() for x in xs]
     meta = {"measuredAt": datetime.date.today().isoformat(), "environment": environment(runs, raw)}
     print(json.dumps({"engines": summary, "raw": res}, indent=1))
-    write_raw(ARGS.raw, {**meta, "document": DOCS[DOC_ID][1]}, raw)
+    # A stopped run's runs go beside the day's file: the entries it did not reach keep theirs.
+    write_raw(stopped_path(ARGS.raw) if stopped else ARGS.raw, {**meta, "document": DOCS[DOC_ID][1], **({"stopped": stopped} if stopped else {})}, raw)
     if out_path:
         write_results(out_path, summary, meta)
     if ARGS.samples:

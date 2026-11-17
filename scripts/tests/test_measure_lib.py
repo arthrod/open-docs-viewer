@@ -374,3 +374,36 @@ def test_the_readme_generator_runs_isolated():
     root = Path(__file__).resolve().parents[2]
     done = subprocess.run([sys.executable, "-I", str(root / "scripts" / "readme_tables.py"), "--check"], capture_output=True, text=True, cwd=root)
     assert "ModuleNotFoundError" not in done.stderr and done.returncode in (0, 1), done.stderr[-300:]
+
+
+def test_end_chrome_reports_a_tool_that_cannot_be_started(monkeypatch):
+    def run(args, **k):
+        raise FileNotFoundError(2, "No such file or directory", args[0])
+
+    monkeypatch.setattr(lib.subprocess, "run", run)
+    assert "may still be running" in lib.end_chrome("/tmp/p", wait_s=0.1)
+
+
+def test_a_context_that_will_not_close_has_its_chrome_ended(monkeypatch):
+    import asyncio
+
+    class Ctx:
+        def __init__(self, ok):
+            self.ok = ok
+
+        async def close(self):
+            if not self.ok:
+                raise RuntimeError("target closed")
+
+    ended = []
+    monkeypatch.setattr(lib, "end_chrome", lambda profile: ended.append(profile) or "that Chrome is still running")
+    assert asyncio.run(lib.close_context(Ctx(True), "/tmp/p")) is None and ended == []
+    assert asyncio.run(lib.close_context(Ctx(False), "/tmp/p")) == "that Chrome is still running" and ended == ["/tmp/p"]
+
+
+def test_a_stopped_run_writes_beside_the_days_file_not_over_it():
+    import datetime
+
+    now = datetime.datetime(2026, 11, 17, 5, 6, 7, tzinfo=datetime.timezone.utc)
+    assert lib.stopped_path("results/raw/2026-11-17-browser-showcase.json", now) == "results/raw/2026-11-17-browser-showcase-stopped-050607Z.json"
+    assert lib.stopped_path(None) is None

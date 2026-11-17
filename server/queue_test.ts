@@ -41,7 +41,11 @@ Deno.test("a render that never ends gives its turn back after the limit, and the
   const err = await assertRejects(() => stuck, TookTooLong);
   assertEquals(err.message.includes("40"), false); // said in seconds, for the reader of the answer
   assertEquals((await next).value, "next");
-  assertEquals((await run(() => Promise.resolve("later"))).waitedMs < 30, true); // the counter is right again
+  assertEquals((await run(() => Promise.resolve("later"))).value, "later");
+  // The counter is right again: a queue of 6 takes seven more (one running, six waiting) and refuses the eighth.
+  const held = Array.from({ length: 7 }, () => run(() => new Promise<number>((r) => setTimeout(() => r(1), 5))));
+  await assertRejects(() => run(() => Promise.resolve(0)), Busy);
+  assertEquals((await Promise.all(held)).length, 7);
 });
 
 Deno.test("a render that ends in time is not cut short, and its own failure is its own", async () => {

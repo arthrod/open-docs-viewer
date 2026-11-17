@@ -177,3 +177,8 @@ Deno.test("samples: a run that failed says why, beside the median of the runs th
   const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, runs: [800, null, 810], failed: "not rendered within 240s <i>" } as typeof browserRow }), noClient);
   assertStringIncludes(html, "1 of 3 runs failed</span>: not rendered within 240s &lt;i&gt;");
 });
+
+Deno.test("samples: a run that rendered and then lost a reading says so", () => {
+  const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, incomplete: "TimeoutError: heap <b>" } as typeof browserRow }), noClient);
+  assertStringIncludes(html, "a later reading failed</span>: TimeoutError: heap &lt;b&gt;");
+});
