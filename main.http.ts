@@ -32,6 +32,7 @@ import { currentResults } from "./server/results.ts";
 import { serverToggle } from "./server/navbar.ts";
 import { resolvesPublic } from "./server/net.ts";
 import { renderFailure } from "./server/failure.ts";
+import { Busy, turns } from "./server/queue.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -237,6 +238,9 @@ export const RENDERERS: Record<string, Renderer> = {
   }),
 };
 
+// One render at a time in this isolate, and at most six waiting (server/queue.ts).
+const renderTurn = turns(6);
+
 app.get("/r/:engine", async (c) => {
   const engine = c.req.param("engine");
   // An own key only: "constructor" and the like are on every object and are not engines.
@@ -249,15 +253,22 @@ app.get("/r/:engine", async (c) => {
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
   let rendered: Rendered;
+  let queueMs = 0;
   try {
-    rendered = await render(got, src);
+    const turn = await renderTurn(() => render(got, src));
+    rendered = turn.value;
+    queueMs = turn.waitedMs;
   } catch (err) {
+    if (err instanceof Busy) {
+      return c.text("this server is rendering other documents: try again in a moment", 503, { "retry-after": "10", "cache-control": "no-store" });
+    }
     // A zip that is not a .docx, or a document the engine cannot read.
     console.error(`/r/${engine} ${src.href}:`, err);
     return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
   }
   const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = rendered;
-  const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
+  // queue: the wait for this isolate to finish the renders asked before this one.
+  const timing = `fetch;dur=${fetchMs}, queue;dur=${queueMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
     "server-timing": timing,
