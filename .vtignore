@@ -2,3 +2,9 @@
 .gitignore
 client/dx-paginate.js
 .github/
+.scratch
+.impeccable
+__pycache__
+.pytest_cache
+cov
+.ruff_cache

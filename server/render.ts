@@ -100,6 +100,14 @@ ${NAVBAR_CSS}
 .odv-form input[type=url],.odv-form select{font-family:var(--font-sans);font-size:15px;padding:12px 14px;border:1px solid var(--ink);border-radius:0;background:var(--surface);color:var(--ink);width:100%}
 .odv-form select{font-family:var(--font-mono);font-size:12px;letter-spacing:.03em;text-transform:uppercase}
 .odv-form .fld:has(select){flex:0 1 240px}
+.odv-samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 14px}
+.odv-samples > span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.odv-samples .btn{padding:6px 12px;font-size:12px}
+.odv-h3{font-size:17px;margin:28px 0 10px}
+.odv-h3 .ro{display:block;font-family:var(--font-mono);font-size:10px;font-weight:400;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.odv-fail{font-weight:600;color:#b42318}
+.lh-tbl td.n{white-space:nowrap}
+.lh-good{color:#0a7a3d}.lh-mid{color:#9a5b00}.lh-bad{color:#b42318}
 .odv-foot{margin:52px 0 44px;padding-top:22px;border-top:1px solid var(--ink);font-family:var(--font-mono);font-size:11px;letter-spacing:.05em;
   text-transform:uppercase;color:var(--muted);line-height:1.6}
 .odv-foot a{text-decoration:underline;text-decoration-color:var(--link-rule);text-underline-offset:2px}
@@ -133,6 +141,8 @@ export async function docxodusHtml(bytes: Uint8Array) {
     paginationMode: m.PaginationMode.Paginated,
     renderHeadersAndFooters: true,
     renderFootnotesAndEndnotes: true,
+    // A redline is shown as one: insertions and deletions, not the accepted text.
+    renderTrackedChanges: true,
   });
   // Shipped as JSON data (never executed); "<" escaped so nothing in it can close the element.
   const data = JSON.stringify(converted).replace(/</g, "\\u003c");

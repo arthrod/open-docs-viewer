@@ -1,0 +1,5 @@
+# What CI lints the Python scripts for: mistakes (pyflakes: unused and undefined names, shadowed
+# definitions; E9: syntax errors), not layout. The scripts keep compact imports and one-line
+# helpers on purpose, and are not reformatted.
+[lint]
+select = ["E9", "F"]
