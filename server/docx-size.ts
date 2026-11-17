@@ -47,5 +47,5 @@ export function tooLarge(engine: string, docx: Uint8Array, limits = RENDER_LIMIT
   const size = partSize(docx, "word/document.xml");
   if (size == null || size <= limit) return null;
   const mb = (n: number) => (n / 1e6).toFixed(1);
-  return `this document is too large for this engine's server render (${mb(size)} MB of document XML, limit ${mb(limit)} MB): larger ones end the server process. Open it in the browser render instead.`;
+  return `this document is too large for this engine's server render (its text and structure unpack to ${mb(size)} MB; the limit is ${mb(limit)} MB): larger ones end the server process. Open it in the browser render instead.`;
 }

@@ -1,0 +1,2314 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "",
+ "raw": [
+  {
+   "page": "v/docxodus",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 217,
+    "lcpMs": 6627,
+    "tbtMs": 689,
+    "cls": 0.001,
+    "speedIndexMs": 2811
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 45,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 38562,
+    "tbtMs": 944,
+    "cls": 0.0,
+    "speedIndexMs": 9736
+   }
+  },
+  {
+   "page": "v/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 74,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 770,
+    "lcpMs": 8178,
+    "tbtMs": 132,
+    "cls": 0.0,
+    "speedIndexMs": 3034
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 91,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 212,
+    "lcpMs": 1632,
+    "tbtMs": 147,
+    "cls": 0.002,
+    "speedIndexMs": 513
+   }
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 50,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1676,
+    "lcpMs": 29307,
+    "tbtMs": 585,
+    "cls": 0.0,
+    "speedIndexMs": 10994
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 4811,
+    "tbtMs": 573,
+    "cls": 0.002,
+    "speedIndexMs": 2230
+   }
+  },
+  {
+   "page": "v/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 51,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 448,
+    "lcpMs": 2922,
+    "tbtMs": 1024,
+    "cls": 0.002,
+    "speedIndexMs": 2029
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1658,
+    "lcpMs": 13735,
+    "tbtMs": 1254,
+    "cls": 0.0,
+    "speedIndexMs": 7464
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1681,
+    "lcpMs": 17462,
+    "tbtMs": 942,
+    "cls": 0.05,
+    "speedIndexMs": 4780
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 52,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 502,
+    "lcpMs": 3239,
+    "tbtMs": 614,
+    "cls": 0.137,
+    "speedIndexMs": 1312
+   }
+  },
+  {
+   "page": "v/canvas-editor",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 80,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 12,
+    "cls": 0.079,
+    "speedIndexMs": 715
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 91,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 789,
+    "lcpMs": 789,
+    "tbtMs": 333,
+    "cls": 0.057,
+    "speedIndexMs": 3509
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 58,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 897,
+    "cls": 0.327,
+    "speedIndexMs": 5645
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 41,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 2296,
+    "tbtMs": 855,
+    "cls": 0.288,
+    "speedIndexMs": 2298
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 770,
+    "lcpMs": 770,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 5578
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 0,
+    "cls": 0.086,
+    "speedIndexMs": 1596
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/apryse",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 73,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 555,
+    "cls": 0.007,
+    "speedIndexMs": 2002
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 1017,
+    "cls": 0.0,
+    "speedIndexMs": 6051
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 208,
+    "cls": 0.003,
+    "speedIndexMs": 1255
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 776,
+    "lcpMs": 776,
+    "tbtMs": 260,
+    "cls": 0.0,
+    "speedIndexMs": 3437
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 912,
+    "lcpMs": 1843,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 4301
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 252,
+    "lcpMs": 519,
+    "tbtMs": 4,
+    "cls": 0.0,
+    "speedIndexMs": 837
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 942,
+    "lcpMs": 2416,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1421
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 309,
+    "lcpMs": 603,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 761
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 80,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1824,
+    "lcpMs": 5124,
+    "tbtMs": 0,
+    "cls": 0.008,
+    "speedIndexMs": 2522
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 507,
+    "lcpMs": 867,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 1011
+   }
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 781,
+    "lcpMs": 781,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 815
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 245,
+    "lcpMs": 245,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 330
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 796,
+    "lcpMs": 2586,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1544
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 259,
+    "lcpMs": 1328,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 801
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 779,
+    "lcpMs": 1824,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1243
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 222,
+    "lcpMs": 378,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 290
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1548
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 210,
+    "lcpMs": 210,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 835
+   }
+  },
+  {
+   "page": "v/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 41,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 41560,
+    "tbtMs": 1398,
+    "cls": 0.0,
+    "speedIndexMs": 10386
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 38,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 215,
+    "lcpMs": 6948,
+    "tbtMs": 1054,
+    "cls": 0.001,
+    "speedIndexMs": 3912
+   }
+  },
+  {
+   "page": "v/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 443,
+    "lcpMs": 2685,
+    "tbtMs": 514,
+    "cls": 0.002,
+    "speedIndexMs": 1973
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 50,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1655,
+    "lcpMs": 13445,
+    "tbtMs": 682,
+    "cls": 0.0,
+    "speedIndexMs": 7872
+   }
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 50,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1659,
+    "lcpMs": 29210,
+    "tbtMs": 575,
+    "cls": 0.0,
+    "speedIndexMs": 10614
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 453,
+    "lcpMs": 4837,
+    "tbtMs": 955,
+    "cls": 0.001,
+    "speedIndexMs": 2577
+   }
+  },
+  {
+   "page": "v/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 63,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 795,
+    "lcpMs": 8083,
+    "tbtMs": 450,
+    "cls": 0.0,
+    "speedIndexMs": 3875
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 84,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 215,
+    "lcpMs": 1613,
+    "tbtMs": 254,
+    "cls": 0.002,
+    "speedIndexMs": 609
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/canvas-editor",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 772,
+    "lcpMs": 772,
+    "tbtMs": 72,
+    "cls": 0.057,
+    "speedIndexMs": 2881
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 80,
+    "fcpMs": 224,
+    "lcpMs": 224,
+    "tbtMs": 109,
+    "cls": 0.079,
+    "speedIndexMs": 728
+   }
+  },
+  {
+   "page": "v/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 54,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 212,
+    "lcpMs": 2147,
+    "tbtMs": 426,
+    "cls": 0.288,
+    "speedIndexMs": 1802
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 55,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 1131,
+    "cls": 0.327,
+    "speedIndexMs": 6059
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 482,
+    "lcpMs": 3187,
+    "tbtMs": 354,
+    "cls": 0.137,
+    "speedIndexMs": 1443
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 48,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1729,
+    "lcpMs": 17845,
+    "tbtMs": 1233,
+    "cls": 0.05,
+    "speedIndexMs": 3833
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 762,
+    "lcpMs": 762,
+    "tbtMs": 777,
+    "cls": 0.097,
+    "speedIndexMs": 7580
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 74,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 555,
+    "cls": 0.007,
+    "speedIndexMs": 1914
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 802,
+    "lcpMs": 802,
+    "tbtMs": 64,
+    "cls": 0.0,
+    "speedIndexMs": 4022
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 54,
+    "cls": 0.003,
+    "speedIndexMs": 1368
+   }
+  },
+  {
+   "page": "v/word-online",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 0,
+    "cls": 0.087,
+    "speedIndexMs": 1273
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4991
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 912,
+    "lcpMs": 1849,
+    "tbtMs": 2,
+    "cls": 0.008,
+    "speedIndexMs": 1765
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 262,
+    "lcpMs": 536,
+    "tbtMs": 3,
+    "cls": 0.0,
+    "speedIndexMs": 868
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 941,
+    "lcpMs": 2119,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1667
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 260,
+    "lcpMs": 563,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 350
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 76,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1840,
+    "lcpMs": 6190,
+    "tbtMs": 0,
+    "cls": 0.009,
+    "speedIndexMs": 2259
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 559,
+    "lcpMs": 1439,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 848
+   }
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 899
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 247,
+    "lcpMs": 247,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 388
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 250,
+    "lcpMs": 407,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 273
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 802,
+    "lcpMs": 2298,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 829
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 77,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 815,
+    "lcpMs": 6947,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 893
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 256,
+    "lcpMs": 1324,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 315
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 775,
+    "lcpMs": 775,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1306
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 478
+   }
+  },
+  {
+   "page": "v/plate",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 212,
+    "lcpMs": 1611,
+    "tbtMs": 80,
+    "cls": 0.002,
+    "speedIndexMs": 449
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 69,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 772,
+    "lcpMs": 8191,
+    "tbtMs": 279,
+    "cls": 0.0,
+    "speedIndexMs": 3370
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 46,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1656,
+    "lcpMs": 13542,
+    "tbtMs": 972,
+    "cls": 0.0,
+    "speedIndexMs": 7022
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 478,
+    "lcpMs": 3086,
+    "tbtMs": 1241,
+    "cls": 0.002,
+    "speedIndexMs": 2229
+   }
+  },
+  {
+   "page": "v/docxodus",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 212,
+    "lcpMs": 6846,
+    "tbtMs": 730,
+    "cls": 0.001,
+    "speedIndexMs": 2647
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 36,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 779,
+    "lcpMs": 40055,
+    "tbtMs": 3591,
+    "cls": 0.0,
+    "speedIndexMs": 12897
+   }
+  },
+  {
+   "page": "v/eigenpal",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 44,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 449,
+    "lcpMs": 4756,
+    "tbtMs": 953,
+    "cls": 0.001,
+    "speedIndexMs": 2295
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1659,
+    "lcpMs": 29355,
+    "tbtMs": 1228,
+    "cls": 0.0,
+    "speedIndexMs": 11113
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 58,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 468,
+    "lcpMs": 3112,
+    "tbtMs": 415,
+    "cls": 0.137,
+    "speedIndexMs": 1361
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 47,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1713,
+    "lcpMs": 17557,
+    "tbtMs": 1079,
+    "cls": 0.05,
+    "speedIndexMs": 5014
+   }
+  },
+  {
+   "page": "v/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 48,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 210,
+    "lcpMs": 2143,
+    "tbtMs": 598,
+    "cls": 0.288,
+    "speedIndexMs": 1837
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 55,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 1124,
+    "cls": 0.336,
+    "speedIndexMs": 5756
+   }
+  },
+  {
+   "page": "v/apryse",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/v/apryse. Try checking the URL for validity."
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 769,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 3157
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 0,
+    "cls": 0.003,
+    "speedIndexMs": 1322
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "r/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 274,
+    "lcpMs": 575,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1376
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 953,
+    "lcpMs": 2417,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 2088
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 79,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1840,
+    "lcpMs": 5140,
+    "tbtMs": 0,
+    "cls": 0.008,
+    "speedIndexMs": 2947
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 762,
+    "lcpMs": 1522,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 1171
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 84,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 792,
+    "lcpMs": 4529,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 792
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 242,
+    "lcpMs": 1313,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 368
+   }
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 799,
+    "lcpMs": 799,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 926
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 225,
+    "lcpMs": 225,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 430
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "r/wordcraft",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 234,
+    "lcpMs": 390,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 296
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 834,
+    "lcpMs": 2326,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1193
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "r/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 807,
+    "lcpMs": 807,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1352
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 516
+   }
+  },
+  {
+   "page": "v/docxodus",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 39,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 234,
+    "lcpMs": 6875,
+    "tbtMs": 1044,
+    "cls": 0.001,
+    "speedIndexMs": 3283
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 39,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 41407,
+    "tbtMs": 1747,
+    "cls": 0.0,
+    "speedIndexMs": 9955
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 46,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1655,
+    "lcpMs": 13537,
+    "tbtMs": 903,
+    "cls": 0.0,
+    "speedIndexMs": 7581
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 56,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 444,
+    "lcpMs": 2732,
+    "tbtMs": 676,
+    "cls": 0.002,
+    "speedIndexMs": 1997
+   }
+  },
+  {
+   "page": "v/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 775,
+    "lcpMs": 8291,
+    "tbtMs": 308,
+    "cls": 0.0,
+    "speedIndexMs": 4521
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 79,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 249,
+    "lcpMs": 1675,
+    "tbtMs": 342,
+    "cls": 0.002,
+    "speedIndexMs": 593
+   }
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 47,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1658,
+    "lcpMs": 29108,
+    "tbtMs": 761,
+    "cls": 0.0,
+    "speedIndexMs": 10969
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 449,
+    "lcpMs": 4832,
+    "tbtMs": 1113,
+    "cls": 0.001,
+    "speedIndexMs": 2416
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 58,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1661,
+    "lcpMs": 17012,
+    "tbtMs": 480,
+    "cls": 0.05,
+    "speedIndexMs": 5453
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 466,
+    "lcpMs": 3269,
+    "tbtMs": 783,
+    "cls": 0.137,
+    "speedIndexMs": 1386
+   }
+  },
+  {
+   "page": "v/canvas-editor",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 779,
+    "lcpMs": 779,
+    "tbtMs": 230,
+    "cls": 0.008,
+    "speedIndexMs": 3344
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 80,
+    "fcpMs": 244,
+    "lcpMs": 244,
+    "tbtMs": 91,
+    "cls": 0.079,
+    "speedIndexMs": 770
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 56,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 847,
+    "cls": 0.327,
+    "speedIndexMs": 7676
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 40,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 2284,
+    "tbtMs": 833,
+    "cls": 0.288,
+    "speedIndexMs": 2837
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 764,
+    "tbtMs": 727,
+    "cls": 0.097,
+    "speedIndexMs": 7891
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 77,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 399,
+    "cls": 0.002,
+    "speedIndexMs": 2442
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 806,
+    "lcpMs": 806,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 2221
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 54,
+    "seo": 90,
+    "fcpMs": 222,
+    "lcpMs": 222,
+    "tbtMs": 52,
+    "cls": 0.003,
+    "speedIndexMs": 1561
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4932
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 221,
+    "lcpMs": 221,
+    "tbtMs": 0,
+    "cls": 0.085,
+    "speedIndexMs": 2391
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 913,
+    "lcpMs": 1838,
+    "tbtMs": 6,
+    "cls": 0.008,
+    "speedIndexMs": 1706
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 255,
+    "lcpMs": 526,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 673
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 967,
+    "lcpMs": 2462,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1113
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 353,
+    "lcpMs": 594,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 516
+   }
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 777,
+    "lcpMs": 777,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1177
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 248,
+    "lcpMs": 248,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 362
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 88,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1842,
+    "lcpMs": 3792,
+    "tbtMs": 0,
+    "cls": 0.008,
+    "speedIndexMs": 1882
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 503,
+    "lcpMs": 1143,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 842
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 789,
+    "lcpMs": 2428,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1584
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 247,
+    "lcpMs": 806,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 576
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 2256,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 764
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 226,
+    "lcpMs": 384,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 237
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1594
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 454
+   }
+  },
+  {
+   "page": "v/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 45,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 40208,
+    "tbtMs": 958,
+    "cls": 0.0,
+    "speedIndexMs": 8741
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 38,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 213,
+    "lcpMs": 6899,
+    "tbtMs": 1067,
+    "cls": 0.001,
+    "speedIndexMs": 3497
+   }
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1662,
+    "lcpMs": 28728,
+    "tbtMs": 573,
+    "cls": 0.0,
+    "speedIndexMs": 10588
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 4825,
+    "tbtMs": 572,
+    "cls": 0.001,
+    "speedIndexMs": 2350
+   }
+  },
+  {
+   "page": "v/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 57,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 444,
+    "lcpMs": 2723,
+    "tbtMs": 623,
+    "cls": 0.002,
+    "speedIndexMs": 1859
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 82,
+    "fcpMs": 1654,
+    "lcpMs": 13749,
+    "tbtMs": 1198,
+    "cls": 0.0,
+    "speedIndexMs": 7560
+   }
+  },
+  {
+   "page": "v/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 64,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 794,
+    "lcpMs": 8291,
+    "tbtMs": 416,
+    "cls": 0.0,
+    "speedIndexMs": 3438
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 83,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 216,
+    "lcpMs": 1671,
+    "tbtMs": 262,
+    "cls": 0.002,
+    "speedIndexMs": 558
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/canvas-editor",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 784,
+    "lcpMs": 784,
+    "tbtMs": 267,
+    "cls": 0.008,
+    "speedIndexMs": 3120
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 80,
+    "fcpMs": 223,
+    "lcpMs": 223,
+    "tbtMs": 31,
+    "cls": 0.079,
+    "speedIndexMs": 800
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1668,
+    "lcpMs": 16868,
+    "tbtMs": 416,
+    "cls": 0.05,
+    "speedIndexMs": 5224
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 63,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 507,
+    "lcpMs": 3205,
+    "tbtMs": 318,
+    "cls": 0.137,
+    "speedIndexMs": 1368
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 63,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 613,
+    "cls": 0.327,
+    "speedIndexMs": 5978
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 45,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 2235,
+    "tbtMs": 639,
+    "cls": 0.288,
+    "speedIndexMs": 2181
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 772,
+    "lcpMs": 772,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 5630
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 0,
+    "cls": 0.087,
+    "speedIndexMs": 1570
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 770,
+    "lcpMs": 770,
+    "tbtMs": 155,
+    "cls": 0.0,
+    "speedIndexMs": 3891
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 221,
+    "lcpMs": 221,
+    "tbtMs": 69,
+    "cls": 0.003,
+    "speedIndexMs": 1040
+   }
+  },
+  {
+   "page": "v/apryse",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 1033,
+    "cls": 0.002,
+    "speedIndexMs": 2318
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 798,
+    "lcpMs": 798,
+    "tbtMs": 1439,
+    "cls": 0.0,
+    "speedIndexMs": 8313
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 917,
+    "lcpMs": 1862,
+    "tbtMs": 14,
+    "cls": 0.008,
+    "speedIndexMs": 1973
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 90,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 266,
+    "lcpMs": 563,
+    "tbtMs": 34,
+    "cls": 0.0,
+    "speedIndexMs": 594
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 959,
+    "lcpMs": 2283,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 967
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 70,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 288,
+    "lcpMs": 554,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 394
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 93,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 2052,
+    "lcpMs": 2952,
+    "tbtMs": 0,
+    "cls": 0.009,
+    "speedIndexMs": 2691
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 92,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 666,
+    "lcpMs": 1546,
+    "tbtMs": 0,
+    "cls": 0.005,
+    "speedIndexMs": 834
+   }
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 792,
+    "lcpMs": 792,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 901
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 247,
+    "lcpMs": 247,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 329
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 784,
+    "lcpMs": 2282,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 784
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 250,
+    "lcpMs": 408,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 294
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 794,
+    "lcpMs": 2897,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 794
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 235,
+    "lcpMs": 1347,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 283
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 762,
+    "lcpMs": 762,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1468
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 98,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 210,
+    "lcpMs": 210,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 479
+   }
+  }
+ ]
+}

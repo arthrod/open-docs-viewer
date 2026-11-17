@@ -1,239 +1,283 @@
 {
  "measuredAt": "2026-11-16",
- "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 3 analyses per page, median",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
  "base": "https://viewers.benchmarks.law",
  "pages": {
   "v/docxodus": {
    "desktop": {
-    "performance": 40,
+    "performance": 39,
     "accessibility": 95,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 217,
-    "lcpMs": 6862,
-    "tbtMs": 898,
+    "fcpMs": 215,
+    "lcpMs": 6875,
+    "tbtMs": 1044,
     "cls": 0.001,
-    "speedIndexMs": 3212,
+    "speedIndexMs": 3283,
     "performanceRuns": [
-     41,
-     40,
-     37
-    ],
-    "error": null
-   },
-   "mobile": {
-    "performance": 42,
-    "accessibility": 94,
-    "bestPractices": 100,
-    "seo": 91,
-    "fcpMs": 776,
-    "lcpMs": 40061,
-    "tbtMs": 1176,
-    "cls": 0.0,
-    "speedIndexMs": 10770,
-    "performanceRuns": [
-     42,
-     46,
+     43,
+     38,
+     43,
+     39,
      38
     ],
     "error": null
-   }
+   },
+   "mobile": {
+    "performance": 41,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 40208,
+    "tbtMs": 1398,
+    "cls": 0.0,
+    "speedIndexMs": 9955,
+    "performanceRuns": [
+     45,
+     41,
+     36,
+     39,
+     45
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/folio": {
    "desktop": {
-    "performance": 54,
+    "performance": 56,
     "accessibility": 92,
     "bestPractices": 96,
     "seo": 82,
-    "fcpMs": 451,
-    "lcpMs": 2815,
-    "tbtMs": 784,
+    "fcpMs": 444,
+    "lcpMs": 2732,
+    "tbtMs": 676,
     "cls": 0.002,
-    "speedIndexMs": 2226,
+    "speedIndexMs": 1997,
     "performanceRuns": [
+     51,
+     60,
+     49,
      56,
-     54,
-     51
+     57
     ],
     "error": null
    },
    "mobile": {
-    "performance": 49,
+    "performance": 46,
     "accessibility": 92,
     "bestPractices": 96,
     "seo": 82,
     "fcpMs": 1655,
-    "lcpMs": 13662,
-    "tbtMs": 737,
-    "cls": 0,
-    "speedIndexMs": 7658,
+    "lcpMs": 13542,
+    "tbtMs": 972,
+    "cls": 0.0,
+    "speedIndexMs": 7560,
     "performanceRuns": [
-     42,
-     49,
-     50
+     43,
+     50,
+     46,
+     46,
+     43
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/eigenpal": {
    "desktop": {
-    "performance": 41,
+    "performance": 44,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 449,
-    "lcpMs": 4819,
-    "tbtMs": 1529,
+    "fcpMs": 450,
+    "lcpMs": 4825,
+    "tbtMs": 953,
     "cls": 0.001,
-    "speedIndexMs": 2800,
+    "speedIndexMs": 2350,
     "performanceRuns": [
-     41,
-     41,
-     39
+     49,
+     43,
+     44,
+     43,
+     49
     ],
     "error": null
    },
    "mobile": {
-    "performance": 47,
+    "performance": 50,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 1662,
-    "lcpMs": 28833,
-    "tbtMs": 700,
+    "fcpMs": 1659,
+    "lcpMs": 29210,
+    "tbtMs": 585,
     "cls": 0.0,
-    "speedIndexMs": 10169,
+    "speedIndexMs": 10969,
     "performanceRuns": [
-     51,
+     50,
+     50,
+     41,
      47,
-     44
+     51
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/plate": {
    "desktop": {
-    "performance": 72,
+    "performance": 84,
     "accessibility": 98,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 234,
-    "lcpMs": 1638,
-    "tbtMs": 505,
+    "fcpMs": 215,
+    "lcpMs": 1632,
+    "tbtMs": 254,
     "cls": 0.002,
-    "speedIndexMs": 2355,
+    "speedIndexMs": 558,
     "performanceRuns": [
-     78,
-     46,
-     72
+     91,
+     84,
+     94,
+     79,
+     83
     ],
     "error": null
    },
    "mobile": {
-    "performance": 61,
+    "performance": 66,
     "accessibility": 98,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 771,
-    "lcpMs": 8252,
-    "tbtMs": 506,
+    "fcpMs": 775,
+    "lcpMs": 8191,
+    "tbtMs": 308,
     "cls": 0.0,
-    "speedIndexMs": 4305,
+    "speedIndexMs": 3438,
     "performanceRuns": [
-     46,
-     61,
-     68
+     74,
+     63,
+     69,
+     66,
+     64
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/docen": {
    "desktop": {
-    "performance": 39,
+    "performance": 45,
     "accessibility": 82,
     "bestPractices": 88,
     "seo": 90,
-    "fcpMs": 235,
-    "lcpMs": 2299,
-    "tbtMs": 699,
+    "fcpMs": 213,
+    "lcpMs": 2235,
+    "tbtMs": 639,
     "cls": 0.288,
-    "speedIndexMs": 3675,
+    "speedIndexMs": 2181,
     "performanceRuns": [
-     28,
-     44,
-     39
+     41,
+     54,
+     48,
+     40,
+     45
     ],
     "error": null
    },
    "mobile": {
-    "performance": 54,
+    "performance": 56,
     "accessibility": 85,
     "bestPractices": 88,
     "seo": 91,
-    "fcpMs": 767,
-    "lcpMs": 767,
-    "tbtMs": 930,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 897,
     "cls": 0.327,
-    "speedIndexMs": 7033,
+    "speedIndexMs": 5978,
     "performanceRuns": [
-     52,
-     61,
-     54
-    ],
-    "error": null
-   }
-  },
-  "v/wordcraft": {
-   "desktop": {
-    "performance": 100,
-    "accessibility": 100,
-    "bestPractices": 96,
-    "seo": 90,
-    "fcpMs": 213,
-    "lcpMs": 680,
-    "tbtMs": 0,
-    "cls": 0.002,
-    "speedIndexMs": 876,
-    "performanceRuns": [
-     100,
-     100,
-     100
+     58,
+     55,
+     55,
+     56,
+     63
     ],
     "error": null
    },
-   "mobile": {
-    "performance": 97,
-    "accessibility": 100,
-    "bestPractices": 96,
-    "seo": 91,
-    "fcpMs": 769,
-    "lcpMs": 2631,
-    "tbtMs": 0,
-    "cls": 0.0,
-    "speedIndexMs": 2494,
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/wordcraft": {
+   "desktop": {
+    "performance": null,
+    "accessibility": null,
+    "bestPractices": null,
+    "seo": null,
+    "fcpMs": null,
+    "lcpMs": null,
+    "tbtMs": null,
+    "cls": null,
+    "speedIndexMs": null,
     "performanceRuns": [
-     97,
-     97,
-     96
+     null,
+     null,
+     null,
+     null,
+     null
     ],
-    "error": null
-   }
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "mobile": {
+    "performance": null,
+    "accessibility": null,
+    "bestPractices": null,
+    "seo": null,
+    "fcpMs": null,
+    "lcpMs": null,
+    "tbtMs": null,
+    "cls": null,
+    "speedIndexMs": null,
+    "performanceRuns": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/superdoc": {
    "desktop": {
-    "performance": 50,
+    "performance": 58,
     "accessibility": 94,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 453,
-    "lcpMs": 3254,
-    "tbtMs": 748,
+    "fcpMs": 482,
+    "lcpMs": 3205,
+    "tbtMs": 415,
     "cls": 0.137,
-    "speedIndexMs": 1290,
+    "speedIndexMs": 1368,
     "performanceRuns": [
-     50,
-     48,
-     60
+     52,
+     60,
+     58,
+     49,
+     63
     ],
     "error": null
    },
@@ -242,18 +286,23 @@
     "accessibility": 94,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 1672,
-    "lcpMs": 17474,
-    "tbtMs": 884,
+    "fcpMs": 1681,
+    "lcpMs": 17462,
+    "tbtMs": 942,
     "cls": 0.05,
-    "speedIndexMs": 5463,
+    "speedIndexMs": 5014,
     "performanceRuns": [
-     45,
-     61,
-     49
+     49,
+     48,
+     47,
+     58,
+     60
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/canvas-editor": {
    "desktop": {
@@ -261,107 +310,128 @@
     "accessibility": 94,
     "bestPractices": 100,
     "seo": 80,
-    "fcpMs": 235,
-    "lcpMs": 235,
-    "tbtMs": 48,
+    "fcpMs": 223,
+    "lcpMs": 223,
+    "tbtMs": 61,
     "cls": 0.079,
-    "speedIndexMs": 764,
+    "speedIndexMs": 749,
     "performanceRuns": [
+     99,
+     97,
+     null,
      98,
-     98,
-     null
+     98
     ],
-    "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
    },
    "mobile": {
-    "performance": 97,
+    "performance": 94,
     "accessibility": 94,
     "bestPractices": 100,
     "seo": 82,
-    "fcpMs": 800,
-    "lcpMs": 800,
-    "tbtMs": 179,
-    "cls": 0.008,
-    "speedIndexMs": 3220,
+    "fcpMs": 781,
+    "lcpMs": 781,
+    "tbtMs": 248,
+    "cls": 0.033,
+    "speedIndexMs": 3232,
     "performanceRuns": [
-     97,
-     97,
-     null
+     91,
+     99,
+     null,
+     95,
+     94
     ],
-    "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
-   }
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/apryse": {
    "desktop": {
-    "performance": 100,
+    "performance": 73,
     "accessibility": 100,
     "bestPractices": 96,
     "seo": 90,
     "fcpMs": 215,
     "lcpMs": 215,
-    "tbtMs": 69,
-    "cls": 0.002,
-    "speedIndexMs": 229,
+    "tbtMs": 555,
+    "cls": 0.005,
+    "speedIndexMs": 2160,
     "performanceRuns": [
-     100,
-     100,
-     67
+     73,
+     74,
+     null,
+     77,
+     66
     ],
-    "error": null
+    "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/v/apryse. Try checking the URL for validity."
    },
    "mobile": {
-    "performance": 92,
-    "accessibility": 100,
-    "bestPractices": 96,
-    "seo": 91,
-    "fcpMs": 765,
-    "lcpMs": 765,
-    "tbtMs": 354,
-    "cls": 0.0,
-    "speedIndexMs": 773,
-    "performanceRuns": [
-     92,
-     98,
-     76
-    ],
-    "error": null
-   }
-  },
-  "v/nutrient": {
-   "desktop": {
     "performance": 72,
     "accessibility": 100,
     "bestPractices": 96,
-    "seo": 90,
-    "fcpMs": 218,
-    "lcpMs": 218,
-    "tbtMs": 546,
-    "cls": 0.002,
-    "speedIndexMs": 2538,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 897,
+    "cls": 0.049,
+    "speedIndexMs": 7735,
     "performanceRuns": [
-     84,
      72,
-     71
+     72,
+     null,
+     72,
+     66
     ],
-    "error": null
+    "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/v/apryse. Try checking the URL for validity."
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/nutrient": {
+   "desktop": {
+    "performance": null,
+    "accessibility": null,
+    "bestPractices": null,
+    "seo": null,
+    "fcpMs": null,
+    "lcpMs": null,
+    "tbtMs": null,
+    "cls": null,
+    "speedIndexMs": null,
+    "performanceRuns": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
    },
    "mobile": {
-    "performance": 79,
-    "accessibility": 100,
-    "bestPractices": 96,
-    "seo": 91,
-    "fcpMs": 767,
-    "lcpMs": 767,
-    "tbtMs": 551,
-    "cls": 0.0,
-    "speedIndexMs": 6332,
+    "performance": null,
+    "accessibility": null,
+    "bestPractices": null,
+    "seo": null,
+    "fcpMs": null,
+    "lcpMs": null,
+    "tbtMs": null,
+    "cls": null,
+    "speedIndexMs": null,
     "performanceRuns": [
-     87,
-     79,
-     79
+     null,
+     null,
+     null,
+     null,
+     null
     ],
-    "error": null
-   }
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "v/word-online": {
    "desktop": {
@@ -369,71 +439,85 @@
     "accessibility": 100,
     "bestPractices": 73,
     "seo": 90,
-    "fcpMs": 223,
-    "lcpMs": 223,
+    "fcpMs": 218,
+    "lcpMs": 218,
     "tbtMs": 0,
-    "cls": 0.003,
-    "speedIndexMs": 1955,
+    "cls": 0.086,
+    "speedIndexMs": 1570,
     "performanceRuns": [
-     94,
      96,
-     99
+     97,
+     99,
+     93,
+     96
     ],
     "error": null
    },
    "mobile": {
-    "performance": 94,
+    "performance": 96,
     "accessibility": 100,
     "bestPractices": 73,
     "seo": 91,
-    "fcpMs": 773,
-    "lcpMs": 773,
+    "fcpMs": 772,
+    "lcpMs": 772,
     "tbtMs": 0,
     "cls": 0.0,
-    "speedIndexMs": 6397,
+    "speedIndexMs": 4991,
     "performanceRuns": [
-     94,
+     95,
+     96,
+     99,
      97,
-     91
-    ],
-    "error": null
-   }
-  },
-  "v/google-viewer": {
-   "desktop": {
-    "performance": 100,
-    "accessibility": 100,
-    "bestPractices": 100,
-    "seo": 90,
-    "fcpMs": 221,
-    "lcpMs": 221,
-    "tbtMs": 0,
-    "cls": 0.002,
-    "speedIndexMs": 257,
-    "performanceRuns": [
-     100,
-     100,
-     99
+     95
     ],
     "error": null
    },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/google-viewer": {
+   "desktop": {
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 61,
+    "cls": 0.003,
+    "speedIndexMs": 1311,
+    "performanceRuns": [
+     93,
+     99,
+     null,
+     98,
+     99
+    ],
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+   },
    "mobile": {
-    "performance": 99,
+    "performance": 97,
     "accessibility": 100,
     "bestPractices": 58,
     "seo": 91,
-    "fcpMs": 773,
-    "lcpMs": 773,
-    "tbtMs": 60,
+    "fcpMs": 789,
+    "lcpMs": 789,
+    "tbtMs": 109,
     "cls": 0.0,
-    "speedIndexMs": 3501,
+    "speedIndexMs": 3664,
     "performanceRuns": [
+     94,
      98,
-     99,
-     100
+     null,
+     100,
+     96
     ],
-    "error": null
-   }
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/docxodus": {
    "desktop": {
@@ -441,35 +525,42 @@
     "accessibility": 90,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 261,
-    "lcpMs": 521,
-    "tbtMs": 0,
+    "fcpMs": 258,
+    "lcpMs": 531,
+    "tbtMs": 3,
     "cls": 0.0,
-    "speedIndexMs": 809,
+    "speedIndexMs": 755,
     "performanceRuns": [
      100,
      100,
+     null,
+     100,
      100
     ],
-    "error": null
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
    },
    "mobile": {
     "performance": 99,
     "accessibility": 90,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 924,
-    "lcpMs": 1847,
-    "tbtMs": 7,
-    "cls": 0,
-    "speedIndexMs": 2256,
+    "fcpMs": 912,
+    "lcpMs": 1846,
+    "tbtMs": 4,
+    "cls": 0.008,
+    "speedIndexMs": 1869,
     "performanceRuns": [
-     99,
+     97,
+     100,
+     null,
      100,
      99
     ],
-    "error": null
-   }
+    "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/folio": {
    "desktop": {
@@ -477,71 +568,85 @@
     "accessibility": 70,
     "bestPractices": 100,
     "seo": 82,
-    "fcpMs": 299,
-    "lcpMs": 594,
+    "fcpMs": 288,
+    "lcpMs": 575,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 577,
+    "speedIndexMs": 516,
     "performanceRuns": [
      100,
      100,
-     99
+     99,
+     100,
+     100
     ],
     "error": null
    },
    "mobile": {
-    "performance": 99,
+    "performance": 98,
     "accessibility": 70,
     "bestPractices": 100,
     "seo": 82,
-    "fcpMs": 968,
-    "lcpMs": 2136,
+    "fcpMs": 953,
+    "lcpMs": 2416,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 1474,
+    "speedIndexMs": 1421,
     "performanceRuns": [
-     100,
+     98,
      99,
-     99
+     98,
+     98,
+     98
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/eigenpal": {
    "desktop": {
-    "performance": 96,
+    "performance": 95,
     "accessibility": 92,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 523,
-    "lcpMs": 1403,
+    "fcpMs": 559,
+    "lcpMs": 1439,
     "tbtMs": 0,
     "cls": 0.005,
-    "speedIndexMs": 885,
+    "speedIndexMs": 848,
     "performanceRuns": [
-     96,
+     99,
      95,
-     96
+     94,
+     98,
+     94
     ],
     "error": null
    },
    "mobile": {
-    "performance": 76,
+    "performance": 80,
     "accessibility": 92,
     "bestPractices": 100,
     "seo": 90,
     "fcpMs": 1840,
-    "lcpMs": 6491,
+    "lcpMs": 5124,
     "tbtMs": 0,
-    "cls": 0.009,
-    "speedIndexMs": 2941,
+    "cls": 0.008,
+    "speedIndexMs": 2522,
     "performanceRuns": [
+     80,
      76,
-     76,
-     74
+     79,
+     88,
+     93
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/plate": {
    "desktop": {
@@ -549,12 +654,14 @@
     "accessibility": 96,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 244,
-    "lcpMs": 244,
+    "fcpMs": 247,
+    "lcpMs": 247,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 546,
+    "speedIndexMs": 362,
     "performanceRuns": [
+     100,
+     100,
      100,
      100,
      100
@@ -566,54 +673,66 @@
     "accessibility": 96,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 801,
-    "lcpMs": 801,
+    "fcpMs": 781,
+    "lcpMs": 781,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 1055,
+    "speedIndexMs": 901,
     "performanceRuns": [
+     100,
+     100,
      100,
      100,
      100
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/docen": {
    "desktop": {
-    "performance": 98,
+    "performance": 97,
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 261,
-    "lcpMs": 1172,
+    "fcpMs": 247,
+    "lcpMs": 1324,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 444,
+    "speedIndexMs": 368,
     "performanceRuns": [
-     98,
+     96,
      97,
-     98
+     97,
+     100,
+     96
     ],
     "error": null
    },
    "mobile": {
-    "performance": 79,
+    "performance": 95,
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 835,
-    "lcpMs": 5903,
+    "fcpMs": 794,
+    "lcpMs": 2897,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 1479,
+    "speedIndexMs": 893,
     "performanceRuns": [
-     79,
-     76,
-     100
+     97,
+     77,
+     84,
+     98,
+     95
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/wordcraft": {
    "desktop": {
@@ -621,12 +740,14 @@
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 243,
-    "lcpMs": 400,
+    "fcpMs": 234,
+    "lcpMs": 390,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 632,
+    "speedIndexMs": 290,
     "performanceRuns": [
+     100,
+     100,
      100,
      100,
      100
@@ -638,18 +759,23 @@
     "accessibility": 97,
     "bestPractices": 100,
     "seo": 91,
-    "fcpMs": 792,
-    "lcpMs": 2287,
+    "fcpMs": 784,
+    "lcpMs": 2282,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 792,
+    "speedIndexMs": 829,
     "performanceRuns": [
-     97,
+     100,
      98,
+     98,
+     99,
      98
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   },
   "r/superdoc": {
    "desktop": {
@@ -661,8 +787,10 @@
     "lcpMs": 213,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 782,
+    "speedIndexMs": 479,
     "performanceRuns": [
+     100,
+     100,
      100,
      100,
      100
@@ -674,73 +802,87 @@
     "accessibility": 98,
     "bestPractices": 100,
     "seo": 90,
-    "fcpMs": 766,
-    "lcpMs": 766,
+    "fcpMs": 768,
+    "lcpMs": 768,
     "tbtMs": 0,
     "cls": 0,
-    "speedIndexMs": 1783,
+    "speedIndexMs": 1468,
     "performanceRuns": [
+     100,
+     100,
      100,
      100,
      100
     ],
     "error": null
-   }
+   },
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   }
  },
  "docs": {
   "lorem-500": {
    "v/docxodus": {
     "desktop": {
-     "performance": 35,
-     "accessibility": 96,
-     "bestPractices": 100,
-     "seo": 90,
-     "fcpMs": 215,
-     "lcpMs": 10411,
-     "tbtMs": 10052,
-     "cls": 0.001,
-     "speedIndexMs": 20679,
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
      "performanceRuns": [
       null,
-      35,
-      null
-     ],
-     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
-    },
-    "mobile": {
-     "performance": 35,
-     "accessibility": 100,
-     "bestPractices": 100,
-     "seo": 91,
-     "fcpMs": 771,
-     "lcpMs": 42778,
-     "tbtMs": 10082,
-     "cls": 0.0,
-     "speedIndexMs": 42732,
-     "performanceRuns": [
-      35,
-      35,
+      null,
+      null,
+      null,
       null
      ],
      "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
-    }
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/folio": {
     "desktop": {
-     "performance": 38,
+     "performance": 37,
      "accessibility": 96,
      "bestPractices": 96,
      "seo": 91,
-     "fcpMs": 443,
-     "lcpMs": 4505,
-     "tbtMs": 4699,
+     "fcpMs": 445,
+     "lcpMs": 5084,
+     "tbtMs": 6346,
      "cls": 0.002,
-     "speedIndexMs": 6395,
+     "speedIndexMs": 5563,
      "performanceRuns": [
       36,
-      38,
-      39
+      37,
+      40,
+      36,
+      37
      ],
      "error": null
     },
@@ -750,53 +892,65 @@
      "bestPractices": 96,
      "seo": 91,
      "fcpMs": 1655,
-     "lcpMs": 18085,
-     "tbtMs": 9096,
+     "lcpMs": 16935,
+     "tbtMs": 5428,
      "cls": 0.0,
-     "speedIndexMs": 20316,
+     "speedIndexMs": 14382,
      "performanceRuns": [
       34,
       34,
-      34
+      35,
+      34,
+      35
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/eigenpal": {
     "desktop": {
-     "performance": 40,
+     "performance": 41,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 90,
      "fcpMs": 450,
-     "lcpMs": 5063,
-     "tbtMs": 877,
-     "cls": 0.001,
-     "speedIndexMs": 4355,
+     "lcpMs": 5050,
+     "tbtMs": 950,
+     "cls": 0.002,
+     "speedIndexMs": 3328,
      "performanceRuns": [
       40,
-      42,
-      37
+      41,
+      45,
+      37,
+      41
      ],
      "error": null
     },
     "mobile": {
-     "performance": 66,
+     "performance": 64,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 91,
-     "fcpMs": 1662,
-     "lcpMs": 1662,
-     "tbtMs": 1130,
+     "fcpMs": 1659,
+     "lcpMs": 1659,
+     "tbtMs": 1390,
      "cls": 0.0,
-     "speedIndexMs": 13086,
+     "speedIndexMs": 12509,
      "performanceRuns": [
-      69,
+      65,
+      60,
       66,
-      65
+      60,
+      64
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/plate": {
     "desktop": {
@@ -812,9 +966,11 @@
      "performanceRuns": [
       null,
       null,
+      null,
+      null,
       null
      ],
-     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
     },
     "mobile": {
      "performance": null,
@@ -829,118 +985,144 @@
      "performanceRuns": [
       null,
       null,
+      null,
+      null,
       null
      ],
-     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
-    }
+     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/docen": {
     "desktop": {
-     "performance": 57,
-     "accessibility": 100,
-     "bestPractices": 96,
+     "performance": 42,
+     "accessibility": 82,
+     "bestPractices": 88,
      "seo": 90,
      "fcpMs": 214,
-     "lcpMs": 2310,
-     "tbtMs": 578,
-     "cls": 0.002,
-     "speedIndexMs": 2446,
+     "lcpMs": 2425,
+     "tbtMs": 676,
+     "cls": 0.288,
+     "speedIndexMs": 2424,
      "performanceRuns": [
-      100,
-      57,
-      43
+      40,
+      43,
+      42,
+      36,
+      44
      ],
      "error": null
     },
     "mobile": {
-     "performance": 53,
+     "performance": 58,
      "accessibility": 85,
      "bestPractices": 88,
      "seo": 91,
-     "fcpMs": 765,
-     "lcpMs": 767,
-     "tbtMs": 1160,
+     "fcpMs": 764,
+     "lcpMs": 764,
+     "tbtMs": 853,
      "cls": 0.327,
-     "speedIndexMs": 7872,
+     "speedIndexMs": 6697,
      "performanceRuns": [
-      55,
-      44,
-      53
+      51,
+      60,
+      59,
+      58,
+      57
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/wordcraft": {
     "desktop": {
-     "performance": 99,
-     "accessibility": 100,
-     "bestPractices": 96,
-     "seo": 90,
-     "fcpMs": 218,
-     "lcpMs": 915,
-     "tbtMs": 0,
-     "cls": 0.002,
-     "speedIndexMs": 875,
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
      "performanceRuns": [
-      99,
-      99,
-      99
+      null,
+      null,
+      null,
+      null,
+      null
      ],
-     "error": null
+     "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
     },
     "mobile": {
-     "performance": 84,
-     "accessibility": 100,
-     "bestPractices": 96,
-     "seo": 91,
-     "fcpMs": 765,
-     "lcpMs": 4543,
-     "tbtMs": 0,
-     "cls": 0.0,
-     "speedIndexMs": 2724,
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
      "performanceRuns": [
-      83,
-      84,
-      84
+      null,
+      null,
+      null,
+      null,
+      null
      ],
-     "error": null
-    }
+     "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/superdoc": {
     "desktop": {
-     "performance": 59,
+     "performance": 58,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 459,
-     "lcpMs": 3545,
-     "tbtMs": 376,
+     "fcpMs": 452,
+     "lcpMs": 3465,
+     "tbtMs": 396,
      "cls": 0.137,
-     "speedIndexMs": 1364,
+     "speedIndexMs": 1334,
      "performanceRuns": [
+      53,
       58,
       59,
-      59
+      61,
+      53
      ],
      "error": null
     },
     "mobile": {
-     "performance": 59,
+     "performance": 51,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 91,
-     "fcpMs": 1689,
-     "lcpMs": 19470,
-     "tbtMs": 418,
+     "fcpMs": 1664,
+     "lcpMs": 19565,
+     "tbtMs": 808,
      "cls": 0.05,
-     "speedIndexMs": 5355,
+     "speedIndexMs": 5319,
      "performanceRuns": [
-      59,
-      58,
-      60
+      61,
+      51,
+      48,
+      57,
+      48
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/canvas-editor": {
     "desktop": {
@@ -956,6 +1138,8 @@
      "performanceRuns": [
       null,
       null,
+      null,
+      null,
       null
      ],
      "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
@@ -973,156 +1157,60 @@
      "performanceRuns": [
       null,
       null,
+      null,
+      null,
       null
      ],
      "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/apryse": {
     "desktop": {
-     "performance": 63,
+     "performance": 66,
      "accessibility": 100,
      "bestPractices": 96,
      "seo": 90,
-     "fcpMs": 213,
-     "lcpMs": 213,
-     "tbtMs": 1085,
-     "cls": 0.007,
-     "speedIndexMs": 3708,
+     "fcpMs": 217,
+     "lcpMs": 217,
+     "tbtMs": 1097,
+     "cls": 0.002,
+     "speedIndexMs": 2355,
      "performanceRuns": [
       65,
-      60,
-      63
+      75,
+      66,
+      69,
+      66
      ],
      "error": null
     },
     "mobile": {
-     "performance": 69,
+     "performance": 75,
      "accessibility": 100,
      "bestPractices": 96,
      "seo": 91,
      "fcpMs": 766,
      "lcpMs": 766,
-     "tbtMs": 1157,
+     "tbtMs": 760,
      "cls": 0.0,
-     "speedIndexMs": 8997,
+     "speedIndexMs": 7037,
      "performanceRuns": [
-      57,
-      69,
-      69
+      76,
+      68,
+      75,
+      80,
+      72
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "v/nutrient": {
-    "desktop": {
-     "performance": 81,
-     "accessibility": 100,
-     "bestPractices": 96,
-     "seo": 90,
-     "fcpMs": 219,
-     "lcpMs": 219,
-     "tbtMs": 316,
-     "cls": 0.002,
-     "speedIndexMs": 2498,
-     "performanceRuns": [
-      85,
-      81,
-      70
-     ],
-     "error": null
-    },
-    "mobile": {
-     "performance": 85,
-     "accessibility": 100,
-     "bestPractices": 96,
-     "seo": 91,
-     "fcpMs": 767,
-     "lcpMs": 767,
-     "tbtMs": 359,
-     "cls": 0.0,
-     "speedIndexMs": 6952,
-     "performanceRuns": [
-      87,
-      77,
-      85
-     ],
-     "error": null
-    }
-   },
-   "v/word-online": {
-    "desktop": {
-     "performance": 100,
-     "accessibility": 100,
-     "bestPractices": 100,
-     "seo": 90,
-     "fcpMs": 225,
-     "lcpMs": 225,
-     "tbtMs": 0,
-     "cls": 0.003,
-     "speedIndexMs": 1107,
-     "performanceRuns": [
-      100,
-      100,
-      94
-     ],
-     "error": null
-    },
-    "mobile": {
-     "performance": 99,
-     "accessibility": 100,
-     "bestPractices": 100,
-     "seo": 91,
-     "fcpMs": 780,
-     "lcpMs": 780,
-     "tbtMs": 0,
-     "cls": 0.0,
-     "speedIndexMs": 3106,
-     "performanceRuns": [
-      100,
-      99,
-      99
-     ],
-     "error": null
-    }
-   },
-   "v/google-viewer": {
-    "desktop": {
-     "performance": 93,
-     "accessibility": 100,
-     "bestPractices": 58,
-     "seo": 90,
-     "fcpMs": 222,
-     "lcpMs": 222,
-     "tbtMs": 119,
-     "cls": 0.002,
-     "speedIndexMs": 2091,
-     "performanceRuns": [
-      93,
-      100,
-      87
-     ],
-     "error": null
-    },
-    "mobile": {
-     "performance": 89,
-     "accessibility": 100,
-     "bestPractices": 58,
-     "seo": 91,
-     "fcpMs": 775,
-     "lcpMs": 775,
-     "tbtMs": 222,
-     "cls": 0.0,
-     "speedIndexMs": 7012,
-     "performanceRuns": [
-      80,
-      89,
-      95
-     ],
-     "error": null
-    }
-   },
-   "r/docxodus": {
     "desktop": {
      "performance": null,
      "accessibility": null,
@@ -1136,7 +1224,138 @@
      "performanceRuns": [
       null,
       null,
+      null,
+      null,
       null
+     ],
+     "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/word-online": {
+    "desktop": {
+     "performance": 95,
+     "accessibility": 100,
+     "bestPractices": 73,
+     "seo": 90,
+     "fcpMs": 221,
+     "lcpMs": 221,
+     "tbtMs": 0,
+     "cls": 0.003,
+     "speedIndexMs": 2009,
+     "performanceRuns": [
+      93,
+      100,
+      96,
+      95,
+      93
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 98,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 774,
+     "lcpMs": 774,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 4363,
+     "performanceRuns": [
+      98,
+      98,
+      96,
+      100,
+      97
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/google-viewer": {
+    "desktop": {
+     "performance": 96,
+     "accessibility": 100,
+     "bestPractices": 58,
+     "seo": 90,
+     "fcpMs": 220,
+     "lcpMs": 220,
+     "tbtMs": 165,
+     "cls": 0.002,
+     "speedIndexMs": 1283,
+     "performanceRuns": [
+      84,
+      100,
+      91,
+      96,
+      98
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 95,
+     "accessibility": 100,
+     "bestPractices": 58,
+     "seo": 91,
+     "fcpMs": 774,
+     "lcpMs": 774,
+     "tbtMs": 156,
+     "cls": 0.0,
+     "speedIndexMs": 3496,
+     "performanceRuns": [
+      100,
+      100,
+      95,
+      95,
+      95
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/docxodus": {
+    "desktop": {
+     "performance": 34,
+     "accessibility": 91,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 985,
+     "lcpMs": 5935,
+     "tbtMs": 9432,
+     "cls": 0.0,
+     "speedIndexMs": 11497,
+     "performanceRuns": [
+      null,
+      null,
+      35,
+      null,
+      34
      ],
      "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
     },
@@ -1145,54 +1364,66 @@
      "accessibility": 91,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 3600,
-     "lcpMs": 9486,
-     "tbtMs": 10030,
+     "fcpMs": 3579,
+     "lcpMs": 9430,
+     "tbtMs": 10053,
      "cls": 0,
-     "speedIndexMs": 35780,
+     "speedIndexMs": 31766,
      "performanceRuns": [
       28,
       null,
+      28,
+      28,
       null
      ],
-     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
-    }
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/folio": {
     "desktop": {
-     "performance": 54,
+     "performance": 55,
      "accessibility": 74,
      "bestPractices": null,
      "seo": 80,
-     "fcpMs": 5364,
-     "lcpMs": 5620,
-     "tbtMs": 120,
-     "cls": 0,
-     "speedIndexMs": 7343,
+     "fcpMs": 4881,
+     "lcpMs": 5138,
+     "tbtMs": 125,
+     "cls": 0.0,
+     "speedIndexMs": 6356,
      "performanceRuns": [
-      54,
-      null,
+      55,
+      55,
+      38,
+      57,
       null
      ],
-     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
+     "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
     },
     "mobile": {
-     "performance": 30,
+     "performance": 49,
      "accessibility": 74,
      "bestPractices": null,
      "seo": 80,
-     "fcpMs": 9944,
-     "lcpMs": 10969,
-     "tbtMs": 1338,
+     "fcpMs": 10054,
+     "lcpMs": 11077,
+     "tbtMs": 286,
      "cls": 0,
-     "speedIndexMs": 15195,
+     "speedIndexMs": 13519,
      "performanceRuns": [
-      30,
-      null,
-      null
+      49,
+      53,
+      37,
+      29,
+      54
      ],
-     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested."
-    }
+     "error": null
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/eigenpal": {
     "desktop": {
@@ -1207,10 +1438,9 @@
      "speedIndexMs": null,
      "performanceRuns": [
       null,
-      null,
       null
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+     "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
     },
     "mobile": {
      "performance": null,
@@ -1224,83 +1454,99 @@
      "speedIndexMs": null,
      "performanceRuns": [
       null,
-      null,
       null
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
-    }
+     "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 2 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/plate": {
     "desktop": {
-     "performance": 97,
+     "performance": 98,
      "accessibility": 97,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 869,
-     "lcpMs": 869,
-     "tbtMs": 18,
+     "fcpMs": 791,
+     "lcpMs": 791,
+     "tbtMs": 12,
      "cls": 0,
-     "speedIndexMs": 1561,
+     "speedIndexMs": 1231,
      "performanceRuns": [
-      97,
-      97,
-      96
+      99,
+      98,
+      94,
+      96,
+      98
      ],
      "error": null
     },
     "mobile": {
-     "performance": 84,
+     "performance": 81,
      "accessibility": 97,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 3464,
-     "lcpMs": 3464,
-     "tbtMs": 6,
+     "fcpMs": 3532,
+     "lcpMs": 3532,
+     "tbtMs": 43,
      "cls": 0,
-     "speedIndexMs": 3464,
+     "speedIndexMs": 4785,
      "performanceRuns": [
-      83,
-      84,
+      82,
+      81,
+      81,
+      80,
       84
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/docen": {
     "desktop": {
-     "performance": 53,
+     "performance": 61,
      "accessibility": 97,
      "bestPractices": 100,
-     "seo": 82,
-     "fcpMs": 1196,
-     "lcpMs": 1688,
-     "tbtMs": 1566,
-     "cls": 0,
-     "speedIndexMs": 2143,
+     "seo": 90,
+     "fcpMs": 1095,
+     "lcpMs": 1585,
+     "tbtMs": 979,
+     "cls": 0.0,
+     "speedIndexMs": 1652,
      "performanceRuns": [
-      53,
-      53,
-      59
+      60,
+      62,
+      null,
+      63,
+      61
      ],
      "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
     },
     "mobile": {
-     "performance": 33,
+     "performance": 31,
      "accessibility": 97,
      "bestPractices": 100,
-     "seo": 82,
-     "fcpMs": 4686,
-     "lcpMs": 7399,
-     "tbtMs": 3310,
+     "seo": 90,
+     "fcpMs": 4911,
+     "lcpMs": 7673,
+     "tbtMs": 1665,
      "cls": 0,
-     "speedIndexMs": 5649,
+     "speedIndexMs": 9747,
      "performanceRuns": [
-      28,
-      33,
-      38
+      null,
+      null,
+      31,
+      null,
+      null
      ],
      "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/wordcraft": {
     "desktop": {
@@ -1308,12 +1554,14 @@
      "accessibility": 97,
      "bestPractices": 100,
      "seo": 91,
-     "fcpMs": 271,
-     "lcpMs": 563,
+     "fcpMs": 275,
+     "lcpMs": 539,
      "tbtMs": 0,
      "cls": 0,
-     "speedIndexMs": 818,
+     "speedIndexMs": 732,
      "performanceRuns": [
+      100,
+      97,
       100,
       100,
       100
@@ -1325,55 +1573,74 @@
      "accessibility": 97,
      "bestPractices": 100,
      "seo": 91,
-     "fcpMs": 845,
-     "lcpMs": 4117,
+     "fcpMs": 841,
+     "lcpMs": 4116,
      "tbtMs": 0,
      "cls": 0,
-     "speedIndexMs": 1978,
+     "speedIndexMs": 3980,
      "performanceRuns": [
-      86,
-      86,
+      87,
+      95,
+      85,
+      80,
       86
      ],
      "error": null
-    }
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    },
    "r/superdoc": {
     "desktop": {
-     "performance": 88,
+     "performance": 89,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 897,
-     "lcpMs": 897,
+     "fcpMs": 870,
+     "lcpMs": 870,
      "tbtMs": 0,
-     "cls": 0.0,
-     "speedIndexMs": 5927,
+     "cls": 0,
+     "speedIndexMs": 4227,
      "performanceRuns": [
       89,
+      89,
       null,
-      88
+      90,
+      null
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Details: "
     },
     "mobile": {
      "performance": 77,
      "accessibility": 100,
      "bestPractices": 100,
      "seo": 90,
-     "fcpMs": 3258,
-     "lcpMs": 3258,
-     "tbtMs": 0,
+     "fcpMs": 3280,
+     "lcpMs": 3280,
+     "tbtMs": 6,
      "cls": 0.0,
-     "speedIndexMs": 15153,
+     "speedIndexMs": 13125,
      "performanceRuns": [
+      78,
       77,
-      null,
-      77
+      77,
+      77,
+      null
      ],
-     "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
-    }
+     "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/superdoc?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+    },
+    "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
    }
+  }
+ },
+ "docsMeta": {
+  "lorem-500": {
+   "measuredAt": "2026-11-16",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 2 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   }
  }
 }

@@ -1,0 +1,1123 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Florem-500.docx",
+ "raw": [
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 65,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1662,
+    "lcpMs": 1662,
+    "tbtMs": 1328,
+    "cls": 0.0,
+    "speedIndexMs": 11006
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 40,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 5042,
+    "tbtMs": 1226,
+    "cls": 0.002,
+    "speedIndexMs": 3120
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 34,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 1654,
+    "lcpMs": 17689,
+    "tbtMs": 9241,
+    "cls": 0.0,
+    "speedIndexMs": 17773
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 36,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 445,
+    "lcpMs": 6117,
+    "tbtMs": 9794,
+    "cls": 0.002,
+    "speedIndexMs": 7438
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 40,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 2518,
+    "tbtMs": 829,
+    "cls": 0.288,
+    "speedIndexMs": 2206
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 51,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 1563,
+    "cls": 0.327,
+    "speedIndexMs": 7267
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 61,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1666,
+    "lcpMs": 18951,
+    "tbtMs": 373,
+    "cls": 0.05,
+    "speedIndexMs": 5309
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 53,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 456,
+    "lcpMs": 3458,
+    "tbtMs": 507,
+    "cls": 0.137,
+    "speedIndexMs": 1494
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 76,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 760,
+    "cls": 0.0,
+    "speedIndexMs": 6549
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 65,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 222,
+    "lcpMs": 222,
+    "tbtMs": 1158,
+    "cls": 0.002,
+    "speedIndexMs": 2423
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 3966
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 0,
+    "cls": 0.003,
+    "speedIndexMs": 2829
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 780,
+    "lcpMs": 780,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 780
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 84,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 227,
+    "lcpMs": 227,
+    "tbtMs": 336,
+    "cls": 0.002,
+    "speedIndexMs": 1355
+   }
+  },
+  {
+   "page": "v/plate",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/eigenpal",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 453,
+    "lcpMs": 4937,
+    "tbtMs": 950,
+    "cls": 0.001,
+    "speedIndexMs": 3328
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1661,
+    "lcpMs": 1661,
+    "tbtMs": 2853,
+    "cls": 0.0,
+    "speedIndexMs": 12509
+   }
+  },
+  {
+   "page": "v/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 37,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 476,
+    "lcpMs": 5084,
+    "tbtMs": 6346,
+    "cls": 0.002,
+    "speedIndexMs": 5563
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 34,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 1655,
+    "lcpMs": 18107,
+    "tbtMs": 9737,
+    "cls": 0.0,
+    "speedIndexMs": 18853
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 667,
+    "cls": 0.327,
+    "speedIndexMs": 7348
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 43,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 2310,
+    "tbtMs": 676,
+    "cls": 0.288,
+    "speedIndexMs": 2405
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 58,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 452,
+    "lcpMs": 3465,
+    "tbtMs": 396,
+    "cls": 0.137,
+    "speedIndexMs": 1296
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1664,
+    "lcpMs": 19531,
+    "tbtMs": 808,
+    "cls": 0.05,
+    "speedIndexMs": 5319
+   }
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed refused the address: Oops! Something went wrong."
+  },
+  {
+   "page": "v/apryse",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 75,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 212,
+    "lcpMs": 212,
+    "tbtMs": 406,
+    "cls": 0.002,
+    "speedIndexMs": 3097
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 68,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 776,
+    "lcpMs": 776,
+    "tbtMs": 1182,
+    "cls": 0.0,
+    "speedIndexMs": 8537
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 774,
+    "lcpMs": 774,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 774
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 219
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 771,
+    "lcpMs": 771,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4363
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 227,
+    "lcpMs": 227,
+    "tbtMs": 0,
+    "cls": 0.003,
+    "speedIndexMs": 524
+   }
+  },
+  {
+   "page": "v/plate",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1659,
+    "lcpMs": 1659,
+    "tbtMs": 1101,
+    "cls": 0.0,
+    "speedIndexMs": 11485
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 45,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 449,
+    "lcpMs": 5063,
+    "tbtMs": 808,
+    "cls": 0.002,
+    "speedIndexMs": 2399
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 35,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 1654,
+    "lcpMs": 16499,
+    "tbtMs": 4690,
+    "cls": 0.0,
+    "speedIndexMs": 13025
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 40,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 445,
+    "lcpMs": 4071,
+    "tbtMs": 3908,
+    "cls": 0.002,
+    "speedIndexMs": 4065
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 59,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 780,
+    "cls": 0.327,
+    "speedIndexMs": 6428
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 42,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 2417,
+    "tbtMs": 669,
+    "cls": 0.288,
+    "speedIndexMs": 2424
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 59,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 3547,
+    "tbtMs": 360,
+    "cls": 0.137,
+    "speedIndexMs": 1423
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 48,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1660,
+    "lcpMs": 19575,
+    "tbtMs": 978,
+    "cls": 0.05,
+    "speedIndexMs": 5257
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 75,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 756,
+    "cls": 0.0,
+    "speedIndexMs": 7201
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 1097,
+    "cls": 0.002,
+    "speedIndexMs": 2355
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 790,
+    "lcpMs": 790,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 5374
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 221,
+    "lcpMs": 221,
+    "tbtMs": 0,
+    "cls": 0.003,
+    "speedIndexMs": 2009
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 91,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 224,
+    "cls": 0.002,
+    "speedIndexMs": 1306
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 54,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 156,
+    "cls": 0.0,
+    "speedIndexMs": 4636
+   }
+  },
+  {
+   "page": "v/plate",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1659,
+    "lcpMs": 1659,
+    "tbtMs": 3272,
+    "cls": 0.0,
+    "speedIndexMs": 14170
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 37,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 5050,
+    "tbtMs": 2738,
+    "cls": 0.001,
+    "speedIndexMs": 5446
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 34,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 1655,
+    "lcpMs": 16935,
+    "tbtMs": 5428,
+    "cls": 0,
+    "speedIndexMs": 14382
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 36,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 443,
+    "lcpMs": 6313,
+    "tbtMs": 9282,
+    "cls": 0.002,
+    "speedIndexMs": 7508
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1660,
+    "lcpMs": 19578,
+    "tbtMs": 497,
+    "cls": 0.05,
+    "speedIndexMs": 5610
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 61,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 494,
+    "lcpMs": 3479,
+    "tbtMs": 329,
+    "cls": 0.137,
+    "speedIndexMs": 1334
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 58,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 764,
+    "tbtMs": 853,
+    "cls": 0.327,
+    "speedIndexMs": 6530
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 36,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 2664,
+    "tbtMs": 1207,
+    "cls": 0.288,
+    "speedIndexMs": 2635
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 80,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 547,
+    "cls": 0.0,
+    "speedIndexMs": 6362
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 69,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 877,
+    "cls": 0.002,
+    "speedIndexMs": 1992
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 774,
+    "lcpMs": 774,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 2429
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 0,
+    "cls": 0.087,
+    "speedIndexMs": 1759
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 779,
+    "lcpMs": 779,
+    "tbtMs": 229,
+    "cls": 0.0,
+    "speedIndexMs": 3496
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 165,
+    "cls": 0.003,
+    "speedIndexMs": 1132
+   }
+  },
+  {
+   "page": "v/plate",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 64,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1659,
+    "lcpMs": 1659,
+    "tbtMs": 1390,
+    "cls": 0.0,
+    "speedIndexMs": 13027
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 483,
+    "lcpMs": 5075,
+    "tbtMs": 893,
+    "cls": 0.002,
+    "speedIndexMs": 3371
+   }
+  },
+  {
+   "page": "v/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 35,
+    "accessibility": 92,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 1660,
+    "lcpMs": 16473,
+    "tbtMs": 4678,
+    "cls": 0,
+    "speedIndexMs": 13508
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 37,
+    "accessibility": 96,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 442,
+    "lcpMs": 4954,
+    "tbtMs": 6280,
+    "cls": 0.002,
+    "speedIndexMs": 5512
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] TypeError: Failed to fetch at Module.__wbg_init (https://editors.benchmarks.law/vendor/wordcraft/0.17.0/wordcraft-web-d5f8e062bd3e686e.js:382"
+   }
+  },
+  {
+   "page": "v/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 57,
+    "accessibility": 85,
+    "bestPractices": 88,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 764,
+    "tbtMs": 861,
+    "cls": 0.336,
+    "speedIndexMs": 6697
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 44,
+    "accessibility": 82,
+    "bestPractices": 88,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 2425,
+    "tbtMs": 582,
+    "cls": 0.288,
+    "speedIndexMs": 2428
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 53,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 3451,
+    "tbtMs": 527,
+    "cls": 0.137,
+    "speedIndexMs": 1321
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 48,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1669,
+    "lcpMs": 19565,
+    "tbtMs": 951,
+    "cls": 0.05,
+    "speedIndexMs": 5368
+   }
+  },
+  {
+   "page": "v/apryse",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 930,
+    "cls": 0.0,
+    "speedIndexMs": 7037
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 1184,
+    "cls": 0.002,
+    "speedIndexMs": 2340
+   }
+  },
+  {
+   "page": "v/nutrient",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutrient-viewer-lib/gdpicture-ee16ef49/aot/dotnet.native.wasm' fo"
+   }
+  },
+  {
+   "page": "v/word-online",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 90,
+    "fcpMs": 246,
+    "lcpMs": 246,
+    "tbtMs": 0,
+    "cls": 0.084,
+    "speedIndexMs": 2423
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 100,
+    "bestPractices": 73,
+    "seo": 91,
+    "fcpMs": 777,
+    "lcpMs": 777,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4672
+   }
+  },
+  {
+   "page": "v/google-viewer",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 90,
+    "fcpMs": 224,
+    "lcpMs": 224,
+    "tbtMs": 113,
+    "cls": 0.003,
+    "speedIndexMs": 1283
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 100,
+    "bestPractices": 58,
+    "seo": 91,
+    "fcpMs": 770,
+    "lcpMs": 770,
+    "tbtMs": 206,
+    "cls": 0.0,
+    "speedIndexMs": 3586
+   }
+  },
+  {
+   "page": "v/docxodus",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/plate",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/canvas-editor",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  }
+ ]
+}

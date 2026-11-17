@@ -1,0 +1,710 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Florem-500.docx",
+ "raw": [
+  {
+   "page": "r/docxodus",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 28,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3655,
+    "lcpMs": 9527,
+    "tbtMs": 10111,
+    "cls": 0,
+    "speedIndexMs": 47430
+   }
+  },
+  {
+   "page": "r/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 55,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 5261,
+    "lcpMs": 5477,
+    "tbtMs": 116,
+    "cls": 0,
+    "speedIndexMs": 6834
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 49,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 10100,
+    "lcpMs": 11123,
+    "tbtMs": 286,
+    "cls": 0,
+    "speedIndexMs": 14619
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/eigenpal?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  },
+  {
+   "page": "r/plate",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 99,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 784,
+    "lcpMs": 784,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1092
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 82,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3559,
+    "lcpMs": 3559,
+    "tbtMs": 72,
+    "cls": 0,
+    "speedIndexMs": 3933
+   }
+  },
+  {
+   "page": "r/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 60,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1126,
+    "lcpMs": 1625,
+    "tbtMs": 1348,
+    "cls": 0,
+    "speedIndexMs": 1602
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 87,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 841,
+    "lcpMs": 4116,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1924
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 249,
+    "lcpMs": 542,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 732
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 89,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 870,
+    "lcpMs": 870,
+    "tbtMs": 10,
+    "cls": 0,
+    "speedIndexMs": 4144
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 78,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3288,
+    "lcpMs": 3288,
+    "tbtMs": 10,
+    "cls": 0,
+    "speedIndexMs": 9381
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 53,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 9799,
+    "lcpMs": 10823,
+    "tbtMs": 177,
+    "cls": 0,
+    "speedIndexMs": 13309
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 55,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 4873,
+    "lcpMs": 5126,
+    "tbtMs": 135,
+    "cls": 0,
+    "speedIndexMs": 6391
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/eigenpal?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 81,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3450,
+    "lcpMs": 3450,
+    "tbtMs": 95,
+    "cls": 0,
+    "speedIndexMs": 4785
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 876,
+    "lcpMs": 876,
+    "tbtMs": 52,
+    "cls": 0,
+    "speedIndexMs": 1231
+   }
+  },
+  {
+   "page": "r/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 62,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1065,
+    "lcpMs": 1550,
+    "tbtMs": 1015,
+    "cls": 0,
+    "speedIndexMs": 1703
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 95,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 816,
+    "lcpMs": 2284,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 4844
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 97,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 246,
+    "lcpMs": 539,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1716
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 89,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 900,
+    "lcpMs": 900,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 4304
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 77,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3256,
+    "lcpMs": 3256,
+    "tbtMs": 16,
+    "cls": 0,
+    "speedIndexMs": 15172
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 28,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3549,
+    "lcpMs": 9430,
+    "tbtMs": 10053,
+    "cls": 0,
+    "speedIndexMs": 31766
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 35,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 951,
+    "lcpMs": 5599,
+    "tbtMs": 8840,
+    "cls": 0.0,
+    "speedIndexMs": 9744
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 37,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 12579,
+    "lcpMs": 13608,
+    "tbtMs": 728,
+    "cls": 0,
+    "speedIndexMs": 14597
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 38,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 2392,
+    "lcpMs": 2648,
+    "tbtMs": 1047,
+    "cls": 0,
+    "speedIndexMs": 5706
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/eigenpal?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 81,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3532,
+    "lcpMs": 3532,
+    "tbtMs": 43,
+    "cls": 0,
+    "speedIndexMs": 4869
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 94,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 791,
+    "lcpMs": 791,
+    "tbtMs": 12,
+    "cls": 0,
+    "speedIndexMs": 2181
+   }
+  },
+  {
+   "page": "r/docen",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 31,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 4911,
+    "lcpMs": 7673,
+    "tbtMs": 1665,
+    "cls": 0,
+    "speedIndexMs": 9747
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 275,
+    "lcpMs": 412,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 724
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 85,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 855,
+    "lcpMs": 4119,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 3980
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Details: "
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 77,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3292,
+    "lcpMs": 3292,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 11079
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 28,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3579,
+    "lcpMs": 9273,
+    "tbtMs": 9627,
+    "cls": 0,
+    "speedIndexMs": 30444
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "r/folio",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 57,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 4890,
+    "lcpMs": 5150,
+    "tbtMs": 52,
+    "cls": 0,
+    "speedIndexMs": 6321
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 29,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 9953,
+    "lcpMs": 10977,
+    "tbtMs": 1512,
+    "cls": 0,
+    "speedIndexMs": 13519
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/eigenpal?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  },
+  {
+   "page": "r/plate",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 80,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3551,
+    "lcpMs": 3551,
+    "tbtMs": 5,
+    "cls": 0,
+    "speedIndexMs": 4839
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 96,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 778,
+    "lcpMs": 778,
+    "tbtMs": 16,
+    "cls": 0,
+    "speedIndexMs": 1785
+   }
+  },
+  {
+   "page": "r/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 63,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1039,
+    "lcpMs": 1526,
+    "tbtMs": 943,
+    "cls": 0,
+    "speedIndexMs": 1459
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 298,
+    "lcpMs": 589,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 780
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 80,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1480,
+    "lcpMs": 4744,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 4493
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 784,
+    "lcpMs": 784,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 4227
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 77,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3272,
+    "lcpMs": 3272,
+    "tbtMs": 2,
+    "cls": 0,
+    "speedIndexMs": 15723
+   }
+  },
+  {
+   "page": "r/docxodus",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 34,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1019,
+    "lcpMs": 6272,
+    "tbtMs": 10024,
+    "cls": 0.0,
+    "speedIndexMs": 13250
+   }
+  },
+  {
+   "page": "r/folio",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 54,
+    "accessibility": 74,
+    "seo": 80,
+    "fcpMs": 10054,
+    "lcpMs": 11077,
+    "tbtMs": 159,
+    "cls": 0,
+    "speedIndexMs": 10054
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/eigenpal?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  },
+  {
+   "page": "r/plate",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 98,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 873,
+    "lcpMs": 873,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1206
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 84,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 3458,
+    "lcpMs": 3458,
+    "tbtMs": 42,
+    "cls": 0,
+    "speedIndexMs": 3458
+   }
+  },
+  {
+   "page": "r/docen",
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 61,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 1146,
+    "lcpMs": 1621,
+    "tbtMs": 944,
+    "cls": 0,
+    "speedIndexMs": 1776
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "error": "PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)"
+   }
+  },
+  {
+   "page": "r/wordcraft",
+   "mobile": {
+    "version": "13.6.0",
+    "performance": 86,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 835,
+    "lcpMs": 4096,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 2597
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 279,
+    "lcpMs": 411,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 730
+   }
+  },
+  {
+   "page": "r/superdoc",
+   "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/superdoc?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
+  }
+ ]
+}
