@@ -293,17 +293,17 @@ Measured 2026-11-09: Google Chrome (installed, headed) via Playwright, fresh pro
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-09: 2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome). SuperDoc added 2026-11-16. Document: showcase.docx (47,871 B).
+Measured 2026-11-16: curl, a new connection and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 10.3, highest 11.8, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 2.23 s | 235 ms · 1.10 s | 622 ms | 302 ms | n/a | 57 KB |
-| folio | 1.56 s | 449 ms · 337 ms | 459 ms | 157 ms | n/a | 203 KB |
-| docx-editor.dev | 1.19 s | 90 ms · 859 ms | 791 ms | 574 ms | n/a | 237 KB |
-| Plate | 893 ms | 355 ms · 245 ms | 448 ms | 133 ms | n/a | 31 KB |
-| docen | 716 ms | 380 ms · 136 ms | 257 ms | 36 ms | n/a | 42 KB |
-| WordCraft | 930 ms | 185 ms · 167 ms | 255 ms | 23 ms | n/a | 3 KB |
-| SuperDoc | 2.03 s | 654 ms · 770 ms | 604 ms | 448 ms | n/a | 6 KB |
+| Docxodus | 3.06 s | 172 ms · 837 ms | 532 ms | 277 ms | 1.18 s, 442 ms, 457 ms, 532 ms, 1.70 s | 61 KB |
+| folio | 2.28 s | 720 ms · 339 ms | 374 ms | 174 ms | 422 ms, 765 ms, 355 ms, 351 ms, 374 ms | 204 KB |
+| docx-editor.dev | 1.75 s | 203 ms · 887 ms | 758 ms | 492 ms | 714 ms, 835 ms, 758 ms, 882 ms, 681 ms | 238 KB |
+| Plate | 1.05 s | 307 ms · 259 ms | 372 ms | 174 ms | 866 ms, 469 ms, 372 ms, 370 ms, 358 ms | 32 KB |
+| docen | 920 ms | 643 ms · 128 ms | 220 ms | 28 ms | 220 ms, 189 ms, 243 ms, 285 ms, 178 ms | 43 KB |
+| WordCraft | 671 ms | 337 ms · 125 ms | 202 ms | 21 ms | 270 ms, 276 ms, 180 ms, 202 ms, 188 ms | 3 KB |
+| SuperDoc | 1.32 s | 530 ms · 626 ms | 631 ms | 436 ms | 631 ms, 760 ms, 666 ms, 595 ms, 590 ms | 7 KB |
 <!-- server:end -->
 
 How each is measured:
