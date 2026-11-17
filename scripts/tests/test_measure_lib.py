@@ -417,6 +417,10 @@ def test_a_results_file_that_cannot_be_parsed_is_not_silently_replaced(tmp_path)
         lib.read_results(str(bad))
     assert "browser.json" in str(stop.value)
     assert lib.read_results(str(tmp_path / "absent.json")) == {"engines": {}}
+    folder = tmp_path / "a-folder.json"
+    folder.mkdir()  # there, and not readable as a file: not the same as absent
+    with pytest.raises(SystemExit):
+        lib.read_results(str(folder))
     ok = tmp_path / "ok.json"
     ok.write_text('{"engines": {"a": 1}}')
     assert lib.read_results(str(ok)) == {"engines": {"a": 1}}

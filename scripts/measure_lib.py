@@ -431,7 +431,7 @@ def stamp_rows(rows: dict, entries: dict, old: dict, meta: dict) -> dict:
 
 
 def read_results(path: str) -> dict:
-    """The results file a run merges into: empty when there is none, and a stop when it cannot be parsed.
+    """The results file a run merges into: empty when there is none, and a stop when it cannot be read or parsed.
 
     Read as empty, a corrupt file was replaced by this run's engines alone, and
     every engine the run did not measure lost its published entry.
@@ -439,10 +439,11 @@ def read_results(path: str) -> dict:
     try:
         with open(path) as f:
             return json.load(f)
-    except OSError:
+    except FileNotFoundError:
         return {"engines": {}}
-    except ValueError as e:
-        raise SystemExit(f"cannot parse {path}: {e}; fix or remove it before measuring into it")
+    except (OSError, ValueError) as e:
+        # Unreadable is not absent: treated as empty, the file would be rewritten without the others.
+        raise SystemExit(f"cannot read {path}: {e}; fix or remove it before measuring into it")
 
 
 def write_raw(path: str | None, meta: dict, raw: list[dict]) -> None:
