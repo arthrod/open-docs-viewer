@@ -407,3 +407,16 @@ def test_a_stopped_run_writes_beside_the_days_file_not_over_it():
     now = datetime.datetime(2026, 11, 17, 5, 6, 7, tzinfo=datetime.timezone.utc)
     assert lib.stopped_path("results/raw/2026-11-17-browser-showcase.json", now) == "results/raw/2026-11-17-browser-showcase-stopped-050607Z.json"
     assert lib.stopped_path(None) is None
+
+
+def test_a_results_file_that_cannot_be_parsed_is_not_silently_replaced(tmp_path):
+    """Read as empty, a corrupt file lost every engine the run did not measure."""
+    bad = tmp_path / "browser.json"
+    bad.write_text("{ not json")
+    with pytest.raises(SystemExit) as stop:
+        lib.read_results(str(bad))
+    assert "browser.json" in str(stop.value)
+    assert lib.read_results(str(tmp_path / "absent.json")) == {"engines": {}}
+    ok = tmp_path / "ok.json"
+    ok.write_text('{"engines": {"a": 1}}')
+    assert lib.read_results(str(ok)) == {"engines": {"a": 1}}

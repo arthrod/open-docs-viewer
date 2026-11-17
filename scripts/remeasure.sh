@@ -13,5 +13,9 @@ uv run --with playwright python -I scripts/measure.py "$ENGINES" "$RUNS" --resul
 # The README's tables are written from the files: left stale, the test that compares them fails.
 python3 scripts/readme_tables.py
 git add results/browser.json results/raw README.md
+if git diff --cached --quiet -- results/browser.json results/raw README.md; then
+  echo "nothing changed: nothing to commit"
+  exit 0
+fi
 git commit -m "Re-measure: $ENGINES, $RUNS runs ($(date +%F))" -- results/browser.json results/raw README.md
 git push

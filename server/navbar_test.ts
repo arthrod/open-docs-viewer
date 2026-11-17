@@ -93,7 +93,7 @@ Deno.test("Contact is the last item of both menus; crumb reads / viewers (#9)", 
   for (const html of pages) {
     assertStringIncludes(html, `<span class="crumb">/ viewers</span>`);
     const menu = html.slice(html.indexOf(`id="od-menu"`));
-    const items = [...menu.slice(0, menu.indexOf("</div>\n    </div>")).matchAll(/role="menuitem"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+    const items = [...menu.slice(0, menu.indexOf("\n      </div>")).matchAll(/<(?:a|button)\b[^>]*>([^<]*)</g)].map((m) => m[1].trim());
     assertEquals(items.at(-1), "Contact →");
     assertStringIncludes(menu, `href="https://arthur.law/contact"`);
   }
@@ -107,6 +107,24 @@ Deno.test("view menu credits the makers under / Made by; Contact still last (#13
   const menu = html.slice(html.indexOf(`id="od-menu"`));
   assertStringIncludes(menu, "/ Made by");
   assertStringIncludes(menu, `href="https://www.linkedin.com/in/john-scrudato/"`);
-  const items = [...menu.slice(0, menu.indexOf("</div>\n    </div>")).matchAll(/role="menuitem"[^>]*>([^<]*)</g)].map((m) => m[1].trim());
+  const items = [...menu.slice(0, menu.indexOf("\n      </div>")).matchAll(/<(?:a|button)\b[^>]*>([^<]*)</g)].map((m) => m[1].trim());
   assertEquals(items.at(-1), "Contact →");
+});
+
+Deno.test("navbar: the menu is a disclosure, not an ARIA menu (it has no arrow-key navigation)", () => {
+  for (const html of [landingPage(ENGINES, RESULTS, SAMPLE_SRC), viewPage(ENGINES[0]!, shell, src, absolutize)]) {
+    assertStringIncludes(html, `aria-expanded="false" aria-controls="od-menu"`);
+    assertEquals(/role="menu(?:item)?"|aria-haspopup/.test(html), false);
+  }
+});
+
+Deno.test("the site's box model applies to its own bar and error box, never to what an engine draws", () => {
+  const html = viewPage(ENGINES[0]!, shell, src, absolutize);
+  assertEquals(html.includes(".odv-chrome-wrap *"), false);
+  assertStringIncludes(html, ".odv-chrome *,");
+  assertStringIncludes(html, "#od-stage > .verr{box-sizing:border-box}");
+});
+
+Deno.test("a menu button that is hidden stays hidden", () => {
+  assertStringIncludes(viewPage(ENGINES[0]!, shell, src, absolutize), ".od-menu>button:not([hidden]),.od-menu>a{");
 });

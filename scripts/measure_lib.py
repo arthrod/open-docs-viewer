@@ -430,6 +430,21 @@ def stamp_rows(rows: dict, entries: dict, old: dict, meta: dict) -> dict:
     return rows
 
 
+def read_results(path: str) -> dict:
+    """The results file a run merges into: empty when there is none, and a stop when it cannot be parsed.
+
+    Read as empty, a corrupt file was replaced by this run's engines alone, and
+    every engine the run did not measure lost its published entry.
+    """
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except OSError:
+        return {"engines": {}}
+    except ValueError as e:
+        raise SystemExit(f"cannot parse {path}: {e}; fix or remove it before measuring into it")
+
+
 def write_raw(path: str | None, meta: dict, raw: list[dict]) -> None:
     """Every run of a measurement, in a file of its own beside the medians."""
     if not path:
