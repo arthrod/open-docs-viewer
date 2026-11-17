@@ -27,7 +27,7 @@ import { parseHTML } from "npm:linkedom@0.18.12";
 import { imageNode, type Picture, pictureLayout } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/pictures.ts";
 import { safeUrl } from "https://esm.town/v/arthrod/open-docs@471-main/editors/plate/safe-url.ts";
 // Tracked changes as underline / strikethrough before mammoth sees them, as the editor adapter does.
-import { revisionsAsFormatting } from "https://esm.town/v/arthrod/open-docs@725-main/lib/revisions.ts";
+import { revisionsAsFormatting } from "https://esm.town/v/arthrod/open-docs@851-main/lib/revisions.ts";
 export { safeUrl };
 
 // deno-lint-ignore no-explicit-any
