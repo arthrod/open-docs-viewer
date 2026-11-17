@@ -238,7 +238,10 @@ body{margin:0}
 .od-land-nav>a:hover{color:var(--ink);border-bottom-color:var(--mark)}
 @media(max-width:1180px){.od-bar .crumb{display:none}}
 @media(max-width:760px){
-  .od-status-chip{display:none}
+  /* On a phone the status takes a row of its own under the bar: hidden, a failed load and the
+     result of "Re-measure now" (which closes the menu) were shown nowhere. */
+  .od-bar{flex-wrap:wrap}
+  .od-status-chip{order:1;flex:0 0 100%;max-width:none;white-space:normal;overflow:visible;overflow-wrap:anywhere}
   .od-seg{display:none} /* no room beside the wordmark on a phone: the Menu's first Site item is the same link */
   .od-menu-btn .od-menu-lbl{display:none}
   .od-menu-btn{width:32px;padding:0;justify-content:center}
@@ -256,3 +259,9 @@ body{margin:0}
   .od-menu{position:absolute;left:8px;right:8px;top:100%;min-width:0;width:auto}
 }
 `;
+
+/** Where the landing's form goes when its script did not run (`GET /go?engine=&src=`), or null when it names no engine or document. */
+export function goTarget(engine: string | undefined, src: string | undefined, engines: Engine[]): string | null {
+  if (!engine || !src || !engines.some((e) => e.slug === engine)) return null;
+  return `/v/${engine}?src=${encodeURIComponent(src)}`;
+}

@@ -14,10 +14,16 @@ export const OPEN_DOCS_ESM = "https://esm.town/v/arthrod/open-docs";
  */
 async function currentEsm(path: string): Promise<string> {
   const unversioned = `${OPEN_DOCS_ESM}${path}`;
-  const res = await fetch(unversioned, { redirect: "manual" });
-  await res.body?.cancel();
-  const loc = res.headers.get("location");
-  return loc ? new URL(loc, OPEN_DOCS_ESM).href : unversioned;
+  try {
+    const res = await fetch(unversioned, { redirect: "manual", signal: AbortSignal.timeout(5000) });
+    await res.body?.cancel();
+    const loc = res.headers.get("location");
+    return loc ? new URL(loc, OPEN_DOCS_ESM).href : unversioned;
+  } catch {
+    // The probe failed or was slow: the unversioned address still imports (from the runtime's
+    // cache when esm.town is down), and failing here would fail every module that imports this one.
+    return unversioned;
+  }
 }
 
 const { editors } = await import(await currentEsm("/server/registry.ts"));

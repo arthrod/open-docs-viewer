@@ -42,9 +42,16 @@ export const VIEWER_DS_CSS = `
   --font-mono:"Roboto Mono",ui-monospace,monospace;
   --t-fast:.15s ease;--t:.18s ease;
 }
-.bl.odv,.odv-chrome-wrap{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:17px;line-height:1.6;letter-spacing:-0.01em;
+.bl.odv,.odv-chrome,#od-stage > .verr{color:var(--ink);font-family:var(--font-sans);font-size:17px;line-height:1.6;letter-spacing:-0.01em;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-.bl.odv *,.bl.odv *::before,.bl.odv *::after,.odv-chrome,.odv-chrome *,.odv-chrome *::before,.odv-chrome *::after,#od-stage > .verr{box-sizing:border-box}
+.bl.odv{background:var(--bg)}
+/* A /v page gives an engine the page the editors site gives it (open-docs server/styles.ts, SHELL_CSS):
+   border-box everywhere, and a body that sets a generic sans at 13px/1.45 and nothing else. Brand type,
+   ink and tracking stay on our own bar and error box. Inherited from the body, they redrew the documents:
+   every engine's text was tracked -0.17px and antialiased, and Docxodus and folio took our ink
+   (measured in Chrome, 2026-11-17). Without border-box, Plate's text area is 816px wide, not 624. */
+.odv-chrome-wrap{background:var(--bg);font-family:system-ui,-apple-system,sans-serif;font-size:13px;line-height:1.45}
+.bl.odv *,.bl.odv *::before,.bl.odv *::after,.odv-chrome-wrap *,.odv-chrome-wrap *::before,.odv-chrome-wrap *::after{box-sizing:border-box}
 .bl.odv ::selection,.odv-chrome-wrap ::selection{background:var(--mark);color:var(--mark-text)}
 .wrap{max-width:var(--page-max);margin-inline:auto;padding-inline:var(--px)}
 .odv a{color:inherit}
@@ -90,7 +97,7 @@ ${NAVBAR_CSS}
   background-repeat:no-repeat;transition:background-size .25s ease;padding-bottom:1px}
 .tbl td a:hover{background-size:100% 42%}
 .tbl .ro{font-family:var(--font-mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:4px;line-height:1.35}
-.tbl tr.odv-sep th{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:none;color:var(--ink);background:color-mix(in srgb,var(--mark) 35%,var(--bg));
+.tbl tr.odv-sep th{white-space:normal;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:none;color:var(--ink);background:color-mix(in srgb,var(--mark) 35%,var(--bg));
   border-bottom:1px solid var(--ink);padding:12px}
 .odv-bar{display:block;height:10px;border:1px solid var(--ink);background:var(--bg);margin-top:2px}
 .odv-bar > i{display:block;height:100%;background:var(--ink);min-width:1px}
@@ -116,7 +123,7 @@ ${NAVBAR_CSS}
 .site-foot a{color:#c9c9c4;text-decoration:none;border-bottom:1px solid #333;padding-bottom:1px}
 .site-foot a:hover{color:var(--mark);border-color:var(--mark)}
 html.odv-view,html.odv-view body{margin:0;height:100%}
-html.odv-view body{display:flex;flex-direction:column;height:100dvh;background:var(--bg);color:var(--ink)}
+html.odv-view body{display:flex;flex-direction:column;height:100dvh;background:var(--bg)}
 .odv-chrome{flex:none}
 #od-stage{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--surface)}
 #od-stage > *{height:100%}
