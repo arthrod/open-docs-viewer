@@ -333,17 +333,17 @@ Measured 2026-11-17: Google Chrome 157.0.8103.79 (installed, headed) via Playwri
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 2.78 s | 179 ms · 882 ms | 491 ms | 280 ms | 606 ms, 458 ms, 491 ms, 556 ms, 462 ms | 61 KB |
-| folio | 1.88 s | 496 ms · 317 ms | 355 ms | 155 ms | 771 ms, 359 ms, 393 ms, 351 ms, 326 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
-| docx-editor.dev | 1.20 s | 119 ms · 895 ms | 703 ms | 504 ms | 733 ms, 703 ms, 752 ms, 690 ms, 686 ms | 238 KB |
-| Plate | 727 ms | 139 ms · 234 ms | 333 ms | 139 ms | 502 ms, 324 ms, 343 ms, 318 ms, 333 ms | 32 KB |
-| docen | 875 ms | 488 ms · 126 ms | 250 ms | 38 ms | 594 ms, 237 ms, 248 ms, 253 ms, 260 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
-| WordCraft | 791 ms | 331 ms · 172 ms | 193 ms | 23 ms | 247 ms, 505 ms, 166 ms, 212 ms, 174 ms (1 reached a process that had not loaded the engine: not in the median) | 3 KB + a page image per page viewed |
-| SuperDoc | 1.41 s | 547 ms · 649 ms | 660 ms | 460 ms | 656 ms, 630 ms, 1.40 s, 676 ms, 663 ms (1 reached a process that had not loaded the engine: not in the median) | 7 KB |
+| Docxodus | 1.73 s | 189 ms · 890 ms | 471 ms | 282 ms | 1.13 s, 494 ms, 443 ms, 463 ms, 479 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
+| folio | 1.33 s | 347 ms · 332 ms | 399 ms | 212 ms | 1.31 s, 441 ms, 375 ms, 356 ms, 423 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
+| docx-editor.dev | 1.25 s | 119 ms · 866 ms | 710 ms | 503 ms | 739 ms, 1.25 s, 718 ms, 683 ms, 702 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
+| Plate | 718 ms | 135 ms · 212 ms | 306 ms | 146 ms | 1.10 s, 361 ms, 271 ms, 313 ms, 300 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
+| docen | 660 ms | 343 ms · 126 ms | 193 ms | 39 ms | 728 ms, 195 ms, 191 ms, 183 ms, 263 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
+| WordCraft | 476 ms | 187 ms · 126 ms | 221 ms | 23 ms | 171 ms, 191 ms, 375 ms, 221 ms, 256 ms | 3 KB + a page image per page viewed |
+| SuperDoc | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
 <!-- server:end -->
 
 How each is measured:
@@ -355,7 +355,7 @@ How each is measured:
   whose first request reports no init time had already been asked: it is marked as not a first request. This one is
   run by hand from the machine that deployed (no workflow can be "straight after a deploy"), and every total includes
   DNS, TLS and connecting, because each request is a new `curl`. The first-request column is ONE request per engine
-  per deploy, not a median: five deploys on 2026-11-16 and 17 gave Docxodus 3.07 s, 1.47 s, 2.23 s, 1.84 s and 2.78 s
+  per deploy, not a median: six deploys on 2026-11-16 and 17 gave Docxodus 3.07 s, 1.47 s, 2.23 s, 1.84 s, 2.78 s and 1.73 s
   (`git log -p results/server.json`). Val Town also runs more than one copy of the val, so a "warm" request
   sometimes lands on a copy that has not loaded the engine yet (its `init` is then 100 ms or more, not 0 to 2):
   such a request is listed with the others, counted in its row, and left out of the warm medians; every request

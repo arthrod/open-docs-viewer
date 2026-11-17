@@ -1,140 +1,140 @@
 {
  "measuredAt": "2026-11-17",
- "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores",
+ "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores",
  "document": "showcase.docx (47,871 B)",
  "engines": {
   "docxodus": {
-   "firstMs": 2777,
-   "firstInitMs": 179,
-   "firstRenderMs": 882,
+   "firstMs": 1731,
+   "firstInitMs": 189,
+   "firstRenderMs": 890,
    "firstCold": true,
-   "warmMs": 491,
-   "warmRenderMs": 280,
+   "warmMs": 471,
+   "warmRenderMs": 282,
    "bytes": 62692,
    "warmRuns": [
-    606,
-    458,
-    491,
-    556,
-    462
+    1133,
+    494,
+    443,
+    463,
+    479
    ],
-   "warmColdRuns": 0,
+   "warmColdRuns": 1,
    "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
   },
   "folio": {
-   "firstMs": 1881,
-   "firstInitMs": 496,
-   "firstRenderMs": 317,
+   "firstMs": 1334,
+   "firstInitMs": 347,
+   "firstRenderMs": 332,
    "firstCold": true,
-   "warmMs": 355,
-   "warmRenderMs": 155,
+   "warmMs": 399,
+   "warmRenderMs": 212,
    "bytes": 208770,
    "warmRuns": [
-    771,
-    359,
-    393,
-    351,
-    326
+    1313,
+    441,
+    375,
+    356,
+    423
    ],
    "warmColdRuns": 1,
    "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
   },
   "eigenpal": {
-   "firstMs": 1199,
+   "firstMs": 1247,
    "firstInitMs": 119,
-   "firstRenderMs": 895,
+   "firstRenderMs": 866,
    "firstCold": true,
-   "warmMs": 703,
-   "warmRenderMs": 504,
+   "warmMs": 710,
+   "warmRenderMs": 503,
    "bytes": 243292,
    "warmRuns": [
-    733,
-    703,
-    752,
-    690,
-    686
+    739,
+    1255,
+    718,
+    683,
+    702
    ],
-   "warmColdRuns": 0,
+   "warmColdRuns": 1,
    "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
   },
   "plate": {
-   "firstMs": 727,
-   "firstInitMs": 139,
-   "firstRenderMs": 234,
+   "firstMs": 718,
+   "firstInitMs": 135,
+   "firstRenderMs": 212,
    "firstCold": true,
-   "warmMs": 333,
-   "warmRenderMs": 139,
+   "warmMs": 306,
+   "warmRenderMs": 146,
    "bytes": 32966,
    "warmRuns": [
-    502,
-    324,
-    343,
-    318,
-    333
+    1104,
+    361,
+    271,
+    313,
+    300
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "docen": {
+   "firstMs": 660,
+   "firstInitMs": 343,
+   "firstRenderMs": 126,
+   "firstCold": true,
+   "warmMs": 193,
+   "warmRenderMs": 39,
+   "bytes": 43771,
+   "warmRuns": [
+    728,
+    195,
+    191,
+    183,
+    263
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "wordcraft": {
+   "firstMs": 476,
+   "firstInitMs": 187,
+   "firstRenderMs": 126,
+   "firstCold": true,
+   "warmMs": 221,
+   "warmRenderMs": 23,
+   "bytes": 3405,
+   "warmRuns": [
+    171,
+    191,
+    375,
+    221,
+    256
    ],
    "warmColdRuns": 0,
    "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
-  },
-  "docen": {
-   "firstMs": 875,
-   "firstInitMs": 488,
-   "firstRenderMs": 126,
-   "firstCold": true,
-   "warmMs": 250,
-   "warmRenderMs": 38,
-   "bytes": 43771,
-   "warmRuns": [
-    594,
-    237,
-    248,
-    253,
-    260
-   ],
-   "warmColdRuns": 1,
-   "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
-  },
-  "wordcraft": {
-   "firstMs": 791,
-   "firstInitMs": 331,
-   "firstRenderMs": 172,
-   "firstCold": true,
-   "warmMs": 193,
-   "warmRenderMs": 23,
-   "bytes": 3355,
-   "warmRuns": [
-    247,
-    505,
-    166,
-    212,
-    174
-   ],
-   "warmColdRuns": 1,
-   "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
   },
   "superdoc": {
-   "firstMs": 1412,
-   "firstInitMs": 547,
-   "firstRenderMs": 649,
+   "firstMs": 1394,
+   "firstInitMs": 516,
+   "firstRenderMs": 619,
    "firstCold": true,
-   "warmMs": 660,
-   "warmRenderMs": 460,
+   "warmMs": 604,
+   "warmRenderMs": 436,
    "bytes": 6840,
    "warmRuns": [
-    656,
-    630,
-    1401,
-    676,
-    663
+    651,
+    568,
+    598,
+    604,
+    687
    ],
-   "warmColdRuns": 1,
+   "warmColdRuns": 0,
    "measuredAt": "2026-11-17",
-   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 9.4, highest 10.2, on 12 cores"
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
   }
  }
 }
