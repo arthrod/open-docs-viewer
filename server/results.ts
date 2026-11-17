@@ -15,6 +15,13 @@ export interface EngineResult {
   heapBytes: number | null;
   /** How "rendered" was detected in the median run. */
   how: string | null;
+  /** Why a run did not render, when one did not and others did. */
+  failed?: string | null;
+  /** What a run that rendered then failed to read (its time is kept). */
+  incomplete?: string | null;
+  /** When and how this engine was measured, when the file records it per engine (a partial re-run). */
+  measuredAt?: string;
+  environment?: string;
 }
 export interface Results {
   measuredAt: string | null;
@@ -22,248 +29,180 @@ export interface Results {
   document: string;
   engines: Record<string, EngineResult>;
 }
-export const RESULTS: Results = {
-  "measuredAt": "2026-11-09",
-  "environment": "Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Mac",
-  "document": "showcase.docx (47,871 B) with a never-seen ?n= per run",
-  "engines": {
-    "apryse": {
-      "renderedMs": 3477,
-      "runs": [
-        3477,
-        3123,
-        5282
-      ],
-      "bytes": 7296801,
-      "requests": 158,
-      "heapBytes": 21651080,
-      "how": "data-od-rendered"
-    },
-    "canvas-editor": {
-      "renderedMs": 963,
-      "runs": [
-        963,
-        970,
-        824
-      ],
-      "bytes": 609607,
-      "requests": 24,
-      "heapBytes": 9690980,
-      "how": "data-od-rendered"
-    },
-    "docen": {
-      "renderedMs": 1408,
-      "runs": [
-        1672,
-        1356,
-        1408
-      ],
-      "bytes": 1456529,
-      "requests": 327,
-      "heapBytes": 32098880,
-      "how": "data-od-rendered"
-    },
-    "docxodus": {
-      "renderedMs": 2816,
-      "runs": [
-        2816,
-        3308,
-        2042
-      ],
-      "bytes": 8100439,
-      "requests": 58,
-      "heapBytes": 8408300,
-      "how": "data-od-rendered"
-    },
-    "eigenpal": {
-      "renderedMs": 1197,
-      "runs": [
-        1197,
-        1584,
-        971
-      ],
-      "bytes": 5294825,
-      "requests": 200,
-      "heapBytes": 32266276,
-      "how": "data-od-rendered"
-    },
-    "folio": {
-      "renderedMs": 1124,
-      "runs": [
-        2279,
-        1081,
-        1124
-      ],
-      "bytes": 2193101,
-      "requests": 78,
-      "heapBytes": 21732176,
-      "how": "data-od-rendered"
-    },
-    "google-viewer": {
-      "renderedMs": 20838,
-      "runs": [
-        20927,
-        808,
-        20838
-      ],
-      "bytes": 1134168,
-      "requests": 27,
-      "heapBytes": 2143616,
-      "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering); google-viewer: 2 of 3 runs needed the 20 s retry"
-    },
-    "nutrient": {
-      "renderedMs": 4084,
-      "runs": [
-        4168,
-        3332,
-        4084
-      ],
-      "bytes": 25538995,
-      "requests": 98,
-      "heapBytes": 22391244,
-      "how": "data-od-rendered"
-    },
-    "plate": {
-      "renderedMs": 1394,
-      "runs": [
-        1394,
-        1095,
-        1522
-      ],
-      "bytes": 1079773,
-      "requests": 429,
-      "heapBytes": 26428324,
-      "how": "data-od-rendered"
-    },
-    "superdoc": {
-      "renderedMs": 2656,
-      "runs": [
-        3660,
-        2656,
-        2473
-      ],
-      "bytes": 9077099,
-      "requests": 24,
-      "heapBytes": 18602632,
-      "how": "data-od-rendered"
-    },
-    "word-online": {
-      "renderedMs": 769,
-      "runs": [
-        769,
-        584,
-        785
-      ],
-      "bytes": 1701729,
-      "requests": 66,
-      "heapBytes": 1758268,
-      "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering); google-viewer: 2 of 3 runs needed the 20 s retry"
-    },
-    "wordcraft": {
-      "renderedMs": 1675,
-      "runs": [
-        1675,
-        1555,
-        2743
-      ],
-      "bytes": 22699273,
-      "requests": 19,
-      "heapBytes": 3199356,
-      "how": "data-od-rendered"
-    }
-  }
-};
+import BUNDLED from "../results/browser.json" with { type: "json" };
+import SERVER_BUNDLED from "../results/server.json" with { type: "json" };
+
+const esc = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 /**
- * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl): the
- * first request to each engine right after a deploy (only the very first one
- * also paid the isolate's boot), then the median of 5 warm requests. Times
- * are wall clock from this machine; render/init come from Server-Timing.
+ * The cold browser benchmark lives in results/browser.json, written by
+ * scripts/measure.py --results (locally via scripts/remeasure.sh, or by the
+ * "Re-measure" GitHub workflow, which commits it). The landing reads the
+ * latest committed copy from GitHub (5-minute cache), so a refresh shows up
+ * without redeploying; the copy bundled with this deploy is the fallback.
+ */
+export const RESULTS: Results = BUNDLED as Results;
+export const RESULTS_URL = "https://raw.githubusercontent.com/arthrod/open-docs-viewer/main/results/browser.json";
+const RESULTS_TTL_MS = 5 * 60 * 1000;
+let cached: { at: number; results: Results } | undefined;
+let pending: Promise<Results> | undefined;
+
+/** The published results: GitHub's copy when it can be had and has the shape the page renders, else the bundled one. */
+export function currentResults(): Promise<Results> {
+  if (cached && Date.now() - cached.at < RESULTS_TTL_MS) return Promise.resolve(cached.results);
+  // Requests that arrive together share one fetch, and none of them waits for it: the page is
+  // answered with what is held (the last fetched file, or the bundled one, itself a real
+  // measurement), and the next request gets the fetched file. Waiting cost the landing up to
+  // four seconds whenever GitHub was slow.
+  pending ??= fetchResults().finally(() => (pending = undefined));
+  pending.catch(() => {});
+  return Promise.resolve(cached?.results ?? RESULTS);
+}
+
+/** Forget what was fetched, as a fresh isolate would start (tests). */
+export function forgetResults() {
+  cached = undefined;
+  pending = undefined;
+}
+
+const isRecord = (x: unknown): x is Record<string, unknown> => !!x && typeof x === "object" && !Array.isArray(x);
+
+async function fetchResults(): Promise<Results> {
+  let results = RESULTS;
+  try {
+    const res = await fetch(RESULTS_URL, { signal: AbortSignal.timeout(4000) });
+    if (res.ok) {
+      const json: unknown = await res.json();
+      // Only take it if it has the shape the page renders: a dated file with at least one engine.
+      if (isRecord(json) && typeof json.measuredAt === "string" && isRecord(json.engines) && Object.keys(json.engines).length > 0) results = json as unknown as Results;
+    } else {
+      await res.body?.cancel();
+    }
+  } catch {
+    // GitHub unreachable or slow, or not JSON: the bundled copy is still a real measurement.
+  }
+  cached = { at: Date.now(), results };
+  return results;
+}
+
+/** KPI strip for the landing hero (cold benchmark + harness facts). */
+export function landingStatItems(
+  engineCount: number,
+  openCount: number,
+  serverRouteCount: number,
+  results: Results,
+): { value: string; label: string }[] {
+  const measured = results.measuredAt
+    ? results.measuredAt.replace(/T.*/, "").slice(0, 10)
+    : "pending";
+  return [
+    { value: String(engineCount), label: "Engines · same document URL and harness" },
+    { value: String(openCount), label: "Open source · rendered in your browser" },
+    { value: String(engineCount - openCount), label: "Proprietary · vendor servers or trial mode" },
+    { value: measured, label: `Cold browser table · last run (${serverRouteCount} also on server)` },
+  ];
+}
+
+export function statStripHtml(items: { value: string; label: string }[]): string {
+  return `<ul class="stats is-kpi odv-stats">${
+    items.map((i) => `<li class="stat"><b>${esc(i.value)}</b><span>${esc(i.label)}</span></li>`).join("")
+  }</ul>`;
+}
+
+/**
+ * Server-rendered routes (/r/<engine>), measured with plain HTTP (curl) by
+ * scripts/measure_server.py --first-warm, which writes results/server.json:
+ * the first request to each engine right after a deploy (only the very first
+ * one also paid the isolate's boot), then the median of the warm requests.
+ * Times are wall clock from the measuring machine; render/init come from
+ * Server-Timing.
  */
 export interface ServerResult {
   slug: string;
   name: string;
   how: string;
   output: "html" | "pages" | "images" | "browser-paginated";
-  firstMs: number;
-  firstInitMs: number;
-  firstRenderMs: number;
-  warmMs: number;
-  warmRenderMs: number;
-  bytes: number;
+  /** The first request to the route after a deploy. */
+  firstMs: number | null;
+  firstInitMs: number | null;
+  firstRenderMs: number | null;
+  /** False when that request found the engine already loaded (init 0): it was not a first request. */
+  firstCold?: boolean;
+  /** Median of the warm requests. */
+  warmMs: number | null;
+  warmRenderMs: number | null;
+  bytes: number | null;
+  /** Every warm request's total time (null = it failed). */
+  warmRuns?: (number | null)[];
+  /** How many warm requests reached a process that had not loaded the engine: listed, not in the medians. */
+  warmColdRuns?: number;
+  /** A failed request's error. */
+  error?: string;
+  /** When this route was measured, when the file records it per route. */
+  measuredAt?: string;
+  environment?: string;
 }
-export const SERVER_MEASURED_AT = "2026-11-09, curl from a Mac, showcase.docx (47,871 B); Docxodus and Plate re-measured after adding pagination and pictures. Docxodus times exclude its in-browser pagination (~65 ms in Chrome)";
-export const SERVER_RESULTS: ServerResult[] = [
+/** The engines with a server route: what runs, and what the browser is sent. */
+export const SERVER_ROUTES: Pick<ServerResult, "slug" | "name" | "how" | "output">[] = [
   {
     "slug": "docxodus",
     "name": "Docxodus",
     "how": "docxodus/core convertDocxToHtml in Paginated mode (.NET in wasm) here; its own paginateHtml flows it into pages in the browser",
-    "output": "browser-paginated",
-    "firstMs": 2231,
-    "firstInitMs": 235,
-    "firstRenderMs": 1103,
-    "warmMs": 622,
-    "warmRenderMs": 302,
-    "bytes": 58818
+    "output": "browser-paginated"
   },
   {
     "slug": "folio",
     "name": "folio",
-    "how": "@stll/folio-core headless layout → display list → its HTML backend: absolutely positioned pages",
-    "output": "pages",
-    "firstMs": 1556,
-    "firstInitMs": 449,
-    "firstRenderMs": 337,
-    "warmMs": 459,
-    "warmRenderMs": 157,
-    "bytes": 207736
+    "how": "@stll/folio-core headless layout \u2192 display list \u2192 its HTML backend: absolutely positioned pages",
+    "output": "pages"
   },
   {
     "slug": "eigenpal",
     "name": "docx-editor.dev",
-    "how": "@docx-editor.dev/core/export layout (HarfBuzz) → the editor's own painter into linkedom",
-    "output": "pages",
-    "firstMs": 1192,
-    "firstInitMs": 90,
-    "firstRenderMs": 859,
-    "warmMs": 791,
-    "warmRenderMs": 574,
-    "bytes": 242255
+    "how": "@docx-editor.dev/core/export layout (HarfBuzz) \u2192 the editor's own painter into linkedom",
+    "output": "pages"
   },
   {
     "slug": "plate",
     "name": "Plate",
     "how": "platejs/static serializeHtml (react-dom/server) after mammoth's import, pictures via @platejs/media: one flowing page",
-    "output": "html",
-    "firstMs": 893,
-    "firstInitMs": 355,
-    "firstRenderMs": 245,
-    "warmMs": 448,
-    "warmRenderMs": 133,
-    "bytes": 31504
+    "output": "html"
   },
   {
     "slug": "docen",
     "name": "docen",
-    "how": "@docen/layout's paginator with a font-file measureText → SVG pages painted here (no headers/footers yet)",
-    "output": "pages",
-    "firstMs": 716,
-    "firstInitMs": 380,
-    "firstRenderMs": 136,
-    "warmMs": 257,
-    "warmRenderMs": 36,
-    "bytes": 42737
+    "how": "@docen/layout's paginator with a font-file measureText \u2192 SVG pages painted here (no headers/footers yet)",
+    "output": "pages"
   },
   {
     "slug": "wordcraft",
     "name": "WordCraft",
-    "how": "WordCraft's reader, layout and vello_cpu rasteriser compiled to wasm: PNG page images",
-    "output": "images",
-    "firstMs": 1202,
-    "firstInitMs": 220,
-    "firstRenderMs": 656,
-    "warmMs": 550,
-    "warmRenderMs": 218,
-    "bytes": 851493
+    "how": "WordCraft's reader, layout and vello_cpu rasteriser compiled to wasm. The page holds each page's size and one image URL per page; a PNG is rasterised (about 0.2 s) when the browser asks for it, as its page nears the viewport. Render and Sent are the page without its images (measured 2026-11-16)",
+    "output": "images"
+  },
+  {
+    "slug": "superdoc",
+    "name": "SuperDoc",
+    "how": "@superdoc/docx-engine headless runtime \u2192 Document API projectHtml (redline mode): semantic HTML, not its paginated view; no colours, pictures as placeholders",
+    "output": "html"
   }
 ];
+
+/** The file scripts/measure_server.py --first-warm writes. */
+export interface ServerMeasurements {
+  measuredAt: string | null;
+  environment: string;
+  document?: string;
+  engines: Record<string, Partial<Pick<ServerResult, "firstMs" | "firstInitMs" | "firstRenderMs" | "firstCold" | "warmMs" | "warmRenderMs" | "bytes" | "warmRuns" | "warmColdRuns" | "error">>>;
+}
+const SERVER_FILE = SERVER_BUNDLED as ServerMeasurements;
+const NO_FIGURES = { firstMs: null, firstInitMs: null, firstRenderMs: null, warmMs: null, warmRenderMs: null, bytes: null };
+
+/** Each route with its figures from results/server.json; a route the file does not hold has none. */
+export const serverResults = (file: ServerMeasurements = SERVER_FILE): ServerResult[] =>
+  SERVER_ROUTES.map((r) => ({ ...r, ...NO_FIGURES, ...(file.engines?.[r.slug] ?? {}) }));
+export const SERVER_RESULTS: ServerResult[] = serverResults();
+/** The heading of that file: a row measured on another day says so. */
+export const SERVER_FILE_HEAD = { measuredAt: SERVER_FILE.measuredAt };
+export const SERVER_MEASURED_AT = [SERVER_FILE.measuredAt, SERVER_FILE.environment, SERVER_FILE.document].filter(Boolean).join(", ");

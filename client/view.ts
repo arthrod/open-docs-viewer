@@ -2,19 +2,27 @@
  * The view-only page's runner. Loaded after open-docs' lib/boot.ts (which
  * defines window.od) and before the engine's adapter module.
  *
+ * Chrome (sticky bar, re-measure button, stage layout) is in server/render.ts
+ * `viewPage`. This file only wires behaviour; keep ids #od-stage, #od-loading-detail,
+ * #od-remeasure and dataset odRendered / odRemeasured / odError stable.
+ *
  * It hands the adapter a ViewerContext (open-docs lib/kit.ts): the document,
  * fetched once from this val's /api/doc, and its public URL. The adapter
  * mounts read-only on it; when mount() didn't take the document, it is
  * loaded with load(). Then `data-od-rendered` on <html> marks the moment the
  * page is showing it (scripts/measure.py reads it).
  */
-type Config = { slug: string; name: string; src: string; frame: boolean; docUrl: string };
+type Config = { slug: string; name: string; src: string; frame: boolean; docUrl: string; openDocs: string };
 // deno-lint-ignore no-explicit-any
 const od = (window as any).od;
 // deno-lint-ignore no-explicit-any
 const cfg = (window as any).__OD_VIEW as Config;
 const statusEl = document.getElementById("od-loading-detail")!;
-const status = (s: string) => (statusEl.textContent = s);
+// The chip cuts a long line with an ellipsis: the whole text is also its title.
+const status = (s: string) => {
+  statusEl.textContent = s;
+  statusEl.title = s;
+};
 
 let doc: Promise<Uint8Array> | undefined;
 const fetchDoc = () =>
@@ -34,6 +42,36 @@ od.viewer = {
     return fetchDoc().then((b: Uint8Array) => b.slice());
   },
 };
+
+// The default Resource Timing buffer (250 entries) fills on heavy engines.
+performance.setResourceTimingBufferSize?.(5000);
+
+/**
+ * "Re-measure now": the same reading open-docs takes (its lib/metrics.ts
+ * measure(), so cross-origin file sizes are counted the same way), taken
+ * again as the page is now. Shown in the bar; nothing is stored.
+ */
+function wireRemeasure(renderedMs: number) {
+  const btn = document.getElementById("od-remeasure") as HTMLButtonElement | null;
+  if (!btn) return;
+  btn.hidden = false;
+  btn.addEventListener("click", async () => {
+    btn.disabled = true;
+    btn.textContent = "Measuring…";
+    try {
+      const { measure, fmtBytes } = await import(`${cfg.openDocs}/lib/metrics.ts`);
+      const m = await measure({ slug: cfg.slug, mountStart: 0, mountEnd: renderedMs });
+      const at = new Date().toLocaleTimeString();
+      status(`Rendered in ${(renderedMs / 1000).toFixed(2)} s · now (${at}): heap ${fmtBytes(m.heapBytes)} · ${fmtBytes(m.loadedBytes)} in ${m.resources} files`);
+      document.documentElement.dataset.odRemeasured = JSON.stringify({ at, heapBytes: m.heapBytes, loadedBytes: m.loadedBytes, files: m.resources });
+    } catch (err) {
+      status(`Re-measure failed: ${(err as Error)?.message ?? err}`);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Re-measure now";
+    }
+  });
+}
 
 const frames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
@@ -61,6 +99,7 @@ od.onAdapter(async (a: {
     const ms = performance.now();
     document.documentElement.dataset.odRendered = String(Math.round(ms));
     status(cfg.frame ? `Frame loaded in ${(ms / 1000).toFixed(2)} s` : `Rendered in ${(ms / 1000).toFixed(2)} s`);
+    wireRemeasure(Math.round(ms));
   } catch (err) {
     const e = err as Error;
     document.documentElement.dataset.odError = e?.message ?? String(err);

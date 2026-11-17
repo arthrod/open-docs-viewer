@@ -1,0 +1,411 @@
+{
+ "measuredAt": "2026-11-17",
+ "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores",
+ "docs": {
+  "showcase": {
+   "docxodus": {
+    "loadMs": 1487,
+    "paintMs": 1488,
+    "heapBytes": 2153272,
+    "rendererRss": 459784192,
+    "domNodes": 927,
+    "bytes": 61214,
+    "requests": 3,
+    "runs": [
+     961,
+     1487,
+     1408,
+     1738,
+     2823
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "folio": {
+    "loadMs": 1359,
+    "paintMs": 1532,
+    "heapBytes": 1304804,
+    "rendererRss": 446922752,
+    "domNodes": 480,
+    "bytes": 144585,
+    "requests": 7,
+    "runs": [
+     1766,
+     1359,
+     1391,
+     1032,
+     532
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "eigenpal": {
+    "loadMs": 1093,
+    "paintMs": 1340,
+    "heapBytes": 796040,
+    "rendererRss": 468434944,
+    "domNodes": 1048,
+    "bytes": 1162807,
+    "requests": 7,
+    "runs": [
+     902,
+     1142,
+     1093,
+     1240,
+     962
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "plate": {
+    "loadMs": 714,
+    "paintMs": 992,
+    "heapBytes": 1302816,
+    "rendererRss": 435142656,
+    "domNodes": 462,
+    "bytes": 13854,
+    "requests": 1,
+    "runs": [
+     952,
+     664,
+     716,
+     714,
+     408
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "docen": {
+    "loadMs": 1018,
+    "paintMs": 1220,
+    "heapBytes": 788240,
+    "rendererRss": 463011840,
+    "domNodes": 303,
+    "bytes": 1127786,
+    "requests": 6,
+    "runs": [
+     378,
+     1024,
+     1063,
+     1018,
+     461
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "wordcraft": {
+    "loadMs": 1102,
+    "paintMs": 1000,
+    "heapBytes": 1329036,
+    "rendererRss": 438894592,
+    "domNodes": 38,
+    "bytes": 178759,
+    "requests": 3,
+    "runs": [
+     1102,
+     1034,
+     689,
+     1787,
+     1455
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "superdoc": {
+    "loadMs": 973,
+    "paintMs": 1304,
+    "heapBytes": 1292676,
+    "rendererRss": 433668096,
+    "domNodes": 233,
+    "bytes": 3498,
+    "requests": 1,
+    "runs": [
+     944,
+     973,
+     1454,
+     1623,
+     827
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   }
+  },
+  "redline": {
+   "docxodus": {
+    "loadMs": 1595,
+    "paintMs": 1600,
+    "heapBytes": 2165640,
+    "rendererRss": 461651968,
+    "domNodes": 1237,
+    "bytes": 62341,
+    "requests": 3,
+    "runs": [
+     790,
+     2106,
+     1738,
+     1595,
+     974
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "folio": {
+    "loadMs": 582,
+    "paintMs": 816,
+    "heapBytes": 1304828,
+    "rendererRss": 448462848,
+    "domNodes": 663,
+    "bytes": 147656,
+    "requests": 7,
+    "runs": [
+     582,
+     562,
+     564,
+     1170,
+     609
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "eigenpal": {
+    "loadMs": 982,
+    "paintMs": 1284,
+    "heapBytes": 796040,
+    "rendererRss": 468631552,
+    "domNodes": 1266,
+    "bytes": 1166624,
+    "requests": 7,
+    "runs": [
+     982,
+     895,
+     891,
+     1336,
+     1006
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "plate": {
+    "loadMs": 479,
+    "paintMs": 1020,
+    "heapBytes": 1302816,
+    "rendererRss": 432930816,
+    "domNodes": 722,
+    "bytes": 14528,
+    "requests": 1,
+    "runs": [
+     464,
+     479,
+     385,
+     773,
+     1062
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "docen": {
+    "loadMs": 907,
+    "paintMs": 1092,
+    "heapBytes": 788376,
+    "rendererRss": 458080256,
+    "domNodes": 449,
+    "bytes": 1129273,
+    "requests": 6,
+    "runs": [
+     1721,
+     1238,
+     440,
+     907,
+     363
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "wordcraft": {
+    "loadMs": 929,
+    "paintMs": 780,
+    "heapBytes": 1311560,
+    "rendererRss": 435617792,
+    "domNodes": 38,
+    "bytes": 214279,
+    "requests": 3,
+    "runs": [
+     1384,
+     929,
+     591,
+     1167,
+     652
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "superdoc": {
+    "loadMs": 1054,
+    "paintMs": 1324,
+    "heapBytes": 1292676,
+    "rendererRss": 433995776,
+    "domNodes": 351,
+    "bytes": 4500,
+    "requests": 1,
+    "runs": [
+     877,
+     1054,
+     1086,
+     1721,
+     827
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   }
+  },
+  "lorem-500": {
+   "docxodus": {
+    "loadMs": 10630,
+    "paintMs": 3872,
+    "heapBytes": 7776456,
+    "rendererRss": 1200357376,
+    "domNodes": 35320,
+    "bytes": 588723,
+    "requests": 3,
+    "runs": [
+     9384,
+     14468,
+     9981,
+     10630,
+     10883
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "folio": {
+    "loadMs": 7142,
+    "paintMs": 5580,
+    "heapBytes": 841372,
+    "rendererRss": 714489856,
+    "domNodes": 93499,
+    "bytes": 1795064,
+    "requests": 3,
+    "runs": [
+     7142,
+     6900,
+     7049,
+     7245,
+     7257
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "eigenpal": {
+    "loadMs": null,
+    "paintMs": null,
+    "heapBytes": null,
+    "rendererRss": null,
+    "domNodes": null,
+    "bytes": null,
+    "requests": null,
+    "runs": [
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "error": "HTTP 422",
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "plate": {
+    "loadMs": 1588,
+    "paintMs": 1764,
+    "heapBytes": 788232,
+    "rendererRss": 504938496,
+    "domNodes": 15417,
+    "bytes": 520500,
+    "requests": 1,
+    "runs": [
+     1832,
+     2047,
+     1448,
+     1201,
+     1588
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "docen": {
+    "loadMs": 5873,
+    "paintMs": 2240,
+    "heapBytes": 804304,
+    "rendererRss": 1870315520,
+    "domNodes": 36968,
+    "bytes": 1184617,
+    "requests": 3,
+    "runs": [
+     6756,
+     5873,
+     5221,
+     4387,
+     6454
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "wordcraft": {
+    "loadMs": 2279,
+    "paintMs": 1912,
+    "heapBytes": 1357652,
+    "rendererRss": 446267392,
+    "domNodes": 1132,
+    "bytes": 396871,
+    "requests": 3,
+    "runs": [
+     2279,
+     3021,
+     1598,
+     1756,
+     3800
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   },
+   "superdoc": {
+    "loadMs": 5994,
+    "paintMs": 6540,
+    "heapBytes": 788216,
+    "rendererRss": 487604224,
+    "domNodes": 6527,
+    "bytes": 456473,
+    "requests": 1,
+    "runs": [
+     5839,
+     6868,
+     6838,
+     5994,
+     5501
+    ],
+    "error": null,
+    "measuredAt": "2026-11-17",
+    "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 7.1, highest 13.8, on 3 cores"
+   }
+  }
+ }
+}

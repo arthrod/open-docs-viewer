@@ -8,7 +8,9 @@
  *                               Microsoft's and Google's servers fetch theirs)
  *   GET /r/<engine>?src=<url>   server-rendered: the engine runs HERE and the browser
  *                               gets finished pages (docxodus, folio, eigenpal, plate,
- *                               docen, wordcraft); timings in the Server-Timing header
+ *                               docen, wordcraft, superdoc); timings in the Server-Timing header
+ *   GET /r/wordcraft/page?src=<url>&doc=<id>&n=<page>&s=<density>
+ *                               one page of WordCraft's server render, as a PNG
  *   GET /results.json           the measurements shown on /
  *
  * Apples to apples: Microsoft's and Google's viewers fetch a public URL on
@@ -19,13 +21,19 @@
  *
  * The engines' code is NOT copied: shells (head/body markup) are imported
  * from the open-docs val, and the browser loads each adapter straight from
- * open-docs.val.run (served with CORS).
+ * editors.benchmarks.law (served with CORS).
  */
 import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
 import { landingPage } from "./server/landing.ts";
-import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM, type Engine } from "./server/engines.ts";
-import { RESULTS } from "./server/results.ts";
+import { viewPage } from "./server/render.ts";
+import { ENGINES, OPEN_DOCS, OPEN_DOCS_ESM } from "./server/engines.ts";
+import { currentResults } from "./server/results.ts";
+import { goTarget, serverToggle } from "./server/navbar.ts";
+import { fetchFailure, publicUrl, resolvesPublic } from "./server/net.ts";
+import { renderFailure } from "./server/failure.ts";
+import { Busy, TookTooLong, turns } from "./server/queue.ts";
+import { tooLarge } from "./server/docx-size.ts";
 
 /** The open-docs rich sample, hosted on Hugging Face (arthrod/open-docs-fixtures). */
 export const DEFAULT_SRC =
@@ -34,26 +42,6 @@ export const DEFAULT_SRC =
 const MAX_BYTES = 25 * 1024 * 1024;
 
 const app = new Hono();
-
-const esc = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-/** A public https URL, not a private or local address. */
-function publicUrl(raw: string | undefined): URL | null {
-  if (!raw) return null;
-  let u: URL;
-  try {
-    u = new URL(raw);
-  } catch {
-    return null;
-  }
-  if (u.protocol !== "https:") return null;
-  const h = u.hostname.toLowerCase();
-  if (h === "localhost" || h.endsWith(".localhost") || h.endsWith(".internal") || h.endsWith(".local")) return null;
-  // Literal IPs (v4 or v6) are refused outright: documents come by name.
-  if (/^[\d.]+$/.test(h) || h.includes(":") || h.startsWith("[")) return null;
-  return u;
-}
 
 app.get("/api/doc", async (c) => {
   const src = publicUrl(c.req.query("src"));
@@ -80,10 +68,12 @@ const SHELL_TTL_MS = 5 * 60_000; // then re-resolve, so an open-docs deploy show
  * (`/v/arthrod/open-docs@471-main/...`). Deno caches modules by URL, so
  * importing the unversioned one keeps serving whatever version it first saw;
  * resolve the version first and import that exact URL. Adapters load live from
- * open-docs.val.run, so their shells must be the same version.
+ * editors.benchmarks.law, so their shells must be the same version.
  */
 async function currentShellUrl(slug: string): Promise<string> {
-  const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual" });
+  // Bounded: Plate's server render waits on this inside its turn of the render queue, and a
+  // fetch that never settles would hold the turn (and, six renders later, answer 503 to all).
+  const res = await fetch(`${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`, { redirect: "manual", signal: AbortSignal.timeout(10_000) });
   await res.body?.cancel();
   const loc = res.headers.get("location");
   return loc ? new URL(loc, OPEN_DOCS_ESM).href : `${OPEN_DOCS_ESM}/editors/${slug}/shell.ts`;
@@ -97,67 +87,19 @@ const shellOf = (slug: string) => {
   return p;
 };
 
-function viewPage(e: Engine, shell: { head?: string; body: string; entry: string; importMap?: Record<string, string> }, src: URL): string {
-  const imports = Object.fromEntries(
-    Object.entries(shell.importMap ?? {}).map(([k, v]) => [k, v.startsWith("/") ? OPEN_DOCS + v : v]),
-  );
-  const importMap = Object.keys(imports).length
-    ? `<script type="importmap">${JSON.stringify({ imports })}</script>`
-    : "";
-  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}` };
-  return `<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${esc(e.name)} · open-docs viewer</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23334155'/><path d='M10 8h9l5 5v11H10z' fill='white'/></svg>" />
-${importMap}
-<link rel="preconnect" href="${OPEN_DOCS}" crossorigin />
-${absolutize(shell.head ?? "")}
-<style>
-  html, body { margin: 0; height: 100%; }
-  body { display: flex; flex-direction: column; height: 100dvh; font: 13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: #1f2937; background: #eef1f5; }
-  .vbar { flex: none; display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: #fff; border-bottom: 1px solid #e3e6ec; white-space: nowrap; overflow: hidden; }
-  .vbar a { color: #334155; font-weight: 700; text-decoration: none; }
-  .vbar b { font-weight: 600; }
-  .pill { font-size: 11px; border-radius: 999px; padding: 1px 8px; background: #e0e7ff; color: #3730a3; }
-  .pill.prop { background: #fef3c7; color: #7c2d12; }
-  .note { color: #64748b; overflow: hidden; text-overflow: ellipsis; }
-  #od-loading-detail { margin-left: auto; color: #475569; font-variant-numeric: tabular-nums; }
-  #od-stage { flex: 1; min-height: 0; position: relative; overflow: hidden; }
-  #od-stage > * { height: 100%; }
-  .verr { margin: 24px; padding: 16px; background: #fef2f2; color: #7f1d1d; border-radius: 8px; font: 12.5px/1.5 ui-monospace, monospace; white-space: pre-wrap; }
-  @media (max-width: 640px) { .note { display: none; } }
-</style>
-<script type="module" src="${OPEN_DOCS}/lib/boot.ts"></script>
-</head>
-<body>
-  <header class="vbar">
-    <a href="/" title="All engines">open-docs viewer</a>
-    <b>${esc(e.name)}</b>
-    <span class="pill${e.proprietary ? " prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span>
-    <span class="note" title="${esc(e.readOnly)}">${esc(e.readOnly)}</span>
-    <span id="od-loading-detail" role="status" aria-live="polite">Loading…</span>
-  </header>
-  <main id="od-stage">${shell.body}</main>
-  <script>window.__OD_VIEW = ${JSON.stringify(config).replace(/</g, "\\u003c")};</script>
-  <script type="module" src="/client/view.ts"></script>
-  <script type="module" src="${OPEN_DOCS}${shell.entry}"></script>
-</body></html>`;
-}
-
 app.get("/v/:slug", async (c) => {
   const e = ENGINES.find((x) => x.slug === c.req.param("slug"));
   if (!e) return c.text("unknown engine", 404);
   const src = publicUrl(c.req.query("src") ?? DEFAULT_SRC);
   if (!src) return c.text("src must be a public https URL", 400);
-  return c.html(viewPage(e, await shellOf(e.slug), src));
+  return c.html(viewPage(e, await shellOf(e.slug), src, absolutize));
 });
 
 const FETCH_DEADLINE_MS = 20_000;
 const MAX_REDIRECTS = 5;
 // 4xx, not 502/504: Val Town's edge replaces 5xx bodies with "error code: 5xx", which would hide why.
-const fail = (status: number, msg: string) => new Response(msg, { status });
+// Never cached: the next request may find the document there.
+const fail = (status: number, msg: string) => new Response(msg, { status, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
 
 /**
  * Fetch a public .docx on this server (shared by /api/doc and /r/*).
@@ -166,8 +108,11 @@ const fail = (status: number, msg: string) => new Response(msg, { status });
  * literal-IP hosts) instead of letting fetch follow it; the body is read in
  * chunks and abandoned the moment it passes 25 MB, whatever the headers
  * claim; headers and body share one deadline.
- * Not covered: a public name that resolves to a private address — Val Town's
- * egress is the boundary there; this code has no connect-time IP check.
+ * A public name that resolves to a private address (127.0.0.1.nip.io) is
+ * refused at every hop by asking a public resolver first (server/net.ts).
+ * Not covered: a DNS server that answers that check and the connection
+ * differently (rebinding); a Val has no connect-time IP check, so Val Town's
+ * egress is the boundary there.
  */
 async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   const signal = AbortSignal.timeout(FETCH_DEADLINE_MS);
@@ -175,7 +120,8 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
   let res: Response | undefined;
   try {
     for (let hop = 0; ; hop++) {
-      res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://open-docs-viewer.val.run)" } });
+      if (!(await resolvesPublic(url.hostname))) return fail(422, "the document URL points to an address that is not public, or its address could not be checked");
+      res = await fetch(url, { redirect: "manual", signal, headers: { "user-agent": "open-docs-viewer (+https://viewers.benchmarks.law)" } });
       if (res.status < 300 || res.status >= 400) break;
       await res.body?.cancel();
       const next = res.headers.get("location") ? publicUrl(new URL(res.headers.get("location")!, url).href) : null;
@@ -215,7 +161,11 @@ async function fetchDocx(first: URL): Promise<Uint8Array | Response> {
     return bytes;
   } catch (e) {
     if (signal.aborted) return fail(408, `the document did not arrive within ${FETCH_DEADLINE_MS / 1000}s`);
-    throw e;
+    // A host that does not exist, a refused connection, a broken TLS handshake: the document's
+    // address is what failed. Thrown onwards, Val Town would answer 500 with the stack trace.
+    // Said in a fixed phrase: the runtime's text names the stage and the address it reached.
+    console.error("fetchDocx", JSON.stringify(url.hostname), JSON.stringify(`${(e as Error)?.message ?? e} | ${((e as Error)?.cause as Error)?.message ?? ""}`.slice(0, 400)));
+    return fail(422, `the document could not be fetched: ${fetchFailure(e)}`);
   }
 }
 
@@ -235,7 +185,8 @@ type Rendered = {
   /** Where page breaks are computed, when not here. */
   paginatedIn?: "browser";
 };
-type Renderer = (bytes: Uint8Array) => Promise<Rendered>;
+/** `src` is where the document came from: WordCraft's page puts it in its image URLs. */
+type Renderer = (bytes: Uint8Array, src: URL) => Promise<Rendered>;
 
 /**
  * Each renderer's module is imported on its first request, and that import
@@ -245,7 +196,7 @@ type Renderer = (bytes: Uint8Array) => Promise<Rendered>;
  */
 function lazy(load: () => Promise<Renderer>): Renderer {
   let mod: Promise<Renderer> | undefined;
-  return async (bytes) => {
+  return async (bytes, src) => {
     const t0 = performance.now();
     mod ??= load().catch((e) => {
       mod = undefined;
@@ -253,16 +204,19 @@ function lazy(load: () => Promise<Renderer>): Renderer {
     });
     const render = await mod;
     const importMs = Math.round(performance.now() - t0);
-    const r = await render(bytes);
+    const r = await render(bytes, src);
     return { ...r, initMs: r.initMs + importMs };
   };
 }
 
-const RENDERERS: Record<string, Renderer> = {
+/** The engines with a server route. server/navbar.ts lists the same slugs for its links; a test compares the two. */
+export const RENDERERS: Record<string, Renderer> = {
   docxodus: lazy(async () => (await import("./server/render.ts")).docxodusHtml),
   folio: lazy(async () => (await import("./server/folio.ts")).folioHtml),
   wordcraft: lazy(async () => (await import("./server/wordcraft.ts")).wordcraftHtml),
   docen: lazy(async () => (await import("./server/docen.ts")).docenHtml),
+  // Unpaginated: SuperDoc's headless runtime and its HTML projection (see the file).
+  superdoc: lazy(async () => (await import("./server/superdoc.ts")).superdocHtml),
   // docx-editor.dev (its open-docs slug is "eigenpal").
   eigenpal: lazy(async () => (await import("./server/docx-editor.ts")).docxEditorHtml),
   // Styled with the open-docs Plate page's own CSS (its shell head).
@@ -272,8 +226,20 @@ const RENDERERS: Record<string, Renderer> = {
   }),
 };
 
+// One render at a time in this isolate, and at most six waiting (server/queue.ts).
+const renderTurn = turns(6);
+/** The answer to a render that got no turn, or held one too long: 503, to be tried again; never cached. */
+const busyAnswer = (err: unknown): Response | null =>
+  err instanceof Busy
+    ? new Response("this server is rendering other documents: try again in a moment", { status: 503, headers: { "retry-after": "10", "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" } })
+    : err instanceof TookTooLong
+    ? new Response(`${err.message}: try again, or open it in the browser render`, { status: 503, headers: { "retry-after": "30", "cache-control": "no-store", "content-type": "text/plain; charset=utf-8" } })
+    : null;
+
 app.get("/r/:engine", async (c) => {
-  const render = RENDERERS[c.req.param("engine")];
+  const engine = c.req.param("engine");
+  // An own key only: "constructor" and the like are on every object and are not engines.
+  const render = Object.hasOwn(RENDERERS, engine) ? RENDERERS[engine] : undefined;
   if (!render) return c.text("no server renderer for that engine", 404);
   const src = publicUrl(c.req.query("src") ?? DEFAULT_SRC);
   if (!src) return c.text("src must be a public https URL", 400);
@@ -281,8 +247,25 @@ app.get("/r/:engine", async (c) => {
   const got = await fetchDocx(src);
   if (got instanceof Response) return got;
   const fetchMs = Math.round(performance.now() - t0);
-  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = await render(got);
-  const timing = `fetch;dur=${fetchMs}, init;dur=${initMs}, render;dur=${renderMs}`;
+  // Refused before the engine sees it: a render that ends the isolate takes other requests with it.
+  const refused = tooLarge(engine, got);
+  if (refused) return c.text(refused, 422, { "cache-control": "no-store" });
+  let rendered: Rendered;
+  let queueMs = 0;
+  try {
+    const turn = await renderTurn(() => render(got, src));
+    rendered = turn.value;
+    queueMs = turn.waitedMs;
+  } catch (err) {
+    const busy = busyAnswer(err);
+    if (busy) return busy;
+    // A zip that is not a .docx, or a document the engine cannot read.
+    console.error(`/r/${engine}`, JSON.stringify(src.href), err);
+    return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
+  }
+  const { html, initMs, renderMs, pages, unpainted, scriptSrc, paginatedIn } = rendered;
+  // queue: the wait for this isolate to finish the renders asked before this one.
+  const timing = `fetch;dur=${fetchMs}, queue;dur=${queueMs}, init;dur=${initMs}, render;dur=${renderMs}`;
   const headers: Record<string, string> = {
     "content-type": "text/html; charset=utf-8",
     "server-timing": timing,
@@ -290,23 +273,47 @@ app.get("/r/:engine", async (c) => {
     // The pages are markup built from an untrusted document: no script from
     // it may run (a javascript: link in the .docx included). Only Docxodus's
     // page loads scripts, and only this Val's own (its paginator). Fonts and
-    // styles come from jsDelivr, images are inline.
+    // styles come from jsDelivr; images are inline, or WordCraft's page images from this Val
+    // ('self', so they also load when this is served over plain http on localhost).
     "content-security-policy":
-      `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
+      `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src 'self' data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
     "x-content-type-options": "nosniff",
   };
   if (pages !== undefined) headers["x-pages"] = String(pages);
   if (paginatedIn) headers["x-paginated-in"] = paginatedIn;
   // What a renderer laid out but this server does not paint yet.
   if (unpainted?.length) headers["x-unpainted"] = unpainted.join(", ");
-  return new Response(html, { headers });
+  return new Response(serverToggle(html, engine, src), { headers });
+});
+
+/**
+ * One page image of WordCraft's server render. Its page (/r/wordcraft) holds
+ * one of these URLs per page and the browser asks for each as it comes near
+ * the viewport. The document is fetched again only by an isolate that does
+ * not hold its layout.
+ */
+app.get("/r/wordcraft/page", async (c) => {
+  const src = publicUrl(c.req.query("src"));
+  if (!src) return c.text("src must be a public https URL", 400);
+  const { wordcraftPage } = await import("./server/wordcraft.ts");
+  try {
+    return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src), (job) => renderTurn(job).then((t) => t.value));
+  } catch (err) {
+    const busy = busyAnswer(err);
+    if (busy) return busy;
+    console.error("/r/wordcraft/page", JSON.stringify(src.href), err);
+    return renderFailure("WordCraft", err);
+  }
 });
 
 app.get("/client/*", (c) => serveFile(c.req.path, import.meta.url));
 
-app.get("/results.json", (c) => c.json(RESULTS));
+app.get("/results.json", async (c) => c.json(await currentResults()));
 
-app.get("/", (c) => c.html(landingPage(ENGINES, RESULTS, DEFAULT_SRC)));
+app.get("/", async (c) => c.html(landingPage(ENGINES, await currentResults(), DEFAULT_SRC)));
+
+/** The landing's form without its script (`action="/go"`): to the engine's page, or back to the landing. */
+app.get("/go", (c) => c.redirect(goTarget(c.req.query("engine"), c.req.query("src"), ENGINES) ?? "/", 303));
 
 /**
  * Safety net: an engine that asks THIS origin for an open-docs path at run
@@ -323,8 +330,12 @@ app.get("*", async (c) => {
   return new Response(res.body, { status: res.status, headers });
 });
 
-// Unwrap Hono errors to see original error details.
-app.onError((err) => Promise.reject(err));
+// Anything a route did not answer for itself: logged whole (Val Town's logs), answered in one line.
+// Rejecting here made Val Town send the error's stack trace to the visitor.
+app.onError((err, c) => {
+  console.error(c.req.method, JSON.stringify(c.req.path), err);
+  return new Response("this page could not be made; the error is in the server's log", { status: 500, headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
+});
 
 export default app.fetch;
 

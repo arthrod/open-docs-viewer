@@ -1,0 +1,30 @@
+{
+ "measuredAt": "2026-11-16",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 2 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Florem-500.docx",
+ "raw": [
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "mobile": {
+    "version": "13.6.0",
+    "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "error": "NOT_HTML: The page provided is not HTML (served as MIME type text/plain)."
+   }
+  }
+ ]
+}

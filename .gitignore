@@ -1,2 +1,8 @@
 .vt/
 .DS_Store
+.scratch/
+.impeccable/hook.cache.json
+__pycache__/
+.pytest_cache/
+cov/
+.ruff_cache/

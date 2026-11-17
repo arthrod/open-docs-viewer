@@ -1,0 +1,56 @@
+name: Re-measure
+
+# Re-runs the cold browser benchmark (scripts/measure.py) in real Google
+# Chrome, headed, on a macOS runner (the machine the other tables are measured
+# on: .github/workflows/measure.yml) and commits results/browser.json; the
+# landing page reads the committed file from GitHub within 5 minutes. No Val
+# Town token needed. The schedule only runs from the default branch.
+on:
+  workflow_dispatch:
+    inputs:
+      engines:
+        description: "Engines (comma-separated) or all"
+        default: all
+      runs:
+        description: "Cold runs per engine (median)"
+        default: "3"
+  schedule:
+    - cron: "17 6 * * 1" # Mondays 06:17 UTC
+
+permissions:
+  contents: write
+
+# The same group as measure.yml: two jobs asking the same Val at once would time each other.
+concurrency:
+  group: measure
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Google Chrome
+        run: '[ -d "/Applications/Google Chrome.app" ] || uv run --with playwright python -m playwright install chrome'
+      - name: Measure
+        env:
+          MEASURE_WHERE: from a GitHub Actions macos-latest runner (Apple silicon)
+        run: |
+          uv run --with playwright python -I scripts/measure.py \
+            "${{ inputs.engines || 'all' }}" "${{ inputs.runs || '3' }}" \
+            --results results/browser.json --raw "results/raw/$(date -u +%FT%H%M%SZ)-browser-showcase.json" > measure-raw.json
+          python3 scripts/readme_tables.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: measure-raw
+          path: measure-raw.json
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/browser.json results/raw README.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Re-measure: ${{ inputs.engines || 'all' }} ($(date -u +%F), GitHub Actions)"
+          git push

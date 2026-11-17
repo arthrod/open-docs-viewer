@@ -1,0 +1,140 @@
+{
+ "measuredAt": "2026-11-17",
+ "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores",
+ "document": "showcase.docx (47,871 B)",
+ "engines": {
+  "docxodus": {
+   "firstMs": 1731,
+   "firstInitMs": 189,
+   "firstRenderMs": 890,
+   "firstCold": true,
+   "warmMs": 471,
+   "warmRenderMs": 282,
+   "bytes": 62692,
+   "warmRuns": [
+    1133,
+    494,
+    443,
+    463,
+    479
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "folio": {
+   "firstMs": 1334,
+   "firstInitMs": 347,
+   "firstRenderMs": 332,
+   "firstCold": true,
+   "warmMs": 399,
+   "warmRenderMs": 212,
+   "bytes": 208770,
+   "warmRuns": [
+    1313,
+    441,
+    375,
+    356,
+    423
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "eigenpal": {
+   "firstMs": 1247,
+   "firstInitMs": 119,
+   "firstRenderMs": 866,
+   "firstCold": true,
+   "warmMs": 710,
+   "warmRenderMs": 503,
+   "bytes": 243292,
+   "warmRuns": [
+    739,
+    1255,
+    718,
+    683,
+    702
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "plate": {
+   "firstMs": 718,
+   "firstInitMs": 135,
+   "firstRenderMs": 212,
+   "firstCold": true,
+   "warmMs": 306,
+   "warmRenderMs": 146,
+   "bytes": 32966,
+   "warmRuns": [
+    1104,
+    361,
+    271,
+    313,
+    300
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "docen": {
+   "firstMs": 660,
+   "firstInitMs": 343,
+   "firstRenderMs": 126,
+   "firstCold": true,
+   "warmMs": 193,
+   "warmRenderMs": 39,
+   "bytes": 43771,
+   "warmRuns": [
+    728,
+    195,
+    191,
+    183,
+    263
+   ],
+   "warmColdRuns": 1,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "wordcraft": {
+   "firstMs": 476,
+   "firstInitMs": 187,
+   "firstRenderMs": 126,
+   "firstCold": true,
+   "warmMs": 221,
+   "warmRenderMs": 23,
+   "bytes": 3405,
+   "warmRuns": [
+    171,
+    191,
+    375,
+    221,
+    256
+   ],
+   "warmColdRuns": 0,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  },
+  "superdoc": {
+   "firstMs": 1394,
+   "firstInitMs": 516,
+   "firstRenderMs": 619,
+   "firstCold": true,
+   "warmMs": 604,
+   "warmRenderMs": 436,
+   "bytes": 6840,
+   "warmRuns": [
+    651,
+    568,
+    598,
+    604,
+    687
+   ],
+   "warmColdRuns": 0,
+   "measuredAt": "2026-11-17",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores"
+  }
+ }
+}

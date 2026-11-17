@@ -2,14 +2,43 @@
  * The engines, read from the open-docs registry (one source of truth), with
  * how each is made view-only here.
  */
-export const OPEN_DOCS = "https://open-docs.val.run";
+export const OPEN_DOCS = "https://editors.benchmarks.law";
 /** The open-docs val's modules, for the server side (shells, registry). */
 export const OPEN_DOCS_ESM = "https://esm.town/v/arthrod/open-docs";
 
-const { editors } = await import(`${OPEN_DOCS_ESM}/server/registry.ts`);
+/**
+ * esm.town redirects an unversioned path to the val's current version
+ * (`/v/arthrod/open-docs@661-main/...`). The runtime caches the unversioned
+ * module, so a registry change (new makers, a new engine) would not show up
+ * here; importing the versioned URL the redirect names reads the current one.
+ */
+async function currentEsm(path: string): Promise<string> {
+  const unversioned = `${OPEN_DOCS_ESM}${path}`;
+  try {
+    const res = await fetch(unversioned, { redirect: "manual", signal: AbortSignal.timeout(5000) });
+    await res.body?.cancel();
+    const loc = res.headers.get("location");
+    return loc ? new URL(loc, OPEN_DOCS_ESM).href : unversioned;
+  } catch {
+    // The probe failed or was slow: the unversioned address still imports (from the runtime's
+    // cache when esm.town is down), and failing here would fail every module that imports this one.
+    return unversioned;
+  }
+}
+
+const { editors } = await import(await currentEsm("/server/registry.ts"));
+
+export interface Maker {
+  name: string;
+  kind: "company" | "person";
+  linkedin?: string;
+  github?: string;
+}
 
 export interface Engine {
   slug: string;
+  /** Who builds it (open-docs registry `makers`): verified LinkedIn, else GitHub. */
+  makers?: Maker[];
   name: string;
   license: string;
   packages: string[];
@@ -46,4 +75,5 @@ export const ENGINES: Engine[] = (editors as any[]).map((e) => ({
   proprietary: e.kind === "viewer",
   frame: e.opensFiles === false,
   readOnly: READ_ONLY[e.slug] ?? "",
+  makers: e.makers ?? [],
 }));
