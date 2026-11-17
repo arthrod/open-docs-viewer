@@ -394,6 +394,11 @@ def write_raw(path: str | None, meta: dict, raw: list[dict]) -> None:
         f.write(json.dumps({**meta, "raw": raw}, indent=1) + "\n")
 
 
+# An engine being loaded takes 100 ms or more (the least measured: 114 ms); a route that only
+# awaited a module already there reports 0 to 2 ms. Between the two, this is the line.
+COLD_INIT_MS = 10
+
+
 def first_warm_entry(first: dict, warm: list[dict]) -> dict:
     """One /r/ route's row of the landing's server table: its first request after a deploy, then the warm ones.
 
@@ -406,8 +411,8 @@ def first_warm_entry(first: dict, warm: list[dict]) -> dict:
     # Several processes serve the site: a later request can land on one that has not loaded the
     # engine (its init time is not 0). That is another first request, not a warm one: it is listed
     # with the others and counted, and the warm medians stand on the requests that found it loaded.
-    cold = [x for x in ok if (x.get("init") or 0) > 0]
-    settled = [x for x in ok if not (x.get("init") or 0) > 0]
+    cold = [x for x in ok if (x.get("init") or 0) >= COLD_INIT_MS]
+    settled = [x for x in ok if (x.get("init") or 0) < COLD_INIT_MS]
 
     def med(k: str, xs: list[dict] = settled) -> int | None:
         v = [x[k] for x in xs if x.get(k) is not None]
@@ -418,7 +423,7 @@ def first_warm_entry(first: dict, warm: list[dict]) -> dict:
         "firstMs": first["totalMs"] if good else None,
         "firstInitMs": round(first["init"]) if good and first.get("init") is not None else None,
         "firstRenderMs": round(first["render"]) if good and first.get("render") is not None else None,
-        "firstCold": bool(good and (first.get("init") or 0) > 0),
+        "firstCold": bool(good and (first.get("init") or 0) >= COLD_INIT_MS),
         "warmMs": med("totalMs"),
         "warmRenderMs": med("render"),
         "bytes": med("bytes", ok),

@@ -329,3 +329,12 @@ def test_invalid_measure_options_are_refused_by_both_parsers(parse):
     for args in (["all", "3", "--doc"], ["all", "0"], ["all", "3", "--doc", "nope"]):
         with pytest.raises(SystemExit):
             parse(args)
+
+
+def test_an_init_of_a_millisecond_or_two_is_an_engine_already_loaded():
+    """WordCraft's route reports 1 to 2 ms of init when it only awaited a module that was there."""
+    first = {"code": 200, "totalMs": 557, "init": 267, "render": 129, "bytes": 10}
+    warm = [{"code": 200, "totalMs": t, "init": i, "render": 20, "bytes": 10} for t, i in ((512, 192), (178, 2), (152, 2), (332, 0), (188, 1))]
+    row = lib.first_warm_entry(first, warm)
+    assert row["warmColdRuns"] == 1 and row["warmMs"] == 183
+    assert lib.first_warm_entry({"code": 200, "totalMs": 180, "init": 2, "render": 20, "bytes": 1}, warm)["firstCold"] is False
