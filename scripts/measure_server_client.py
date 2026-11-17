@@ -34,7 +34,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw
+from measure_lib import chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -119,6 +119,7 @@ async def one(pw, slug: str, doc: str) -> dict:
                 if paint is not None:
                     out["paintMs"] = round(paint)
                 cdp = await ctx.new_cdp_session(page)
+                out["chrome"] = (await asyncio.wait_for(cdp.send("Browser.getVersion"), 30)).get("product")
                 await cdp.send("Performance.enable")
                 m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
                 out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
@@ -170,7 +171,7 @@ async def main():
     where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
     meta = {
         "measuredAt": datetime.date.today().isoformat(),
-        "environment": f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}",
+        "environment": f"{chrome_note(raw)} (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}",
     }
     write_raw(ARGS.raw, meta, raw)
     # Rows not measured in this run keep the date and environment they were published under.

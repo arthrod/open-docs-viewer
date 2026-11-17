@@ -225,3 +225,9 @@ def test_a_first_request_that_found_the_engine_loaded_is_not_called_cold_and_fai
     bad = lib.first_warm_entry({"code": 0, "totalMs": 180000, "error": "no answer within 180 s"}, [{"code": 200, "totalMs": 400, "render": 100, "bytes": 5}, {"code": 500, "totalMs": 90, "error": "HTTP 500: boom"}])
     assert bad["firstMs"] is None and bad["firstCold"] is False and bad["warmMs"] == 400 and bad["warmRuns"] == [400, None]
     assert bad["error"] == "no answer within 180 s"
+
+
+def test_the_heading_names_the_chrome_version_the_runs_recorded():
+    assert lib.chrome_note([{"chrome": "Chrome/157.0.8103.79"}, {"chrome": "Chrome/157.0.8103.79"}, {"engine": "x"}]) == "Google Chrome 157.0.8103.79"
+    assert lib.chrome_note([{"chrome": "Chrome/157.0.1.2"}, {"chrome": "Chrome/158.0.0.1"}]) == "Google Chrome 157.0.1.2 and 158.0.0.1"
+    assert lib.chrome_note([{"engine": "x"}]) == "Google Chrome"

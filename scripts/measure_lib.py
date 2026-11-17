@@ -363,3 +363,9 @@ def first_warm_entry(first: dict, warm: list[dict]) -> dict:
     if bad:
         entry["error"] = bad.get("error", f"HTTP {bad['code']}")
     return entry
+
+
+def chrome_note(raw: list[dict]) -> str:
+    """The browser the runs were made in, with its version when the runs recorded it."""
+    versions = sorted({str(r["chrome"]).replace("Chrome/", "").replace("HeadlessChrome/", "") for r in raw if r.get("chrome")})
+    return "Google Chrome " + " and ".join(versions) if versions else "Google Chrome"

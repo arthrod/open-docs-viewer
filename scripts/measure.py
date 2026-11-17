@@ -41,7 +41,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, end_chrome, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, write_raw
+from measure_lib import check_results_document, chrome_note, end_chrome, engine_summary, load_note, machine_load, measure_args, renderer_rss, runs_note, samples_shell, stamp_rows, write_raw
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -107,6 +107,7 @@ async def one(pw, slug: str) -> dict:
                 out["error"] = f"not rendered within {TIMEOUT_S}s"
             await asyncio.sleep(1.5)  # let trailing requests finish before counting
             cdp = await ctx.new_cdp_session(page)
+            out["chrome"] = (await asyncio.wait_for(cdp.send("Browser.getVersion"), 30)).get("product")
             await cdp.send("Performance.enable")
             m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
             out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
@@ -159,7 +160,7 @@ async def main():
 
 def environment(runs: int, raw: list[dict]) -> str:
     where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
-    return f"Google Chrome (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}"
+    return f"{chrome_note(raw)} (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}"
 
 
 def write_sample(path: str, summary: dict, meta: dict) -> None:

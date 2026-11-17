@@ -1,8 +1,10 @@
 name: Re-measure
 
 # Re-runs the cold browser benchmark (scripts/measure.py) in real Google
-# Chrome under Xvfb and commits results/browser.json; the landing page reads
-# the committed file from GitHub within 5 minutes. No Val Town token needed.
+# Chrome, headed, on a macOS runner (the machine the other tables are measured
+# on: .github/workflows/measure.yml) and commits results/browser.json; the
+# landing page reads the committed file from GitHub within 5 minutes. No Val
+# Town token needed. The schedule only runs from the default branch.
 on:
   workflow_dispatch:
     inputs:
@@ -24,20 +26,21 @@ concurrency:
 
 jobs:
   measure:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
       - uses: astral-sh/setup-uv@v6
-      - name: Install Google Chrome for Playwright
-        run: uv run --with playwright python -m playwright install --with-deps chrome
+      - name: Google Chrome
+        run: '[ -d "/Applications/Google Chrome.app" ] || uv run --with playwright python -m playwright install chrome'
       - name: Measure
         env:
-          MEASURE_WHERE: from a GitHub Actions ubuntu-latest runner
+          MEASURE_WHERE: from a GitHub Actions macos-latest runner (Apple silicon)
         run: |
-          xvfb-run -a uv run --with playwright python -I scripts/measure.py \
+          uv run --with playwright python -I scripts/measure.py \
             "${{ inputs.engines || 'all' }}" "${{ inputs.runs || '3' }}" \
-            --results results/browser.json > measure-raw.json
+            --results results/browser.json --raw "results/raw/$(date +%F)-browser-showcase.json" > measure-raw.json
+          python3 scripts/readme_tables.py
       - uses: actions/upload-artifact@v4
         with:
           name: measure-raw
@@ -46,7 +49,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add results/browser.json
+          git add results/browser.json results/raw README.md
           git diff --cached --quiet && exit 0
           git commit -m "Re-measure: ${{ inputs.engines || 'all' }} ($(date -u +%F), GitHub Actions)"
           git push

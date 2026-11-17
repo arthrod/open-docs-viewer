@@ -128,7 +128,9 @@ Known gaps, stated rather than hidden:
 
 Hardening: `/r` pages carry a CSP with `script-src 'none'` (Docxodus: only its pinned paginator and this Val's boot script) (a `javascript:` link in a .docx cannot run), Plate keeps
 only http/https/mailto/`#` links, and a failed engine load is retried on the next request instead of cached.
-Not covered: a public hostname that resolves to a private address (no connect-time IP check on Val Town), and
+A public hostname that resolves to a private address (`127.0.0.1.nip.io`) is refused: a public resolver is asked first
+(`server/net.ts`). A document that cannot be fetched or opened is answered with HTTP 422 and one line of reason, never a stack trace.
+Not covered: DNS rebinding between that check and the connection (no connect-time IP check on Val Town), and
 CPU/memory limits per render (a hostile .docx, e.g. a zip bomb, can exhaust the isolate; there is no worker isolation).
 
 Two Deno workarounds, each scoped to one engine and commented in place:
@@ -318,6 +320,10 @@ How each is measured:
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
 - Lighthouse: `uv run --with playwright python -I scripts/measure_pagespeed.py https://viewers.benchmarks.law v/docxodus,r/docxodus 3 --out results/lighthouse.json`
   (PageSpeed Insights, through its own site because the keyless API quota is usually spent; median of the analyses).
+- Where: the browser timings are made on a GitHub-hosted macOS runner by the
+  [Measure workflow](.github/workflows/measure.yml) (push a branch named `measure/<anything>`), because a timing
+  taken on a laptop that is doing other work is slower than the engine. Every run records the machine's load
+  average, so the files show it.
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,
@@ -330,8 +336,8 @@ How each is measured:
 - Refreshing the published table: the landing reads [`results/browser.json`](results/browser.json) from GitHub
   (5-minute cache; the copy bundled with the deploy is the fallback). Re-measure with
   `scripts/remeasure.sh [engines|all] [runs]` (runs `measure.py --results results/browser.json`, commits, pushes) or
-  the [Re-measure workflow](.github/workflows/remeasure.yml) (on demand and Mondays 06:17 UTC; Chrome under Xvfb on
-  ubuntu-latest, commits the file). Engines not re-measured keep their previous entry.
+  the [Re-measure workflow](.github/workflows/remeasure.yml) (on demand and Mondays 06:17 UTC; headed Chrome on a
+  macOS runner, commits the file; the schedule runs only from the default branch). Engines not re-measured keep their previous entry.
 - In the page: every `/v/<engine>` page has **Re-measure now**, which reads JS heap, bytes and files loaded again with
   open-docs' own `lib/metrics.ts`, as the page is at that moment (nothing is stored).
 

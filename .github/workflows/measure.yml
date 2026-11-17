@@ -1,0 +1,63 @@
+name: Measure
+
+# Every browser timing of this site, on a machine that does nothing else: a
+# GitHub-hosted macOS runner (Apple silicon), the installed Google Chrome,
+# headed. A timing taken on a busy laptop is slower than the engine; here the
+# load average recorded with every run shows the machine was idle.
+#
+# Runs when a branch named measure/<anything> is pushed (a workflow that is not
+# on the default branch cannot be started by hand), or by hand once it is. The
+# result files are the artifact "results": download it over results/ and commit.
+on:
+  push:
+    branches: ["measure/**"]
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: "Cold runs per engine on the long documents (the rich sample gets 5)"
+        default: "3"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: measure
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: macos-latest
+    timeout-minutes: 150
+    env:
+      MEASURE_WHERE: from a GitHub Actions macos-latest runner (Apple silicon)
+      RUNS: ${{ inputs.runs || '3' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v6
+      - name: Google Chrome
+        run: |
+          [ -d "/Applications/Google Chrome.app" ] || uv run --with playwright python -m playwright install chrome
+          "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --version
+          sysctl -n machdep.cpu.brand_string hw.ncpu hw.memsize
+      # One after another: two Chromes at once, or two jobs asking the same Val, would time each other.
+      - name: Browser pages, rich sample
+        run: uv run --with playwright python -I scripts/measure.py all 5 --results results/browser.json --raw "results/raw/$(date +%F)-browser-showcase.json" > /dev/null
+      - name: Browser pages, redline
+        run: uv run --with playwright python -I scripts/measure.py all "$RUNS" --doc redline --samples results/samples.json --raw "results/raw/$(date +%F)-browser-redline.json" > /dev/null
+      - name: Browser pages, 500 pages
+        run: uv run --with playwright python -I scripts/measure.py all "$RUNS" --doc lorem-500 --samples results/samples.json --raw "results/raw/$(date +%F)-browser-lorem-500.json" > /dev/null
+      - name: Server routes with curl, redline and 500 pages
+        run: |
+          python3 -I scripts/measure_server.py all 5 --doc redline --samples results/samples.json --raw "results/raw/$(date +%F)-server-redline.json" > /dev/null
+          python3 -I scripts/measure_server.py all 5 --doc lorem-500 --samples results/samples.json --raw "results/raw/$(date +%F)-server-lorem-500.json" > /dev/null
+      - name: What a server render costs the browser
+        run: uv run --with playwright python -I scripts/measure_server_client.py all showcase,redline,lorem-500 "$RUNS" --out results/server-client.json --raw "results/raw/$(date +%F)-server-client.json"
+      - name: README tables from the new files
+        run: python3 scripts/readme_tables.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results
+          path: |
+            results/
+            README.md
