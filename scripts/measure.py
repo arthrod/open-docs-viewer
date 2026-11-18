@@ -35,13 +35,13 @@ renders (server/results.ts `Results`); engines not measured in this run keep
 their previous entry from PATH. scripts/remeasure.sh and the "Re-measure"
 GitHub workflow use this.
 """
-import asyncio, datetime, json, os, platform, random, sys, tempfile, time, urllib.parse
+import asyncio, datetime, json, platform, random, sys, tempfile, time, urllib.parse
 
 from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
+from measure_lib import check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw, where_note
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -69,7 +69,7 @@ async def one(pw, slug: str) -> dict:
     src = f"{DOC}?n={random.getrandbits(48):x}"
     url = f"{BASE}/v/{slug}?src={urllib.parse.quote(src, safe='')}"
     with tempfile.TemporaryDirectory() as profile:
-        ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
+        ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, args=chrome_args(), viewport={"width": 1280, "height": 800})
         try:
             page = ctx.pages[0] if ctx.pages else await ctx.new_page()
         except Exception as e:
@@ -168,7 +168,7 @@ async def main():
 
 
 def environment(runs: int, raw: list[dict]) -> str:
-    where = os.environ.get("MEASURE_WHERE") or f"from {platform.system()} {platform.machine()}"
+    where = where_note(f"from {platform.system()} {platform.machine()}")
     return f"{chrome_note(raw)} (installed, headed) via Playwright, fresh profile per run (cold cache), {runs_note(runs, raw)}, median; {where}; {load_note(raw)}"
 
 
