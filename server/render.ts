@@ -10,6 +10,7 @@
  *
  * Shared viewer chrome CSS and the /v/<engine> page shell also live here.
  */
+import { VENDOR_ROOT } from "./pass-through.ts";
 import type { Engine } from "./engines.ts";
 import { ENGINES, OPEN_DOCS } from "./engines.ts";
 import { NAVBAR_CSS, viewNavBar } from "./navbar.ts";
@@ -172,17 +173,19 @@ body.odv-srv{padding:24px 0}
 /** /v/<engine> page shell around each adapter (engine markup stays inside #od-stage). */
 export function viewPage(
   e: Engine,
-  shell: { head?: string; body: string; entry: string; importMap?: Record<string, string> },
+  shell: { head?: string; body: string; entry: string; importMap?: Record<string, string>; sameOrigin?: boolean },
   src: URL,
   absolutize: (html: string) => string,
 ): string {
   const imports = Object.fromEntries(
-    Object.entries(shell.importMap ?? {}).map(([k, v]) => [k, v.startsWith("/") ? OPEN_DOCS + v : v]),
+    // An engine that starts a Worker from its files, or reaches into a frame of them, needs them
+    // from this origin: main.http.ts passes them through under VENDOR_ROOT.
+    Object.entries(shell.importMap ?? {}).map(([k, v]) => [k, !v.startsWith("/") ? v : (shell.sameOrigin ? VENDOR_ROOT : OPEN_DOCS) + v]),
   );
   const importMap = Object.keys(imports).length
     ? `<script type="importmap">${JSON.stringify({ imports })}</script>`
     : "";
-  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}`, openDocs: OPEN_DOCS };
+  const config = { slug: e.slug, name: e.name, src: src.href, frame: e.frame, docUrl: `/api/doc?src=${encodeURIComponent(src.href)}`, vendorRoot: VENDOR_ROOT, openDocs: OPEN_DOCS };
   return `<!DOCTYPE html>
 <html lang="en" class="odv-view"><head>
 <meta charset="utf-8" />

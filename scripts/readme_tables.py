@@ -17,6 +17,8 @@ NAMES = {
     "canvas-editor": "canvas-editor", "docxodus": "Docxodus", "superdoc": "SuperDoc", "plate": "Plate", "docen": "docen",
     "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Word Online viewer",
     "google-viewer": "Google viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
+    "react-docx": "react-docx", "univer": "Univer", "opendoc": "OpenDoc", "betteroffice": "BetterOffice",
+    "onlyoffice": "OnlyOffice (CryptPad build)",
 }
 # Cross-origin frames: only the frame's load is timed, and the heap read is this page's, not theirs.
 FRAMES = {"word-online": "Microsoft", "google-viewer": "Google"}

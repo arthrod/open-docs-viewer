@@ -23,6 +23,7 @@
  * from the open-docs val, and the browser loads each adapter straight from
  * editors.benchmarks.law (served with CORS).
  */
+import { passedThrough, passThroughHeaders, passThroughPath, VENDOR_ROOT } from "./server/pass-through.ts";
 import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
 import { landingPage } from "./server/landing.ts";
@@ -320,14 +321,21 @@ app.get("/go", (c) => c.redirect(goTarget(c.req.query("engine"), c.req.query("sr
  * time (site-relative fetches) gets it from open-docs. The measurement script
  * counts these requests separately; none are expected.
  */
+// Engines whose shell says `sameOrigin` (a Worker or a frame of their own files: react-docx,
+// OpenDoc, BetterOffice, OnlyOffice) get those files from this origin, under VENDOR_ROOT.
+app.get(`${VENDOR_ROOT}/*`, async (c) => {
+  const url = new URL(c.req.url);
+  const path = passThroughPath(url.pathname);
+  if (!path) return c.text("not found", 404);
+  return passedThrough(await fetch(OPEN_DOCS + path + url.search, { headers: passThroughHeaders() }));
+});
+
 const PROXIED = /^\/(api\/blank\.docx|api\/sample\.docx|api\/svg-raw\/|vendor\/|lib\/|editors\/)/;
 app.get("*", async (c) => {
   const url = new URL(c.req.url);
   if (!PROXIED.test(url.pathname)) return c.text("not found", 404);
-  const res = await fetch(OPEN_DOCS + url.pathname + url.search);
-  const headers = new Headers(res.headers);
-  headers.set("x-proxied-from", "open-docs");
-  return new Response(res.body, { status: res.status, headers });
+  const res = await fetch(OPEN_DOCS + url.pathname + url.search, { headers: passThroughHeaders() });
+  return passedThrough(res);
 });
 
 // Anything a route did not answer for itself: logged whole (Val Town's logs), answered in one line.

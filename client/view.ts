@@ -34,6 +34,7 @@ const fetchDoc = () =>
 // parallel with loading the engine. Frame viewers fetch it on their servers.
 if (!cfg.frame) fetchDoc().catch(() => undefined);
 
+od.vendorRoot = cfg.vendorRoot;
 od.viewer = {
   srcUrl: cfg.src,
   taken: false,
