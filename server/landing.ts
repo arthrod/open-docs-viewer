@@ -227,7 +227,7 @@ export function landingPage(engines: Engine[], results: Results, defaultSrc: str
 <html lang="en"><head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>open-docs viewer · every .docx renderer, same document, same harness</title>
-<meta name="description" content="View-only pages for eight open-source and four proprietary .docx renderers, fed the same public document URL and measured cold the same way." />
+<meta name="description" content="View-only pages for ${open.length} open-source and ${prop.length} proprietary .docx renderers, fed the same public document URL and measured cold the same way." />
 <style>${VIEWER_DS_CSS}</style>
 <script type="module" src="/client/nav.ts"></script></head><body>
 <div class="bl odv">
@@ -235,8 +235,8 @@ ${landingNavBar()}
 <div class="wrap">
 <header class="hero">
   <h1>Every .docx renderer, the same document, the same harness.</h1>
-  <p class="lede">Twelve engines as <strong>view-only</strong> pages that all take one input: a public .docx URL. Microsoft's and Google's
-  viewers fetch it and render on their own servers (nothing of theirs renders in your browser: the page here is a frame); for the eight open-source engines and Apryse and Nutrient,
+  <p class="lede">${engines.length} engines as <strong>view-only</strong> pages that all take one input: a public .docx URL. Microsoft's and Google's
+  viewers fetch it and render on their own servers (nothing of theirs renders in your browser: the page here is a frame); for the ${open.length} open-source engines and Apryse and Nutrient,
   this val's Deno server fetches it and the browser renders it in the engine's own read-only mode. Every page is
   measured cold by the same script. The editable versions live at <a href="https://editors.benchmarks.law">open-docs</a>.</p>
   <form class="odv-form" action="/go" method="get" onsubmit="event.preventDefault(); const f=new FormData(this); location.href='/v/'+f.get('engine')+'?src='+encodeURIComponent(f.get('src'));">
