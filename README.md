@@ -7,8 +7,9 @@
 [![Engines](https://img.shields.io/badge/engines-arthrod%2Fopen--docs-0f172a)](https://github.com/arthrod/open-docs)
 
 Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
-same public document URL, and measured the same way. Ten engines render in the browser. The other two, Microsoft's and Google's viewers, render on the vendor's own
-servers and are shown here in a frame: nothing of theirs renders client-side. Seven of the ten also
+same public document URL, and measured the same way. Fifteen engines run in the browser (Univer receives
+text and headings extracted by this site). Microsoft's and Google's viewers render on the vendor's own
+servers and are shown here in a frame: nothing of theirs renders client-side. Seven of the fifteen also
 render **on this Val's server**, the way those two do: the server fetches the document,
 lays it out, paints it, and the browser receives finished pages.
 
@@ -407,11 +408,16 @@ How each is measured:
   how much of that slowed our Chrome cannot be told from inside the job. These figures do not continue the
   earlier series, which came from a GitHub-hosted macOS runner (3 cores, 5 runs; the files of 2026-11-16 and
   2026-11-17 in `results/raw/`, and the [Measure workflow](.github/workflows/measure.yml) that still makes
-  them). Read the figures as that machine's; what carries to another machine is the order between engines, not
-  the seconds.
-- That pass, honestly: OpenDoc failed all 9 starts of the first pass, because its adapter handed it a document
-  before its engine was ready (fixed in open-docs the same day); its rows are from a second pass, and the failed
-  runs stay in the raw files. OnlyOffice and BetterOffice were measured in both passes (6 runs). 14 of the 171
+  them). Both timings and engine order can vary across setups; the reported medians describe this setup.
+  Even within the showcase pass, docen was faster than Plate in the first attempt and slower in the other two.
+- Pass provenance: [`results/raw/2026-11-18-passes.json`](results/raw/2026-11-18-passes.json) records
+  both job URLs, commands, source commits, deployed revisions and the render check. Deployed revisions name
+  the commits pushed to the sites; Val Town does not expose a build ID to the page.
+- That pass, honestly: OpenDoc failed all 9 starts of the first pass. Eight reported that OpenDoc did not show
+  the document within 60 s; the adapter handed it a document before its engine was ready (fixed in open-docs
+  the same day). The remaining attempt timed out after 240 s with only 12 requests; the raw record does not
+  establish its cause. OpenDoc's rows are from a second pass, and the failed runs stay in the raw files.
+  OnlyOffice and BetterOffice were measured in both passes (6 runs). 14 of the 171
   runs behind the tables did not render, 5 of them OnlyOffice's (of its 18) and 4 BetterOffice's (of 18): mostly
   "not rendered within 240 s" or the page answering an error status. Each row's runs column shows them, and the
   raw files give the reason.
