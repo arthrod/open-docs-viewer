@@ -96,6 +96,16 @@ def median(xs: list[dict], key: str) -> int | None:
 DOC_IDS = ("showcase", "redline", "lorem-500")
 
 
+def chrome_args(env: dict | None = None) -> list[str]:
+    """Extra Chrome start-up flags from OD_CHROME_ARGS (space-separated), none by default.
+
+    A container needs them: Chrome will not start as root with its sandbox, and a small /dev/shm
+    crashes it on a large document. Whatever is passed belongs in MEASURE_WHERE, since a flag
+    can change what is measured.
+    """
+    return (os.environ if env is None else env).get("OD_CHROME_ARGS", "").split()
+
+
 def renderer_rss_of(rows: list[tuple[int, int, int, str]], profile: str) -> int:
     """RSS of the renderers of the Chrome started on `profile`, from `ps` rows (pid, ppid, rss, command).
 

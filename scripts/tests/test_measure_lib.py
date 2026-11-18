@@ -424,3 +424,8 @@ def test_a_results_file_that_cannot_be_parsed_is_not_silently_replaced(tmp_path)
     ok = tmp_path / "ok.json"
     ok.write_text('{"engines": {"a": 1}}')
     assert lib.read_results(str(ok)) == {"engines": {"a": 1}}
+
+
+def test_chrome_args_come_from_the_environment_and_default_to_none():
+    assert lib.chrome_args({}) == []
+    assert lib.chrome_args({"OD_CHROME_ARGS": "--no-sandbox  --disable-dev-shm-usage"}) == ["--no-sandbox", "--disable-dev-shm-usage"]

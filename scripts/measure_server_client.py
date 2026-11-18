@@ -35,7 +35,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw
+from measure_lib import chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -84,7 +84,7 @@ async def one(pw, slug: str, doc: str) -> dict:
 
         try:
             # Inside the handler: a Chrome that fails to start is this run's error, not the end of the script.
-            ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
+            ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, args=chrome_args(), viewport={"width": 1280, "height": 800})
             page = ctx.pages[0] if ctx.pages else await ctx.new_page()
             ctx.on("requestfinished", lambda r: asyncio.ensure_future(finished(r)))
             page.on("response", lambda r: status.append(r.status) if r.url.startswith(f"{BASE}/r/") else None)

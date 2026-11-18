@@ -41,7 +41,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
+from measure_lib import check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -69,7 +69,7 @@ async def one(pw, slug: str) -> dict:
     src = f"{DOC}?n={random.getrandbits(48):x}"
     url = f"{BASE}/v/{slug}?src={urllib.parse.quote(src, safe='')}"
     with tempfile.TemporaryDirectory() as profile:
-        ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, viewport={"width": 1280, "height": 800})
+        ctx = await pw.chromium.launch_persistent_context(profile, channel="chrome", headless=False, args=chrome_args(), viewport={"width": 1280, "height": 800})
         try:
             page = ctx.pages[0] if ctx.pages else await ctx.new_page()
         except Exception as e:
