@@ -416,6 +416,36 @@ How each is measured:
 - In the page: every `/v/<engine>` page has **Re-measure now**, which reads JS heap, bytes and files loaded again with
   open-docs' own `lib/metrics.ts`, as the page is at that moment (nothing is stored).
 
+### Chrome flags for Linux containers
+
+`scripts/measure.py`, `scripts/measure_server_client.py`, and
+`scripts/measure_pagespeed.py` accept extra Chrome startup flags through
+`OD_CHROME_ARGS`. Unset or empty means no extra flags, so existing macOS runs
+keep their launch settings. The scripts still use installed, headed Google
+Chrome; Linux containers also need a display, such as Xvfb.
+
+For a container running as root with limited `/dev/shm`, for example (with Chrome
+and Xvfb installed):
+
+```sh
+OD_CHROME_ARGS='--no-sandbox --disable-dev-shm-usage' \
+  xvfb-run -a uv run --with playwright python -I scripts/measure.py docxodus,plate 3
+```
+
+`--no-sandbox` disables Chrome's sandbox for root-run containers;
+`--disable-dev-shm-usage` avoids relying on their small shared-memory mount.
+Set only the flags your environment requires, since they can affect measurements.
+The value uses shell-style quoting: `OD_CHROME_ARGS='--user-agent="Benchmark Browser"'`
+passes one argument with a space in its value. Unmatched quotes raise a parsing error.
+
+For `measure.py` and `measure_server_client.py`, `MEASURE_WHERE` describes the
+machine (default: operating system and architecture). Their published environment
+line appends configured Chrome arguments that do not already appear in that
+description. Values are included without redaction, so do not put credentials or
+other secrets in these flags or in `MEASURE_WHERE`. For `measure_pagespeed.py`,
+the flags configure the local browser that reads PageSpeed Insights; Lighthouse
+itself still runs on Google's machines.
+
 ## Development
 
 ```sh
