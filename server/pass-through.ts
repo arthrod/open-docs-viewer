@@ -23,13 +23,24 @@ export function passThroughPath(path: string): string | undefined {
   return path.slice(VENDOR_ROOT.length);
 }
 
-const KEPT = ["content-type", "cache-control", "last-modified", "etag", "access-control-allow-origin"];
+/** Where on the editors site a request under VENDOR_ROOT goes: the prefix off, the query as it came. */
+export function passThroughUrl(openDocs: string, asked: URL): string | undefined {
+  const path = passThroughPath(asked.pathname);
+  return path === undefined ? undefined : openDocs + path + asked.search;
+}
+
+const KEPT = ["content-type", "content-disposition", "cache-control", "last-modified", "etag", "access-control-allow-origin"];
+const NO_BODY = new Set([101, 204, 205, 304]);
 
 /**
- * The editors site's answer, for the visitor: the body whole (a body streamed from one val through
- * another broke off mid-file at 380 KB, seen 2026-11-18), with only the headers that describe it.
+ * The editors site's answer, for the visitor: its body streamed on, with only the headers that
+ * describe it. The upstream's content-length and content-encoding belong to bytes this runtime
+ * has already decoded; copying every header, as this route once did, sent a decoded body under
+ * them, and files broke off mid-way or could not be decoded (seen 2026-11-18). With these headers
+ * a streamed body arrives whole (checked on the deployed site on files of 0.4 to 38.8 MB, with
+ * and without compression).
  */
-export async function passedThrough(res: Response): Promise<Response> {
+export function passedThrough(res: Response): Response {
   const headers = new Headers({ "x-proxied-from": "open-docs" });
   for (const name of KEPT) {
     const value = res.headers.get(name);
@@ -37,5 +48,5 @@ export async function passedThrough(res: Response): Promise<Response> {
   }
   // Only a good answer may be kept by caches: a failure kept for a year is a broken engine.
   if (res.status !== 200) headers.set("cache-control", "no-store");
-  return new Response(await res.arrayBuffer(), { status: res.status, headers });
+  return new Response(NO_BODY.has(res.status) ? null : res.body, { status: res.status, headers });
 }

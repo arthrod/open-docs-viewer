@@ -23,7 +23,7 @@
  * from the open-docs val, and the browser loads each adapter straight from
  * editors.benchmarks.law (served with CORS).
  */
-import { passedThrough, passThroughHeaders, passThroughPath, VENDOR_ROOT } from "./server/pass-through.ts";
+import { passedThrough, passThroughHeaders, passThroughUrl, VENDOR_ROOT } from "./server/pass-through.ts";
 import { Hono } from "npm:hono@4";
 import { serveFile } from "https://esm.town/v/std/utils/index.ts";
 import { landingPage } from "./server/landing.ts";
@@ -324,10 +324,9 @@ app.get("/go", (c) => c.redirect(goTarget(c.req.query("engine"), c.req.query("sr
 // Engines whose shell says `sameOrigin` (a Worker or a frame of their own files: react-docx,
 // OpenDoc, BetterOffice, OnlyOffice) get those files from this origin, under VENDOR_ROOT.
 app.get(`${VENDOR_ROOT}/*`, async (c) => {
-  const url = new URL(c.req.url);
-  const path = passThroughPath(url.pathname);
-  if (!path) return c.text("not found", 404);
-  return passedThrough(await fetch(OPEN_DOCS + path + url.search, { headers: passThroughHeaders() }));
+  const target = passThroughUrl(OPEN_DOCS, new URL(c.req.url));
+  if (!target) return c.text("not found", 404);
+  return passedThrough(await fetch(target, { headers: passThroughHeaders() }));
 });
 
 const PROXIED = /^\/(api\/blank\.docx|api\/sample\.docx|api\/svg-raw\/|vendor\/|lib\/|editors\/)/;

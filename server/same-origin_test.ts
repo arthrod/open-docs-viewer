@@ -1,7 +1,7 @@
 import { assertEquals, assertStringIncludes } from "jsr:@std/assert@1.0.13";
 import { ENGINES } from "./engines.ts";
 import { viewPage } from "./render.ts";
-import { passedThrough, passThroughHeaders, passThroughPath, VENDOR_ROOT } from "./pass-through.ts";
+import { passedThrough, passThroughHeaders, passThroughPath, passThroughUrl, VENDOR_ROOT } from "./pass-through.ts";
 
 const src = new URL("https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/showcase.docx");
 const map = (html: string) => JSON.parse(html.match(/<script type="importmap">(.*?)<\/script>/s)![1]).imports;
@@ -54,4 +54,26 @@ Deno.test("pass-through: only engine files under the prefix are passed, and the 
 Deno.test("pass-through: a failed answer is never cacheable", async () => {
   const res = await passedThrough(new Response("slow down", { status: 429, headers: { "cache-control": "public, max-age=31536000, immutable" } }));
   assertEquals([res.status, res.headers.get("cache-control")], [429, "no-store"]);
+});
+
+Deno.test("pass-through: the OpenDoc frame's request reaches the editors site without the prefix, its query untouched", () => {
+  const asked = new URL("https://viewers.benchmarks.law/eo1/vendor/opendoc/2026-11-05/editor.html?blank=1&od-at=https%3A%2F%2Fviewers.benchmarks.law%2Feo1");
+  assertEquals(
+    passThroughUrl("https://editors.benchmarks.law", asked),
+    "https://editors.benchmarks.law/vendor/opendoc/2026-11-05/editor.html?blank=1&od-at=https%3A%2F%2Fviewers.benchmarks.law%2Feo1",
+  );
+  assertEquals(passThroughUrl("https://editors.benchmarks.law", new URL("https://viewers.benchmarks.law/eo1/api/keys")), undefined);
+});
+
+Deno.test("pass-through: an answer that may not have a body keeps its status, and a download keeps its file name", async () => {
+  const none = await passedThrough(new Response(null, { status: 304 }));
+  assertEquals([none.status, none.body], [304, null]);
+  const file = await passedThrough(new Response("x", { headers: { "content-disposition": 'attachment; filename="open-docs-sample.docx"' } }));
+  assertEquals(file.headers.get("content-disposition"), 'attachment; filename="open-docs-sample.docx"');
+});
+
+Deno.test("pass-through: the body is streamed on, not read into memory first", () => {
+  const upstream = new Response(new ReadableStream({ pull() {/* never produces: reading it whole would hang */} }));
+  const res = passedThrough(upstream);
+  assertEquals([res.status, res.body instanceof ReadableStream], [200, true]);
 });

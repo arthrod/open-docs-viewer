@@ -12,7 +12,7 @@
  * loaded with load(). Then `data-od-rendered` on <html> marks the moment the
  * page is showing it (scripts/measure.py reads it).
  */
-type Config = { slug: string; name: string; src: string; frame: boolean; docUrl: string; openDocs: string };
+type Config = { slug: string; name: string; src: string; frame: boolean; docUrl: string; openDocs: string; vendorRoot: string };
 // deno-lint-ignore no-explicit-any
 const od = (window as any).od;
 // deno-lint-ignore no-explicit-any
