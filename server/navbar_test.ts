@@ -150,3 +150,11 @@ Deno.test("without script, the landing's form still reaches the engine's page", 
   assertEquals(goTarget("nope", "https://example.com/a.docx", ENGINES), null);
   assertEquals(goTarget("folio", "", ENGINES), null);
 });
+
+Deno.test("landing: the intro counts the engines it lists, not a number written once", () => {
+  const html = landingPage(ENGINES, RESULTS, SAMPLE_SRC);
+  const open = ENGINES.filter((e) => !e.proprietary).length, prop = ENGINES.length - open;
+  if (!html.includes(`${ENGINES.length} engines as`)) throw new Error("the lede does not give the number of engines");
+  if (!html.includes(`for ${open} open-source and ${prop} proprietary`)) throw new Error("the description does not give both counts");
+  if (/Twelve engines|eight open-source/.test(html)) throw new Error("a count written by hand is still in the page");
+});
