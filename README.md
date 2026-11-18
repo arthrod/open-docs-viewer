@@ -91,6 +91,26 @@ projection is asked for its `redline` review mode (`<ins>` and `<del>`). The oth
 four are handed the original bytes. What each engine draws in the browser is
 listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-changes-what-each-engine-draws).
 
+## Engines added on 2026-11-18 (not measured yet)
+
+Five engines were added to both sites and open the samples here, view-only where the engine has
+such a mode. **None of them has figures in the tables below yet**: they were added after the last
+measuring pass.
+
+| Engine | View-only here | Notes |
+| --- | --- | --- |
+| [react-docx](https://viewers.benchmarks.law/v/react-docx) | its `read-only` mode | Rust WASM reader, DOM pages |
+| [BetterOffice](https://viewers.benchmarks.law/v/betteroffice) | `readOnly` (no toolbar or rulers) | Rust WASM engines in a Worker |
+| [OpenDoc](https://viewers.benchmarks.law/v/opendoc) | its review mode "viewing" | its own application, a snapshot of 2026-11-05, in a frame |
+| [OnlyOffice (CryptPad build)](https://viewers.benchmarks.law/v/onlyoffice) | `mode: "view"` | no document server: x2t converter in WASM; AGPL-3.0, [source and offer](https://github.com/arthrod/open-docs/tree/main/editors/onlyoffice) |
+| [Univer](https://viewers.benchmarks.law/v/univer) | none: still editable | **text only**. Univer's open-source packages have no .docx reader, so this site's reader hands it the text and headings; layout, pictures and tracked changes are not Univer's rendering of the file |
+
+The first four start a Worker from their own files or reach into a frame of them, which a browser
+allows only from the page's own origin. Their files are therefore passed through this site under
+`/eo1/vendor/…` (`server/pass-through.ts`) instead of being linked from the editors site, so each
+of their files costs this site a request as well. For these engines the "requests passed through"
+count of the measuring script is expected to be non-zero.
+
 ## Server rendering
 
 | `/r/…` | Engine | How it runs on Deno | Output |

@@ -58,7 +58,8 @@ DOCS = {
 DOC_ID = ARGS.doc
 DOC = f"{FIXTURES}/{DOCS[DOC_ID][0]}"
 TIMEOUT_S = 240
-ALL = ["apryse", "canvas-editor", "docen", "docxodus", "eigenpal", "folio", "google-viewer", "nutrient", "plate", "superdoc", "word-online", "wordcraft"]
+ALL = ["apryse", "canvas-editor", "docen", "docxodus", "eigenpal", "folio", "google-viewer", "nutrient", "plate", "superdoc", "word-online", "wordcraft",
+       "betteroffice", "onlyoffice", "opendoc", "react-docx", "univer"]
 # Cross-origin frames: the page sees only the frame's load event.
 FRAME = {"google-viewer", "word-online"}
 FRAME_HOW = "frame load event (cross-origin: the page cannot see when the vendor finished rendering)"
