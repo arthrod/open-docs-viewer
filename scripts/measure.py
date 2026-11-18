@@ -35,7 +35,7 @@ renders (server/results.ts `Results`); engines not measured in this run keep
 their previous entry from PATH. scripts/remeasure.sh and the "Re-measure"
 GitHub workflow use this.
 """
-import asyncio, datetime, json, os, platform, random, sys, tempfile, time, urllib.parse
+import asyncio, datetime, json, platform, random, sys, tempfile, time, urllib.parse
 
 from playwright.async_api import async_playwright
 
