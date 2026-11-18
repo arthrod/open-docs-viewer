@@ -1,350 +1,403 @@
 {
- "measuredAt": "2026-11-17",
- "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores",
+ "measuredAt": "2026-11-18",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores",
  "samples": {
   "redline": {
    "browser": {
     "apryse": {
-     "renderedMs": 5358,
+     "renderedMs": 2702,
      "runs": [
-      7444,
-      4022,
-      4666,
-      5358,
-      5958
+      2702,
+      2595,
+      7997
      ],
-     "bytes": 7419500,
+     "bytes": 7383955,
      "requests": 163,
-     "heapBytes": 22012200,
-     "rendererRss": 824344576,
+     "heapBytes": 22614900,
+     "rendererRss": 690909184,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
     "canvas-editor": {
-     "renderedMs": 2712,
+     "renderedMs": 1053,
      "runs": [
-      3248,
-      2712,
-      2202,
-      2364,
-      2818
+      974,
+      1214,
+      1053
      ],
-     "bytes": 693489,
+     "bytes": 692339,
      "requests": 29,
-     "heapBytes": 10100656,
-     "rendererRss": 580993024,
+     "heapBytes": 10327064,
+     "rendererRss": 495656960,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
     "docen": {
-     "renderedMs": 2455,
+     "renderedMs": 1548,
      "runs": [
-      null,
-      2373,
-      2455,
-      4186,
-      null
+      1480,
+      1548,
+      1669
      ],
-     "bytes": 1532175,
+     "bytes": 1501396,
      "requests": 329,
-     "heapBytes": 29112880,
-     "rendererRss": 633372672,
+     "heapBytes": 21129176,
+     "rendererRss": 575594496,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": "Failed to fetch dynamically imported module: https://esm.sh/@docen/editor@0.7.0?target=es2022&deps=@microsoft/fast-element@3.0.2",
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
     "docxodus": {
-     "renderedMs": 3055,
+     "renderedMs": 2191,
      "runs": [
-      null,
-      2897,
-      2430,
-      3214,
-      3843
+      1769,
+      2191,
+      3231
      ],
-     "bytes": 7520600,
+     "bytes": 7515812,
      "requests": 61,
-     "heapBytes": 8662986,
-     "rendererRss": 741687296,
+     "heapBytes": 8427404,
+     "rendererRss": 562085888,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/docxodus?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fredline.docx%3Fn%3Dc74f46210aaa\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/docxodus?src=",
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
     "eigenpal": {
-     "renderedMs": 1918,
+     "renderedMs": 1083,
      "runs": [
-      null,
-      1522,
-      2316,
-      1616,
-      2221
+      1083,
+      872,
+      1098
      ],
-     "bytes": 5311980,
+     "bytes": 5276960,
      "requests": 205,
-     "heapBytes": 31185578,
-     "rendererRss": 648970240,
+     "heapBytes": 32289088,
+     "rendererRss": 525705216,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "folio": {
+     "renderedMs": 1583,
+     "runs": [
+      1583,
+      1268,
+      1731
+     ],
+     "bytes": 2266512,
+     "requests": 82,
+     "heapBytes": 26712936,
+     "rendererRss": 478162944,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "google-viewer": {
+     "renderedMs": 11099,
+     "runs": [
+      1055,
+      null,
+      21144
+     ],
+     "bytes": 1202267,
+     "requests": 32,
+     "heapBytes": 2238824,
+     "rendererRss": 619626496,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
+     "incomplete": null,
+     "failed": "Google Docs viewer did not load within 60s",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "nutrient": {
+     "renderedMs": 6688,
+     "runs": [
+      5369,
+      6688,
+      9264
+     ],
+     "bytes": 25614810,
+     "requests": 103,
+     "heapBytes": 23625284,
+     "rendererRss": 617644032,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "plate": {
+     "renderedMs": 1441,
+     "runs": [
+      1373,
+      1441,
+      2639
+     ],
+     "bytes": 1153273,
+     "requests": 435,
+     "heapBytes": 11704052,
+     "rendererRss": 458264576,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "superdoc": {
+     "renderedMs": 3791,
+     "runs": [
+      3791,
+      3755,
+      4497
+     ],
+     "bytes": 8203146,
+     "requests": 26,
+     "heapBytes": 21725968,
+     "rendererRss": 659406848,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "word-online": {
+     "renderedMs": 620,
+     "runs": [
+      590,
+      620,
+      1211
+     ],
+     "bytes": 1617570,
+     "requests": 66,
+     "heapBytes": 1996524,
+     "rendererRss": 995282944,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "wordcraft": {
+     "renderedMs": 3178,
+     "runs": [
+      3178,
+      2997,
+      3559
+     ],
+     "bytes": 23072919,
+     "requests": 23,
+     "heapBytes": 3840912,
+     "rendererRss": 869511168,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
+    },
+    "betteroffice": {
+     "renderedMs": 2472,
+     "runs": [
+      2371,
+      2358,
+      null,
+      4480,
+      2573,
+      null
+     ],
+     "bytes": 12795467,
+     "requests": 249,
+     "heapBytes": 17923134,
+     "rendererRss": 672712704,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": "not rendered within 240s",
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
-    "folio": {
-     "renderedMs": 2281,
+    "onlyoffice": {
+     "renderedMs": 3512,
      "runs": [
-      3894,
-      1712,
-      2119,
-      2281,
-      2716
+      3012,
+      2985,
+      4012,
+      null,
+      4039,
+      null
      ],
-     "bytes": 2278125,
-     "requests": 82,
-     "heapBytes": 24943476,
-     "rendererRss": 620593152,
+     "bytes": 19239055,
+     "requests": 80,
+     "heapBytes": 53652768,
+     "rendererRss": 736866304,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": "not rendered within 240s",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
-    "google-viewer": {
-     "renderedMs": 2024,
+    "opendoc": {
+     "renderedMs": 2705,
      "runs": [
-      1717,
-      1650,
-      22250,
-      2256,
-      2024
+      null,
+      2570,
+      2841
      ],
-     "bytes": 1200254,
-     "requests": 32,
-     "heapBytes": 1841456,
-     "rendererRss": 669663232,
-     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
-    },
-    "nutrient": {
-     "renderedMs": 9238,
-     "runs": [
-      9238,
-      7821,
-      9609,
-      10173,
-      9083
-     ],
-     "bytes": 25614189,
-     "requests": 103,
-     "heapBytes": 23283556,
-     "rendererRss": 933314560,
+     "bytes": 21350837,
+     "requests": 378,
+     "heapBytes": 12959710,
+     "rendererRss": 677371904,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/opendoc?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fredline.docx%3Fn%3D11afa9c70ef0\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/opendoc?src=ht",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
-    "plate": {
-     "renderedMs": 4016,
+    "react-docx": {
+     "renderedMs": 3040,
      "runs": [
-      3621,
-      4016,
-      3762,
-      4618,
-      4486
+      null,
+      2946,
+      3135
      ],
-     "bytes": 1221672,
-     "requests": 435,
-     "heapBytes": 11394056,
-     "rendererRss": 549847040,
+     "bytes": 7762252,
+     "requests": 38,
+     "heapBytes": 17232438,
+     "rendererRss": 526706688,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": "react-docx could not open the first document: Failed to fetch dynamically imported module: https://viewers.benchmarks.law/eo1/vendor/npm/@extend-ai/react-docx@0.15.0/dist/src-53S7JWW5.js",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     },
-    "superdoc": {
-     "renderedMs": 4760,
+    "univer": {
+     "renderedMs": 1671,
      "runs": [
-      4518,
-      4500,
-      4760,
-      5083,
-      5198
+      1527,
+      null,
+      1815
      ],
-     "bytes": 8273192,
-     "requests": 26,
-     "heapBytes": 21431200,
-     "rendererRss": 817545216,
+     "bytes": 2404632,
+     "requests": 374,
+     "heapBytes": 33949234,
+     "rendererRss": 513636352,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
-    },
-    "word-online": {
-     "renderedMs": 2420,
-     "runs": [
-      1172,
-      3228,
-      2622,
-      1190,
-      2420
-     ],
-     "bytes": 1593893,
-     "requests": 67,
-     "heapBytes": 1871752,
-     "rendererRss": 1099120640,
-     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
-    },
-    "wordcraft": {
-     "renderedMs": 3372,
-     "runs": [
-      2675,
-      2992,
-      3943,
-      3372,
-      4148
-     ],
-     "bytes": 23072718,
-     "requests": 23,
-     "heapBytes": 3245756,
-     "rendererRss": 991772672,
-     "how": "data-od-rendered",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 6.2, highest 11.5, on 3 cores"
+     "failed": "not rendered within 240s",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores"
     }
    },
    "server": {
     "docxodus": {
      "code": 200,
-     "totalMs": 874,
-     "renderMs": 443,
+     "totalMs": 1311,
+     "renderMs": 888,
      "bytes": 75010,
      "pages": null,
      "runs": [
-      1719,
-      1503,
-      599,
-      722,
-      874
+      2407,
+      1311,
+      889
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "folio": {
      "code": 200,
-     "totalMs": 626,
-     "renderMs": 243,
+     "totalMs": 387,
+     "renderMs": 198,
      "bytes": 257232,
      "pages": 3,
      "runs": [
-      2237,
-      1082,
-      590,
-      626,
-      572
+      1388,
+      378,
+      387
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "eigenpal": {
      "code": 200,
-     "totalMs": 973,
-     "renderMs": 631,
+     "totalMs": 827,
+     "renderMs": 587,
      "bytes": 334898,
      "pages": 3,
      "runs": [
-      1387,
-      973,
-      882,
-      861,
-      1465
+      1191,
+      827,
+      726
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "plate": {
      "code": 200,
-     "totalMs": 524,
-     "renderMs": 205,
+     "totalMs": 664,
+     "renderMs": 265,
      "bytes": 39070,
      "pages": null,
      "runs": [
-      926,
-      980,
-      468,
-      462,
-      524
+      664,
+      390,
+      1533
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "docen": {
      "code": 200,
-     "totalMs": 409,
-     "renderMs": 42,
+     "totalMs": 708,
+     "renderMs": 144,
      "bytes": 57648,
      "pages": 4,
      "runs": [
-      779,
-      409,
-      328,
-      1013,
-      312
+      708,
+      262,
+      1057
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "wordcraft": {
      "code": 200,
-     "totalMs": 329,
-     "renderMs": 23,
+     "totalMs": 248,
+     "renderMs": 26,
      "bytes": 3565,
      "pages": 3,
      "runs": [
-      1007,
-      632,
-      282,
-      269,
-      329
+      979,
+      248,
+      188
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     },
     "superdoc": {
      "code": 200,
-     "totalMs": 872,
-     "renderMs": 530,
+     "totalMs": 832,
+     "renderMs": 594,
      "bytes": 18917,
      "pages": null,
      "runs": [
-      1756,
-      872,
-      726,
-      1717,
-      794
+      1723,
+      832,
+      727
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 3.6, highest 4.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores"
     }
    },
    "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments with a never-seen ?n= per run"
@@ -352,266 +405,329 @@
   "lorem-500": {
    "browser": {
     "apryse": {
-     "renderedMs": 6563,
+     "renderedMs": 3771,
      "runs": [
-      7052,
-      6706,
-      4896,
-      5652,
-      6563
+      3206,
+      3771,
+      4175
      ],
-     "bytes": 7807104,
+     "bytes": 7771961,
      "requests": 162,
-     "heapBytes": 26286768,
-     "rendererRss": 882868224,
+     "heapBytes": 27620388,
+     "rendererRss": 1117413376,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     },
     "canvas-editor": {
-     "renderedMs": 46394,
+     "renderedMs": 27804,
      "runs": [
-      79060,
-      46394,
-      44492,
-      38429,
-      55574
+      28233,
+      27804,
+      27490
      ],
-     "bytes": 1081132,
+     "bytes": 1079989,
      "requests": 29,
-     "heapBytes": 1322165064,
-     "rendererRss": 1351335936,
+     "heapBytes": 1316878844,
+     "rendererRss": 6374338560,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     },
     "docen": {
-     "renderedMs": 8304,
+     "renderedMs": 6428,
      "runs": [
-      10425,
-      9003,
-      6590,
-      7605,
-      null
+      6718,
+      5919,
+      6428
      ],
-     "bytes": 1920085,
+     "bytes": 1888966,
      "requests": 329,
-     "heapBytes": 179703694,
-     "rendererRss": 2143158272,
+     "heapBytes": 176304528,
+     "rendererRss": 3853811712,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "docxodus": {
+     "renderedMs": 11556,
+     "runs": [
+      11556,
+      12583,
+      10813
+     ],
+     "bytes": 7768267,
+     "requests": 61,
+     "heapBytes": 15536456,
+     "rendererRss": 1123819520,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "eigenpal": {
+     "renderedMs": 2623,
+     "runs": [
+      2158,
+      2791,
+      2623
+     ],
+     "bytes": 5664494,
+     "requests": 204,
+     "heapBytes": 95878484,
+     "rendererRss": 642027520,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "folio": {
+     "renderedMs": 4211,
+     "runs": [
+      4211,
+      4325,
+      3922
+     ],
+     "bytes": 2628076,
+     "requests": 79,
+     "heapBytes": 54456096,
+     "rendererRss": 1076183040,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "google-viewer": {
+     "renderedMs": 1128,
+     "runs": [
+      9637,
+      1128,
+      1047
+     ],
+     "bytes": 1174639,
+     "requests": 32,
+     "heapBytes": 2047760,
+     "rendererRss": 633053184,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "nutrient": {
+     "renderedMs": 16369,
+     "runs": [
+      16369,
+      15716,
+      17567
+     ],
+     "bytes": 25899526,
+     "requests": 103,
+     "heapBytes": 27374936,
+     "rendererRss": 697868288,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "plate": {
+     "renderedMs": 56048,
+     "runs": [
+      56048,
+      58833,
+      53251
+     ],
+     "bytes": 1541323,
+     "requests": 435,
+     "heapBytes": 67603084,
+     "rendererRss": 617250816,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "superdoc": {
+     "renderedMs": 13510,
+     "runs": [
+      12900,
+      13510,
+      13788
+     ],
+     "bytes": 8590811,
+     "requests": 25,
+     "heapBytes": 31504616,
+     "rendererRss": 1017348096,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "word-online": {
+     "renderedMs": 1648,
+     "runs": [
+      1871,
+      1543,
+      1648
+     ],
+     "bytes": 1154462,
+     "requests": 39,
+     "heapBytes": 2057952,
+     "rendererRss": 768987136,
+     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "wordcraft": {
+     "renderedMs": 5058,
+     "runs": [
+      5058,
+      5043,
+      6637
+     ],
+     "bytes": 23460459,
+     "requests": 23,
+     "heapBytes": 3759248,
+     "rendererRss": 1043546112,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "betteroffice": {
+     "renderedMs": 6449,
+     "runs": [
+      6449,
+      6408,
+      7530,
+      6283,
+      null,
+      6857
+     ],
+     "bytes": 11766028,
+     "requests": 242,
+     "heapBytes": 23910604,
+     "rendererRss": 1290129408,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": "not rendered within 240s",
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     },
-    "docxodus": {
-     "renderedMs": 14704,
+    "onlyoffice": {
+     "renderedMs": 5212,
      "runs": [
-      16350,
-      18264,
-      11394,
-      14020,
-      14704
+      4494,
+      5600,
+      5615,
+      11221,
+      4825,
+      4748
      ],
-     "bytes": 7908200,
-     "requests": 61,
-     "heapBytes": 12954612,
-     "rendererRss": 1379123200,
-     "how": "data-od-rendered",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "eigenpal": {
-     "renderedMs": 3043,
-     "runs": [
-      3034,
-      3335,
-      2904,
-      3394,
-      3043
-     ],
-     "bytes": 5699769,
-     "requests": 204,
-     "heapBytes": 63167060,
-     "rendererRss": 728678400,
-     "how": "data-od-rendered",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "folio": {
-     "renderedMs": 4691,
-     "runs": [
-      6250,
-      4691,
-      3832,
-      4807,
-      4547
-     ],
-     "bytes": 2639045,
+     "bytes": 19631302,
      "requests": 79,
-     "heapBytes": 56798128,
-     "rendererRss": 1246527488,
+     "heapBytes": 181970396,
+     "rendererRss": 941230080,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     },
-    "google-viewer": {
-     "renderedMs": 2392,
+    "opendoc": {
+     "renderedMs": 5082,
      "runs": [
-      5463,
-      8699,
-      2256,
-      1869,
-      2392
+      null,
+      4842,
+      5323
      ],
-     "bytes": 1172091,
-     "requests": 32,
-     "heapBytes": 1866800,
-     "rendererRss": 690094080,
-     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "nutrient": {
-     "renderedMs": 19781,
-     "runs": [
-      20807,
-      17590,
-      15710,
-      19982,
-      19781
-     ],
-     "bytes": 25899350,
-     "requests": 103,
-     "heapBytes": 24405564,
-     "rendererRss": 991690752,
+     "bytes": 21738789,
+     "requests": 378,
+     "heapBytes": 13350672,
+     "rendererRss": 958396416,
      "how": "data-od-rendered",
      "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "failed": "not rendered within 240s",
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     },
-    "plate": {
-     "renderedMs": 51384,
+    "react-docx": {
+     "renderedMs": 9669,
      "runs": [
-      48186,
-      37410,
-      59878,
-      61091,
-      51384
+      9669,
+      9079,
+      20701
      ],
-     "bytes": 1610018,
-     "requests": 435,
-     "heapBytes": 85521720,
-     "rendererRss": 727678976,
-     "how": "data-od-rendered",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "superdoc": {
-     "renderedMs": 10183,
-     "runs": [
-      12808,
-      10401,
-      10034,
-      9505,
-      10183
-     ],
-     "bytes": 8660871,
-     "requests": 25,
-     "heapBytes": 30106232,
-     "rendererRss": 1239891968,
-     "how": "data-od-rendered",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "word-online": {
-     "renderedMs": 4125,
-     "runs": [
-      4187,
-      2396,
-      4125,
-      45874,
-      3184
-     ],
-     "bytes": 1107942,
+     "bytes": 7687958,
      "requests": 37,
-     "heapBytes": 1887568,
-     "rendererRss": 801554432,
-     "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
-     "incomplete": null,
-     "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
-    },
-    "wordcraft": {
-     "renderedMs": 6037,
-     "runs": [
-      6964,
-      5116,
-      6037,
-      7283,
-      5662
-     ],
-     "bytes": 23460313,
-     "requests": 23,
-     "heapBytes": 3166672,
-     "rendererRss": 1165262848,
+     "heapBytes": 179080412,
+     "rendererRss": 967487488,
      "how": "data-od-rendered",
      "incomplete": null,
      "failed": null,
-     "measuredAt": "2026-11-17",
-     "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 4.3, highest 7.7, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
+    },
+    "univer": {
+     "renderedMs": 16947,
+     "runs": [
+      16947,
+      16171,
+      28800
+     ],
+     "bytes": 3118150,
+     "requests": 385,
+     "heapBytes": 1842714648,
+     "rendererRss": 2467037184,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-18",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores"
     }
    },
    "server": {
     "docxodus": {
      "code": 200,
-     "totalMs": 3750,
-     "renderMs": 3011,
+     "totalMs": 3376,
+     "renderMs": 2878,
      "bytes": 2232032,
      "pages": null,
      "runs": [
-      3750,
-      3513,
-      3443,
-      4604,
-      4734
+      3376,
+      4728,
+      3099
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "folio": {
      "code": 200,
-     "totalMs": 5826,
-     "renderMs": 3911,
+     "totalMs": 5744,
+     "renderMs": 4630,
      "bytes": 30027275,
      "pages": 500,
      "runs": [
-      5826,
-      3784,
-      3957,
-      5956,
-      6555
+      5744,
+      3827,
+      7251
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "eigenpal": {
      "code": 422,
@@ -622,77 +738,67 @@
      "runs": [
       null,
       null,
-      null,
-      null,
       null
      ],
      "error": "this document is too large for this engine's server render (its text and structure unpack to 1.8 MB; the limit is 1.0 MB): larger ones end the server process. Open it in the browser render instead.",
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "plate": {
      "code": 200,
-     "totalMs": 1931,
-     "renderMs": 874,
+     "totalMs": 1325,
+     "renderMs": 705,
      "bytes": 2056823,
      "pages": null,
      "runs": [
-      2450,
-      1223,
-      2349,
-      1192,
-      1931
+      975,
+      1445,
+      1325
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "docen": {
      "code": 200,
-     "totalMs": 2030,
-     "renderMs": 1259,
+     "totalMs": 1523,
+     "renderMs": 1188,
      "bytes": 5004960,
      "pages": 623,
      "runs": [
-      1808,
-      2901,
-      2262,
-      2030,
-      932
+      3026,
+      1523,
+      991
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "wordcraft": {
      "code": 200,
-     "totalMs": 1177,
-     "renderMs": 814,
-     "bytes": 375684,
+     "totalMs": 1589,
+     "renderMs": 1162,
+     "bytes": 374033,
      "pages": 550,
      "runs": [
-      1177,
-      1045,
-      1761,
-      1606,
-      1104
+      1589,
+      940,
+      1706
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     },
     "superdoc": {
      "code": 200,
-     "totalMs": 5888,
-     "renderMs": 5134,
+     "totalMs": 5585,
+     "renderMs": 5163,
      "bytes": 1643769,
      "pages": null,
      "runs": [
-      6192,
-      6124,
-      5888,
-      5779,
-      5585
+      5537,
+      5585,
+      6304
      ],
-     "measuredAt": "2026-11-17",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 2.1, highest 3.6, on 3 cores"
+     "measuredAt": "2026-11-18",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 55.6, highest 59.3, on 64 cores"
     }
    },
    "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word with a never-seen ?n= per run"

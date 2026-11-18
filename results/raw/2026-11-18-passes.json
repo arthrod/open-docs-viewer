@@ -1,0 +1,21 @@
+{
+ "passes": [
+  {
+   "job": "https://huggingface.co/jobs/arthrod/6afd7634884144d2f44fc91f",
+   "what": "every engine and route, 3 runs per document",
+   "started": "2026-11-18T09:56Z",
+   "command": "SITE=both RUNS=3 scripts/hf_job.sh of open-docs b01016df81da3d9ac75a9d0b6583ead24bf30ca0 (flavor cpu-upgrade, timeout 6h)",
+   "scripts": "open-docs-viewer d980373",
+   "site": "viewers.benchmarks.law as deployed from main 9af4450; adapters served by editors.benchmarks.law, main f3e9e4e"
+  },
+  {
+   "job": "https://huggingface.co/jobs/arthrod/6afda0a1e41aae15936c72ae",
+   "what": "OpenDoc, OnlyOffice and BetterOffice again in the browser, 3 runs per document",
+   "started": "2026-11-18T12:57Z",
+   "command": "SITE=retake RUNS=3 RETAKE_FROM=2026-11-18 V_ENGINES=opendoc,onlyoffice,betteroffice scripts/hf_job.sh of open-docs 5c4b17db5a3cfbd0254c66717946bc66fe76855d (flavor cpu-upgrade, timeout 90m)",
+   "scripts": "open-docs-viewer d980373",
+   "site": "the same, plus the OpenDoc adapter fix (open-docs f0aad3e, pull request 65)"
+  }
+ ],
+ "rendered": "a run counts when the page set data-od-rendered; a run without renderedMs carries its reason in the raw file"
+}
