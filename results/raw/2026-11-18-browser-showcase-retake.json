@@ -1,0 +1,106 @@
+{
+ "measuredAt": "2026-11-18",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 14.2, highest 15.1, on 64 cores",
+ "document": "showcase.docx (47,871 B)",
+ "raw": [
+  {
+   "engine": "opendoc",
+   "load1": 14.71,
+   "cores": 64,
+   "renderedMs": 8629,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 15802772,
+   "rendererRss": 685805568,
+   "bytes": 21222999,
+   "requests": 378
+  },
+  {
+   "engine": "opendoc",
+   "load1": 15.07,
+   "cores": 64,
+   "renderedMs": 2959,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 18471844,
+   "rendererRss": 704233472,
+   "bytes": 21318503,
+   "requests": 378
+  },
+  {
+   "engine": "opendoc",
+   "load1": 13.85,
+   "cores": 64,
+   "renderedMs": 2513,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 19517320,
+   "rendererRss": 699215872,
+   "bytes": 21318127,
+   "requests": 378
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 14.07,
+   "cores": 64,
+   "renderedMs": 4019,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 75265332,
+   "rendererRss": 723812352,
+   "bytes": 19211017,
+   "requests": 80
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 14.98,
+   "cores": 64,
+   "renderedMs": 3528,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 75848644,
+   "rendererRss": 723607552,
+   "bytes": 19210794,
+   "requests": 80
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 13.54,
+   "cores": 64,
+   "error": "OnlyOffice: Fonts are not loaded.<br>Please contact your Document Server administrator.",
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 43028332,
+   "rendererRss": 635543552,
+   "bytes": 16840265,
+   "requests": 85
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 14.46,
+   "cores": 64,
+   "renderedMs": 3607,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 12183268,
+   "rendererRss": 663306240,
+   "bytes": 12762770,
+   "requests": 249
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 14.18,
+   "cores": 64,
+   "renderedMs": 2508,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 12371684,
+   "rendererRss": 636088320,
+   "bytes": 12762700,
+   "requests": 249
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 12.77,
+   "cores": 64,
+   "renderedMs": 2668,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 12381092,
+   "rendererRss": 662310912,
+   "bytes": 12762780,
+   "requests": 249
+  }
+ ]
+}

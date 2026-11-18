@@ -1,0 +1,100 @@
+{
+ "measuredAt": "2026-11-18",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.0, highest 16.0, on 64 cores",
+ "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments",
+ "raw": [
+  {
+   "engine": "opendoc",
+   "load1": 13.27,
+   "cores": 64,
+   "error": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/opendoc?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fredline.docx%3Fn%3D11afa9c70ef0\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/opendoc?src=ht",
+   "bytes": 0,
+   "requests": 0
+  },
+  {
+   "engine": "opendoc",
+   "load1": 7.95,
+   "cores": 64,
+   "renderedMs": 2570,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 12955488,
+   "rendererRss": 675033088,
+   "bytes": 21350905,
+   "requests": 378
+  },
+  {
+   "engine": "opendoc",
+   "load1": 6.64,
+   "cores": 64,
+   "renderedMs": 2841,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 12963932,
+   "rendererRss": 679710720,
+   "bytes": 21350769,
+   "requests": 378
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 13.27,
+   "cores": 64,
+   "error": "not rendered within 240s",
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 2958844,
+   "rendererRss": 370872320,
+   "bytes": 125118,
+   "requests": 6
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 7.39,
+   "cores": 64,
+   "renderedMs": 4039,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 53843440,
+   "rendererRss": 735637504,
+   "bytes": 19243236,
+   "requests": 80
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 6.26,
+   "cores": 64,
+   "error": "not rendered within 240s",
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 2992296,
+   "rendererRss": 374484992,
+   "bytes": 125097,
+   "requests": 6
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 8.38,
+   "cores": 64,
+   "renderedMs": 4480,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 17392036,
+   "rendererRss": 673169408,
+   "bytes": 12795416,
+   "requests": 249
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 6.64,
+   "cores": 64,
+   "renderedMs": 2573,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 17196568,
+   "rendererRss": 671784960,
+   "bytes": 12795541,
+   "requests": 249
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 16.04,
+   "cores": 64,
+   "error": "Error: Page.goto: net::ERR_CONNECTION_CLOSED at https://viewers.benchmarks.law/v/betteroffice?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fredline.docx%3Fn%3D18958dbecc28\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/betteroffice?src=h",
+   "bytes": 0,
+   "requests": 0
+  }
+ ]
+}

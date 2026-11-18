@@ -1,235 +1,302 @@
 {
- "measuredAt": "2026-11-17",
- "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores",
+ "measuredAt": "2026-11-18",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores",
  "document": "showcase.docx (47,871 B) with a never-seen ?n= per run",
  "engines": {
   "apryse": {
-   "renderedMs": 5735,
+   "renderedMs": 2744,
    "runs": [
-    7868,
-    6633,
-    4693,
-    null,
-    4837
+    4624,
+    2695,
+    2744
    ],
-   "bytes": 7386978,
+   "bytes": 7351651,
    "requests": 163,
-   "heapBytes": 21876584,
-   "rendererRss": 823263232,
+   "heapBytes": 22360336,
+   "rendererRss": 684822528,
    "how": "data-od-rendered",
    "incomplete": null,
-   "failed": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/apryse?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fshowcase.docx%3Fn%3Ddd106c4d00a4\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/apryse?src=htt",
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "failed": null,
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
+  },
+  "betteroffice": {
+   "renderedMs": 2508,
+   "runs": [
+    null,
+    2395,
+    2094,
+    3607,
+    2508,
+    2668
+   ],
+   "bytes": 12762770,
+   "requests": 249,
+   "heapBytes": 12355496,
+   "rendererRss": 636088320,
+   "how": "data-od-rendered",
+   "incomplete": null,
+   "failed": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/betteroffice?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fshowcase.docx%3Fn%3D3f676fa55094\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/betterof",
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 6 runs (both passes of the day), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "canvas-editor": {
-   "renderedMs": 2310,
+   "renderedMs": 882,
    "runs": [
-    11487,
-    3283,
-    2310,
-    1989,
-    2046
+    1152,
+    842,
+    882
    ],
-   "bytes": 660949,
+   "bytes": 659720,
    "requests": 29,
-   "heapBytes": 9782636,
-   "rendererRss": 592445440,
+   "heapBytes": 10165412,
+   "rendererRss": 488878080,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "docen": {
-   "renderedMs": 2855,
+   "renderedMs": 1532,
    "runs": [
-    2980,
-    3012,
-    2401,
-    null,
-    2731
+    2548,
+    1532,
+    1510
    ],
-   "bytes": 1499803,
+   "bytes": 1468403,
    "requests": 329,
-   "heapBytes": 30703102,
-   "rendererRss": 634765312,
+   "heapBytes": 32139764,
+   "rendererRss": 575709184,
    "how": "data-od-rendered",
    "incomplete": null,
-   "failed": "Failed to fetch dynamically imported module: https://esm.sh/@docen/editor@0.7.0?target=es2022&deps=@microsoft/fast-element@3.0.2",
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "failed": null,
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "docxodus": {
-   "renderedMs": 2909,
+   "renderedMs": 1869,
    "runs": [
-    2359,
-    2909,
-    2707,
-    3141,
-    3601
+    1863,
+    1869,
+    1882
    ],
-   "bytes": 7487371,
-   "requests": 60,
-   "heapBytes": 8496352,
-   "rendererRss": 732528640,
+   "bytes": 7483313,
+   "requests": 61,
+   "heapBytes": 8087052,
+   "rendererRss": 562372608,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "eigenpal": {
-   "renderedMs": 2203,
+   "renderedMs": 992,
    "runs": [
-    2173,
-    2203,
-    2061,
-    2904,
-    2288
+    1642,
+    944,
+    992
    ],
-   "bytes": 5279400,
+   "bytes": 5244564,
    "requests": 205,
-   "heapBytes": 32826128,
-   "rendererRss": 640172032,
+   "heapBytes": 33063400,
+   "rendererRss": 523354112,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "folio": {
-   "renderedMs": 2159,
+   "renderedMs": 1308,
    "runs": [
-    1777,
-    2207,
-    1979,
-    3289,
-    2159
+    2112,
+    1292,
+    1308
    ],
-   "bytes": 2245440,
+   "bytes": 2234075,
    "requests": 82,
-   "heapBytes": 20926188,
-   "rendererRss": 612483072,
+   "heapBytes": 22224480,
+   "rendererRss": 466235392,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "google-viewer": {
-   "renderedMs": 1919,
+   "renderedMs": 942,
    "runs": [
-    1875,
-    3460,
-    1919,
-    2015,
-    1744
+    1045,
+    942,
+    913
    ],
-   "bytes": 1178090,
+   "bytes": 1180630,
    "requests": 32,
-   "heapBytes": 1836988,
-   "rendererRss": 667353088,
+   "heapBytes": 2011852,
+   "rendererRss": 614932480,
    "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "nutrient": {
-   "renderedMs": 9330,
+   "renderedMs": 5668,
    "runs": [
-    6803,
-    10873,
-    8611,
-    13923,
-    9330
+    6063,
+    5603,
+    5668
    ],
-   "bytes": 25581982,
+   "bytes": 25582145,
    "requests": 103,
-   "heapBytes": 23305980,
-   "rendererRss": 933806080,
+   "heapBytes": 24659336,
+   "rendererRss": 613273600,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
+  },
+  "onlyoffice": {
+   "renderedMs": 3528,
+   "runs": [
+    null,
+    2892,
+    null,
+    4019,
+    3528,
+    null
+   ],
+   "bytes": 19210794,
+   "requests": 80,
+   "heapBytes": 75317960,
+   "rendererRss": 723607552,
+   "how": "data-od-rendered",
+   "incomplete": null,
+   "failed": "Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/onlyoffice?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Fshowcase.docx%3Fn%3Dfa0208ec3891\nCall log:\n  - navigating to \"https://viewers.benchmarks.law/v/onlyoffice",
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 6 runs (both passes of the day), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
+  },
+  "opendoc": {
+   "renderedMs": 2959,
+   "runs": [
+    8629,
+    2959,
+    2513
+   ],
+   "bytes": 21318127,
+   "requests": 378,
+   "heapBytes": 18471844,
+   "rendererRss": 699215872,
+   "how": "data-od-rendered",
+   "incomplete": null,
+   "failed": null,
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (second pass of the day, after the adapter was fixed to wait for OpenDoc's engine; the first pass's failed runs are in the raw file), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "plate": {
-   "renderedMs": 3734,
+   "renderedMs": 1506,
    "runs": [
-    3197,
-    3950,
-    3391,
-    4119,
-    3734
+    3429,
+    1506,
+    1182
    ],
-   "bytes": 1189157,
+   "bytes": 1120906,
    "requests": 435,
-   "heapBytes": 26476832,
-   "rendererRss": 546373632,
+   "heapBytes": 11012648,
+   "rendererRss": 451944448,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
+  },
+  "react-docx": {
+   "renderedMs": 3104,
+   "runs": [
+    3104,
+    3244,
+    3003
+   ],
+   "bytes": 7729577,
+   "requests": 38,
+   "heapBytes": 17352168,
+   "rendererRss": 538353664,
+   "how": "data-od-rendered",
+   "incomplete": null,
+   "failed": null,
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "superdoc": {
-   "renderedMs": 4553,
+   "renderedMs": 4297,
    "runs": [
-    4546,
-    4553,
-    4747,
-    6355,
-    3929
+    4352,
+    4297,
+    3672
    ],
-   "bytes": 8240498,
+   "bytes": 8170585,
    "requests": 26,
-   "heapBytes": 19168192,
-   "rendererRss": 788889600,
+   "heapBytes": 19534540,
+   "rendererRss": 639352832,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
+  },
+  "univer": {
+   "renderedMs": 1634,
+   "runs": [
+    1699,
+    1634,
+    1492
+   ],
+   "bytes": 2372067,
+   "requests": 374,
+   "heapBytes": 32877408,
+   "rendererRss": 508837888,
+   "how": "data-od-rendered",
+   "incomplete": null,
+   "failed": null,
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "word-online": {
-   "renderedMs": 1961,
+   "renderedMs": 562,
    "runs": [
-    2667,
-    1076,
-    1282,
-    1961,
-    2049
+    648,
+    562,
+    468
    ],
-   "bytes": 1465774,
-   "requests": 57,
-   "heapBytes": 1816276,
-   "rendererRss": 952696832,
+   "bytes": 1733317,
+   "requests": 71,
+   "heapBytes": 2001392,
+   "rendererRss": 923361280,
    "how": "frame load event (cross-origin: the page cannot see when the vendor finished rendering)",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   },
   "wordcraft": {
-   "renderedMs": 3581,
+   "renderedMs": 2931,
    "runs": [
-    5107,
-    5057,
-    3173,
-    2874,
-    3581
+    2931,
+    3009,
+    2846
    ],
-   "bytes": 23040114,
+   "bytes": 23040353,
    "requests": 23,
-   "heapBytes": 3266080,
-   "rendererRss": 986447872,
+   "heapBytes": 3781616,
+   "rendererRss": 882974720,
    "how": "data-od-rendered",
    "incomplete": null,
    "failed": null,
-   "measuredAt": "2026-11-17",
-   "environment": "Google Chrome 156.0.8078.80 (installed, headed) via Playwright, fresh profile per run (cold cache), 5 runs, median; from a GitHub Actions macos-latest runner (Apple silicon); machine load (1-minute average) median 10.0, highest 14.5, on 3 cores"
+   "measuredAt": "2026-11-18",
+   "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.6, highest 13.1, on 64 cores"
   }
  }
 }

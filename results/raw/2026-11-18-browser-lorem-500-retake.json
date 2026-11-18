@@ -1,0 +1,106 @@
+{
+ "measuredAt": "2026-11-18",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 3.9, highest 24.5, on 64 cores",
+ "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word",
+ "raw": [
+  {
+   "engine": "opendoc",
+   "load1": 16.04,
+   "cores": 64,
+   "error": "not rendered within 240s",
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 3197428,
+   "rendererRss": 381575168,
+   "bytes": 566127,
+   "requests": 18
+  },
+  {
+   "engine": "opendoc",
+   "load1": 3.81,
+   "cores": 64,
+   "renderedMs": 4842,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 13424820,
+   "rendererRss": 961974272,
+   "bytes": 21738833,
+   "requests": 378
+  },
+  {
+   "engine": "opendoc",
+   "load1": 23.54,
+   "cores": 64,
+   "renderedMs": 5323,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 13276524,
+   "rendererRss": 954818560,
+   "bytes": 21738745,
+   "requests": 378
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 3.88,
+   "cores": 64,
+   "renderedMs": 11221,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 200699268,
+   "rendererRss": 941150208,
+   "bytes": 19631275,
+   "requests": 79
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 3.83,
+   "cores": 64,
+   "renderedMs": 4825,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 189258972,
+   "rendererRss": 942346240,
+   "bytes": 19631329,
+   "requests": 79
+  },
+  {
+   "engine": "onlyoffice",
+   "load1": 24.0,
+   "cores": 64,
+   "renderedMs": 4748,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 181637580,
+   "rendererRss": 941309952,
+   "bytes": 19631209,
+   "requests": 79
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 3.59,
+   "cores": 64,
+   "renderedMs": 6283,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 23910604,
+   "rendererRss": 1290248192,
+   "bytes": 11766117,
+   "requests": 242
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 3.39,
+   "cores": 64,
+   "error": "not rendered within 240s",
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 3830608,
+   "rendererRss": 380305408,
+   "bytes": 633747,
+   "requests": 64
+  },
+  {
+   "engine": "betteroffice",
+   "load1": 24.46,
+   "cores": 64,
+   "renderedMs": 6857,
+   "chrome": "Chrome/158.0.8127.36",
+   "heapBytes": 23972628,
+   "rendererRss": 1292509184,
+   "bytes": 11765923,
+   "requests": 242
+  }
+ ]
+}
