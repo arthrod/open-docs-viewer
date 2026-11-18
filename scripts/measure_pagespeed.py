@@ -25,7 +25,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import merge_pagespeed, page_entry, pagespeed_args, summarize, psi_refusal
+from measure_lib import chrome_args, merge_pagespeed, page_entry, pagespeed_args, summarize, psi_refusal
 
 # Parsed before any browser starts.
 ARGS = pagespeed_args(sys.argv[1:])
@@ -128,7 +128,7 @@ async def main():
     raw: list[dict] = []
     sem = asyncio.Semaphore(PARALLEL)
     async with async_playwright() as pw:
-        browser = await pw.chromium.launch(channel="chrome", headless=False)
+        browser = await pw.chromium.launch(channel="chrome", headless=False, args=chrome_args())
 
         async def job(p):
             async with sem:

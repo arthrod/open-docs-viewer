@@ -427,5 +427,24 @@ def test_a_results_file_that_cannot_be_parsed_is_not_silently_replaced(tmp_path)
 
 
 def test_chrome_args_come_from_the_environment_and_default_to_none():
+    """An explicit mapping makes the result independent of the process environment."""
     assert lib.chrome_args({}) == []
     assert lib.chrome_args({"OD_CHROME_ARGS": "--no-sandbox  --disable-dev-shm-usage"}) == ["--no-sandbox", "--disable-dev-shm-usage"]
+
+
+def test_chrome_args_keep_a_quoted_value_whole_and_read_the_process_environment(monkeypatch):
+    """Shell quoting applies, and a call without a mapping reads os.environ (what the launchers do)."""
+    assert lib.chrome_args({"OD_CHROME_ARGS": '--user-agent="Benchmark Browser" --no-sandbox'}) == ["--user-agent=Benchmark Browser", "--no-sandbox"]
+    monkeypatch.setenv("OD_CHROME_ARGS", "--no-sandbox")
+    assert lib.chrome_args() == ["--no-sandbox"]
+    monkeypatch.delenv("OD_CHROME_ARGS")
+    assert lib.chrome_args() == []
+
+
+def test_where_note_names_the_chrome_flags_the_description_left_out():
+    """A published environment line always shows the start-up flags, said by the operator or not."""
+    assert lib.where_note("Linux x86_64", {}) == "Linux x86_64"
+    assert lib.where_note("Linux x86_64", {"MEASURE_WHERE": "a laptop"}) == "a laptop"
+    assert lib.where_note("Linux x86_64", {"OD_CHROME_ARGS": "--no-sandbox"}) == "Linux x86_64; Chrome started with --no-sandbox"
+    both = {"MEASURE_WHERE": "a job, Chrome with --no-sandbox", "OD_CHROME_ARGS": "--no-sandbox --disable-gpu"}
+    assert lib.where_note("x", both) == "a job, Chrome with --no-sandbox; Chrome started with --disable-gpu"
