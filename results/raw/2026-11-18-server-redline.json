@@ -1,6 +1,6 @@
 {
  "measuredAt": "2026-11-18",
- "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 51.6, highest 51.6, on 64 cores",
+ "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 51.6, highest 51.6, on 64 cores",
  "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments",
  "raw": [
   {
