@@ -6,9 +6,12 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Engines](https://img.shields.io/badge/engines-arthrod%2Fopen--docs-0f172a)](https://github.com/arthrod/open-docs)
 
-Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
-same public document URL, and measured the same way. Ten engines render in the browser. The other two, Microsoft's and Google's viewers, render on the vendor's own
-servers and are shown here in a frame: nothing of theirs renders client-side. Seven of the ten also
+The document engines from the [open-docs](https://github.com/arthrod/open-docs) bench, fed the
+same public document URL and measured the same way, with **view-only modes where available**.
+Fifteen engines render in the browser; Univer receives text and headings extracted by this site
+rather than rendering the `.docx` itself. WordCraft and Univer remain editable here.
+Microsoft's and Google's viewers render on the vendor's own servers and are shown here in a frame:
+nothing of theirs renders client-side. Seven browser engines also
 render **on this Val's server**, the way those two do: the server fetches the document,
 lays it out, paints it, and the browser receives finished pages.
 
@@ -17,10 +20,11 @@ lays it out, paints it, and the browser receives finished pages.
 | Route | What |
 | --- | --- |
 | `GET /` | the engines, the measurements, a URL form |
-| `GET /v/<engine>?src=<url>` | view-only page: the engine runs in the browser, in its own read-only mode (Microsoft's and Google's viewers: a frame onto their server render) |
+| `GET /v/<engine>?src=<url>` | viewer page: the engine runs in the browser, in its read-only mode where available (Microsoft's and Google's viewers: a frame onto their server render) |
 | `GET /r/<engine>?src=<url>` | **server-rendered**: the engine runs here; timings in `Server-Timing` (`fetch`, `init`, `render`), page count in `x-pages`, anything laid out but not painted in `x-unpainted` |
 | `GET /api/doc?src=<url>` | this server fetches the document (https only, no private hosts, every redirect re-checked, ≤ 25 MB read in chunks, 20 s deadline, must be a zip); refusals are 4xx with the reason as text |
 | `GET /results.json` | the browser-side measurements |
+| `GET /eo1/vendor/<path>` | same-origin engine files passed through from the editors site, with the `/eo1` prefix removed and the query preserved |
 
 `src` defaults to the rich sample on Hugging Face:
 [`arthrod/open-docs-fixtures/showcase.docx`](https://huggingface.co/datasets/arthrod/open-docs-fixtures).
@@ -119,6 +123,13 @@ allows only from the page's own origin. Their files are therefore passed through
 `/eo1/vendor/…` (`server/pass-through.ts`) instead of being linked from the editors site, so each
 of their files costs this site a request as well. For these engines the "requests passed through"
 count of the measuring script is expected to be non-zero.
+
+Pass-through responses stream the upstream body and retain only `Content-Type`,
+`Content-Disposition`, `Cache-Control`, `Last-Modified`, `ETag` and
+`Access-Control-Allow-Origin`, plus `x-proxied-from: open-docs`. They omit upstream
+`Content-Encoding` and `Content-Length` because the runtime has already decoded the body.
+Every non-200 response uses `Cache-Control: no-store`. The legacy allowlisted
+pass-through routes use the same response handling.
 
 ## Server rendering
 
@@ -444,7 +455,9 @@ vt watch            # edit locally, deploys on save
 ```
 
 Engines' browser code is not copied: shells are imported from the open-docs val and adapters load from
-`editors.benchmarks.law`.
+`editors.benchmarks.law`. Engines whose shell declares `sameOrigin` load their vendor
+files through `/eo1/vendor/` on this site; `server/render.ts` rewrites their root-relative
+import-map URLs and `client/view.ts` supplies `od.vendorRoot` to the adapter.
 
 ## License
 
