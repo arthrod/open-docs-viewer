@@ -412,8 +412,10 @@ How each is measured:
 - That pass, honestly: OpenDoc failed all 9 starts of the first pass, because its adapter handed it a document
   before its engine was ready (fixed in open-docs the same day); its rows are from a second pass, and the failed
   runs stay in the raw files. OnlyOffice and BetterOffice were measured in both passes (6 runs). The second pass
-  was a separate job on the same machine type, and its load-average readings do not continue the first job's, so
-  it ran on another host of that type (64 cores, 493 GB). A third job that evening, meant to take every row on one
+  was a separate job of the same `cpu-upgrade` flavor, as recorded in
+  [`results/raw/2026-11-18-passes.json`](results/raw/2026-11-18-passes.json). The records do not identify the
+  underlying hosts; different load-average readings alone do not establish whether the host changed.
+  A third job that evening, meant to take every row on one
   host, was not used: its host's load reached 102 during the browser runs, and it saved no new 500-page file. 14 of the 171
   runs behind the tables did not render, 5 of them OnlyOffice's (of its 18) and 4 BetterOffice's (of 18): mostly
   "not rendered within 240 s" or the page answering an error status. Each row's runs column shows them, and the
