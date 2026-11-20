@@ -1,0 +1,602 @@
+{
+ "measuredAt": "2026-11-20",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Florem-500.docx",
+ "raw": [
+  {
+   "page": "v/betteroffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.006Z",
+    "performance": 67,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1511,
+    "lcpMs": 8751,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 7988
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.705Z",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 411,
+    "lcpMs": 1571,
+    "tbtMs": 0,
+    "cls": 0.001,
+    "speedIndexMs": 2191
+   }
+  },
+  {
+   "page": "v/react-docx",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.591Z",
+    "performance": 36,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 775,
+    "lcpMs": 38821,
+    "tbtMs": 2810,
+    "cls": 0.0,
+    "speedIndexMs": 11278
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.743Z",
+    "performance": 38,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 6682,
+    "tbtMs": 2612,
+    "cls": 0.001,
+    "speedIndexMs": 3095
+   }
+  },
+  {
+   "page": "v/onlyoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:31:04.873Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 899
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:31:05.298Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 327
+   }
+  },
+  {
+   "page": "v/opendoc",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.441Z",
+    "performance": 60,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 811,
+    "lcpMs": 811,
+    "tbtMs": 13273,
+    "cls": 0.054,
+    "speedIndexMs": 28571
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:30:39.583Z",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 9942,
+    "cls": 0.192,
+    "speedIndexMs": 7946
+   }
+  },
+  {
+   "page": "v/univer",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/react-docx",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.395Z",
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 774,
+    "lcpMs": 39963,
+    "tbtMs": 1598,
+    "cls": 0.0,
+    "speedIndexMs": 8078
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.391Z",
+    "performance": 40,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 6508,
+    "tbtMs": 1731,
+    "cls": 0.001,
+    "speedIndexMs": 2383
+   }
+  },
+  {
+   "page": "v/betteroffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.058Z",
+    "performance": 91,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 429,
+    "lcpMs": 1603,
+    "tbtMs": 0,
+    "cls": 0.001,
+    "speedIndexMs": 1977
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.574Z",
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1513,
+    "lcpMs": 8503,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4976
+   }
+  },
+  {
+   "page": "v/onlyoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:02.288Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 939
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:02.300Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 382
+   }
+  },
+  {
+   "page": "v/opendoc",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.652Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.429Z",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 9494,
+    "cls": 0.192,
+    "speedIndexMs": 7008
+   }
+  },
+  {
+   "page": "v/univer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.044Z",
+    "performance": 59,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1681,
+    "lcpMs": 1681,
+    "tbtMs": 10393,
+    "cls": 0.003,
+    "speedIndexMs": 16777
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:34:41.570Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "v/react-docx",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:34.860Z",
+    "performance": 39,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 6628,
+    "tbtMs": 2433,
+    "cls": 0.001,
+    "speedIndexMs": 2851
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:35.005Z",
+    "performance": 36,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 772,
+    "lcpMs": 39796,
+    "tbtMs": 3309,
+    "cls": 0.0,
+    "speedIndexMs": 12402
+   }
+  },
+  {
+   "page": "v/onlyoffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:36:06.654Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 597
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:36:06.695Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 1848
+   }
+  },
+  {
+   "page": "v/opendoc",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:34.793Z",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 7974,
+    "cls": 0.192,
+    "speedIndexMs": 6266
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:35:35.034Z",
+    "performance": 60,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 19427,
+    "cls": 0.054,
+    "speedIndexMs": 32466
+   }
+  },
+  {
+   "page": "v/betteroffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:36:50.648Z",
+    "performance": 85,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 450,
+    "lcpMs": 1598,
+    "tbtMs": 0,
+    "cls": 0.001,
+    "speedIndexMs": 3994
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:36:50.718Z",
+    "performance": 65,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1517,
+    "lcpMs": 8586,
+    "tbtMs": 2,
+    "cls": 0.0,
+    "speedIndexMs": 10855
+   }
+  },
+  {
+   "page": "v/univer",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  },
+  {
+   "page": "v/react-docx",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:13.644Z",
+    "performance": 43,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 6468,
+    "tbtMs": 1206,
+    "cls": 0.001,
+    "speedIndexMs": 1885
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:13.662Z",
+    "performance": 41,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 765,
+    "lcpMs": 39740,
+    "tbtMs": 1617,
+    "cls": 0.0,
+    "speedIndexMs": 8009
+   }
+  },
+  {
+   "page": "v/betteroffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:12.962Z",
+    "performance": 69,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1519,
+    "lcpMs": 8301,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 6247
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:12.993Z",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 423,
+    "lcpMs": 1581,
+    "tbtMs": 0,
+    "cls": 0.001,
+    "speedIndexMs": 2169
+   }
+  },
+  {
+   "page": "v/onlyoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:34.061Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 1027
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:34.091Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 228,
+    "lcpMs": 228,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 697
+   }
+  },
+  {
+   "page": "v/univer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:13.642Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:13.422Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "v/opendoc",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:12.604Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:41:12.727Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "v/betteroffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:42:06.796Z",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1511,
+    "lcpMs": 8766,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 4730
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:42:06.856Z",
+    "performance": 92,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 411,
+    "lcpMs": 1563,
+    "tbtMs": 0,
+    "cls": 0.001,
+    "speedIndexMs": 1653
+   }
+  },
+  {
+   "page": "v/onlyoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:18.719Z",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 792,
+    "lcpMs": 792,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 3801
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:18.306Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 744
+   }
+  },
+  {
+   "page": "v/react-docx",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:13.805Z",
+    "performance": 35,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 790,
+    "lcpMs": 39579,
+    "tbtMs": 3990,
+    "cls": 0.0,
+    "speedIndexMs": 16069
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:13.387Z",
+    "performance": 36,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 247,
+    "lcpMs": 6680,
+    "tbtMs": 3087,
+    "cls": 0.001,
+    "speedIndexMs": 4663
+   }
+  },
+  {
+   "page": "v/opendoc",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:05.498Z",
+    "performance": 51,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 271,
+    "lcpMs": 271,
+    "tbtMs": 6870,
+    "cls": 0.192,
+    "speedIndexMs": 9898
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-20T06:43:05.703Z",
+    "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+   }
+  },
+  {
+   "page": "v/univer",
+   "error": "PageSpeed gave no result within 240 s: the page never finished loading for it"
+  }
+ ]
+}

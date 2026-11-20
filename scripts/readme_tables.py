@@ -4,7 +4,7 @@
     python3 scripts/readme_tables.py --check    # exit 1 if README.md is not what the files say
 
 The blocks are the text between `<!-- NAME:start -->` and `<!-- NAME:end -->`
-for NAME in browser, server, samples, server-client and lighthouse. They are
+for NAME in browser, server, samples, server-client, lighthouse and no-server. They are
 never edited by hand: a table typed beside its data goes stale.
 """
 import json
@@ -26,6 +26,9 @@ FRAMES = {"word-online": "Microsoft", "google-viewer": "Google"}
 SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc")
 # Routes whose page images are separate requests, made as each page nears the viewport.
 IMAGES = {"wordcraft"}
+# Why an engine has no server route: the file the landing page reads too.
+NO_SERVER = json.load(open(f"{ROOT}/server/no-server.json"))
+NO_SERVER_KIND = {"needs-a-browser": "needs a browser", "needs-native": "needs native code", "not-built": "possible, not built"}
 DOCS = (("showcase", "Rich sample (`showcase.docx`)"), ("redline", "Redline (`redline.docx`)"), ("lorem-500", "500 pages (`lorem-500.docx`)"))
 
 
@@ -119,7 +122,7 @@ def server_block(data: dict) -> str:
 def server_cell(e: str, x: dict | None) -> str:
     """One /r/ route on one sample, in a sentence."""
     if x is None:
-        return "not measured on this file yet" if e in SERVER else "no server route"
+        return "not measured on this file yet" if e in SERVER else NO_SERVER.get(e, {}).get("cell", "no server route")
     if x.get("totalMs") is None:
         status = x.get("code")
         return f"**failed**: {cell(x.get('error') or f'HTTP {status}')}"
@@ -234,6 +237,14 @@ def lighthouse_block(data: dict) -> str:
     return "\n".join(out)
 
 
+def no_server_block(reasons: dict) -> str:
+    """Every engine without a server route, and why (server/no-server.json, which the landing page reads too)."""
+    out = ["| Engine | Kind | Why there is no server route |", "| --- | --- | --- |"]
+    for e, r in reasons.items():
+        out.append(f"| {NAMES.get(e, e)} | {NO_SERVER_KIND.get(r.get('status'), r.get('status') or 'n/a')} | {str(r.get('why', '')).replace('|', chr(92) + '|')} |")
+    return "\n".join(out)
+
+
 def put(text: str, name: str, body: str) -> str:
     """`text` with the named block replaced by `body`. The markers must be there."""
     start, end = f"<!-- {name}:start -->", f"<!-- {name}:end -->"
@@ -250,6 +261,7 @@ def render(readme: str, files: dict) -> str:
         ("samples", samples_block(files["samples"])),
         ("server-client", server_client_block(files["server-client"], files["browser"], files["samples"])),
         ("lighthouse", lighthouse_block(files["lighthouse"])),
+        ("no-server", no_server_block(files.get("no-server", NO_SERVER))),
     ):
         readme = put(readme, name, body)
     return readme

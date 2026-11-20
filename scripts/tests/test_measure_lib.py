@@ -448,3 +448,21 @@ def test_where_note_names_the_chrome_flags_the_description_left_out():
     assert lib.where_note("Linux x86_64", {"OD_CHROME_ARGS": "--no-sandbox"}) == "Linux x86_64; Chrome started with --no-sandbox"
     both = {"MEASURE_WHERE": "a job, Chrome with --no-sandbox", "OD_CHROME_ARGS": "--no-sandbox --disable-gpu"}
     assert lib.where_note("x", both) == "a job, Chrome with --no-sandbox; Chrome started with --disable-gpu"
+
+
+def test_an_analysis_pagespeed_served_from_its_cache_is_not_counted_twice():
+    """Five requests in three minutes came back as three analyses (2026-11-20): a copy has the first one's time."""
+    seen: dict = {}
+    first = {"page": "e/univer", "desktop": {"performance": 93, "fetchTime": "2026-11-20T05:53:01Z"}, "mobile": {"performance": 91, "fetchTime": "2026-11-20T05:53:02Z"}}
+    assert lib.repeated_analysis(first, seen) == []
+    copy = {"page": "e/univer", "desktop": {"performance": 93, "fetchTime": "2026-11-20T05:53:01Z"}, "mobile": {"performance": 88, "fetchTime": "2026-11-20T05:54:40Z"}}
+    again = lib.repeated_analysis(copy, seen)
+    assert again == ["desktop"]
+    kept = lib.without_repeats(copy, again)
+    assert "desktop" not in kept and kept["mobile"]["performance"] == 88 and kept["error"] == lib.PSI_REPEAT and kept["repeated"] == ["desktop"]
+    # The same time on another page is another analysis, and a report without a time is never called a copy.
+    assert lib.repeated_analysis({"page": "e/plate", "desktop": {"performance": 93, "fetchTime": "2026-11-20T05:53:01Z"}}, seen) == []
+    assert lib.repeated_analysis({"page": "e/univer", "desktop": {"performance": 93}}, seen) == []
+    assert lib.summarize({"lighthouseVersion": "13", "fetchTime": "2026-11-20T05:53:01Z", "categories": {}, "audits": {}})["fetchTime"] == "2026-11-20T05:53:01Z"
+    e = lib.page_entry([first, kept], limit_s=240)
+    assert e["desktop"]["performanceRuns"] == [93, None] and e["mobile"]["performanceRuns"] == [91, 88]

@@ -2,6 +2,8 @@
  * The engines, read from the open-docs registry (one source of truth), with
  * how each is made view-only here.
  */
+import NO_SERVER_JSON from "./no-server.json" with { type: "json" };
+
 export const OPEN_DOCS = "https://editors.benchmarks.law";
 /** The open-docs val's modules, for the server side (shells, registry). */
 export const OPEN_DOCS_ESM = "https://esm.town/v/arthrod/open-docs";
@@ -58,7 +60,7 @@ const READ_ONLY: Record<string, string> = {
   "docen": 'docen editable="false" (its ribbon always shows, by design)',
   "eigenpal": 'docx-editor.dev mode="view"',
   "folio": "folio readOnly (hides its toolbar and rulers)",
-  "wordcraft": "WordCraft 0.16.0 has no read-only mode — still editable here",
+  "wordcraft": "WordCraft's web build has no read-only mode: still editable here",
   "react-docx": 'react-docx mode "read-only"',
   "univer": "Univer has no read-only switch in its docs preset; still editable here (text only, read by this site)",
   "opendoc": "OpenDoc's review mode \"viewing\" (its ribbon stays)",
@@ -69,6 +71,21 @@ const READ_ONLY: Record<string, string> = {
   "apryse": "WebViewer annotation read-only, View ribbon only (no key: demo mode, watermark)",
   "nutrient": "readOnly view state, navigation toolbar only (no key: trial mode, watermark)",
 };
+
+/**
+ * Why an engine has no server route (`/r/<slug>`), one entry per engine without one.
+ * `cell` is what a table says in place of a measurement; `why` is the whole reason;
+ * `status` tells "would need a browser or native code" from "possible, not built".
+ * scripts/readme_tables.py reads the same file for the README.
+ */
+export interface NoServer {
+  status: "needs-a-browser" | "needs-native" | "not-built";
+  cell: string;
+  why: string;
+}
+export const NO_SERVER = NO_SERVER_JSON as Record<string, NoServer>;
+/** What a table cell says for an engine with no server route. */
+export const noServerCell = (slug: string): string => NO_SERVER[slug]?.cell ?? "no server route";
 
 // deno-lint-ignore no-explicit-any
 export const ENGINES: Engine[] = (editors as any[]).map((e) => ({
