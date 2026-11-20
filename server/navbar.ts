@@ -31,6 +31,7 @@ const siteLinks = () =>
     <a href="/">Viewers</a>
     <a href="/#measurements">Measurements</a>
     <a href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
+    <a href="https://editors.benchmarks.law/blog" target="_blank" rel="noopener">Blog →</a>
     <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>`;
 
 const siteLinksMenu = () =>
@@ -38,6 +39,7 @@ const siteLinksMenu = () =>
         <a href="/">Viewers</a>
         <a href="/#measurements">Measurements</a>
         <a href="${ARENA}" target="_blank" rel="noopener">Arena →</a>
+        <a href="https://editors.benchmarks.law/blog" target="_blank" rel="noopener">Blog →</a>
         <a href="${SOURCE}" target="_blank" rel="noopener">Source →</a>
         <a href="https://arthur.law/contact" target="_blank" rel="noopener">Contact →</a>`;
 
