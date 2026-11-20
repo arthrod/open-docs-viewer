@@ -14,6 +14,7 @@ import shlex
 import re
 import statistics
 import subprocess
+import sys
 import time
 
 LH_CATS = {"performance": "performance", "accessibility": "accessibility", "best-practices": "bestPractices", "seo": "seo"}
@@ -434,6 +435,32 @@ def machine_load() -> dict:
     engine is; every run records this so a reader can tell.
     """
     return {"load1": round(os.getloadavg()[0], 2), "cores": os.cpu_count() or 1}
+
+
+async def quiet_host(env: dict | None = None, load=None, sleep=asyncio.sleep, now=time.monotonic) -> str | None:
+    """Wait until the machine is quiet enough to time a page; the reason, when it never was.
+
+    On a shared host the load changes within minutes (2026-11-20: 38 when a step started, 98
+    when it ended), so it is looked at before every run, not once per step. OD_MAX_LOAD is the
+    1-minute load average a run may start under; without it nothing waits (one's own machine).
+    OD_LOAD_WAIT_S is how long one run waits (six hours unless given). A wait that runs out
+    stops the script like a Chrome that will not end: what was measured is written, the rest
+    is left as it was, and the script ends with a status that says it did not finish.
+    """
+    env = os.environ if env is None else env
+    if not env.get("OD_MAX_LOAD"):
+        return None
+    limit, wait = float(env["OD_MAX_LOAD"]), float(env.get("OD_LOAD_WAIT_S", 21600))
+    load = load or (lambda: os.getloadavg()[0])
+    end, said = now() + wait, False
+    while (at := load()) > limit:
+        if now() >= end:
+            return f"the host stayed busy for {wait:g} s (load {at:.1f}, a run starts under {limit:g})"
+        if not said:
+            print(f"waiting for the host: load {at:.1f}, a run starts under {limit:g}", file=sys.stderr, flush=True)
+            said = True
+        await sleep(10)
+    return None
 
 
 def load_note(runs: list[dict]) -> str:

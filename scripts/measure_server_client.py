@@ -37,7 +37,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
+from measure_lib import quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -157,6 +157,9 @@ async def one(pw, slug: str, doc: str) -> dict:
     return out
 
 
+STOPPED: list[str] = []  # why the run loop ended early, when it did
+
+
 async def main():
     engines = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
     docs = ARGS.docs.split(",")
@@ -168,6 +171,10 @@ async def main():
         for _ in range(runs):
             for d in docs:
                 for e in engines:
+                    busy = await quiet_host()
+                    if busy:
+                        stopped = busy
+                        break
                     x = await one(pw, e, d)
                     raw.append(x)
                     print(json.dumps(x), file=sys.stderr, flush=True)
@@ -180,6 +187,7 @@ async def main():
                 # A Chrome that would not end is still using the machine: what was measured so far is
                 # written, and nothing more is measured beside it.
                 print(f"stopping: {stopped}", file=sys.stderr, flush=True)
+                STOPPED.append(stopped)
                 break
     try:
         result = json.load(open(path)) if path else {}
@@ -221,3 +229,5 @@ async def main():
 
 
 asyncio.run(main())
+if STOPPED:
+    sys.exit(4)  # stopped before the end: what was measured is written, and the caller is told

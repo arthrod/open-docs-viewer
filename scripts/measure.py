@@ -43,7 +43,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw, where_note
+from measure_lib import quiet_host, check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw, where_note
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -141,6 +141,9 @@ async def one(pw, slug: str) -> dict:
         return out
 
 
+STOPPED: list[str] = []  # why the run loop ended early, when it did
+
+
 async def main():
     engines = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
     runs = ARGS.runs
@@ -150,6 +153,10 @@ async def main():
     async with async_playwright() as pw:
         for r in range(runs):
             for e in engines:
+                busy = await quiet_host()
+                if busy:
+                    stopped = busy
+                    break
                 try:
                     x = await one(pw, e)
                 except Exception as ex:
@@ -165,6 +172,7 @@ async def main():
                 # A Chrome that would not end is still using the machine: what was measured so far is
                 # written, and nothing more is measured beside it.
                 print(f"stopping: {stopped}", file=sys.stderr, flush=True)
+                STOPPED.append(stopped)
                 break
     # A run that rendered but lost a later reading keeps its time (measure_lib.engine_summary).
     summary = {e: engine_summary(xs) for e, xs in res.items() if xs}  # engines a stopped run never reached keep their entry
@@ -222,3 +230,5 @@ def write_results(path: str, summary: dict, meta: dict) -> None:
 
 
 asyncio.run(main())
+if STOPPED:
+    sys.exit(4)  # stopped before the end: what was measured is written, and the caller is told

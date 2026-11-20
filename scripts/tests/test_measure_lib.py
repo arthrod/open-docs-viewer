@@ -528,3 +528,27 @@ def test_an_uncollected_heap_stays_out_of_the_median_and_is_counted():
     all_un = lib.engine_summary([{"renderedMs": 1, "heapBytes": 900, "heapNotCollected": "x"}])
     assert all_un["heapBytes"] == 900 and all_un["heapNotCollected"] == 1
     assert lib.engine_summary([{"renderedMs": 1, "heapBytes": 5}])["heapNotCollected"] == 0
+
+
+def _quiet(loads, env):
+    """quiet_host over a scripted list of load readings (the last one repeats), on a fake clock."""
+    t, it = [0.0], iter(loads)
+    last = [loads[-1]]
+
+    def load():
+        last[0] = next(it, last[0])
+        return last[0]
+
+    async def sleep(s):
+        t[0] += s
+
+    return lib.asyncio.run(lib.quiet_host(env, load=load, sleep=sleep, now=lambda: t[0])), t[0]
+
+
+def test_a_run_waits_for_a_quiet_host_and_gives_up_with_the_reason():
+    assert _quiet([200], {}) == (None, 0.0)  # no limit given: one's own machine, no wait
+    assert _quiet([30], {"OD_MAX_LOAD": "48"}) == (None, 0.0)
+    why, waited = _quiet([90, 90, 70, 40], {"OD_MAX_LOAD": "48"})
+    assert why is None and waited == 30.0
+    why, waited = _quiet([90], {"OD_MAX_LOAD": "48", "OD_LOAD_WAIT_S": "60"})
+    assert "busy" in why and "48" in why and waited == 60.0
