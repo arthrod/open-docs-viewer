@@ -37,7 +37,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
+from measure_lib import collected_heap, quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -134,14 +134,7 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["rendererRss"] = renderer_rss(profile)
                 # The heap after a forced collection, as scripts/measure.py reads it: both land
                 # under "JS heap". The reading before it is kept beside it.
-                out["heapBytesBeforeGc"] = int(m.get("JSHeapUsedSize", 0))
-                try:
-                    await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
-                    m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
-                    out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
-                except Exception as e:
-                    out["heapBytes"] = out["heapBytesBeforeGc"]
-                    out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]  # the figure is then the uncollected one
+                out.update(await collected_heap(cdp, int(m.get("JSHeapUsedSize", 0))))
         except Exception as e:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)

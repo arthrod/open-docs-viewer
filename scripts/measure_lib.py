@@ -140,6 +140,24 @@ def renderer_rss(profile: str) -> int:
     return renderer_rss_of([(int(r[0]), int(r[1]), int(r[2]) * 1024, r[3]) for r in rows if len(r) == 4], profile)
 
 
+async def collected_heap(cdp, before: int) -> dict:
+    """The JS heap after a forced collection, beside the reading before it (`before`, bytes).
+
+    An engine that has just converted a file holds garbage: canvas-editor read 1,281 MiB at
+    1.5 s after rendering 500 pages and 702 MiB once Chrome had collected (2026-11-20). When
+    the collection fails the figure is the earlier reading, and the run says so.
+    """
+    out = {"heapBytesBeforeGc": before}
+    try:
+        await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
+        m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
+        out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
+    except Exception as e:
+        out["heapBytes"] = before
+        out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]
+    return out
+
+
 def engine_summary(xs: list[dict]) -> dict:
     """One engine's published entry from its cold runs (scripts/measure.py).
 

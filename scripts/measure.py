@@ -43,7 +43,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import quiet_host, check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw, where_note
+from measure_lib import collected_heap, quiet_host, check_results_document, chrome_args, chrome_note, close_context, engine_summary, load_note, machine_load, measure_args, read_results, renderer_rss, runs_note, samples_shell, stamp_rows, stopped_path, write_raw, where_note
 
 # Parsed, and refused if it would mix documents in the main table, before any browser starts.
 ARGS = measure_args(sys.argv[1:])
@@ -122,14 +122,7 @@ async def one(pw, slug: str) -> dict:
             # The heap twice: as it is 1.5 s after rendering, and after a forced collection. The
             # first holds the garbage of the conversion: canvas-editor read 1,281 MiB at this
             # moment on the 500 pages and 702 MiB once Chrome had collected (2026-11-20).
-            out["heapBytesBeforeGc"] = int(m.get("JSHeapUsedSize", 0))
-            try:
-                await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
-                m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
-                out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
-            except Exception as e:
-                out["heapBytes"] = out["heapBytesBeforeGc"]
-                out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]  # the figure is then the uncollected one
+            out.update(await collected_heap(cdp, int(m.get("JSHeapUsedSize", 0))))
         except Exception as e:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)

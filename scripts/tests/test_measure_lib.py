@@ -552,3 +552,21 @@ def test_a_run_waits_for_a_quiet_host_and_gives_up_with_the_reason():
     assert why is None and waited == 30.0
     why, waited = _quiet([90], {"OD_MAX_LOAD": "48", "OD_LOAD_WAIT_S": "60"})
     assert "busy" in why and "48" in why and waited == 60.0
+
+
+def test_the_heap_is_read_after_a_collection_and_says_when_it_could_not_be():
+    class Cdp:
+        def __init__(self, fail):
+            self.fail, self.sent = fail, []
+
+        async def send(self, method):
+            self.sent.append(method)
+            if self.fail and method == "HeapProfiler.collectGarbage":
+                raise TimeoutError("no answer")
+            return {"metrics": [{"name": "JSHeapUsedSize", "value": 700.0}]}
+
+    ok = Cdp(False)
+    assert lib.asyncio.run(lib.collected_heap(ok, 1281)) == {"heapBytesBeforeGc": 1281, "heapBytes": 700}
+    assert ok.sent == ["HeapProfiler.collectGarbage", "Performance.getMetrics"]
+    bad = lib.asyncio.run(lib.collected_heap(Cdp(True), 1281))
+    assert bad["heapBytes"] == 1281 and bad["heapNotCollected"].startswith("TimeoutError")
