@@ -1,0 +1,47 @@
+{
+  "canvas-editor": {
+    "status": "needs-a-browser",
+    "cell": "no server route: it measures and paints on a browser canvas",
+    "why": "canvas-editor measures every character with a canvas 2D context and paints each page on a `<canvas>` it creates in the DOM. The package has no headless entry, so running it here would mean faking a browser."
+  },
+  "cite-check": {
+    "status": "needs-a-browser",
+    "cell": "no server route: it is canvas-editor with an application on top",
+    "why": "cite-check is an application built on canvas-editor, and draws through it: the same reason as canvas-editor."
+  },
+  "apryse": {
+    "status": "needs-native",
+    "cell": "no server route: Apryse renders on a server with a native SDK",
+    "why": "WebViewer is Apryse's browser product. Its server rendering is a native SDK and a Docker service (WebViewer Server); a Val runs neither native binaries nor subprocesses."
+  },
+  "nutrient": {
+    "status": "needs-native",
+    "cell": "no server route: Nutrient renders on a server with a Docker service",
+    "why": "The Web SDK converts the .docx in the browser with a .NET engine in WebAssembly that it fetches from its own workers. Nutrient's server rendering is Document Engine, a Docker service; a Val runs neither native binaries nor subprocesses."
+  },
+  "react-docx": {
+    "status": "needs-a-browser",
+    "cell": "no server route: it breaks pages by measuring text in the browser",
+    "why": "`@extend-ai/react-docx@0.15.0` exports browser entries only (`.`, `./vanilla`, `./internal`). Its Rust parser in WebAssembly needs no DOM, but pagination measures text with a canvas `measureText` and with laid-out elements (`getBoundingClientRect`), and its page-image renderer throws \"DOCX thumbnails require a browser environment\". A route could send the parsed text, but the page breaks would be ours, not its."
+  },
+  "univer": {
+    "status": "needs-a-browser",
+    "cell": "no server route: no .docx reader, and its layout measures text on a canvas",
+    "why": "Univer's open-source packages cannot read a .docx (import and export are in its separately licensed Server SDK), so even in the browser this site hands it text and headings. Its layout (`@univerjs/engine-render@1.5.2`) takes text measurements from a canvas 2D context and has none without `document` or `OffscreenCanvas`."
+  },
+  "opendoc": {
+    "status": "not-built",
+    "cell": "not built yet: its viewer package can render pages without a browser",
+    "why": "This one is possible. `@casualoffice/opendoc-viewer@0.1.0-alpha.1` (Apache-2.0, pre-release) opens a .docx in WebAssembly and offers `renderPagePng` and `toPdf` with no DOM or canvas import, the same shape as the WordCraft route. It is not built yet: that package is an older build than the application of 2026-11-05 the browser page shows, and it carries one font family (Liberation Sans), so the others would have to be supplied. Read from the package's files; not run here."
+  },
+  "betteroffice": {
+    "status": "not-built",
+    "cell": "not built: its layout runs without a browser, its only painter draws on a browser canvas",
+    "why": "`@betteroffice/docx@0.5.1` paginates without a browser (`exportDocxStructuredWithPages`, and a display list from its Rust session), but the only painter it publishes draws on a `CanvasRenderingContext2D` and returns `HTMLCanvasElement`s; it has no SVG or PDF writer for documents. A route would need a painter of ours over its display list, so the pixels would be ours. Read from the package's files; not run here."
+  },
+  "onlyoffice": {
+    "status": "needs-a-browser",
+    "cell": "no server route: its converter is built without the renderer, and drawing needs the editor in a browser",
+    "why": "CryptPad compiles x2t to WebAssembly with OnlyOffice's `doctrenderer` replaced by an empty stub, so it converts between formats but cannot lay out or draw: x2t sends PDF and HTML output through that renderer. Pages are drawn by the editor's JavaScript (sdkjs) on a browser canvas. OnlyOffice's own server rendering is the native Document Server or Document Builder, which a Val cannot run."
+  }
+}

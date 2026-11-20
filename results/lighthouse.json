@@ -819,6 +819,221 @@
    "measuredAt": "2026-11-16",
    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
    "base": "https://viewers.benchmarks.law"
+  },
+  "v/react-docx": {
+   "desktop": {
+    "performance": 57,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 218,
+    "lcpMs": 6221,
+    "tbtMs": 403,
+    "cls": 0.001,
+    "speedIndexMs": 1261,
+    "performanceRuns": [
+     57,
+     97,
+     68,
+     46,
+     56
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 62,
+    "accessibility": 96,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 37693,
+    "tbtMs": 371,
+    "cls": 0.0,
+    "speedIndexMs": 5075,
+    "performanceRuns": [
+     63,
+     56,
+     63,
+     62,
+     59
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-20",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/univer": {
+   "desktop": {
+    "performance": 85,
+    "accessibility": 83,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 447,
+    "lcpMs": 447,
+    "tbtMs": 260,
+    "cls": 0.006,
+    "speedIndexMs": 2265,
+    "performanceRuns": [
+     85,
+     89,
+     90,
+     73,
+     77
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 83,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1656,
+    "lcpMs": 1656,
+    "tbtMs": 388,
+    "cls": 0.003,
+    "speedIndexMs": 7379,
+    "performanceRuns": [
+     86,
+     83,
+     90,
+     78,
+     80
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-20",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/opendoc": {
+   "desktop": {
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 227,
+    "lcpMs": 227,
+    "tbtMs": 382,
+    "cls": 0.195,
+    "speedIndexMs": 3059,
+    "performanceRuns": [
+     64,
+     75,
+     67,
+     56,
+     66
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 69,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 939,
+    "cls": 0.054,
+    "speedIndexMs": 12200,
+    "performanceRuns": [
+     69,
+     71,
+     71,
+     64,
+     66
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-20",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/betteroffice": {
+   "desktop": {
+    "performance": 92,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 413,
+    "lcpMs": 1272,
+    "tbtMs": 96,
+    "cls": 0.001,
+    "speedIndexMs": 1825,
+    "performanceRuns": [
+     92,
+     94,
+     92,
+     90,
+     96
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1513,
+    "lcpMs": 6512,
+    "tbtMs": 129,
+    "cls": 0.0,
+    "speedIndexMs": 5670,
+    "performanceRuns": [
+     69,
+     72,
+     71,
+     69,
+     74
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-20",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/onlyoffice": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 0,
+    "cls": 0.002,
+    "speedIndexMs": 417,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 771,
+    "lcpMs": 771,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 1360,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-20",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   }
  },
  "docs": {
@@ -1631,6 +1846,221 @@
      "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/superdoc?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main/lorem-500.docx. Try chec"
     },
     "measuredAt": "2026-11-16",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/react-docx": {
+    "desktop": {
+     "performance": 39,
+     "accessibility": 96,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 215,
+     "lcpMs": 6628,
+     "tbtMs": 2433,
+     "cls": 0.001,
+     "speedIndexMs": 2851,
+     "performanceRuns": [
+      38,
+      40,
+      39,
+      43,
+      36
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 36,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 774,
+     "lcpMs": 39740,
+     "tbtMs": 2810,
+     "cls": 0.0,
+     "speedIndexMs": 11278,
+     "performanceRuns": [
+      36,
+      41,
+      36,
+      41,
+      35
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-20",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/univer": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "mobile": {
+     "performance": 59,
+     "accessibility": 89,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 1681,
+     "lcpMs": 1681,
+     "tbtMs": 10393,
+     "cls": 0.003,
+     "speedIndexMs": 16777,
+     "performanceRuns": [
+      null,
+      59,
+      null,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "measuredAt": "2026-11-20",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/opendoc": {
+    "desktop": {
+     "performance": 51,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 217,
+     "lcpMs": 217,
+     "tbtMs": 8734,
+     "cls": 0.192,
+     "speedIndexMs": 7477,
+     "performanceRuns": [
+      51,
+      51,
+      51,
+      null,
+      51
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "mobile": {
+     "performance": 60,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 789,
+     "lcpMs": 789,
+     "tbtMs": 16350,
+     "cls": 0.054,
+     "speedIndexMs": 30518,
+     "performanceRuns": [
+      60,
+      null,
+      60,
+      null,
+      null
+     ],
+     "error": "PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding."
+    },
+    "measuredAt": "2026-11-20",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/betteroffice": {
+    "desktop": {
+     "performance": 90,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 423,
+     "lcpMs": 1581,
+     "tbtMs": 0,
+     "cls": 0.001,
+     "speedIndexMs": 2169,
+     "performanceRuns": [
+      90,
+      91,
+      85,
+      90,
+      92
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 69,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 1513,
+     "lcpMs": 8586,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 6247,
+     "performanceRuns": [
+      67,
+      71,
+      65,
+      69,
+      72
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-20",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/onlyoffice": {
+    "desktop": {
+     "performance": 100,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 216,
+     "lcpMs": 216,
+     "tbtMs": 0,
+     "cls": 0.002,
+     "speedIndexMs": 597,
+     "performanceRuns": [
+      100,
+      100,
+      100,
+      100,
+      100
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 100,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 768,
+     "lcpMs": 768,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 1027,
+     "performanceRuns": [
+      100,
+      100,
+      100,
+      100,
+      98
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-20",
     "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
     "base": "https://viewers.benchmarks.law"
    }
