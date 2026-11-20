@@ -526,6 +526,15 @@ def runs_note(asked: int, raw: list[dict], key: str = "engine") -> str:
     return f"{counts[0]} to {counts[-1]} runs ({asked} asked; the measuring stopped early)" if len(counts) > 1 else f"{counts[0]} runs ({asked} asked; the measuring stopped early)"
 
 
+def page_list(pages: str) -> list[str]:
+    """The pages to analyse, each once, in the order given.
+
+    A page named twice ran as two jobs of one round: both could keep the same fresh analysis
+    while they waited for the other form factor, and both published it.
+    """
+    return list(dict.fromkeys(p.strip() for p in pages.split(",") if p.strip()))
+
+
 def pagespeed_args(argv: list[str]) -> argparse.Namespace:
     """scripts/measure_pagespeed.py's command line."""
     p = argparse.ArgumentParser(description="PageSpeed Insights on pages of one site, several analyses each.")

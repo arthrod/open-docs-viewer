@@ -626,3 +626,7 @@ def test_a_run_without_a_heap_reading_does_not_hide_the_uncollected_one():
     assert s["heapBytes"] == 100
     assert lib.heap_median([{"heapBytes": 900, "heapNotCollected": "x"}, {}]) == (900, 1)
     assert lib.heap_median([{}]) == (None, 0)
+
+
+def test_a_page_named_twice_is_analysed_once_per_round():
+    assert lib.page_list("e/plate,e/folio,e/plate, ,e/folio") == ["e/plate", "e/folio"]

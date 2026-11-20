@@ -28,12 +28,12 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import chrome_args, merge_pagespeed, page_entry, pagespeed_args, remember_analyses, repeated_analysis, still_repeated, summarize, psi_refusal, with_kept
+from measure_lib import chrome_args, merge_pagespeed, page_entry, page_list, pagespeed_args, remember_analyses, repeated_analysis, still_repeated, summarize, psi_refusal, with_kept
 
 # Parsed before any browser starts.
 ARGS = pagespeed_args(sys.argv[1:])
 BASE = ARGS.base.rstrip("/")
-PAGES = ARGS.pages.split(",")
+PAGES = page_list(ARGS.pages)
 RUNS = ARGS.runs
 OUT = ARGS.out
 # --query "src=<url>" is appended to every page; with --label NAME the medians go under docs.NAME
