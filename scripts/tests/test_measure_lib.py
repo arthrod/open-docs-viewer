@@ -605,13 +605,14 @@ def test_only_published_analyses_are_remembered():
     assert lib.repeated_analysis(_psi("e/plate", "D1", "M1"), seen, remember=False) == ["desktop", "mobile"]
 
 
-def test_a_retry_that_succeeds_replaces_a_kept_error_and_a_report_without_a_time_is_kept():
+def test_the_first_fresh_report_counts_even_with_an_error_and_a_report_without_a_time_is_kept():
     kept: dict = {}
     bad = {"page": "e/plate", "desktop": {"fetchTime": "D1", "error": "the engine failed to start"}}
+    # A fresh report with an error is a result: it is not asked for again.
     assert lib.still_repeated(kept, bad, ["mobile"]) == ["mobile"]
     good = _psi("e/plate", "D2", "M1")
     assert lib.still_repeated(kept, good, [], ["mobile"]) == []
-    assert kept["desktop"]["fetchTime"] == "D2" and "error" not in kept["desktop"]
+    assert kept["desktop"] == bad["desktop"] and kept["mobile"]["fetchTime"] == "M1"
     # A report that carries no time cannot be a copy: it is kept like any fresh one.
     kept = {}
     lib.still_repeated(kept, {"page": "e/plate", "desktop": {"performance": 90}}, ["mobile"])

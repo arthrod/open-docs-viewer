@@ -387,10 +387,12 @@ def still_repeated(kept: dict, x: dict, again: list[str], owed: list[str] | None
     An attempt can bring one form factor fresh and the other as a copy: the fresh one is kept,
     and only the other is owed. `owed` is what the attempt before left owed: an attempt that
     fails brings nothing, and without it the form factor stopped being asked for and lost its
-    "repeated" mark. A kept report that carries an error gives way to a later one that does not.
+    "repeated" mark. The first fresh report of a form factor is the one counted, whatever it
+    says: a report with an error (the engine failed to start) is a result, which page_entry
+    counts, and one that a later attempt replaced or asked for again would be a failure hidden.
     """
     for f in ("desktop", "mobile"):
-        if f in x and f not in again and (f not in kept or ("error" in kept[f] and "error" not in x[f])):
+        if f in x and f not in again and f not in kept:
             kept[f] = x[f]
     return [f for f in ("desktop", "mobile") if (f in again or f in (owed or [])) and f not in kept]
 
