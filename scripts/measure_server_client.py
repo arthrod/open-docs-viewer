@@ -10,9 +10,11 @@ Per run:
               render, the download, and the browser parsing, laying out and
               decoding every picture of what it was sent
   paintMs     navigation start → first contentful paint
-  heapBytes   JSHeapUsedSize (Chrome DevTools Protocol), 1.5 s after load: no
-              engine script runs on these pages (Docxodus's paginator excepted),
-              so this is close to an empty page's heap
+  heapBytes   JSHeapUsedSize (Chrome DevTools Protocol), 1.5 s after load and
+              after a forced garbage collection, as scripts/measure.py reads it
+              (heapBytesBeforeGc is the reading before it): no engine script
+              runs on these pages (Docxodus's paginator excepted), so this is
+              close to an empty page's heap
   rendererRss resident memory of every renderer process of that Chrome (`ps`),
               same moment: the DOM, decoded pictures and Chrome's spare renderer
   domNodes    DOM nodes alive in the page
@@ -128,9 +130,18 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["chrome"] = (await asyncio.wait_for(cdp.send("Browser.getVersion"), 30)).get("product")
                 await cdp.send("Performance.enable")
                 m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
-                out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
                 out["domNodes"] = int(m.get("Nodes", 0))
                 out["rendererRss"] = renderer_rss(profile)
+                # The heap after a forced collection, as scripts/measure.py reads it: both land
+                # under "JS heap". The reading before it is kept beside it.
+                out["heapBytesBeforeGc"] = int(m.get("JSHeapUsedSize", 0))
+                try:
+                    await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
+                    m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
+                    out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
+                except Exception as e:
+                    out["heapBytes"] = out["heapBytesBeforeGc"]
+                    out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]  # the figure is then the uncollected one
         except Exception as e:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)
@@ -191,9 +202,13 @@ async def main():
             if not xs:
                 continue  # a stopped run never reached it: its entry stays as it was
             ok = [x for x in xs if "loadMs" in x]
+            collected = [x for x in ok if "heapBytes" in x and not x.get("heapNotCollected")]
             med = lambda k: int(statistics.median(x[k] for x in ok if k in x)) if any(k in x for x in ok) else None
             result.setdefault("docs", {}).setdefault(d, {})[e] = {
                 **{k: med(k) for k in KEYS},
+                # As in measure_lib.engine_summary: an uncollected heap stays out of the median.
+                **({"heapBytes": int(statistics.median(x["heapBytes"] for x in collected))} if collected else {}),
+                "heapNotCollected": sum(1 for x in ok if x.get("heapNotCollected")),
                 "runs": [x.get("loadMs") for x in xs],
                 "error": next((x["error"] for x in xs if "error" in x), None),
                 **meta,

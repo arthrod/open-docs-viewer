@@ -10,6 +10,6 @@
   "redline": {
     "eigenpal": "Cold render is not the document: its loader returns at once",
     "univer": "text only: Univer was handed this site's reading of the file, not the .docx",
-    "google-viewer": "not a median: 1.05 s, a failure and 21.1 s"
+    "google-viewer": "median of only two runs, 1.05 s and 21.1 s; one failed"
   }
 }

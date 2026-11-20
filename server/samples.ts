@@ -55,6 +55,8 @@ export interface SampleBrowser {
   failed?: string | null;
   /** What a run that rendered then failed to read (its time is kept). */
   incomplete?: string | null;
+  /** Runs whose heap could not be collected first: left out of heapBytes while any run was collected. */
+  heapNotCollected?: number;
   /** When this row was measured, when the file records it per row (a partial re-run). */
   measuredAt?: string;
   environment?: string;

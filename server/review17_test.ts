@@ -210,3 +210,8 @@ Deno.test("samples: a figure found wrong is marked under the engine's name, only
   assertEquals(html.split("read with care").length - 1, 1);
   assertStringIncludes(html, "read with care</span>: heap read &lt;early&gt;");
 });
+
+Deno.test("a heap that could not be collected first in some runs is said beside the figure", () => {
+  const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, heapNotCollected: 1 } as typeof browserRow, plate: browserRow }), noClient);
+  assertEquals(html.split("not collected first in 1 run<").length - 1, 1);
+});

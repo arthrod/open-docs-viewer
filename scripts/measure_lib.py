@@ -148,12 +148,16 @@ def engine_summary(xs: list[dict]) -> dict:
     `failed`, beside the median of the runs that did.
     """
     ok = [x for x in xs if "renderedMs" in x]
+    # A heap that could not be collected first is the uncollected figure under the collected
+    # one's name: left out of the median while any run was collected, and counted either way.
+    collected = [x for x in ok if not x.get("heapNotCollected")]
     return {
         "renderedMs": median(ok, "renderedMs"),
         "runs": [x.get("renderedMs") for x in xs],
         "bytes": median(ok, "bytes"),
         "requests": median(ok, "requests"),
-        "heapBytes": median(ok, "heapBytes"),
+        "heapBytes": median(collected or ok, "heapBytes"),
+        "heapNotCollected": len(ok) - len(collected),
         "rendererRss": median(ok, "rendererRss"),
         "how": "data-od-rendered" if ok else (xs[0].get("blocked") or xs[0].get("error")),
         "incomplete": next((x["error"] for x in ok if x.get("error")), None),
@@ -334,6 +338,25 @@ def without_repeats(x: dict, again: list[str]) -> dict:
     out.setdefault("error", PSI_REPEAT)
     out["repeated"] = again
     return out
+
+
+def still_repeated(kept: dict, x: dict, again: list[str]) -> list[str]:
+    """Keep the fresh form factors of attempt `x` in `kept`; the ones still without a fresh analysis.
+
+    An attempt can bring one form factor fresh and the other as a copy. The fresh one's time is
+    in `seen` from then on, so in the next attempt it reads as a copy of itself: without `kept`
+    it was thrown away with the attempt and then left out as a repeat, though no published
+    analysis held it (review of 2026-11-20).
+    """
+    for f in ("desktop", "mobile"):
+        if f in x and f not in again and f not in kept and x[f].get("fetchTime"):
+            kept[f] = x[f]
+    return [f for f in again if f not in kept]
+
+
+def with_kept(x: dict, kept: dict, missing: list[str]) -> dict:
+    """The last attempt with the fresh form factors of the earlier ones, less those that stayed copies."""
+    return without_repeats({**x, **kept}, missing)
 
 
 def page_entry(xs: list[dict], limit_s: int) -> dict:

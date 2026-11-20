@@ -28,7 +28,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import chrome_args, merge_pagespeed, page_entry, pagespeed_args, repeated_analysis, summarize, psi_refusal, without_repeats
+from measure_lib import chrome_args, merge_pagespeed, page_entry, pagespeed_args, repeated_analysis, still_repeated, summarize, psi_refusal, with_kept
 
 # Parsed before any browser starts.
 ARGS = pagespeed_args(sys.argv[1:])
@@ -141,15 +141,17 @@ async def main():
             async with sem:
                 # PageSpeed answers a request made soon after another with the same analysis
                 # (measure_lib.repeated_analysis). Asked again after a pause, up to three times; a
-                # form factor that is still a copy is left out of this analysis and said so.
+                # form factor that came fresh in any attempt is kept (still_repeated), and one that
+                # is still a copy at the end is left out of this analysis and said so.
+                kept: dict = {}
                 for attempt in range(4):
                     x = await one(browser, p)
-                    again = repeated_analysis(x, seen)
-                    if not again or attempt == 3:
+                    missing = still_repeated(kept, x, repeated_analysis(x, seen))
+                    if not missing or attempt == 3:
                         break
-                    print(json.dumps({"page": p, "repeat": again, "attempt": attempt + 1}), file=sys.stderr, flush=True)
+                    print(json.dumps({"page": p, "repeat": missing, "attempt": attempt + 1}), file=sys.stderr, flush=True)
                     await asyncio.sleep(REPEAT_PAUSE_S)
-                x = without_repeats(x, again)
+                x = with_kept(x, kept, missing)
                 raw.append(x)
                 print(json.dumps(x), file=sys.stderr, flush=True)
 

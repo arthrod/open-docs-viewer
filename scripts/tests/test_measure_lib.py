@@ -466,3 +466,65 @@ def test_an_analysis_pagespeed_served_from_its_cache_is_not_counted_twice():
     assert lib.summarize({"lighthouseVersion": "13", "fetchTime": "2026-11-20T05:53:01Z", "categories": {}, "audits": {}})["fetchTime"] == "2026-11-20T05:53:01Z"
     e = lib.page_entry([first, kept], limit_s=240)
     assert e["desktop"]["performanceRuns"] == [93, None] and e["mobile"]["performanceRuns"] == [91, 88]
+
+
+# --- review of pull request 32 (CodeRabbit, 2026-11-20) ---
+
+
+def _psi(page, d=None, m=None):
+    x = {"page": page}
+    if d:
+        x["desktop"] = {"performance": 90, "fetchTime": d}
+    if m:
+        x["mobile"] = {"performance": 80, "fetchTime": m}
+    return x
+
+
+def test_a_fresh_form_factor_is_kept_while_the_other_is_asked_again():
+    """D0 and M0 are counted. An attempt returns D0 (a copy) with a fresh M1; the next returns a
+    fresh D1 with M1, which is now a copy of the attempt before. Both fresh analyses are published."""
+    seen: dict = {}
+    assert lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen) == []
+    kept: dict = {}
+    first = _psi("e/plate", "D0", "M1")
+    assert lib.still_repeated(kept, first, lib.repeated_analysis(first, seen)) == ["desktop"]
+    second = _psi("e/plate", "D1", "M1")
+    missing = lib.still_repeated(kept, second, lib.repeated_analysis(second, seen))
+    assert missing == []
+    out = lib.with_kept(second, kept, missing)
+    assert out["desktop"]["fetchTime"] == "D1" and out["mobile"]["fetchTime"] == "M1" and "error" not in out
+
+
+def test_a_fresh_form_factor_survives_a_retry_that_fails():
+    seen: dict = {}
+    lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    first = _psi("e/plate", "D0", "M1")
+    lib.still_repeated(kept, first, lib.repeated_analysis(first, seen))
+    failed = {"page": "e/plate", "error": "PageSpeed gave no result within 240 s"}
+    missing = lib.still_repeated(kept, failed, lib.repeated_analysis(failed, seen))
+    out = lib.with_kept(failed, kept, missing)
+    assert out["mobile"]["fetchTime"] == "M1" and "desktop" not in out and out["error"].startswith("PageSpeed gave no result")
+
+
+def test_a_form_factor_that_stays_a_copy_is_left_out_and_said_so():
+    seen: dict = {}
+    lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    x = _psi("e/plate", "D0", "M1")
+    missing = lib.still_repeated(kept, x, lib.repeated_analysis(x, seen))
+    out = lib.with_kept(x, kept, missing)
+    assert "desktop" not in out and out["repeated"] == ["desktop"] and out["mobile"]["fetchTime"] == "M1"
+
+
+def test_an_uncollected_heap_stays_out_of_the_median_and_is_counted():
+    s = lib.engine_summary([
+        {"renderedMs": 1, "heapBytes": 100},
+        {"renderedMs": 1, "heapBytes": 900, "heapBytesBeforeGc": 900, "heapNotCollected": "TimeoutError"},
+        {"renderedMs": 1, "heapBytes": 300},
+    ])
+    assert s["heapBytes"] == 200 and s["heapNotCollected"] == 1
+    # Every run uncollected: the figure is shown, and the row says what it is.
+    all_un = lib.engine_summary([{"renderedMs": 1, "heapBytes": 900, "heapNotCollected": "x"}])
+    assert all_un["heapBytes"] == 900 and all_un["heapNotCollected"] == 1
+    assert lib.engine_summary([{"renderedMs": 1, "heapBytes": 5}])["heapNotCollected"] == 0
