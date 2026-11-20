@@ -37,7 +37,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import collected_heap, quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
+from measure_lib import collected_heap, heap_median, quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -203,13 +203,13 @@ async def main():
             if not xs:
                 continue  # a stopped run never reached it: its entry stays as it was
             ok = [x for x in xs if "loadMs" in x]
-            collected = [x for x in ok if "heapBytes" in x and not x.get("heapNotCollected")]
+            heap, uncollected = heap_median(ok)
             med = lambda k: int(statistics.median(x[k] for x in ok if k in x)) if any(k in x for x in ok) else None
             result.setdefault("docs", {}).setdefault(d, {})[e] = {
                 **{k: med(k) for k in KEYS},
                 # As in measure_lib.engine_summary: an uncollected heap stays out of the median.
-                **({"heapBytes": int(statistics.median(x["heapBytes"] for x in collected))} if collected else {}),
-                "heapNotCollected": sum(1 for x in ok if x.get("heapNotCollected")),
+                "heapBytes": heap,
+                "heapNotCollected": uncollected,
                 "runs": [x.get("loadMs") for x in xs],
                 "error": next((x["error"] for x in xs if "error" in x), None),
                 **meta,

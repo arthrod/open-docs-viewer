@@ -129,3 +129,11 @@ def test_a_heap_that_was_not_collected_first_is_said_in_the_table():
 
     assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 2}) == "5.0 MB (not collected first in 2 runs)"
     assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 0}) == "5.0 MB"
+
+
+def test_the_server_client_table_says_an_uncollected_heap_too():
+    import inspect
+
+    import readme_tables as rt
+
+    assert "heap(r)" in inspect.getsource(rt.server_client_block)

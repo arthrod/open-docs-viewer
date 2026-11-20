@@ -70,7 +70,7 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
     if (!c) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6" class="ro">not measured yet</td></tr>`;
     if (c.loadMs == null) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6"><span class="odv-fail">failed</span> <span class="ro">${esc(c.error ?? "")}</span></td></tr>`;
     return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a>${when(c, client)}</td><td class="n"><b>${ms(c.loadMs)}</b></td><td class="n hide-sm">${ms(c.paintMs)}</td>
-<td class="n">${mb(c.heapBytes)}</td><td class="n">${mb(c.rendererRss)}</td><td class="n hide-sm">${c.domNodes?.toLocaleString("en-US") ?? "n/a"}</td><td class="n hide-sm">${mb(c.bytes)}</td></tr>`;
+<td class="n">${mb(c.heapBytes)}${uncollected(c)}</td><td class="n">${mb(c.rendererRss)}</td><td class="n hide-sm">${c.domNodes?.toLocaleString("en-US") ?? "n/a"}</td><td class="n hide-sm">${mb(c.bytes)}</td></tr>`;
   }).join("");
   const vendors = engines.filter((e) => e.frame).map((e) => {
     const b = results.engines[e.slug];
@@ -192,7 +192,7 @@ export function samplesSection(
       // Chrome's reading of the server page is its own measurement: shown whatever curl got.
       const inBrowser = !c ? "" : c.loadMs == null
         ? `<div class="ro">in the browser: <span class="odv-fail">failed</span> ${esc(c.error ?? "")}</div>`
-        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
+        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)}${uncollected(c)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
       const server = e.frame
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v

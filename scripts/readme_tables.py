@@ -191,7 +191,7 @@ def server_client_block(client: dict, browser: dict, samples: dict) -> str:
                 out.append(f"| {name} | **failed**: {cell(r.get('error') or 'no answer')} | {each(r.get('runs'))} | | | | | |")
                 continue
             nodes = f"{r['domNodes']:,}" if r.get("domNodes") is not None else "n/a"
-            out.append(f"| {name} | {ms(r['loadMs'])} | {each(r.get('runs'))} | {ms(r.get('paintMs'))} | {mb(r.get('heapBytes'))} | {mb(r.get('rendererRss'))} | {nodes} | {mb(r.get('bytes'))} |")
+            out.append(f"| {name} | {ms(r['loadMs'])} | {each(r.get('runs'))} | {ms(r.get('paintMs'))} | {heap(r)} | {mb(r.get('rendererRss'))} | {nodes} | {mb(r.get('bytes'))} |")
         for e, who in FRAMES.items():
             r = (browser.get("engines", {}) if doc == "showcase" else samples.get("samples", {}).get(doc, {}).get("browser", {})).get(e)
             if not r:

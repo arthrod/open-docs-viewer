@@ -96,6 +96,8 @@ export interface ServerClient {
   loadMs: number | null;
   paintMs: number | null;
   heapBytes: number | null;
+  /** Runs whose heap could not be collected first: left out of heapBytes while any run was collected. */
+  heapNotCollected?: number;
   rendererRss: number | null;
   domNodes: number | null;
   bytes: number | null;
