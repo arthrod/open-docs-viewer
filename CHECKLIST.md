@@ -43,6 +43,7 @@ why one is missing.
 - [x] 3.1 Same menu as editors.benchmarks.law, with the Blog link
 - [x] 3.2 Same engine names as the other sites The README tables now use the sites' names for the two embed viewers (2026-11-21)
 - [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes`, the six new tools included since benchmarks.law published their sections (et-v0.10.6, 2026-11-21)
+- [ ] 3.4 GenOffice, office-open, Fidus Writer and docs.plus were added to editors.benchmarks.law on 2026-11-21 and have no read-only view here. Not built: each runs there as a demo build with no read-only mode to switch on, and Fidus Writer and docs.plus have no page layout to show
 
 ## Log
 
@@ -54,3 +55,4 @@ why one is missing.
 | 2026-11-21 | 1.11 | Lighthouse on our computer published for every page and route |
 | 2026-11-21 | vendor notes | benchmarks.law has the six new sections; their links are on |
 | 2026-11-21 | 1, 2, 3.2 | Audited against the live site; PageSpeed for the two new server routes |
+| 2026-11-21 | 3.4 | Recorded: the four tools added to the editors site are not on this one |
