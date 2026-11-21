@@ -36,11 +36,6 @@ const mb = (n: number | null | undefined) =>
 /** Who renders a vendor's embed viewer (the visitor's browser only shows their frame). */
 const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-viewer": "Google" };
 
-/**
- * The browser's side of a server render, on the rich sample: the /r/
- * routes, then the two vendor viewers, which are server renders too (their
- * row is the /v/ page that frames them).
- */
 /** Inline code in a reason (`like this`), after escaping. */
 const coded = (s: string) => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
 
@@ -64,6 +59,11 @@ ${rows.map((e) => {
   </tbody></table></div>`;
 }
 
+/**
+ * The browser's side of a server render, on the rich sample: the /r/
+ * routes, then the two vendor viewers, which are server renders too (their
+ * row is the /v/ page that frames them).
+ */
 export function serverClientTable(engines: Engine[], results: Results, defaultSrc: string, client: ServerClientResults = SERVER_CLIENT): string {
   const doc = client.docs?.showcase ?? {};
   const q = encodeURIComponent(defaultSrc);
