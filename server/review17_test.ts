@@ -1,7 +1,7 @@
 /** Behaviour asked for in the review of PR #17: the /r/ toggle, the landing tables, the route registry. */
 import { assert, assertEquals, assertStringIncludes } from "jsr:@std/assert@1.0.13";
-import { ENGINES } from "./engines.ts";
-import { lighthouseSection, samplesSection } from "./landing.ts";
+import { ENGINES, NO_SERVER, noServerCell } from "./engines.ts";
+import { lighthouseSection, noServerList, samplesSection } from "./landing.ts";
 import { renderToggle, SERVER_RENDER_SLUGS, serverToggle } from "./navbar.ts";
 import { codeLines } from "./plate.ts";
 import type { LighthousePage, LighthouseResults, SampleResults, ServerClientResults } from "./samples.ts";
@@ -181,4 +181,32 @@ Deno.test("samples: a run that failed says why, beside the median of the runs th
 Deno.test("samples: a run that rendered and then lost a reading says so", () => {
   const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, incomplete: "TimeoutError: heap <b>" } as typeof browserRow }), noClient);
   assertStringIncludes(html, "a later reading failed</span>: TimeoutError: heap &lt;b&gt;");
+});
+
+Deno.test("no server route: every engine without one says why, in its cells and in the list", () => {
+  const without = ENGINES.filter((e) => !e.frame && !SERVER_RENDER_SLUGS.has(e.slug));
+  assert(without.length >= 8, "the engines with only a browser page");
+  for (const e of without) {
+    assert(NO_SERVER[e.slug], `${e.slug} has no server route and no reason on file (server/no-server.json)`);
+    assert(noServerCell(e.slug) !== "no server route", `${e.slug}'s cell gives no reason`);
+  }
+  // An engine that has a route, or renders on its vendor's servers, has no entry to go stale.
+  for (const slug of Object.keys(NO_SERVER)) assert(without.some((e) => e.slug === slug), `${slug} is listed as having no route`);
+  const html = noServerList(ENGINES);
+  assertStringIncludes(html, 'id="no-server"');
+  assertStringIncludes(html, "possible, not built");
+  assertStringIncludes(html, "<code>renderPagePng</code>");
+  for (const e of without) assertStringIncludes(html, `/v/${e.slug}"`);
+  assert(!html.includes("/v/folio\""), "an engine with a server route is not in the list");
+  // A sample table's server cell carries the short reason instead of a bare "no server route".
+  const table = samplesSection(ENGINES, samples({}, { onlyoffice: browserRow }), noClient);
+  assertStringIncludes(table, "no server route: its converter is built without the renderer");
+});
+
+Deno.test("samples: a figure found wrong is marked under the engine's name, only where it was told", () => {
+  const data = samples({}, { "canvas-editor": browserRow, folio: browserRow });
+  assert(!samplesSection(ENGINES, data, noClient).includes("read with care"), "a data set with no caveats of its own shows none");
+  const html = samplesSection(ENGINES, data, noClient, { redline: { "canvas-editor": "heap read <early>" } });
+  assertEquals(html.split("read with care").length - 1, 1);
+  assertStringIncludes(html, "read with care</span>: heap read &lt;early&gt;");
 });

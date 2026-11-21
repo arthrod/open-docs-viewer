@@ -10,8 +10,10 @@ Per run:
               client/view.ts two frames after the engine shows the document)
   bytes       response headers + bodies of every finished request, all frames
   requests    finished requests, all frames
-  heapBytes   JSHeapUsedSize of the top page (Chrome DevTools Protocol);
-              cross-origin frames (Microsoft, Google) are not included
+  heapBytes   JSHeapUsedSize of the top page (Chrome DevTools Protocol) after a forced
+              garbage collection; cross-origin frames (Microsoft, Google) are not
+              included. heapBytesBeforeGc is the reading just before it, 1.5 s after
+              rendering: what the files up to 2026-11-18 call heapBytes
   rendererRss resident memory of every renderer process of that Chrome (`ps`),
               read at the same moment: unlike the JS heap it includes
               WebAssembly memory, canvases, the DOM and cross-origin frames
@@ -116,8 +118,18 @@ async def one(pw, slug: str) -> dict:
             out["chrome"] = (await asyncio.wait_for(cdp.send("Browser.getVersion"), 30)).get("product")
             await cdp.send("Performance.enable")
             m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
-            out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
             out["rendererRss"] = renderer_rss(profile)
+            # The heap twice: as it is 1.5 s after rendering, and after a forced collection. The
+            # first holds the garbage of the conversion: canvas-editor read 1,281 MiB at this
+            # moment on the 500 pages and 702 MiB once Chrome had collected (2026-11-20).
+            out["heapBytesBeforeGc"] = int(m.get("JSHeapUsedSize", 0))
+            try:
+                await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
+                m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
+                out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
+            except Exception as e:
+                out["heapBytes"] = out["heapBytesBeforeGc"]
+                out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]  # the figure is then the uncollected one
         except Exception as e:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)

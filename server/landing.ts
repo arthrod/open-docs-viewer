@@ -1,5 +1,5 @@
 /** The landing page: every engine, the cold measurements, a URL form. */
-import type { Engine } from "./engines.ts";
+import { type Engine, NO_SERVER, noServerCell } from "./engines.ts";
 import {
   type Results,
   SERVER_FILE_HEAD,
@@ -9,6 +9,7 @@ import {
   statStripHtml,
 } from "./results.ts";
 import { landingNavBar, SERVER_RENDER_SLUGS } from "./navbar.ts";
+import CAVEATS from "../results/caveats.json" with { type: "json" };
 import { VIEWER_DS_CSS } from "./render.ts";
 import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, type LighthousePage, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
 
@@ -35,6 +36,29 @@ const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-vie
  * routes, then the two vendor viewers, which are server renders too (their
  * row is the /v/ page that frames them).
  */
+/** Inline code in a reason (`like this`), after escaping. */
+const coded = (s: string) => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+
+/**
+ * Every engine without a server route, and the reason (server/no-server.json):
+ * what stops it, or that it is possible and not built. An engine with no entry
+ * there is listed as unexplained rather than left out.
+ */
+export function noServerList(engines: Engine[]): string {
+  const rows = engines.filter((e) => !e.frame && !SERVER_RENDER_SLUGS.has(e.slug));
+  if (!rows.length) return "";
+  const kind = { "needs-a-browser": "needs a browser", "needs-native": "needs native code", "not-built": "possible, not built" } as const;
+  return `<h3 class="smp-h" id="no-server">No server route, and why</h3>
+  <p class="fine">A server route runs the engine inside this Val: Deno, with WebAssembly and JavaScript, and no DOM, no canvas, no native binaries and no subprocesses.
+  Each engine below has only the browser page; Microsoft's and Google's viewers always render on their own servers.</p>
+  <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th>Why there is no server route</th></tr></thead><tbody>
+${rows.map((e) => {
+    const n = NO_SERVER[e.slug];
+    return `<tr><td><a href="/v/${e.slug}">${esc(e.name)}</a><div class="ro">${n ? kind[n.status] : "not explained yet"}</div></td><td>${n ? coded(n.why) : "no reason recorded"}</td></tr>`;
+  }).join("\n")}
+  </tbody></table></div>`;
+}
+
 export function serverClientTable(engines: Engine[], results: Results, defaultSrc: string, client: ServerClientResults = SERVER_CLIENT): string {
   const doc = client.docs?.showcase ?? {};
   const q = encodeURIComponent(defaultSrc);
@@ -89,7 +113,7 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
       const text = [one("desktop", p.desktop), one("mobile", p.mobile), spread("desktop", p.desktop), spread("mobile", p.mobile)].filter(Boolean).join(" · ");
       return text ? `<div class="ro odv-part">${text}</div>` : "";
     };
-    const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : "no server route"}</span>`
+    const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : esc(noServerCell(e.slug))}</span>`
       : r.desktop.performance == null && r.mobile.performance == null ? `<span class="odv-fail">no result</span><div class="ro">${esc((r.desktop.error ?? r.mobile.error ?? "").slice(0, 60))}</div>`
       : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}${elsewhere(r)}`;
     // The server route was measured on its own: keep its cell, say the browser page was not.
@@ -129,9 +153,24 @@ An engine that could not start on Google's machine has no score (a failed page p
 /** Routes whose page images are separate requests, made as each page nears the viewport (WordCraft). */
 const IMAGES_ON_DEMAND = new Set(SERVER_RESULTS.filter((r) => r.output === "images").map((r) => r.slug));
 
-export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RESULTS, client: ServerClientResults = SERVER_CLIENT): string {
+/**
+ * Published figures that were looked at again and found wrong, unreliable or about the machine
+ * (results/caveats.json; the README's "Figures to distrust" has the evidence).
+ */
+export type Caveats = Record<string, Record<string, string> | string>;
+
+export function samplesSection(
+  engines: Engine[],
+  res: SampleResults = SAMPLE_RESULTS,
+  client: ServerClientResults = SERVER_CLIENT,
+  // The caveats are about the published file: another data set (a test's) has none unless it brings its own.
+  caveats: Caveats = res === SAMPLE_RESULTS ? (CAVEATS as Caveats) : {},
+): string {
   const tables = SAMPLES.filter((s) => res.samples[s.id]).map((s: Sample) => {
     const r = res.samples[s.id];
+    const told = caveats[s.id];
+    const care = (slug: string) =>
+      told && typeof told === "object" && told[slug] ? `<div class="ro"><span class="odv-fail">read with care</span>: ${esc(told[slug])}</div>` : "";
     const src = encodeURIComponent(sampleUrl(s));
     const row = (e: Engine) => {
       const b = r.browser[e.slug], v = r.server[e.slug];
@@ -155,7 +194,7 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v
         // The route exists (the toggle links to it) but this file has no measurement of it yet.
-        ? `<span class="ro">${SERVER_RENDER_SLUGS.has(e.slug) ? "not measured on this file yet" : "no server route"}</span>${inBrowser}`
+        ? `<span class="ro">${SERVER_RENDER_SLUGS.has(e.slug) ? "not measured on this file yet" : esc(noServerCell(e.slug))}</span>${inBrowser}`
         : v.code !== 200
         ? `<span class="odv-fail">failed</span><div class="ro">${esc(v.error ?? `HTTP ${v.code}`)}</div>${inBrowser}`
         : `<a href="/r/${e.slug}?src=${src}"><b>${ms(v.totalMs)}</b></a><div class="ro">render ${ms(v.renderMs)} · ${mb(v.bytes)} sent${v.pages ? ` · ${v.pages} pages` : ""}</div>${
@@ -165,7 +204,7 @@ export function samplesSection(engines: Engine[], res: SampleResults = SAMPLE_RE
           v.error ? `<div class="ro"><span class="odv-fail">${(v.runs ?? []).filter((x) => x == null).length} of ${(v.runs ?? []).length} runs failed</span>: ${esc(v.error.slice(0, 140))}</div>` : ""
         }${when(v, res)}${inBrowser}`;
       return `<tr>
-      <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}${
+      <td><a href="/v/${e.slug}?src=${src}">${esc(e.name)}</a>${care(e.slug)}${b && b.renderedMs == null && b.how ? `<div class="ro">${esc(b.how.slice(0, 140))}</div>` : ""}${
         // The median stands on the runs that rendered; the one that did not is said, with its reason.
         (b && b.renderedMs != null && b.failed ? `<div class="ro"><span class="odv-fail">${runs.filter((x) => x == null).length} of ${runs.length} runs failed</span>: ${esc(b.failed.slice(0, 140))}</div>` : "") +
         (b?.incomplete ? `<div class="ro"><span class="odv-fail">a later reading failed</span>: ${esc(b.incomplete.slice(0, 140))}</div>` : "")
@@ -257,7 +296,7 @@ ${stats}
   <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
 <strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot). It is one request per engine, not a median, and moves from one deploy to the next.
-<strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. canvas-editor has no server route: it draws to a canvas throughout.</p>
+<strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. The engines with no server route, and why, are <a href="#no-server">listed below</a>.</p>
   <div class="table-wrap"><table class="tbl"><thead><tr><th>Engine</th><th class="n">First</th><th class="n hide-sm">init · render</th><th class="n">Warm</th><th class="n hide-sm">render</th><th class="n">Sent</th><th>How</th></tr></thead><tbody>
 ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURIComponent(defaultSrc)}">${esc(r.name)}</a><div class="ro">${
     r.output === "images" ? "page images" : r.output === "pages" ? "positioned pages" : r.output === "browser-paginated" ? "pages; breaks computed in the browser" : "flowing HTML"
@@ -270,6 +309,7 @@ ${SERVER_RESULTS.map((r) => `<tr><td><a href="/r/${r.slug}?src=${encodeURICompon
 <td class="n">${mb(r.bytes)}</td><td class="ro">${esc(r.how)}</td></tr>`).join("")}
 </tbody></table></div>
   ${serverClientTable(engines, results, defaultSrc)}
+  ${noServerList(engines)}
 </section>
 
 <section class="odv-section" id="measurements">

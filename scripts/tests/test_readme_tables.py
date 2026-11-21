@@ -47,7 +47,8 @@ def test_sample_rows_and_their_server_cells():
     out = rt.samples_block(data)
     assert "| WordCraft | 1.70 s | 1.70 s | 3.0 MB | 649 MB | 22 MB | 287 ms (25 ms laying out), 3 KB + a page image per page viewed, 3 pages |" in out
     assert out.count("not measured on this file yet") == 1 and "| folio |" in out  # folio has a route, and no figure here
-    assert "| Apryse WebViewer | 1.70 s | 1.70 s | 3.0 MB | 649 MB | 22 MB | no server route |" in out
+    # An engine with no server route says why in its cell (server/no-server.json).
+    assert "| Apryse WebViewer | 1.70 s | 1.70 s | 3.0 MB | 649 MB | 22 MB | no server route: Apryse renders on a server with a native SDK |" in out
     assert "| Word Online viewer | 1.70 s (frame load) | 1.70 s | n/a | 649 MB | 22 MB | rendered on Microsoft's servers |" in out
     assert '**failed**: "socket hang up"' in out
 
@@ -109,3 +110,15 @@ def test_a_browser_row_says_when_a_reading_after_rendering_failed():
     data = {"measuredAt": "2026-11-17", "environment": "e", "engines": {"folio": {"renderedMs": 100, "runs": [100, None], "failed": "not rendered", "incomplete": "TimeoutError: heap"}}}
     line = [l for l in rt.browser_block(data).splitlines() if l.startswith("| folio")][0]
     assert "failed: not rendered" in line and "a later reading failed: TimeoutError: heap" in line
+
+
+def test_every_engine_without_a_server_route_says_why():
+    """No table cell is left at a bare "no server route": each such engine has a reason on file."""
+    without = [e for e in rt.NAMES if e not in rt.SERVER and e not in rt.FRAMES]
+    assert sorted(without) == sorted(e for e in rt.NO_SERVER if e in rt.NAMES)
+    for e in without:
+        r = rt.NO_SERVER[e]
+        assert r["status"] in rt.NO_SERVER_KIND and len(r["why"]) > 40 and r["cell"].startswith(("no server route: ", "not built"))
+    block = rt.no_server_block(rt.NO_SERVER)
+    assert "| OpenDoc | possible, not built | This one is possible." in block
+    assert "| OnlyOffice (CryptPad build) | needs a browser | " in block
