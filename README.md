@@ -495,7 +495,8 @@ uv run --with pytest pytest scripts/tests              # the measurement scripts
 ## Measuring
 
 Every table in this file between `<!-- …:start -->` and `<!-- …:end -->` is written from the files in
-[`results/`](results/) by `python3 scripts/readme_tables.py`, and CI fails when the two differ
+[`results/`](results/) and, for the no-server-route table,
+[`server/no-server.json`](server/no-server.json) by `python3 scripts/readme_tables.py`, and CI fails when the sources and tables differ
 (`--check`). Every run behind a median is in [`results/raw/`](results/raw/), with the machine's load average
 when it was taken.
 
@@ -562,6 +563,9 @@ How each is measured:
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
 - Lighthouse: `uv run --with playwright python -I scripts/measure_pagespeed.py https://viewers.benchmarks.law v/docxodus,r/docxodus 3 --out results/lighthouse.json`
   (PageSpeed Insights, through its own site because the keyless API quota is usually spent; median of the analyses).
+  Repeated `fetchTime` values for the same page and form factor identify cached analyses. The script retains
+  fresh form-factor reports across up to four attempts, waiting `PSI_REPEAT_PAUSE_S` seconds (default 45)
+  between retries; cached reports still unresolved at the end are excluded and recorded as repeats.
 - Where: the browser timings are made on a Hugging Face Jobs machine (Linux, no GPU, so Chrome draws in
   software; headed under Xvfb) by open-docs'
   [`scripts/hf_job.sh`](https://github.com/arthrod/open-docs/blob/main/scripts/hf_job.sh), 3 runs per engine and
@@ -584,7 +588,9 @@ How each is measured:
   their history.
   The first-and-warm server table was not taken again. The Lighthouse rows of the five engines added on
   2026-11-18 were taken on 2026-11-20 (PageSpeed runs on Google's machines, so the day's other figures do not
-  bear on them); the other Lighthouse rows are still those of 2026-11-16.
+  bear on them). The `/r/opendoc` and `/r/betteroffice` PageSpeed rows were added on 2026-11-21;
+  the other PageSpeed rows are still those of 2026-11-16. The separate local Lighthouse tables were measured
+  on 2026-11-21, as their headings and individual rows state.
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,
