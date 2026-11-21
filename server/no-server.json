@@ -33,5 +33,10 @@
     "status": "needs-a-browser",
     "cell": "no server route: its converter is built without the renderer, and drawing needs the editor in a browser",
     "why": "CryptPad compiles x2t to WebAssembly with OnlyOffice's `doctrenderer` replaced by an empty stub, so it converts between formats but cannot lay out or draw: x2t sends PDF and HTML output through that renderer. Pages are drawn by the editor's JavaScript (sdkjs) on a browser canvas. OnlyOffice's own server rendering is the native Document Server or Document Builder, which a Val cannot run."
+  },
+  "genoffice": {
+    "status": "needs-a-browser",
+    "cell": "no server route: it is a desktop application's window, drawn in a browser",
+    "why": "GenOffice's Docs application is an Electron renderer: a React application that lays out its pages in the DOM, shown on editors.benchmarks.law with a stand-in for the desktop it expects. It has no headless entry, so running it here would mean faking a browser."
   }
 }

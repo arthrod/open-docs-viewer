@@ -277,3 +277,23 @@ Deno.test("with results from our computer only, PageSpeed's date line and empty 
   assertEquals((html.match(/<table/g) ?? []).length, 1);
   assertStringIncludes(html, "Every cell reads <strong>desktop · mobile</strong>");
 });
+
+Deno.test("office-open, Fidus Writer and docs.plus render the rich sample here, each with its own code", async () => {
+  // The same file the sites serve as the rich sample; fetched once, since the routes take bytes.
+  const res = await fetch("https://editors.benchmarks.law/api/showcase.docx");
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const text = (html: string) => html.replace(/<style[\s\S]*?<\/style>/g, "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const { officeOpenHtml } = await import("./office-open.ts");
+  const { fidusHtml } = await import("./fidus-writer.ts");
+  const { docsPlusHtml } = await import("./docs-plus.ts");
+  for (const [name, render] of [["office-open", officeOpenHtml], ["fidus-writer", fidusHtml], ["docs-plus", docsPlusHtml]] as const) {
+    const r = await render(bytes);
+    assertStringIncludes(text(r.html), "Coastal Wind Farm", name);
+    assertStringIncludes(text(r.html), "Output across the twelve turbines", name);
+    assert(r.unpainted?.some((u: string) => /pages/.test(u)), `${name} says it has no pages`);
+    assert(!("document" in globalThis), `${name} left a document on the global object`);
+  }
+  // docs.plus and Fidus Writer keep the sample's picture; none of its bytes is fetched from elsewhere.
+  assert((await docsPlusHtml(bytes)).html.includes('src="data:image/'), "docs.plus inlines the picture");
+  assert(!(await docsPlusHtml(bytes)).html.includes("pictures.invalid"), "no placeholder address is left");
+});

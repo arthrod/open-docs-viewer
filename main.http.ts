@@ -222,6 +222,10 @@ export const RENDERERS: Record<string, Renderer> = {
   // SVG pages: BetterOffice's layout and painter, on a canvas of ours that writes SVG (see the file).
   betteroffice: lazy(async () => (await import("./server/betteroffice.ts")).betterofficeHtml),
   docen: lazy(async () => (await import("./server/docen.ts")).docenHtml),
+  // Unpaginated, like their pages on editors.benchmarks.law: each library's own reading of the file (see the files).
+  "office-open": lazy(async () => (await import("./server/office-open.ts")).officeOpenHtml),
+  "fidus-writer": lazy(async () => (await import("./server/fidus-writer.ts")).fidusHtml),
+  "docs-plus": lazy(async () => (await import("./server/docs-plus.ts")).docsPlusHtml),
   // Unpaginated: SuperDoc's headless runtime and its HTML projection (see the file).
   superdoc: lazy(async () => (await import("./server/superdoc.ts")).superdocHtml),
   // docx-editor.dev (its open-docs slug is "eigenpal").
