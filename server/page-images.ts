@@ -51,7 +51,7 @@ const attr = (s: string) => s.replaceAll("&", "&amp;").replaceAll('"', "&quot;")
 /** A refusal in plain text, never cached. */
 const refuse = (status: number, msg: string) => new Response(msg, { status, headers: { "cache-control": "no-store" } });
 
-type Laid = { doc: LaidDocument; initMs: number; layoutMs: number; users: number; evicted: boolean };
+type Laid = { id: string; doc: LaidDocument; initMs: number; layoutMs: number; evicted: boolean };
 type Query = { doc?: string; n?: string; s?: string };
 type Turn = <T>(job: () => Promise<T>) => Promise<T>;
 
@@ -72,10 +72,26 @@ export function pageImages(engine: PageImageEngine) {
       throw e;
     });
 
+  /**
+   * Requests drawing from, or still waiting for, a document's layout, by document id. Counted from
+   * the moment a request asks, not from when the layout resolves: an eviction registered earlier
+   * reacts first, and would free the layout under a request that had not yet taken hold of it.
+   */
+  const pinned = new Map<string, number>();
+  /** Layouts evicted while pinned, by document id: freed when the last request lets go. */
+  const limbo = new Map<string, Set<Laid>>();
+
   /** Engine memory is not the garbage collector's: a layout is freed the moment it is both evicted and unused. */
   function release(l: Laid) {
-    if (!l.evicted || l.users > 0) return;
+    if (!l.evicted) return;
+    if ((pinned.get(l.id) ?? 0) > 0) {
+      let waiting = limbo.get(l.id);
+      if (!waiting) limbo.set(l.id, waiting = new Set());
+      waiting.add(l);
+      return;
+    }
     l.evicted = false; // freed once
+    limbo.get(l.id)?.delete(l);
     l.doc.free();
     released++;
   }
@@ -102,7 +118,7 @@ export function pageImages(engine: PageImageEngine) {
         await Promise.allSettled(room.map(([, p]) => (evict(p), p)));
         const t1 = performance.now();
         const doc = await engine.open(bytes);
-        return { doc, initMs: Math.round(t1 - t0), layoutMs: Math.round(performance.now() - t1), users: 0, evicted: false };
+        return { id, doc, initMs: Math.round(t1 - t0), layoutMs: Math.round(performance.now() - t1), evicted: false };
       })();
       hit.catch(() => laid.get(id) === hit && laid.delete(id));
     }
@@ -110,15 +126,19 @@ export function pageImages(engine: PageImageEngine) {
     return hit;
   }
 
-  /** Run `fn` on a layout that cannot be freed under it. */
-  async function using<T>(p: Promise<Laid>, fn: (l: Laid) => T | Promise<T>): Promise<T> {
-    const l = await p;
-    l.users++;
+  /** Run `fn` on document `id`'s layout, which cannot be freed under it, nor while it waits for it. */
+  async function using<T>(id: string, p: Promise<Laid>, fn: (l: Laid) => T | Promise<T>): Promise<T> {
+    pinned.set(id, (pinned.get(id) ?? 0) + 1); // before the first await
     try {
-      return await fn(l);
+      return await fn(await p);
     } finally {
-      l.users--;
-      release(l);
+      const left = (pinned.get(id) ?? 1) - 1;
+      if (left > 0) pinned.set(id, left);
+      else {
+        pinned.delete(id);
+        for (const l of [...(limbo.get(id) ?? [])]) release(l);
+        limbo.delete(id);
+      }
     }
   }
 
@@ -127,7 +147,7 @@ export function pageImages(engine: PageImageEngine) {
     const id = (await sha256(bytes)).slice(0, 16);
     // Opening the page always reads and lays the document out, as every other engine's route does;
     // only its page images reuse that work.
-    const { sizes, initMs, layoutMs } = await using(layOut(id, bytes, true), (l) => ({ sizes: Array.from(l.doc.sizes), initMs: l.initMs, layoutMs: l.layoutMs }));
+    const { sizes, initMs, layoutMs } = await using(id, layOut(id, bytes, true), (l) => ({ sizes: Array.from(l.doc.sizes), initMs: l.initMs, layoutMs: l.layoutMs }));
     const count = sizes.length / 2;
     const q = `/r/${engine.slug}/page?src=${encodeURIComponent(src.href)}&doc=${id}`;
     const pages: string[] = [];
@@ -190,7 +210,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
     const t1 = performance.now();
     const n = Number(q.n);
     let t2 = t1;
-    const image = await using(hit, ({ doc }) => {
+    const image = await using(id, hit, ({ doc }) => {
       t2 = performance.now();
       const count = doc.sizes.length / 2;
       return n > count ? count : doc.page(n - 1, Number(q.s));

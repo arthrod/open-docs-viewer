@@ -391,9 +391,9 @@ Read the Lighthouse tables with care:
 
 #### Lighthouse on our computer
 
-Google's machines have no graphics card, and an engine that draws through one cannot start there, so WordCraft
-and Nutrient have no browser score above. The same Lighthouse release also runs here, on a computer with a
-graphics card, and on every page, not only on those two (`scripts/measure_lighthouse_local.py` in the
+On Google's machines WordCraft and Nutrient do not start (their engines do not download there, and why is not
+known), so they have no browser score above. The same Lighthouse release also runs here, on a computer that has a
+graphics card, which Google's machines do not, and on every page, not only on those two (`scripts/measure_lighthouse_local.py` in the
 [open-docs](https://github.com/arthrod/open-docs) repository, with `--out results/lighthouse-local.json`).
 The price is that these figures depend on this computer and on what else it was doing: the heading gives its
 load and Lighthouse's own reading of how fast its processor was during the analyses. Compare rows within these

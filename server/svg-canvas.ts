@@ -222,7 +222,8 @@ interface State {
 }
 
 /** The CSS filters an image may carry: the functions and nothing else. */
-const CSS_FILTER = /^(?:\s*(?:blur|brightness|contrast|grayscale|hue-rotate|invert|opacity|saturate|sepia)\(-?\d+(?:\.\d+)?(?:px|deg|%)?\)\s*)+$/;
+// Whitespace once before the first function and after each: a space between two functions has one reading, so a non-matching value fails in linear time.
+const CSS_FILTER = /^\s*(?:(?:blur|brightness|contrast|grayscale|hue-rotate|invert|opacity|saturate|sepia)\(-?\d+(?:\.\d+)?(?:px|deg|%)?\)\s*)+$/;
 const FONT = /^\s*((?:(?:italic|oblique|small-caps|normal|bold|bolder|lighter|\d{1,4})\s+)*)(\d*\.?\d+)px(?:\/\S+)?\s+(.+)$/s;
 
 export class SvgCanvas implements State {
@@ -484,8 +485,10 @@ export class SvgCanvas implements State {
       ? this.outlineText(text, { family: f?.[3] ?? "sans-serif", size, bold: weight === "bold" || weight === "bolder" || Number(weight) >= 600, italic, smallCaps })
       : null;
     if (outlined && outlined.unitsPerEm > 0) {
-      const k = size / outlined.unitsPerEm, spacing = px(this.letterSpacing);
-      const width = outlined.glyphs.reduce((w, g) => w + g.advance * k * (g.scale ?? 1) + spacing, 0);
+      const k = size / outlined.unitsPerEm, spacing = px(this.letterSpacing), word = px(this.wordSpacing);
+      // A glyph with no outline is a space: it takes the word spacing too, as canvas text does.
+      const step = (g: OutlinedGlyph) => g.advance * k * (g.scale ?? 1) + spacing + (g.path ? 0 : word);
+      const width = outlined.glyphs.reduce((w, g) => w + step(g), 0);
       let at = x - (anchor === "middle" ? width / 2 : anchor === "end" ? width : 0);
       this.save();
       this.translate(0, y);
@@ -501,7 +504,7 @@ export class SvgCanvas implements State {
           } else this.fill(g.path);
           this.restore();
         }
-        at += g.advance * s + spacing;
+        at += step(g);
       }
       this.restore();
       return;

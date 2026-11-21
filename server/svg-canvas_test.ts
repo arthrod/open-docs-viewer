@@ -181,6 +181,22 @@ Deno.test("text whose outlines the caller gives is drawn as those outlines, each
   assertStringIncludes(svg, '<use href="#p1" transform="matrix(0.02 0 0 -0.02 45 40)" fill="#112233"/>');
   assertStringIncludes(svg, ">?</text>");
   assertEquals((svg.match(/<text /g) ?? []).length, 1);
+  // Word spacing is added at each space, on top of its advance: "b" moves 3 px to the right.
+  const w = new SvgCanvas(100, 50, (text) => ({ unitsPerEm: 1000, glyphs: [...text].map((ch) => (ch === " " ? { path: null, advance: 250 } : { path: b, advance: 500 })) }));
+  w.font = "20px Calibri";
+  w.wordSpacing = "3px";
+  w.fillText("b b", 0, 30);
+  assertStringIncludes(w.toSvg(), 'matrix(0.02 0 0 -0.02 18 30)');
+});
+
+Deno.test("an image filter that is not a list of CSS filter functions is refused quickly, however many near-misses it holds", () => {
+  const c = new SvgCanvas(10, 10);
+  c.filter = "blur(1px) ".repeat(60) + "x";
+  const t0 = performance.now();
+  // deno-lint-ignore no-explicit-any
+  c.drawImage({ width: 1, height: 1, src: "data:image/png;base64,AAAA" } as any, 0, 0);
+  assert(performance.now() - t0 < 200, "the filter pattern backtracked");
+  assert(!c.toSvg().includes("filter="), c.toSvg());
 });
 
 Deno.test("a colour that is not a colour is drawn in black, and a number that is not finite draws nothing", () => {

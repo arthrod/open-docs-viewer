@@ -315,7 +315,14 @@ app.get("/r/:engine/page", async (c) => {
   if (!src) return c.text("src must be a public https URL", 400);
   try {
     const page = await PAGE_RENDERERS[engine]();
-    return await page({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src), (job) => renderTurn(job).then((t) => t.value));
+    // The same refusal as the page itself: a page image's address must not be a way round the size guard.
+    const guarded = async () => {
+      const got = await fetchDocx(src);
+      if (got instanceof Response) return got;
+      const refused = tooLarge(engine, got);
+      return refused ? new Response(refused, { status: 422, headers: { "cache-control": "no-store" } }) : got;
+    };
+    return await page({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, guarded, (job) => renderTurn(job).then((t) => t.value));
   } catch (err) {
     const busy = busyAnswer(err);
     if (busy) return busy;

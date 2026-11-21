@@ -5,7 +5,7 @@
  *   deno test -A server/page-images_test.ts
  */
 import { assert, assertEquals } from "jsr:@std/assert@1.0.13";
-import { type PageImageEngine, pageImages } from "./page-images.ts";
+import { type PageImageEngine, pageImages, sha256 } from "./page-images.ts";
 
 /** An engine whose document is `pages` Letter pages, and whose page image is its number as text. */
 function fake(over: Partial<PageImageEngine> = {}) {
@@ -155,4 +155,42 @@ Deno.test("a refused turn is the page request's refusal, a failed engine load is
   assertEquals(said, "busy");
   busy = false;
   assertEquals((await route.page({ doc: id, n: "1", s: "1" }, () => Promise.resolve(bytes), turn)).status, 200);
+});
+
+Deno.test("a page request still waiting for its layout when that layout is pushed out draws from it, and it is freed afterwards", async () => {
+  const seen = { frees: 0, drawnAfterFree: 0 };
+  const gates: (() => void)[] = [];
+  const { route } = fake({
+    keep: 1,
+    // Each layout waits until the test lets it through.
+    open: async (bytes) => {
+      await new Promise<void>((go) => gates.push(go));
+      let freed = false;
+      return {
+        sizes: Array.from({ length: bytes[0] * 2 }, (_, i) => (i % 2 ? 1056 : 816)),
+        page: (i, s) => {
+          if (freed) seen.drawnAfterFree++;
+          return new TextEncoder().encode(`${i + 1}@${s}`);
+        },
+        free: () => void (freed = true, seen.frees++),
+      };
+    },
+  });
+  const a = doc(2, 7), b = doc(1, 8);
+  const id = async (x: Uint8Array) => (await sha256(x)).slice(0, 16);
+  // A page of document A is asked for in an isolate without its layout: it waits for the layout.
+  const waiting = route.page({ doc: await id(a), n: "2", s: "1" }, () => Promise.resolve(a));
+  for (let i = 0; i < 20 && gates.length < 1; i++) await new Promise((r) => setTimeout(r, 1));
+  // Document B's page is opened meanwhile: with room for one layout, A's is pushed out while still being made.
+  const other = route.html(b, SRC);
+  await new Promise((r) => setTimeout(r, 1));
+  gates.shift()!(); // A's layout finishes: its eviction and the waiting page request both react
+  for (let i = 0; i < 20 && gates.length < 1; i++) await new Promise((r) => setTimeout(r, 1));
+  gates.shift()?.();
+  const res = await waiting;
+  await other;
+  assertEquals(res.status, 200);
+  assertEquals(new TextDecoder().decode(await res.arrayBuffer()), "2@1");
+  assertEquals(seen.drawnAfterFree, 0, "the page was drawn from a layout already freed");
+  assertEquals(seen.frees, 1, "A's layout is freed once its waiting page has been drawn");
 });

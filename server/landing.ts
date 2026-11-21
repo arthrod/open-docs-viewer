@@ -95,7 +95,10 @@ export function lighthouseSection(
   local: LighthouseResults = lh === LIGHTHOUSE ? LIGHTHOUSE_LOCAL : { measuredAt: null, environment: "", pages: {} },
 ): string {
   // Either table is enough to show the section: the 500 pages can be analysed on their own.
-  if (!Object.keys(lh.pages ?? {}).length && !Object.keys(lh.docs?.["lorem-500"] ?? {}).length) return "";
+  // The four populations stand by themselves: PageSpeed's two, and the two measured on our computer.
+  const some = (p?: Record<string, unknown>) => Object.keys(p ?? {}).length > 0;
+  const localSome = some(local.pages) || some(local.docs?.["lorem-500"]);
+  if (!some(lh.pages) && !some(lh.docs?.["lorem-500"]) && !localSome) return "";
   const score = (n: number | null | undefined) => n == null ? "n/a" : `<b class="lh ${n >= 90 ? "lh-good" : n >= 50 ? "lh-mid" : "lh-bad"}">${n}</b>`;
   // `ours`: a pass made on our computer. Its scores do not link to PageSpeed.
   const table = (pages: LighthouseResults["pages"], q: string, head: { measuredAt?: string | null; environment?: string }, ours = false) => {
@@ -150,16 +153,16 @@ export function lighthouseSection(
     : "";
   const localBig = local.docs?.["lorem-500"];
   const localHead = local.docsMeta?.["lorem-500"];
-  const localBlock = Object.keys(local.pages ?? {}).length
+  const localBlock = localSome
     ? `<h3 class="odv-h3" id="lighthouse-local">Lighthouse on our computer <span class="ro">the same pages, the same Lighthouse release, on a machine with a graphics card</span></h3>
-  <p class="fine">Google's machines have no graphics card, and an engine that draws through one cannot start there: it has no score above.
+  <p class="fine">On Google's machines two engines do not start (their files do not download there; why is not known), so they have no score above. This computer has a graphics card, which Google's machines do not.
 So the same Lighthouse was also run here, on every page and not only on those. These figures depend on this computer and on what else it was doing:
 the heading gives its load and Lighthouse's own reading of how fast its processor was. Compare rows within this table, not with the one above.
-Measured ${esc(local.measuredAt ?? "")} · ${esc(local.environment)}.</p>
-  ${table(local.pages, "", local, true)}${
+${some(local.pages) ? `Measured ${esc(local.measuredAt ?? "")} · ${esc(local.environment)}.` : ""}</p>
+  ${some(local.pages) ? table(local.pages, "", local, true) : ""}${
       big && localBig && Object.keys(localBig).length
         ? `<h3 class="odv-h3" id="lighthouse-local-lorem-500">${esc(big.label)}, on our computer <span class="ro">${esc(big.file)}</span></h3>${
-          localHead && (localHead.measuredAt !== local.measuredAt || localHead.environment !== local.environment)
+          localHead && (!some(local.pages) || localHead.measuredAt !== local.measuredAt || localHead.environment !== local.environment)
             ? `<p class="fine">Measured ${esc(localHead.measuredAt)} · ${esc(localHead.environment)}.</p>`
             : ""
         }

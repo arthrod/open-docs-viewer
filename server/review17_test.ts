@@ -242,3 +242,21 @@ Deno.test("Lighthouse on our computer: its own tables, headed by its machine, wi
   // Without a local pass there is no such block.
   assertEquals(lighthouseSection(ENGINES, psi, { measuredAt: null, environment: "", pages: {} }).includes('id="lighthouse-local"'), false);
 });
+
+Deno.test("Lighthouse on our computer is shown without PageSpeed rows, and its 500 pages without its rich sample", () => {
+  const none: LighthouseResults = { measuredAt: null, environment: "", pages: {} };
+  const onlyRich: LighthouseResults = { measuredAt: "2026-11-21", environment: "our computer", pages: { "v/folio": both(lh({ performance: 77 })) } };
+  const a = lighthouseSection(ENGINES, none, onlyRich);
+  assertStringIncludes(a, 'id="lighthouse-local"');
+  assertStringIncludes(a, '<b class="lh lh-mid">77</b>');
+  const onlyLong: LighthouseResults = {
+    measuredAt: null, environment: "", pages: {},
+    docs: { "lorem-500": { "v/folio": both(lh({ performance: 55 })) } },
+    docsMeta: { "lorem-500": { measuredAt: "2026-11-21", environment: "our computer, later" } },
+  };
+  const b = lighthouseSection(ENGINES, { measuredAt: "2026-11-16", environment: "PSI", pages: { "v/folio": both() } }, onlyLong);
+  assertStringIncludes(b, 'id="lighthouse-local-lorem-500"');
+  assertStringIncludes(b, "Measured 2026-11-21 · our computer, later.");
+  assertEquals(b.includes("Measured  · "), false);
+  assertEquals(lighthouseSection(ENGINES, none, none), "");
+});
