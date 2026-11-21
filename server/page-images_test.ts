@@ -160,11 +160,17 @@ Deno.test("a refused turn is the page request's refusal, a failed engine load is
 Deno.test("a page request still waiting for its layout when that layout is pushed out draws from it, and it is freed afterwards", async () => {
   const seen = { frees: 0, drawnAfterFree: 0 };
   const gates: (() => void)[] = [];
+  // Resolves when the engine has been asked for a layout the test has not yet let through.
+  const gateWaiters: (() => void)[] = [];
+  const gate = () => gates.length ? Promise.resolve() : new Promise<void>((r) => gateWaiters.push(r));
   const { route } = fake({
     keep: 1,
     // Each layout waits until the test lets it through.
     open: async (bytes) => {
-      await new Promise<void>((go) => gates.push(go));
+      await new Promise<void>((go) => {
+        gates.push(go);
+        for (const w of gateWaiters.splice(0)) w();
+      });
       let freed = false;
       return {
         sizes: Array.from({ length: bytes[0] * 2 }, (_, i) => (i % 2 ? 1056 : 816)),
@@ -180,13 +186,16 @@ Deno.test("a page request still waiting for its layout when that layout is pushe
   const id = async (x: Uint8Array) => (await sha256(x)).slice(0, 16);
   // A page of document A is asked for in an isolate without its layout: it waits for the layout.
   const waiting = route.page({ doc: await id(a), n: "2", s: "1" }, () => Promise.resolve(a));
-  for (let i = 0; i < 20 && gates.length < 1; i++) await new Promise((r) => setTimeout(r, 1));
+  await gate();
   // Document B's page is opened meanwhile: with room for one layout, A's is pushed out while still being made.
   const other = route.html(b, SRC);
-  await new Promise((r) => setTimeout(r, 1));
+  // B registers its eviction of A after hashing its bytes and a few microtasks. Hash the same bytes
+  // (B's hash was asked for first) and let one macrotask pass, which runs every microtask queued by then.
+  await id(b);
+  await new Promise((r) => setTimeout(r, 0));
   gates.shift()!(); // A's layout finishes: its eviction and the waiting page request both react
-  for (let i = 0; i < 20 && gates.length < 1; i++) await new Promise((r) => setTimeout(r, 1));
-  gates.shift()?.();
+  await gate(); // B's layout is asked for only after A's has settled
+  gates.shift()!();
   const res = await waiting;
   await other;
   assertEquals(res.status, 200);
@@ -215,4 +224,33 @@ Deno.test("a page request for a layout still being made by a request whose turn 
   await route.page({ doc: id, n: "1", s: "1" }, () => Promise.resolve(a)).catch((e) => (err = e));
   assert(err instanceof TookTooLong, String(err));
   assert(performance.now() - t0 < 2000);
+});
+
+Deno.test("a layout replaced by a newer one of the same document is freed at once, not held by requests on the newer one", async () => {
+  let frees = 0;
+  const gates: (() => void)[] = [];
+  const gateWaiters: (() => void)[] = [];
+  const gate = () => gates.length ? Promise.resolve() : new Promise<void>((r) => gateWaiters.push(r));
+  const { route } = fake({
+    open: async (bytes) => {
+      await new Promise<void>((go) => {
+        gates.push(go);
+        for (const w of gateWaiters.splice(0)) w();
+      });
+      return { sizes: [816, 1056].slice(0, bytes[0] * 2), page: () => new Uint8Array(), free: () => void frees++ };
+    },
+  });
+  const a = doc(1, 9);
+  const first = route.html(a, SRC);
+  await gate();
+  gates.shift()!();
+  await first;
+  // The page is opened again: a new layout of the same document, still being made.
+  const second = route.html(a, SRC);
+  await gate();
+  await new Promise((r) => setTimeout(r, 0));
+  assertEquals(frees, 1, "the first layout waits for the request on the second one");
+  gates.shift()!();
+  await second;
+  assertEquals(frees, 1);
 });

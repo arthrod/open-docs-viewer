@@ -157,7 +157,8 @@ export function lighthouseSection(
   ${table(bigPages, `?src=${encodeURIComponent(sampleUrl(big))}`, lh.docsMeta?.["lorem-500"] ?? lh)}`
     : "";
   const localBig = local.docs?.["lorem-500"];
-  const localHead = local.docsMeta?.["lorem-500"];
+  // The long table's own run when the file records one, else the file's: the table is never undated.
+  const localHead = local.docsMeta?.["lorem-500"] ?? { measuredAt: local.measuredAt ?? "", environment: local.environment };
   const localBlock = localSome
     ? `<h3 class="odv-h3" id="lighthouse-local">Lighthouse on our computer <span class="ro">the same pages, the same Lighthouse release, on a machine with a graphics card</span></h3>
   <p class="fine">On Google's machines two engines do not start (their files do not download there; why is not known), so they have no score above. This computer has a graphics card, which Google's machines do not.
@@ -167,11 +168,11 @@ ${some(local.pages) ? `Measured ${esc(local.measuredAt ?? "")} · ${esc(local.en
   ${some(local.pages) ? table(local.pages, "", local, true) : ""}${
       big && localBig && Object.keys(localBig).length
         ? `<h3 class="odv-h3" id="lighthouse-local-lorem-500">${esc(big.label)}, on our computer <span class="ro">${esc(big.file)}</span></h3>${
-          localHead && (!some(local.pages) || localHead.measuredAt !== local.measuredAt || localHead.environment !== local.environment)
+          (!some(local.pages) || localHead.measuredAt !== local.measuredAt || localHead.environment !== local.environment)
             ? `<p class="fine">Measured ${esc(localHead.measuredAt)} · ${esc(localHead.environment)}.</p>`
             : ""
         }
-  ${table(localBig, `?src=${encodeURIComponent(sampleUrl(big))}`, localHead ?? local, true)}`
+  ${table(localBig, `?src=${encodeURIComponent(sampleUrl(big))}`, localHead, true)}`
         : ""
     }`
     : "";

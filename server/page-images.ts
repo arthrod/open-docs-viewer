@@ -58,6 +58,8 @@ const refuse = (status: number, msg: string) => new Response(msg, { status, head
 type Laid = { id: string; doc: LaidDocument; initMs: number; layoutMs: number; evicted: boolean };
 type Query = { doc?: string; n?: string; s?: string };
 type Turn = <T>(job: () => Promise<T>) => Promise<T>;
+/** A layout waiting for its turn: `made` once the turn came, and until then how many requests share it. */
+type Queued = { promise: Promise<Laid>; made?: Promise<Laid>; sharers: number };
 
 export function pageImages(engine: PageImageEngine) {
   const keep = engine.keep ?? 3;
@@ -66,7 +68,7 @@ export function pageImages(engine: PageImageEngine) {
   /** Document fetches in flight, by document id: pages asked for together share one. */
   const fetching = new Map<string, Promise<Uint8Array | Response>>();
   /** Layouts waiting for, or holding, their turn of the render queue for the page route, by document id. */
-  const laying = new Map<string, Promise<Laid>>();
+  const laying = new Map<string, Queued>();
   let released = 0;
 
   let ready: Promise<void> | undefined;
@@ -77,32 +79,33 @@ export function pageImages(engine: PageImageEngine) {
     });
 
   /**
-   * Requests drawing from, or still waiting for, a document's layout, by document id. Counted from
-   * the moment a request asks, not from when the layout resolves: an eviction registered earlier
-   * reacts first, and would free the layout under a request that had not yet taken hold of it.
+   * Requests drawing from, or still waiting for, one layout, by that layout's own promise (never a
+   * promise wrapped around it). Counted from the moment the layout exists for the request, not from
+   * when it resolves: an eviction registered earlier reacts first, and would free the layout under
+   * a request that had not yet taken hold of it.
+   * Keyed by the layout and not by the document: a document laid out again is a new layout, and a
+   * request on the new one must not keep the old one's memory alive.
    */
-  const pinned = new Map<string, number>();
-  /** Layouts evicted while pinned, by document id: freed when the last request lets go. */
-  const limbo = new Map<string, Set<Laid>>();
+  const pinned = new Map<Promise<Laid>, number>();
+  /** Layouts evicted while pinned: each is freed when its own last request lets go. */
+  const limbo = new Map<Promise<Laid>, Laid>();
 
   /** Engine memory is not the garbage collector's: a layout is freed the moment it is both evicted and unused. */
-  function release(l: Laid) {
+  function release(p: Promise<Laid>, l: Laid) {
     if (!l.evicted) return;
-    if ((pinned.get(l.id) ?? 0) > 0) {
-      let waiting = limbo.get(l.id);
-      if (!waiting) limbo.set(l.id, waiting = new Set());
-      waiting.add(l);
+    if ((pinned.get(p) ?? 0) > 0) {
+      limbo.set(p, l);
       return;
     }
     l.evicted = false; // freed once
-    limbo.get(l.id)?.delete(l);
+    limbo.delete(p);
     l.doc.free();
     released++;
   }
   function evict(p: Promise<Laid>) {
     p.then((l) => {
       l.evicted = true;
-      release(l);
+      release(p, l);
     }, () => {});
   }
 
@@ -130,19 +133,24 @@ export function pageImages(engine: PageImageEngine) {
     return hit;
   }
 
-  /** Run `fn` on document `id`'s layout, which cannot be freed under it, nor while it waits for it. */
-  async function using<T>(id: string, p: Promise<Laid>, fn: (l: Laid) => T | Promise<T>): Promise<T> {
-    pinned.set(id, (pinned.get(id) ?? 0) + 1); // before the first await
+  const pin = (p: Promise<Laid>, n = 1) => n > 0 && pinned.set(p, (pinned.get(p) ?? 0) + n);
+  function unpin(p: Promise<Laid>) {
+    const left = (pinned.get(p) ?? 1) - 1;
+    if (left > 0) return void pinned.set(p, left);
+    pinned.delete(p);
+    const l = limbo.get(p);
+    if (l) release(p, l);
+  }
+  /**
+   * Run `fn` on the layout `wait` resolves to. The caller has pinned that layout (synchronously,
+   * when it came to exist for it); `key` names it once `wait` has settled, and is let go here.
+   */
+  async function using<T>(wait: Promise<Laid>, key: () => Promise<Laid> | undefined, fn: (l: Laid) => T | Promise<T>): Promise<T> {
     try {
-      return await fn(await p);
+      return await fn(await wait);
     } finally {
-      const left = (pinned.get(id) ?? 1) - 1;
-      if (left > 0) pinned.set(id, left);
-      else {
-        pinned.delete(id);
-        for (const l of [...(limbo.get(id) ?? [])]) release(l);
-        limbo.delete(id);
-      }
+      const p = key();
+      if (p) unpin(p);
     }
   }
 
@@ -151,7 +159,9 @@ export function pageImages(engine: PageImageEngine) {
     const id = (await sha256(bytes)).slice(0, 16);
     // Opening the page always reads and lays the document out, as every other engine's route does;
     // only its page images reuse that work.
-    const { sizes, initMs, layoutMs } = await using(id, layOut(id, bytes, true), (l) => ({ sizes: Array.from(l.doc.sizes), initMs: l.initMs, layoutMs: l.layoutMs }));
+    const mine = layOut(id, bytes, true);
+    pin(mine); // before the first await
+    const { sizes, initMs, layoutMs } = await using(mine, () => mine, (l) => ({ sizes: Array.from(l.doc.sizes), initMs: l.initMs, layoutMs: l.layoutMs }));
     const count = sizes.length / 2;
     const q = `/r/${engine.slug}/page?src=${encodeURIComponent(src.href)}&doc=${id}`;
     const pages: string[] = [];
@@ -189,6 +199,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
     const t0 = performance.now();
     const id = q.doc;
     let hit = laid.get(id);
+    let key: () => Promise<Laid> | undefined;
     let fetchMs = 0;
     if (!hit) {
       let pending = fetching.get(id);
@@ -206,14 +217,25 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
       if (!queued) {
         // layOut is called when the turn comes, not before: a layout waiting for its turn is not
         // in `laid`, so a render that holds the turn never waits on one queued behind itself.
-        queued = turn(() => layOut(id, bytes)).finally(() => laying.delete(id));
-        laying.set(id, queued);
+        const q: Queued = queued = { sharers: 0, promise: undefined as unknown as Promise<Laid> };
+        q.promise = turn(() => {
+          // Every request already waiting takes hold of the layout the moment it exists.
+          pin(q.made = layOut(id, bytes), q.sharers);
+          return q.made;
+        }).finally(() => laying.get(id) === q && laying.delete(id));
+        laying.set(id, q);
       }
-      hit = queued;
+      const q = queued;
+      if (q.made) pin(q.made);
+      else q.sharers++;
+      hit = q.promise;
+      key = () => q.made;
     } else {
       // Already laid out, or still being laid out by a request whose turn may have run out: this one
       // takes no turn, so it has a limit of its own and is told to try again instead of waiting for ever.
       const kept = layOut(id, new Uint8Array()); // only moves it to most recently used
+      pin(kept);
+      key = () => kept;
       const limit = engine.waitMs ?? 120_000;
       let timer: ReturnType<typeof setTimeout> | undefined;
       hit = Promise.race([kept, new Promise<never>((_, no) => (timer = setTimeout(() => no(new TookTooLong(limit)), limit)))]).finally(() => clearTimeout(timer));
@@ -221,7 +243,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
     const t1 = performance.now();
     const n = Number(q.n);
     let t2 = t1;
-    const image = await using(id, hit, ({ doc }) => {
+    const image = await using(hit, key, ({ doc }) => {
       t2 = performance.now();
       const count = doc.sizes.length / 2;
       return n > count ? count : doc.page(n - 1, Number(q.s));
