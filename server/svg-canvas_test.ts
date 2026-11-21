@@ -261,3 +261,20 @@ Deno.test("the size of a picture is read from its first bytes", () => {
   assertEquals(imageSize("data:image/png;base64,AAAA"), { width: 0, height: 0 });
   assertEquals(imageSize("https://example.com/a.png"), { width: 0, height: 0 });
 });
+
+Deno.test("a radial gradient that starts at a radius keeps it (fr), and one that starts at a point has none", () => {
+  const c = new SvgCanvas(100, 100);
+  const ring = c.createRadialGradient(50, 50, 10, 50, 50, 40);
+  ring.addColorStop(0, "#fff");
+  ring.addColorStop(1, "#000");
+  c.fillStyle = ring;
+  c.fillRect(0, 0, 100, 100);
+  const point = c.createRadialGradient(50, 50, 0, 50, 50, 40);
+  point.addColorStop(0, "#fff");
+  point.addColorStop(1, "#000");
+  c.fillStyle = point;
+  c.fillRect(0, 0, 100, 100);
+  const svg = c.toSvg();
+  assertStringIncludes(svg, 'fx="50" fy="50" fr="10" cx="50" cy="50" r="40"');
+  assertStringIncludes(svg, 'fx="50" fy="50" cx="50" cy="50" r="40"');
+});

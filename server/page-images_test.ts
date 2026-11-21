@@ -194,3 +194,25 @@ Deno.test("a page request still waiting for its layout when that layout is pushe
   assertEquals(seen.drawnAfterFree, 0, "the page was drawn from a layout already freed");
   assertEquals(seen.frees, 1, "A's layout is freed once its waiting page has been drawn");
 });
+
+Deno.test("a page request for a layout still being made by a request whose turn ran out is told to try again, not left waiting", async () => {
+  const { TookTooLong } = await import("./queue.ts");
+  // The engine never finishes laying this document out.
+  const { route } = fake({ waitMs: 30, open: () => new Promise(() => {}) });
+  const a = doc(1, 9);
+  const id = (await sha256(a)).slice(0, 16);
+  // The first request's turn runs out while the layout goes on: the layout stays kept, unfinished.
+  const first = route.page({ doc: id, n: "1", s: "1" }, () => Promise.resolve(a), (job) => {
+    job();
+    return Promise.reject(new TookTooLong(1));
+  });
+  let err: unknown;
+  await first.catch((e) => (err = e));
+  assert(err instanceof TookTooLong);
+  // The retry finds that layout and takes no turn: it has its own limit.
+  const t0 = performance.now();
+  err = undefined;
+  await route.page({ doc: id, n: "1", s: "1" }, () => Promise.resolve(a)).catch((e) => (err = e));
+  assert(err instanceof TookTooLong, String(err));
+  assert(performance.now() - t0 < 2000);
+});

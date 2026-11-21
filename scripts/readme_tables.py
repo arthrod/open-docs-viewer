@@ -125,6 +125,12 @@ def server_block(data: dict) -> str:
     return "\n".join(out)
 
 
+def server_from(x: dict | None) -> str | None:
+    """Where a server route was timed from, as its record says ("... median; from <where>; machine load ...")."""
+    env = (x or {}).get("environment") or ""
+    return env.split("; from ", 1)[1].split("; machine load")[0].split(" (")[0] if "; from " in env else None
+
+
 def server_cell(e: str, x: dict | None) -> str:
     """One /r/ route on one sample, in a sentence."""
     if x is None:
@@ -153,6 +159,16 @@ def samples_block(data: dict) -> str:
         head = dict(zip(("measuredAt", "environment"), max(dict.fromkeys(stamps), key=stamps.count))) if stamps else data
         out += [f"**{title}**", "", said(head), "", "| Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |",
                 "| --- | ---: | --- | ---: | ---: | ---: | --- |"]
+        # curl's total includes the way to the server: a route timed from another machine than
+        # most of its table says so in its own cell.
+        froms = [w for w in (server_from(x) for x in d.get("server", {}).values()) if w]
+        usual = max(dict.fromkeys(froms), key=froms.count) if froms else None
+
+        def server_said(e: str) -> str:
+            x = d.get("server", {}).get(e)
+            where = server_from(x)
+            return server_cell(e, x) + (f" (timed from {where}, not from {usual} as the other rows)" if where and where != usual else "")
+
         for e in NAMES:
             r = d.get("browser", {}).get(e)
             frame = e in FRAMES
@@ -160,9 +176,9 @@ def samples_block(data: dict) -> str:
                 # Measured with curl only (measure_server.py --samples before the browser pass): the
                 # server cell is a result, and dropping the row would hide it.
                 if d.get("server", {}).get(e):
-                    out.append(f"| {NAMES[e]} | not measured | n/a | n/a | n/a | n/a | {server_cell(e, d['server'][e])} |")
+                    out.append(f"| {NAMES[e]} | not measured | n/a | n/a | n/a | n/a | {server_said(e)} |")
                 continue
-            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_cell(e, d.get("server", {}).get(e))
+            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_said(e)
             name = dated(NAMES[e], r, head)
             if r.get("renderedMs") is None:
                 out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | {srv} |")

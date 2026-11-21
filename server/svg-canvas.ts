@@ -379,7 +379,7 @@ export class SvgCanvas implements State {
       this.defs.push(
         style.kind === "linear"
           ? `<linearGradient id="${id}" gradientUnits="userSpaceOnUse" x1="${at[0]}" y1="${at[1]}" x2="${at[2]}" y2="${at[3]}"${where}>${stops}</linearGradient>`
-          : `<radialGradient id="${id}" gradientUnits="userSpaceOnUse" fx="${at[0]}" fy="${at[1]}" cx="${at[3]}" cy="${at[4]}" r="${at[5]}"${where}>${stops}</radialGradient>`,
+          : `<radialGradient id="${id}" gradientUnits="userSpaceOnUse" fx="${at[0]}" fy="${at[1]}"${at[2] === "0" ? "" : ` fr="${at[2]}"`} cx="${at[3]}" cy="${at[4]}" r="${at[5]}"${where}>${stops}</radialGradient>`,
       );
     }
     return `url(#${id})`;

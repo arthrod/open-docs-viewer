@@ -66,8 +66,8 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | Nutrient | 7.12 s | 7.12 s, 6.65 s, 7.18 s | 18 MB | 589 MB | 24 MB | no server route: Nutrient renders on a server with a Docker service |
 | react-docx | 2.26 s | 3.02 s, 2.26 s, 2.05 s | 12 MB | 500 MB | 7.4 MB | no server route: it breaks pages by measuring text in the browser |
 | Univer | 1.77 s | 1.60 s, 1.77 s, 1.78 s | 24 MB | 488 MB | 2.3 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | 204 ms (22 ms laying out), 3 KB + a page image per page viewed, 3 pages |
-| BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | 275 ms (91 ms laying out), 2 KB + a page image per page viewed, 3 pages |
+| OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | 204 ms (22 ms laying out), 3 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | 275 ms (91 ms laying out), 2 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | OnlyOffice (CryptPad build) | 3.50 s | 3.23 s, 3.74 s, 3.50 s | 45 MB | 699 MB | 18 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 
 **500 pages (`lorem-500.docx`)**
@@ -90,8 +90,8 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | Nutrient | 20.7 s | 16.7 s, 20.7 s, 21.0 s | 19 MB | 666 MB | 25 MB | no server route: Nutrient renders on a server with a Docker service |
 | react-docx | 14.7 s | 11.2 s, 18.4 s, 14.7 s | 98 MB | 906 MB | 7.3 MB | no server route: it breaks pages by measuring text in the browser |
 | Univer | 27.5 s | 23.9 s, 33.6 s, 27.5 s | 879 MB | 2357 MB | 3.0 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | 1.57 s (1.33 s laying out), 331 KB + a page image per page viewed, 500 pages |
-| BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | 3.97 s (3.68 s laying out), 143 KB + a page image per page viewed, 500 pages |
+| OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | 1.57 s (1.33 s laying out), 331 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | 3.97 s (3.68 s laying out), 143 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | OnlyOffice (CryptPad build) | 14.4 s | 13.5 s, 14.4 s, 15.9 s | 128 MB | 908 MB | 19 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 <!-- samples:end -->
 
@@ -108,7 +108,7 @@ listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-ch
 Five engines were added to both sites and open the samples here, view-only where the engine has
 such a mode. They are in the browser tables since the measuring pass of the same day, in the
 Lighthouse tables since 2026-11-20, and in the [arena](https://arena.benchmarks.law) since
-2026-11-20. None of the five has a server route: see [why](#no-server-route-and-why).
+2026-11-20. OpenDoc and BetterOffice have a server route since 2026-11-21; the other three have none: see [why](#no-server-route-and-why).
 
 | Engine | View-only here | Notes |
 | --- | --- | --- |

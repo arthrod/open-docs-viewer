@@ -880,40 +880,6 @@
     }
    },
    "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word with a never-seen ?n= per run"
-  },
-  "showcase": {
-   "document": "showcase.docx (47,871 B) with a never-seen ?n= per run",
-   "browser": {},
-   "server": {
-    "opendoc": {
-     "code": 200,
-     "totalMs": 248,
-     "renderMs": 21,
-     "bytes": 3553,
-     "pages": 3,
-     "runs": [
-      248,
-      330,
-      207
-     ],
-     "measuredAt": "2026-11-21",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.6, highest 6.8, on 12 cores"
-    },
-    "betteroffice": {
-     "code": 200,
-     "totalMs": 302,
-     "renderMs": 83,
-     "bytes": 2426,
-     "pages": 3,
-     "runs": [
-      305,
-      302,
-      278
-     ],
-     "measuredAt": "2026-11-21",
-     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.6, highest 6.8, on 12 cores"
-    }
-   }
   }
  }
 }

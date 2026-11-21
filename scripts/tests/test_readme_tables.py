@@ -151,3 +151,17 @@ def test_the_local_lighthouse_block_is_empty_until_measured_and_then_headed_by_i
     assert "| WordCraft | 60 · 60 |" in out
     assert "| Nutrient | **no result**: Lighthouse gave no score |" in out
     assert "PageSpeed" not in out
+
+
+def test_a_server_route_timed_from_another_machine_says_so_in_its_cell():
+    b = {"renderedMs": 1700, "runs": [1700], "bytes": 22 << 20, "requests": 20, "heapBytes": 3 << 20, "rendererRss": 649 << 20}
+    cloud = "curl, 3 runs, median; from a cloud machine (16 vCPU; shared); machine load (1-minute average) median 2.0"
+    mac = "curl, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.6"
+    s = lambda env: {"code": 200, "totalMs": 300, "renderMs": 20, "bytes": 3000, "pages": 3, "runs": [300], "measuredAt": "2026-11-21", "environment": env}
+    data = {"measuredAt": "2026-11-21", "environment": "test", "samples": {"redline": {"document": "redline.docx",
+            "browser": {"folio": b, "docxodus": b, "opendoc": b},
+            "server": {"folio": s(cloud), "docxodus": s(cloud), "opendoc": s(mac)}}}}
+    out = rt.samples_block(data)
+    assert rt.server_from(s(cloud)) == "a cloud machine" and rt.server_from({}) is None
+    assert "pages (timed from Darwin arm64, not from a cloud machine as the other rows) |" in out
+    assert out.count("timed from") == 1

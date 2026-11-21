@@ -38,10 +38,14 @@ export interface PageImageEngine {
   unpainted?: string[];
   /** How many documents' layouts one isolate keeps for the page images asked for next. */
   keep?: number;
+  /** How long a page request waits for a kept layout that is still being made (default: the render queue's turn, 120 s). */
+  waitMs?: number;
 }
 
 /** Pages above the fold load with the page; the rest wait until they are near the viewport. */
 const EAGER_PAGES = 2;
+
+import { TookTooLong } from "./queue.ts";
 
 const hex = (b: ArrayBuffer) => [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join("");
 /** The SHA-256 of `b`, as hex. */
@@ -206,7 +210,14 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
         laying.set(id, queued);
       }
       hit = queued;
-    } else hit = layOut(id, new Uint8Array()); // already laid out: only moves it to most recently used
+    } else {
+      // Already laid out, or still being laid out by a request whose turn may have run out: this one
+      // takes no turn, so it has a limit of its own and is told to try again instead of waiting for ever.
+      const kept = layOut(id, new Uint8Array()); // only moves it to most recently used
+      const limit = engine.waitMs ?? 120_000;
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      hit = Promise.race([kept, new Promise<never>((_, no) => (timer = setTimeout(() => no(new TookTooLong(limit)), limit)))]).finally(() => clearTimeout(timer));
+    }
     const t1 = performance.now();
     const n = Number(q.n);
     let t2 = t1;

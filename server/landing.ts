@@ -173,12 +173,12 @@ ${some(local.pages) ? `Measured ${esc(local.measuredAt ?? "")} · ${esc(local.en
   return `<section class="odv-section" id="lighthouse">
   <div class="sec-label"><span class="sq"></span><span>/ Lighthouse</span></div>
   <p class="fine">Google's <a href="https://pagespeed.web.dev">PageSpeed Insights</a> on every engine's page with the rich sample: Lighthouse run on Google's machines, so the figures do not depend on anyone's computer.
-Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. Every cell reads <strong>desktop · mobile</strong>; mobile emulates a mid-range phone on slow 4G. Scores are 0 to 100.
+${some(lh.pages) || some(lh.docs?.["lorem-500"]) ? `Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. ` : ""}Every cell reads <strong>desktop · mobile</strong>; mobile emulates a mid-range phone on slow 4G. Scores are 0 to 100.
 <strong>LCP</strong>: largest contentful paint. <strong>TBT</strong>: total blocking time, how long the main thread was too busy to answer input. <strong>CLS</strong>: layout shift.
 Accessibility, best practices and SEO are the desktop scores. Lighthouse scores the page load, not how faithfully the document is drawn. For Microsoft's and Google's viewers it sees this site's frame page, not their servers' work.
 An engine that could not start on Google's machine has no score (a failed page paints fast, and its score would flatter it): WordCraft's and Nutrient's engines (22 and 24 MB over the network) do not download there.
 <strong>Server route</strong>: the performance score and LCP of the same engine's <code>/r/</code> page.</p>
-  ${table(lh.pages, "", lh)}
+  ${some(lh.pages) ? table(lh.pages, "", lh) : ""}
   ${bigTable}
   ${localBlock}
 </section>`;
@@ -200,7 +200,8 @@ export function samplesSection(
   // The caveats are about the published file: another data set (a test's) has none unless it brings its own.
   caveats: Caveats = res === SAMPLE_RESULTS ? (CAVEATS as Caveats) : {},
 ): string {
-  const tables = SAMPLES.filter((s) => res.samples[s.id]).map((s: Sample) => {
+  // The rich sample has the page's main tables; this section is the two harder files.
+  const tables = SAMPLES.filter((s) => s.id !== "showcase" && res.samples[s.id]).map((s: Sample) => {
     const r = res.samples[s.id];
     const told = caveats[s.id];
     const care = (slug: string) =>

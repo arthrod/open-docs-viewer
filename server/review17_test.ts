@@ -260,3 +260,20 @@ Deno.test("Lighthouse on our computer is shown without PageSpeed rows, and its 5
   assertEquals(b.includes("Measured  · "), false);
   assertEquals(lighthouseSection(ENGINES, none, none), "");
 });
+
+Deno.test("the other-documents section is the two harder files: a rich-sample entry in the file gets no table there", () => {
+  const res = samples({}, { folio: browserRow });
+  res.samples.showcase = { document: "showcase.docx", browser: {}, server: { opendoc: { code: 200, totalMs: 248, renderMs: 21, bytes: 3553, pages: 3, runs: [248] } } };
+  const html = samplesSection(ENGINES, res, noClient);
+  assertStringIncludes(html, 'id="sample-redline"');
+  assertEquals(html.includes('id="sample-showcase"'), false);
+});
+
+Deno.test("with results from our computer only, PageSpeed's date line and empty table are not printed", () => {
+  const none: LighthouseResults = { measuredAt: null, environment: "", pages: {} };
+  const local: LighthouseResults = { measuredAt: "2026-11-21", environment: "our computer", pages: { "v/folio": both(lh({ performance: 77 })) } };
+  const html = lighthouseSection(ENGINES, none, local);
+  assertEquals(html.includes("Measured  · "), false);
+  assertEquals((html.match(/<table/g) ?? []).length, 1);
+  assertStringIncludes(html, "Every cell reads <strong>desktop · mobile</strong>");
+});
