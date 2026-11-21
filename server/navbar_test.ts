@@ -158,3 +158,12 @@ Deno.test("landing: the intro counts the engines it lists, not a number written 
   if (!html.includes(`for ${open} open-source and ${prop} proprietary`)) throw new Error("the description does not give both counts");
   if (/Twelve engines|eight open-source/.test(html)) throw new Error("a count written by hand is still in the page");
 });
+
+Deno.test("view page: the menu links to the engine's vendor note when it has one, and has no such link otherwise", () => {
+  const e = ENGINES.find((x) => x.slug === "docxodus")!;
+  const note = "https://benchmarks.law/editors-trial/vendor-notes#docxodus";
+  const withNote = viewPage({ ...e, vendorNote: note }, shell, src, absolutize);
+  assertStringIncludes(withNote, `<a href="${note}" target="_blank" rel="noopener">About Docxodus: pros, cons, every benchmark →</a>`);
+  const without = viewPage({ ...e, vendorNote: null }, shell, src, absolutize);
+  assertEquals(without.includes("pros, cons, every benchmark"), false);
+});
