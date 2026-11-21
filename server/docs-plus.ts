@@ -29,7 +29,7 @@ type Any = any;
  */
 let lib: Promise<Any> | undefined;
 function loadLib(): Promise<Any> {
-  if (!lib) {
+  if (lib === undefined) {
     Object.defineProperty(Object.prototype, "__proto__", {
       configurable: true,
       get(this: object) {
