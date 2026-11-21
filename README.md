@@ -21,6 +21,7 @@ browser page, each for a reason [given below](#no-server-route-and-why).
 | `GET /` | the engines, the measurements, a URL form |
 | `GET /v/<engine>?src=<url>` | view-only page: the engine runs in the browser, in its own read-only mode (Microsoft's and Google's viewers: a frame onto their server render) |
 | `GET /r/<engine>?src=<url>` | **server-rendered**: the engine runs here; timings in `Server-Timing` (`fetch`, `init`, `render`), page count in `x-pages`, anything laid out but not painted in `x-unpainted` |
+| `GET /r/<engine>/page?src=<url>&doc=<id>&n=<page>&s=<density>` | page image for WordCraft or OpenDoc (PNG), or BetterOffice (SVG); use the image URLs supplied by the corresponding `/r/` page |
 | `GET /api/doc?src=<url>` | this server fetches the document (https only, no private hosts, every redirect re-checked, ≤ 25 MB read in chunks, 20 s deadline, must be a zip); refusals are 4xx with the reason as text |
 | `GET /results.json` | the browser-side measurements |
 
@@ -100,7 +101,7 @@ Tracked changes on the server routes: Docxodus is asked for them
 the document goes through open-docs' `lib/revisions.ts` first (inserted words
 underlined, deleted words struck), exactly as its editor adapter does. SuperDoc's
 projection is asked for its `redline` review mode (`<ins>` and `<del>`). The other
-four are handed the original bytes. What each engine draws in the browser is
+six are handed the original bytes. What each engine draws in the browser is
 listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-changes-what-each-engine-draws).
 
 ## Engines added on 2026-11-18
@@ -230,7 +231,7 @@ machine: see "Where" under Measuring). Each row below says what was found and wh
 | Figure in the tables | Verdict | What was seen |
 | --- | --- | --- |
 | **canvas-editor, 500 pages: 1,256 MB of JS heap** (the tables of 2026-11-18) | **Was wrong by about 80%; corrected** | The heap was read 1.5 s after the page renders, before Chrome had collected the garbage of the conversion. The new pass forces a collection first: 679 MB in each of its three runs, 1,216 to 1,232 MB before the collection. |
-| **JS heap, every engine** | **Was read too early; corrected** | The same reading, so any engine that converts the file in JavaScript was overstated by its garbage. `scripts/measure.py` and `scripts/measure_server_client.py` (the `/r/` tables) now force a collection first (`heapBytes`) and keep the old reading as `heapBytesBeforeGc`. In the new pass every run that rendered was collected (none carries `heapNotCollected`). Had one failed, it would be left out of the median while any run of the row was collected, and counted in the row. |
+| **JS heap, every engine** | **Was read too early; corrected** | The same reading, so any engine that converts the file in JavaScript was overstated by its garbage. `scripts/measure.py` and `scripts/measure_server_client.py` (the `/r/` tables) now force a collection first (`heapBytes`) and keep the old reading as `heapBytesBeforeGc`. In the new pass every run that rendered was collected (none carries `heapNotCollected`). Had one failed, it would be left out of the median while any run of the row was collected, and counted in the row as `heapNotCollected`. If no reading was collected, the median uses the available uncollected readings and shows that count; runs without a heap reading never enter the median. |
 | **canvas-editor, 500 pages: 6,248 MB of renderer memory** | **This machine, not the engine** | With no GPU, Chrome keeps each of the 661 page canvases in the renderer's own memory. On a Mac with a GPU the same page read 2,410 MiB (2026-11-20). docen (3,809 MB) and Univer (2,357 MB) draw on canvases too. Compare these only with each other. |
 | **Cold render on the 500 pages** | **Not "the document is ready" for two engines** | It ends two frames after the adapter's `load()` returns. docx-editor.dev's used to return at once (2.62 s on 2026-11-18, nearly all page start-up); its adapter now waits for the layout, and the new pass reads 6.65 s. docen answers after 9 s; on the editors site it then holds the main thread for minutes (not checked in its read-only mode here). OnlyOffice reports ready and goes on paginating to 500 pages after it. |
 | **Univer, every row** | **Not a .docx figure** | Univer never reads the file: this site's reader hands it text and headings. Its heap on the 500 pages is 879 MB after a collection in each of the three runs (1,759 to 1,764 MB before it, which is what the tables of 2026-11-18 showed), and it is what Univer does with that text. |
@@ -562,6 +563,14 @@ How each is measured:
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
 - Lighthouse: `uv run --with playwright python -I scripts/measure_pagespeed.py https://viewers.benchmarks.law v/docxodus,r/docxodus 3 --out results/lighthouse.json`
   (PageSpeed Insights, through its own site because the keyless API quota is usually spent; median of the analyses).
+  Cached analyses are retried up to three times. The first fresh report for each form factor is retained across
+  retries, including reports with errors; a retry for the other form factor cannot replace it. An unresolved
+  cached report is excluded and marked as repeated, and only published analyses are remembered as counted.
+- Host-load guard: `scripts/measure.py` and `scripts/measure_server_client.py` check the one-minute load
+  average before each run when `OD_MAX_LOAD` is set (for example, `OD_MAX_LOAD=100`). With it unset, they do
+  not wait. While load exceeds the limit they check every 10 seconds, for up to `OD_LOAD_WAIT_S` seconds
+  (default 21,600, or six hours, per run). If the wait expires, they save completed measurements, preserve
+  summary entries they never reached, and exit with status 4 to report an incomplete pass.
 - Where: the browser timings are made on a Hugging Face Jobs machine (Linux, no GPU, so Chrome draws in
   software; headed under Xvfb) by open-docs'
   [`scripts/hf_job.sh`](https://github.com/arthrod/open-docs/blob/main/scripts/hf_job.sh), 3 runs per engine and
@@ -582,9 +591,11 @@ How each is measured:
   render (see "Figures to distrust"); the three `/r/` runs of docx-editor.dev on the 500 pages answered HTTP 422,
   as designed. The files of 2026-11-18 stay in `results/raw/`, with the account of that day's two passes in
   their history.
-  The first-and-warm server table was not taken again. The Lighthouse rows of the five engines added on
-  2026-11-18 were taken on 2026-11-20 (PageSpeed runs on Google's machines, so the day's other figures do not
-  bear on them); the other Lighthouse rows are still those of 2026-11-16.
+  The seven existing rows of the first-and-warm server table were not taken again; OpenDoc and BetterOffice
+  were added on 2026-11-21. The browser PageSpeed rows of the five engines added on 2026-11-18 were taken on
+  2026-11-20, and the two new server routes on 2026-11-21; the remaining PageSpeed rows are still those of
+  2026-11-16. PageSpeed runs on Google's machines, independently of the browser timing pass; local Lighthouse
+  has its own machine details and dates above.
 - Browser pages: `uv run --with playwright python -I scripts/measure.py <engines> <runs>` drives the installed
   Google Chrome, headed, with a fresh profile per run (cold cache) and a never-seen document URL per run, and reads
   `data-od-rendered`, which the page sets once the engine shows the document. `val.run` sits behind Cloudflare,
