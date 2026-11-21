@@ -4,6 +4,7 @@ import { ENGINES, NO_SERVER, noServerCell } from "./engines.ts";
 import { lighthouseSection, noServerList, samplesSection } from "./landing.ts";
 import { renderToggle, SERVER_RENDER_SLUGS, serverToggle } from "./navbar.ts";
 import { codeLines } from "./plate.ts";
+import { SERVER_ROUTES } from "./results.ts";
 import type { LighthousePage, LighthouseResults, SampleResults, ServerClientResults } from "./samples.ts";
 import { SUPERDOC_CSS } from "./superdoc.ts";
 
@@ -40,8 +41,11 @@ Deno.test("a struck-out side of the toggle says why to a screen reader too", () 
 Deno.test("the toggle's list of server routes is the router's list", async () => {
   // The router imports Val Town's std utils, whose client wants a key at import time; none is used here.
   if (!Deno.env.get("VAL_TOWN_API_KEY")) Deno.env.set("VAL_TOWN_API_KEY", "not-used-by-this-test");
-  const { RENDERERS } = await import("../main.http.ts");
+  const { RENDERERS, PAGE_RENDERERS } = await import("../main.http.ts");
   assertEquals([...SERVER_RENDER_SLUGS].sort(), Object.keys(RENDERERS).sort());
+  // The landing's table of server routes lists the same ones, and says which send their pages as images.
+  assertEquals(SERVER_ROUTES.map((r) => r.slug).sort(), Object.keys(RENDERERS).sort());
+  assertEquals(SERVER_ROUTES.filter((r) => r.output === "images").map((r) => r.slug).sort(), Object.keys(PAGE_RENDERERS).sort());
 });
 
 Deno.test("code paragraphs keep revision marks (the Plate route)", () => {
@@ -185,7 +189,7 @@ Deno.test("samples: a run that rendered and then lost a reading says so", () => 
 
 Deno.test("no server route: every engine without one says why, in its cells and in the list", () => {
   const without = ENGINES.filter((e) => !e.frame && !SERVER_RENDER_SLUGS.has(e.slug));
-  assert(without.length >= 8, "the engines with only a browser page");
+  assert(without.length >= 6, "the engines with only a browser page");
   for (const e of without) {
     assert(NO_SERVER[e.slug], `${e.slug} has no server route and no reason on file (server/no-server.json)`);
     assert(noServerCell(e.slug) !== "no server route", `${e.slug}'s cell gives no reason`);
@@ -194,8 +198,10 @@ Deno.test("no server route: every engine without one says why, in its cells and 
   for (const slug of Object.keys(NO_SERVER)) assert(without.some((e) => e.slug === slug), `${slug} is listed as having no route`);
   const html = noServerList(ENGINES);
   assertStringIncludes(html, 'id="no-server"');
-  assertStringIncludes(html, "possible, not built");
-  assertStringIncludes(html, "<code>renderPagePng</code>");
+  // OpenDoc and BetterOffice were listed as possible and not built until 2026-11-21; both have a route now.
+  for (const built of ["opendoc", "betteroffice"]) assert(SERVER_RENDER_SLUGS.has(built) && !NO_SERVER[built], `${built} has a server route`);
+  assert(!html.includes("possible, not built"), "no engine is listed as possible and not built");
+  assertStringIncludes(html, "<code>measureText</code>");
   for (const e of without) assertStringIncludes(html, `/v/${e.slug}"`);
   assert(!html.includes("/v/folio\""), "an engine with a server route is not in the list");
   // A sample table's server cell carries the short reason instead of a bare "no server route".
@@ -214,4 +220,60 @@ Deno.test("samples: a figure found wrong is marked under the engine's name, only
 Deno.test("a heap that could not be collected first in some runs is said beside the figure", () => {
   const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, heapNotCollected: 1 } as typeof browserRow, plate: browserRow }), noClient);
   assertEquals(html.split("not collected first in 1 run<").length - 1, 1);
+});
+
+Deno.test("Lighthouse on our computer: its own tables, headed by its machine, with no PageSpeed link", () => {
+  const psi: LighthouseResults = { measuredAt: "2026-11-16", environment: "PSI", pages: { "v/folio": both() } };
+  const local: LighthouseResults = {
+    measuredAt: "2026-11-21", environment: "Lighthouse 13.6.0 run on a MacBook Pro",
+    pages: { "v/wordcraft": both(lh({ performance: 61 }), lh({ performance: 44 })), "r/wordcraft": both(lh({ performance: 99 })) },
+    docs: { "lorem-500": { "v/wordcraft": both(lh({ performance: 52 })) } },
+  };
+  const html = lighthouseSection(ENGINES, psi, local);
+  const at = html.indexOf('id="lighthouse-local"');
+  assertEquals(at > 0, true);
+  const mine = html.slice(at);
+  assertStringIncludes(mine, "Measured 2026-11-21 · Lighthouse 13.6.0 run on a MacBook Pro");
+  assertStringIncludes(mine, '<b class="lh lh-mid">61</b> · <b class="lh lh-bad">44</b>');
+  assertStringIncludes(mine, '<b class="lh lh-good">99</b>');
+  assertStringIncludes(mine, 'id="lighthouse-local-lorem-500"');
+  assertEquals(mine.includes("pagespeed.web.dev"), false);
+  assertStringIncludes(html.slice(0, at), "pagespeed.web.dev/analysis");
+  // Without a local pass there is no such block.
+  assertEquals(lighthouseSection(ENGINES, psi, { measuredAt: null, environment: "", pages: {} }).includes('id="lighthouse-local"'), false);
+});
+
+Deno.test("Lighthouse on our computer is shown without PageSpeed rows, and its 500 pages without its rich sample", () => {
+  const none: LighthouseResults = { measuredAt: null, environment: "", pages: {} };
+  const onlyRich: LighthouseResults = { measuredAt: "2026-11-21", environment: "our computer", pages: { "v/folio": both(lh({ performance: 77 })) } };
+  const a = lighthouseSection(ENGINES, none, onlyRich);
+  assertStringIncludes(a, 'id="lighthouse-local"');
+  assertStringIncludes(a, '<b class="lh lh-mid">77</b>');
+  const onlyLong: LighthouseResults = {
+    measuredAt: null, environment: "", pages: {},
+    docs: { "lorem-500": { "v/folio": both(lh({ performance: 55 })) } },
+    docsMeta: { "lorem-500": { measuredAt: "2026-11-21", environment: "our computer, later" } },
+  };
+  const b = lighthouseSection(ENGINES, { measuredAt: "2026-11-16", environment: "PSI", pages: { "v/folio": both() } }, onlyLong);
+  assertStringIncludes(b, 'id="lighthouse-local-lorem-500"');
+  assertStringIncludes(b, "Measured 2026-11-21 · our computer, later.");
+  assertEquals(b.includes("Measured  · "), false);
+  assertEquals(lighthouseSection(ENGINES, none, none), "");
+});
+
+Deno.test("the other-documents section is the two harder files: a rich-sample entry in the file gets no table there", () => {
+  const res = samples({}, { folio: browserRow });
+  res.samples.showcase = { document: "showcase.docx", browser: {}, server: { opendoc: { code: 200, totalMs: 248, renderMs: 21, bytes: 3553, pages: 3, runs: [248] } } };
+  const html = samplesSection(ENGINES, res, noClient);
+  assertStringIncludes(html, 'id="sample-redline"');
+  assertEquals(html.includes('id="sample-showcase"'), false);
+});
+
+Deno.test("with results from our computer only, PageSpeed's date line and empty table are not printed", () => {
+  const none: LighthouseResults = { measuredAt: null, environment: "", pages: {} };
+  const local: LighthouseResults = { measuredAt: "2026-11-21", environment: "our computer", pages: { "v/folio": both(lh({ performance: 77 })) } };
+  const html = lighthouseSection(ENGINES, none, local);
+  assertEquals(html.includes("Measured  · "), false);
+  assertEquals((html.match(/<table/g) ?? []).length, 1);
+  assertStringIncludes(html, "Every cell reads <strong>desktop · mobile</strong>");
 });

@@ -29,16 +29,6 @@
     "cell": "no server route: no .docx reader, and its layout measures text on a canvas",
     "why": "Univer's open-source packages cannot read a .docx (import and export are in its separately licensed Server SDK), so even in the browser this site hands it text and headings. Its layout (`@univerjs/engine-render@1.5.2`) takes text measurements from a canvas 2D context and has none without `document` or `OffscreenCanvas`."
   },
-  "opendoc": {
-    "status": "not-built",
-    "cell": "not built yet: its viewer package can render pages without a browser",
-    "why": "This one is possible. `@casualoffice/opendoc-viewer@0.1.0-alpha.1` (Apache-2.0, pre-release) opens a .docx in WebAssembly and offers `renderPagePng` and `toPdf` with no DOM or canvas import, the same shape as the WordCraft route. It is not built yet: that package is an older build than the application of 2026-11-05 the browser page shows, and it carries one font family (Liberation Sans), so the others would have to be supplied. Read from the package's files; not run here."
-  },
-  "betteroffice": {
-    "status": "not-built",
-    "cell": "not built: its layout runs without a browser, its only painter draws on a browser canvas",
-    "why": "`@betteroffice/docx@0.5.1` paginates without a browser (`exportDocxStructuredWithPages`, and a display list from its Rust session), but the only painter it publishes draws on a `CanvasRenderingContext2D` and returns `HTMLCanvasElement`s; it has no SVG or PDF writer for documents. A route would need a painter of ours over its display list, so the pixels would be ours. Read from the package's files; not run here."
-  },
   "onlyoffice": {
     "status": "needs-a-browser",
     "cell": "no server route: its converter is built without the renderer, and drawing needs the editor in a browser",

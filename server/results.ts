@@ -188,6 +188,18 @@ export const SERVER_ROUTES: Pick<ServerResult, "slug" | "name" | "how" | "output
     "name": "SuperDoc",
     "how": "@superdoc/docx-engine headless runtime \u2192 Document API projectHtml (redline mode): semantic HTML, not its paginated view; no colours, pictures as placeholders",
     "output": "html"
+  },
+  {
+    "slug": "opendoc",
+    "name": "OpenDoc",
+    "how": "CasualOffice's Viewer SDK (@casualoffice/opendoc-viewer 0.1.0-alpha.1): OpenDoc's reader, pagination and rasteriser in wasm, an older build than the application the browser page shows. The page holds each page's size and one image URL per page; a PNG is rasterised when the browser asks for it. Render and Sent are the page without its images",
+    "output": "images"
+  },
+  {
+    "slug": "betteroffice",
+    "name": "BetterOffice",
+    "how": "@betteroffice/docx's headless layout and its own page painter, drawing on a canvas of ours that writes SVG (it publishes no surface but a browser canvas). The page holds each page's size and one image URL per page; an SVG is drawn when the browser asks for it. Render and Sent are the page without its images",
+    "output": "images"
   }
 ];
 

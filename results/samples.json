@@ -409,6 +409,34 @@
      ],
      "measuredAt": "2026-11-21",
      "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 59.7, highest 64.6, on 64 cores"
+    },
+    "opendoc": {
+     "code": 200,
+     "totalMs": 204,
+     "renderMs": 22,
+     "bytes": 3543,
+     "pages": 3,
+     "runs": [
+      204,
+      197,
+      213
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.4, highest 6.4, on 12 cores"
+    },
+    "betteroffice": {
+     "code": 200,
+     "totalMs": 275,
+     "renderMs": 91,
+     "bytes": 2422,
+     "pages": 3,
+     "runs": [
+      420,
+      269,
+      275
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.4, highest 6.4, on 12 cores"
     }
    },
    "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments with a never-seen ?n= per run"
@@ -821,6 +849,34 @@
      ],
      "measuredAt": "2026-11-21",
      "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 50.4, highest 57.9, on 64 cores"
+    },
+    "opendoc": {
+     "code": 200,
+     "totalMs": 1567,
+     "renderMs": 1327,
+     "bytes": 338630,
+     "pages": 500,
+     "runs": [
+      1853,
+      1559,
+      1567
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.7, highest 8.5, on 12 cores"
+    },
+    "betteroffice": {
+     "code": 200,
+     "totalMs": 3973,
+     "renderMs": 3684,
+     "bytes": 146356,
+     "pages": 500,
+     "runs": [
+      4118,
+      3973,
+      3920
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.7, highest 8.5, on 12 cores"
     }
    },
    "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word with a never-seen ?n= per run"

@@ -8,9 +8,11 @@
  *                               Microsoft's and Google's servers fetch theirs)
  *   GET /r/<engine>?src=<url>   server-rendered: the engine runs HERE and the browser
  *                               gets finished pages (docxodus, folio, eigenpal, plate,
- *                               docen, wordcraft, superdoc); timings in the Server-Timing header
- *   GET /r/wordcraft/page?src=<url>&doc=<id>&n=<page>&s=<density>
- *                               one page of WordCraft's server render, as a PNG
+ *                               docen, wordcraft, superdoc, opendoc, betteroffice);
+ *                               timings in the Server-Timing header
+ *   GET /r/<engine>/page?src=<url>&doc=<id>&n=<page>&s=<density>
+ *                               one page of a server render that sends page images:
+ *                               a PNG (wordcraft, opendoc) or an SVG (betteroffice)
  *   GET /results.json           the measurements shown on /
  *
  * Apples to apples: Microsoft's and Google's viewers fetch a public URL on
@@ -215,6 +217,10 @@ export const RENDERERS: Record<string, Renderer> = {
   docxodus: lazy(async () => (await import("./server/render.ts")).docxodusHtml),
   folio: lazy(async () => (await import("./server/folio.ts")).folioHtml),
   wordcraft: lazy(async () => (await import("./server/wordcraft.ts")).wordcraftHtml),
+  // PNG pages from CasualOffice's Viewer SDK, one request per page, like WordCraft's.
+  opendoc: lazy(async () => (await import("./server/opendoc.ts")).opendocHtml),
+  // SVG pages: BetterOffice's layout and painter, on a canvas of ours that writes SVG (see the file).
+  betteroffice: lazy(async () => (await import("./server/betteroffice.ts")).betterofficeHtml),
   docen: lazy(async () => (await import("./server/docen.ts")).docenHtml),
   // Unpaginated: SuperDoc's headless runtime and its HTML projection (see the file).
   superdoc: lazy(async () => (await import("./server/superdoc.ts")).superdocHtml),
@@ -274,7 +280,7 @@ app.get("/r/:engine", async (c) => {
     // The pages are markup built from an untrusted document: no script from
     // it may run (a javascript: link in the .docx included). Only Docxodus's
     // page loads scripts, and only this Val's own (its paginator). Fonts and
-    // styles come from jsDelivr; images are inline, or WordCraft's page images from this Val
+    // styles come from jsDelivr; images are inline, or page images from this Val (WordCraft, OpenDoc, BetterOffice)
     // ('self', so they also load when this is served over plain http on localhost).
     "content-security-policy":
       `default-src 'none'; script-src ${scriptSrc ?? "'none'"}; style-src 'unsafe-inline' https://cdn.jsdelivr.net; font-src https://cdn.jsdelivr.net data:; img-src 'self' data: https:; base-uri 'none'; form-action 'none'; frame-ancestors 'self'`,
@@ -288,22 +294,40 @@ app.get("/r/:engine", async (c) => {
 });
 
 /**
- * One page image of WordCraft's server render. Its page (/r/wordcraft) holds
- * one of these URLs per page and the browser asks for each as it comes near
- * the viewport. The document is fetched again only by an isolate that does
- * not hold its layout.
+ * One page image of a server render that sends its pages as images (WordCraft, OpenDoc, BetterOffice).
+ * Its page (/r/<engine>) holds one of these URLs per page and the browser asks
+ * for each as it comes near the viewport. The document is fetched again only
+ * by an isolate that does not hold its layout.
  */
-app.get("/r/wordcraft/page", async (c) => {
+type PageQuery = { doc?: string; n?: string; s?: string };
+type PageRenderer = (q: PageQuery, getBytes: () => Promise<Uint8Array | Response>, turn: <T>(job: () => Promise<T>) => Promise<T>) => Promise<Response>;
+/** The engines whose server route has a page-image route beside it. A test checks each is in RENDERERS too. */
+export const PAGE_RENDERERS: Record<string, () => Promise<PageRenderer>> = {
+  wordcraft: async () => (await import("./server/wordcraft.ts")).wordcraftPage,
+  opendoc: async () => (await import("./server/opendoc.ts")).opendocPage,
+  betteroffice: async () => (await import("./server/betteroffice.ts")).betterofficePage,
+};
+
+app.get("/r/:engine/page", async (c) => {
+  const engine = c.req.param("engine");
+  if (!Object.hasOwn(PAGE_RENDERERS, engine)) return c.text("no page images for that engine", 404);
   const src = publicUrl(c.req.query("src"));
   if (!src) return c.text("src must be a public https URL", 400);
-  const { wordcraftPage } = await import("./server/wordcraft.ts");
   try {
-    return await wordcraftPage({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, () => fetchDocx(src), (job) => renderTurn(job).then((t) => t.value));
+    const page = await PAGE_RENDERERS[engine]();
+    // The same refusal as the page itself: a page image's address must not be a way round the size guard.
+    const guarded = async () => {
+      const got = await fetchDocx(src);
+      if (got instanceof Response) return got;
+      const refused = tooLarge(engine, got);
+      return refused ? new Response(refused, { status: 422, headers: { "cache-control": "no-store" } }) : got;
+    };
+    return await page({ doc: c.req.query("doc"), n: c.req.query("n"), s: c.req.query("s") }, guarded, (job) => renderTurn(job).then((t) => t.value));
   } catch (err) {
     const busy = busyAnswer(err);
     if (busy) return busy;
-    console.error("/r/wordcraft/page", JSON.stringify(src.href), err);
-    return renderFailure("WordCraft", err);
+    console.error(`/r/${engine}/page`, JSON.stringify(src.href), err);
+    return renderFailure(ENGINES.find((x) => x.slug === engine)?.name ?? engine, err);
   }
 });
 

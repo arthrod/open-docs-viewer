@@ -1,6 +1,6 @@
 {
  "measuredAt": "2026-11-21",
- "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores",
  "docs": {
   "showcase": {
    "docxodus": {
@@ -128,6 +128,42 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
+   },
+   "opendoc": {
+    "loadMs": 442,
+    "paintMs": 280,
+    "heapBytes": 981520,
+    "rendererRss": 297877504,
+    "domNodes": 40,
+    "bytes": 386916,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     442,
+     439,
+     461
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "betteroffice": {
+    "loadMs": 541,
+    "paintMs": 436,
+    "heapBytes": 981528,
+    "rendererRss": 309952512,
+    "domNodes": 5068,
+    "bytes": 77318,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     765,
+     541,
+     534
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
    }
   },
   "redline": {
@@ -256,6 +292,42 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
+   },
+   "opendoc": {
+    "loadMs": 423,
+    "paintMs": 308,
+    "heapBytes": 981520,
+    "rendererRss": 297631744,
+    "domNodes": 40,
+    "bytes": 413869,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     306,
+     472,
+     423
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "betteroffice": {
+    "loadMs": 513,
+    "paintMs": 380,
+    "heapBytes": 981528,
+    "rendererRss": 314261504,
+    "domNodes": 6661,
+    "bytes": 88050,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     513,
+     457,
+     570
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
    }
   },
   "lorem-500": {
@@ -384,6 +456,42 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
+   },
+   "opendoc": {
+    "loadMs": 1868,
+    "paintMs": 1620,
+    "heapBytes": 981688,
+    "rendererRss": 305545216,
+    "domNodes": 1034,
+    "bytes": 1105132,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     1826,
+     1927,
+     1868
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "betteroffice": {
+    "loadMs": 4319,
+    "paintMs": 4024,
+    "heapBytes": 982080,
+    "rendererRss": 344113152,
+    "domNodes": 18509,
+    "bytes": 67338,
+    "requests": 4,
+    "heapNotCollected": 0,
+    "runs": [
+     4319,
+     4018,
+     4572
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
    }
   }
  }
