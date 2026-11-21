@@ -400,7 +400,41 @@ load and Lighthouse's own reading of how fast its processor was during the analy
 tables, not with PageSpeed's.
 
 <!-- lighthouse-local:start -->
-Not measured yet.
+Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4094, lowest 3542; machine load (1-minute average) median 6.4, highest 18.4, on 12 cores. Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.
+
+**Browser pages (`/v/`), rich sample**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus | 60 · 41 | 6.63 s · 38.6 s | 249 ms · 1.29 s | 0.001 · 0 | 337 ms · 901 ms | 2.58 s · 9.88 s | 95 | 100 | 91 | 58/60/61 · 41/41/41 |
+| folio | 82 · 58 | 2.55 s · 13.4 s | 68 ms · 421 ms | 0.003 · 0 | 594 ms · 1.78 s | 1.93 s · 6.43 s | 92 | 100 | 82 | 82/82/85 · 58/58/58 |
+| docx-editor.dev | 73 · 51 | 4.91 s · 27.9 s | 22 ms · 598 ms | 0.001 · 0 | 609 ms · 1.79 s | 2.03 s · 8.12 s | 100 | 100 | 90 | 73/72/73 · 51/51/51 |
+| Plate | 93 · 75 | 1.72 s · 7.84 s | 0 ms · 97 ms | 0.002 · 0 | 317 ms · 837 ms | 382 ms · 1.62 s | 98 | 100 | 91 | 94/93/93 · 75/75/75 |
+| docen | 89 · 92 | 2.04 s · 879 ms | 34 ms · 229 ms | 0.006 · 0.02 | 325 ms · 879 ms | 1.49 s · 2.92 s | 82 | 88 | 90 | fail/88/90 · 100/85/fail (desktop: the engine failed on this computer, so there is no score: [open-docs-viewer] TypeError: Failed to fetch dynamically imported module: https://esm.sh/@docen/edito; mobile: the engine failed on this computer, so there is no score: [open-docs-viewer] TypeError: Failed to fetch dynamically imported module: https://esm.sh/@docen/edito) |
+| WordCraft | 83 · 67 | 329 ms · 874 ms | 223 ms · 1.07 s | 0.003 · 0.02 | 329 ms · 874 ms | 8.53 s · 47.3 s | 94 | 96 | 90 | 83/82/83 · 67/68/67 |
+| SuperDoc | 74 · 57 | 3.22 s · 17.3 s | 41 ms · 352 ms | 0.129 · 0.046 | 628 ms · 1.86 s | 1.95 s · 8.99 s | 94 | 100 | 90 | 74/72/75 · 57/57/98 |
+| canvas-editor | 99 · 96 | 330 ms · 885 ms | 0 ms · 188 ms | 0.075 · 0.056 | 330 ms · 885 ms | 704 ms · 3.02 s | 94 | 100 | 80 | 99/99/100 · 96/100/96 |
+| Apryse WebViewer | 96 · 71 | 337 ms · 851 ms | 24 ms · 770 ms | 0.008 · 0.086 | 337 ms · 851 ms | 2.05 s · 8.98 s | 100 | 96 | 90 | 96/fail/96 · 70/77/71 (desktop: CHROME_INTERSTITIAL_ERROR: Chrome prevented page load with an interstitial. Make sure you are testing the correct URL and that the server is properly responding) |
+| Nutrient | 62 · 57 | 2.41 s · 12.1 s | 66 ms · 426 ms | 0.582 · 0.02 | 312 ms · 862 ms | 1.73 s · 7.39 s | 100 | 100 | 91 | 62/62/63 · 57/57/57 |
+| Word Online viewer | 100 · 99 | 321 ms · 889 ms | 0 ms · 0 ms | 0.003 · 0.039 | 321 ms · 889 ms | 835 ms · 2.55 s | 100 | 73 | 90 | 100/100/98 · 99/100/99 |
+| Google viewer | 82 · 80 | 366 ms · 913 ms | 0 ms · 0 ms | 0.364 · 0.455 | 366 ms · 913 ms | 1.04 s · 2.80 s | 100 | 77 | 90 | 82/82/82 · 80/98/80 |
+| react-docx | 75 · 64 | 6.34 s · 37.6 s | 14 ms · 390 ms | 0.001 · 0 | 240 ms · 771 ms | 1.15 s · 3.67 s | 96 | 100 | 91 | 74/75/75 · 64/65/63 |
+| Univer | 97 · 90 | 512 ms · 1.63 s | 0 ms · 185 ms | 0.014 · 0.003 | 512 ms · 1.63 s | 1.78 s · 6.36 s | 83 | 100 | 90 | 97/97/98 · 90/91/90 |
+| OpenDoc | 83 · 72 | 326 ms · 851 ms | 54 ms · 724 ms | 0.202 · 0.057 | 326 ms · 851 ms | 3.16 s · 13.9 s | 100 | 100 | 90 | 83/83/82 · 72/72/70 |
+| BetterOffice | 95 · 75 | 1.38 s · 6.32 s | 0 ms · 2 ms | 0.001 · 0 | 578 ms · 1.66 s | 1.30 s · 3.85 s | 100 | 100 | 90 | 95/95/93 · 75/75/fail (mobile: the engine failed on this computer, so there is no score: [open-docs-viewer] l: Document worker failed: undefined at worker.onerror (https://viewers.benchmarks.) |
+| OnlyOffice (CryptPad build) | 84 · 62 | 269 ms · 806 ms | 200 ms · 1.70 s | 0.047 · 0.077 | 269 ms · 806 ms | 5.72 s · 26.9 s | 96 | 96 | 90 | 79/84/100 · 63/62/62 |
+
+**Server-rendered pages (`/r/`), rich sample**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus | 99 · 99 | 636 ms · 1.97 s | 0 ms · 14 ms | 0 · 0 | 379 ms · 1.01 s | 1.16 s · 1.71 s | 90 | 96 | 83 | 99/99/99 · 99/99/99 |
+| folio | 96 · 100 | 1.17 s · 1.11 s | 0 ms · 0 ms | 0 · 0 | 831 ms · 1.11 s | 1.12 s · 1.11 s | 70 | 96 | 75 | 96/98/96 · 100/100/100 |
+| docx-editor.dev | 88 · 97 | 1.95 s · 2.17 s | 0 ms · 0 ms | 0.005 · 0 | 1.12 s · 2.17 s | 1.33 s · 2.17 s | 92 | 96 | 82 | 84/95/88 · 96/97/97 |
+| Plate | 100 · 100 | 552 ms · 926 ms | 0 ms · 0 ms | 0 · 0 | 552 ms · 926 ms | 665 ms · 926 ms | 96 | 96 | 83 | 100/100/100 · 100/100/100 |
+| docen | 98 · 100 | 1.15 s · 882 ms | 0 ms · 0 ms | 0 · 0 | 553 ms · 882 ms | 711 ms · 882 ms | 97 | 96 | 82 | 98/98/96 · 100/100/100 |
+| WordCraft | 100 · 98 | 427 ms · 2.30 s | 0 ms · 0 ms | 0 · 0 | 270 ms · 975 ms | 577 ms · 1.19 s | 97 | 96 | 83 | 99/100/100 · 99/98/98 |
+| SuperDoc | 97 · 100 | 918 ms · 1.03 s | 0 ms · 0 ms | 0 · 0 | 918 ms · 1.03 s | 1.30 s · 1.25 s | 98 | 96 | 82 | 97/97/97 · 100/100/100 |
 <!-- lighthouse-local:end -->
 
 ## Tests

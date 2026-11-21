@@ -29,7 +29,7 @@ why one is missing.
 - [ ] 1.8 Figures to distrust (table)
 - [ ] 1.9 What the browser pays for a server render (3 tables)
 - [ ] 1.10 Lighthouse, PageSpeed (`/v/` and `/r/`, 3 samples)
-- [ ] 1.11 Lighthouse, this computer: every engine and every sample, not some
+- [~] 1.11 Lighthouse on our computer: rich sample done for all 17 browser pages and 7 server routes (every engine has a score, WordCraft and Nutrient included); the 500 pages are running; `/r/opendoc` and `/r/betteroffice` follow
 - [ ] 1.12 First and warm server render table
 - [ ] 1.13 Tests, Measuring, Development, License
 
