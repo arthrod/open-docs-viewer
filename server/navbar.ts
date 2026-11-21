@@ -22,6 +22,9 @@ export const SERVER_RENDER_SLUGS = new Set([
   "superdoc",
   "opendoc",
   "betteroffice",
+  "office-open",
+  "fidus-writer",
+  "docs-plus",
 ]);
 
 export const WORDMARK_HTML = `<a class="wm" href="/" title="All engines and results">

@@ -200,6 +200,24 @@ export const SERVER_ROUTES: Pick<ServerResult, "slug" | "name" | "how" | "output
     "name": "BetterOffice",
     "how": "@betteroffice/docx's headless layout and its own page painter, drawing on a canvas of ours that writes SVG (it publishes no surface but a browser canvas). The page holds each page's size and one image URL per page; an SVG is drawn when the browser asks for it. Render and Sent are the page without its images",
     "output": "images"
+  },
+  {
+    "slug": "office-open",
+    "name": "office-open",
+    "how": "@office-open/docx 0.15.3 `parseDocument`, drawn as an outline by the same code as its page on editors.benchmarks.law. The library has no renderer: there is no layout and there are no pages",
+    "output": "html"
+  },
+  {
+    "slug": "fidus-writer",
+    "name": "Fidus Writer",
+    "how": "@fiduswriter/document 0.3.40: its DocxConvert importer, then its own schema's toDOM rules run by ProseMirror's DOMSerializer into a linkedom document. One flowing page, as in its editor; the words inside tracked changes are left out, as there",
+    "output": "html"
+  },
+  {
+    "slug": "docs-plus",
+    "name": "docs.plus",
+    "how": "docs.plus's own server conversion code at a9b0c69 (importDocx: mammoth into its Tiptap document), then its render schema run by ProseMirror's DOMSerializer into a linkedom document. One flowing page; pictures are inlined",
+    "output": "html"
   }
 ];
 

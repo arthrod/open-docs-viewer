@@ -116,6 +116,10 @@ Lighthouse tables since 2026-11-20, and in the [arena](https://arena.benchmarks.
 | [BetterOffice](https://viewers.benchmarks.law/v/betteroffice) | `readOnly` (no toolbar or rulers) | Rust WASM engines in a Worker |
 | [OpenDoc](https://viewers.benchmarks.law/v/opendoc) | its review mode "viewing" | its own application, a snapshot of 2026-11-05, in a frame |
 | [OnlyOffice (CryptPad build)](https://viewers.benchmarks.law/v/onlyoffice) | `mode: "view"` | no document server: x2t converter in WASM; AGPL-3.0, [source and offer](https://github.com/arthrod/open-docs/tree/main/editors/onlyoffice) |
+| [GenOffice](https://viewers.benchmarks.law/v/genoffice) | none: its demo build has no read-only mode, so it is still editable here | the editors trial's demo build of its Docs application, in a frame |
+| [office-open](https://viewers.benchmarks.law/v/office-open) | nothing to edit | a library with no editor: an outline of what its parser read |
+| [Fidus Writer](https://viewers.benchmarks.law/v/fidus-writer) | none: its demo build has no read-only mode, so it is still editable here | the editors trial's demo build of its document library, in a frame |
+| [docs.plus](https://viewers.benchmarks.law/v/docs-plus) | none: its demo build has no read-only mode, so it is still editable here | the editors trial's demo build of its editor, in a frame |
 | [Univer](https://viewers.benchmarks.law/v/univer) | none: still editable | **text only**. Univer's open-source packages have no .docx reader, so this site's reader hands it the text and headings; layout, pictures and tracked changes are not Univer's rendering of the file |
 
 The first four start a Worker from their own files or reach into a frame of them, which a browser
@@ -137,14 +141,18 @@ count of the measuring script is expected to be non-zero.
 | `superdoc` | SuperDoc | `@superdoc/docx-engine/document-runtime` `openDocumentRuntime` (the engine's headless runtime, imported directly; that package is under SuperDoc's proprietary DOCX Engine licence, not the AGPL) → Document API `projectHtml` in `redline` review mode. **Not the paginated view**: no page breaks, colours or fonts, pictures become placeholders; what was downgraded is counted in `x-unpainted` | flowing HTML |
 | `opendoc` | OpenDoc | `@casualoffice/opendoc-viewer` 0.1.0-alpha.1: OpenDoc's own reader, pagination and rasteriser in wasm, SHA-256-checked. It is an older build than the application the browser page shows, and it draws a redline as the accepted text. Fonts are fetched from the engine's repository at the commit the package was published from (the package names them and does not ship them). `/r/opendoc/page` rasterises a page when the browser asks for its image | PNG page images, one request per page viewed |
 | `betteroffice` | BetterOffice | `@betteroffice/docx` 0.5.1: its headless layout, its display list and its own painter. The painter only draws on a browser canvas, so it draws on a canvas of ours that writes SVG ([`server/svg-canvas.ts`](server/svg-canvas.ts)); the text it sends as canvas text (list markers, small capitals, leaders) is outlined from its bundled fonts. The route uses entry points the package does not document, pinned to this version. `/r/betteroffice/page` draws a page when asked | SVG page images, one request per page viewed |
+| `office-open` | office-open | `@office-open/docx` 0.15.3 `parseDocument`, drawn as an outline by the same code as its browser page (copied from the editors trial). The library has no renderer, so there is no layout | HTML, no pages |
+| `fidus-writer` | Fidus Writer | `@fiduswriter/document` 0.3.40: its `DocxConvert` importer, then its own schema's `toDOM` rules run by ProseMirror's DOMSerializer into a linkedom document (a few rules build on the global `document`, which is linkedom's for the length of the call) | HTML, one flowing page |
+| `docs-plus` | docs.plus | docs.plus's own server conversion code at `a9b0c69` (`importDocx`: mammoth into its Tiptap document), bundled alone into `server/docs-plus-lib.js`, then its render schema run by ProseMirror's DOMSerializer. Its logger and metrics are replaced by stand-ins | HTML, one flowing page |
 
 ### No server route, and why
 
 A server route runs the engine inside this Val: Deno, with WebAssembly and JavaScript, and no DOM, no canvas, no
-native binaries and no subprocesses. Six engines have only the browser page (seven rows below: cite-check is an
+native binaries and no subprocesses. Seven engines have only the browser page (eight rows below: cite-check is an
 application on canvas-editor). For each of them a route would mean
 faking a browser or running native code. OpenDoc and BetterOffice were on this list as "possible, not built"
-until 2026-11-21; both now have a route (above). The Microsoft Word viewer and the Google Docs viewer are not
+until 2026-11-21; both now have a route (above). office-open, Fidus Writer and docs.plus, added to the editors
+site that day, got their routes the same day; GenOffice, a desktop application's window, needs a browser. The Microsoft Word viewer and the Google Docs viewer are not
 in the list: each always renders on its owner's servers, and there is no engine of theirs to run here. The
 landing page shows the same list, and every "Server render" cell above that has no figure says its reason in
 short ([`server/no-server.json`](server/no-server.json) is the one source).
@@ -159,6 +167,7 @@ short ([`server/no-server.json`](server/no-server.json) is the one source).
 | react-docx | needs a browser | `@extend-ai/react-docx@0.15.0` exports browser entries only (`.`, `./vanilla`, `./internal`). Its Rust parser in WebAssembly needs no DOM, but pagination measures text with a canvas `measureText` and with laid-out elements (`getBoundingClientRect`), and its page-image renderer throws "DOCX thumbnails require a browser environment". A route could send the parsed text, but the page breaks would be ours, not its. |
 | Univer | needs a browser | Univer's open-source packages cannot read a .docx (import and export are in its separately licensed Server SDK), so even in the browser this site hands it text and headings. Its layout (`@univerjs/engine-render@1.5.2`) takes text measurements from a canvas 2D context and has none without `document` or `OffscreenCanvas`. |
 | OnlyOffice (CryptPad build) | needs a browser | CryptPad compiles x2t to WebAssembly with OnlyOffice's `doctrenderer` replaced by an empty stub, so it converts between formats but cannot lay out or draw: x2t sends PDF and HTML output through that renderer. Pages are drawn by the editor's JavaScript (sdkjs) on a browser canvas. OnlyOffice's own server rendering is the native Document Server or Document Builder, which a Val cannot run. |
+| genoffice | needs a browser | GenOffice's Docs application is an Electron renderer: a React application that lays out its pages in the DOM, shown on editors.benchmarks.law with a stand-in for the desktop it expects. It has no headless entry, so running it here would mean faking a browser. |
 <!-- no-server:end -->
 
 The reasons for the five engines added on 2026-11-18 were read from their published packages and sources on
