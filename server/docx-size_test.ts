@@ -88,3 +88,10 @@ Deno.test("the refusal never says the size equals the limit", () => {
   assertEquals(msg.includes("unpack to just over 1.0 MB"), true, msg);
   assertEquals(tooLarge("eigenpal", zipDeclaring([{ name: "word/document.xml", declared: 1_000_000 }])), null);
 });
+
+Deno.test("BetterOffice's server render takes the 500-page sample's size and refuses a document past twice it", async () => {
+  const { tooLarge, RENDER_LIMIT } = await import("./docx-size.ts");
+  assertEquals(tooLarge("betteroffice", zipDeclaring([{ name: "word/document.xml", declared: 1_827_939 }])), null);
+  assertEquals(RENDER_LIMIT.betteroffice > 2 * 1_827_939, true);
+  assertEquals(tooLarge("betteroffice", zipDeclaring([{ name: "word/document.xml", declared: 4_000_001 }]))?.includes("too large"), true);
+});

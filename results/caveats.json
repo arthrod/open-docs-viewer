@@ -1,15 +1,11 @@
 {
   "checked": "2026-11-20",
   "lorem-500": {
-    "canvas-editor": "JS heap read before garbage collection (about 700 MB after it); renderer memory is this machine's, with no GPU",
-    "eigenpal": "Cold render is not the document: its loader returns at once",
     "docen": "Cold render is its first page: on the editors site its main thread stays busy for minutes after",
     "onlyoffice": "Cold render is its \"ready\": it goes on paginating to 500 pages after it",
     "univer": "text only: Univer was handed this site's reading of the file, not the .docx"
   },
   "redline": {
-    "eigenpal": "Cold render is not the document: its loader returns at once",
-    "univer": "text only: Univer was handed this site's reading of the file, not the .docx",
-    "google-viewer": "not a median: 1.05 s, a failure and 21.1 s"
+    "univer": "text only: Univer was handed this site's reading of the file, not the .docx"
   }
 }

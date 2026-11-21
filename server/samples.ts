@@ -6,6 +6,8 @@
 import BUNDLED from "../results/samples.json" with { type: "json" };
 import CLIENT from "../results/server-client.json" with { type: "json" };
 import LIGHTHOUSE_JSON from "../results/lighthouse.json" with { type: "json" };
+// The same pages analysed by the same Lighthouse on our own computer (open-docs: scripts/measure_lighthouse_local.py).
+import LIGHTHOUSE_LOCAL_JSON from "../results/lighthouse-local.json" with { type: "json" };
 
 export const FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main";
 
@@ -55,6 +57,8 @@ export interface SampleBrowser {
   failed?: string | null;
   /** What a run that rendered then failed to read (its time is kept). */
   incomplete?: string | null;
+  /** Runs whose heap could not be collected first: left out of heapBytes while any run was collected. */
+  heapNotCollected?: number;
   /** When this row was measured, when the file records it per row (a partial re-run). */
   measuredAt?: string;
   environment?: string;
@@ -94,6 +98,8 @@ export interface ServerClient {
   loadMs: number | null;
   paintMs: number | null;
   heapBytes: number | null;
+  /** Runs whose heap could not be collected first: left out of heapBytes while any run was collected. */
+  heapNotCollected?: number;
   rendererRss: number | null;
   domNodes: number | null;
   bytes: number | null;
@@ -144,3 +150,4 @@ export interface LighthouseResults {
   docsMeta?: Record<string, { measuredAt: string; environment: string }>;
 }
 export const LIGHTHOUSE = LIGHTHOUSE_JSON as LighthouseResults;
+export const LIGHTHOUSE_LOCAL = LIGHTHOUSE_LOCAL_JSON as LighthouseResults;

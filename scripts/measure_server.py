@@ -1,6 +1,6 @@
 """Measure /r/<engine> on the viewer val with plain HTTP: total time, bytes, Server-Timing.
 
-    python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft,superdoc 5
+    python3 scripts/measure_server.py docxodus,folio,eigenpal,plate,docen,wordcraft,superdoc,opendoc,betteroffice 5
     python3 scripts/measure_server.py all 5 --doc lorem-500 --samples results/samples.json
     python3 scripts/measure_server.py all 5 --first-warm results/server.json     (right after a deploy)
 
@@ -28,7 +28,7 @@ sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from measure_lib import classify, first_warm_entry, load_note, machine_load, runs_note, samples_shell, server_args, server_entry, stamp_rows, write_raw
 
 ARGS = server_args(sys.argv[1:])
-ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc"]
+ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice"]
 ENGINES = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
 RUNS = ARGS.runs
 BASE = "https://viewers.benchmarks.law/r/"

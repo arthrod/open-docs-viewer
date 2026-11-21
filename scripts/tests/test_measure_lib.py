@@ -466,3 +466,167 @@ def test_an_analysis_pagespeed_served_from_its_cache_is_not_counted_twice():
     assert lib.summarize({"lighthouseVersion": "13", "fetchTime": "2026-11-20T05:53:01Z", "categories": {}, "audits": {}})["fetchTime"] == "2026-11-20T05:53:01Z"
     e = lib.page_entry([first, kept], limit_s=240)
     assert e["desktop"]["performanceRuns"] == [93, None] and e["mobile"]["performanceRuns"] == [91, 88]
+
+
+# --- review of pull request 32 (CodeRabbit, 2026-11-20) ---
+
+
+def _psi(page, d=None, m=None):
+    x = {"page": page}
+    if d:
+        x["desktop"] = {"performance": 90, "fetchTime": d}
+    if m:
+        x["mobile"] = {"performance": 80, "fetchTime": m}
+    return x
+
+
+def test_a_fresh_form_factor_is_kept_while_the_other_is_asked_again():
+    """D0 and M0 are counted. An attempt returns D0 (a copy) with a fresh M1; the next returns a
+    fresh D1 with M1, which is now a copy of the attempt before. Both fresh analyses are published."""
+    seen: dict = {}
+    assert lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen) == []
+    kept: dict = {}
+    first = _psi("e/plate", "D0", "M1")
+    assert lib.still_repeated(kept, first, lib.repeated_analysis(first, seen)) == ["desktop"]
+    second = _psi("e/plate", "D1", "M1")
+    missing = lib.still_repeated(kept, second, lib.repeated_analysis(second, seen))
+    assert missing == []
+    out = lib.with_kept(second, kept, missing)
+    assert out["desktop"]["fetchTime"] == "D1" and out["mobile"]["fetchTime"] == "M1" and "error" not in out
+
+
+def test_a_fresh_form_factor_survives_a_retry_that_fails():
+    seen: dict = {}
+    lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    first = _psi("e/plate", "D0", "M1")
+    lib.still_repeated(kept, first, lib.repeated_analysis(first, seen))
+    failed = {"page": "e/plate", "error": "PageSpeed gave no result within 240 s"}
+    missing = lib.still_repeated(kept, failed, lib.repeated_analysis(failed, seen))
+    out = lib.with_kept(failed, kept, missing)
+    assert out["mobile"]["fetchTime"] == "M1" and "desktop" not in out and out["error"].startswith("PageSpeed gave no result")
+
+
+def test_a_form_factor_that_stays_a_copy_is_left_out_and_said_so():
+    seen: dict = {}
+    lib.repeated_analysis(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    x = _psi("e/plate", "D0", "M1")
+    missing = lib.still_repeated(kept, x, lib.repeated_analysis(x, seen))
+    out = lib.with_kept(x, kept, missing)
+    assert "desktop" not in out and out["repeated"] == ["desktop"] and out["mobile"]["fetchTime"] == "M1"
+
+
+def test_an_uncollected_heap_stays_out_of_the_median_and_is_counted():
+    s = lib.engine_summary([
+        {"renderedMs": 1, "heapBytes": 100},
+        {"renderedMs": 1, "heapBytes": 900, "heapBytesBeforeGc": 900, "heapNotCollected": "TimeoutError"},
+        {"renderedMs": 1, "heapBytes": 300},
+    ])
+    assert s["heapBytes"] == 200 and s["heapNotCollected"] == 1
+    # Every run uncollected: the figure is shown, and the row says what it is.
+    all_un = lib.engine_summary([{"renderedMs": 1, "heapBytes": 900, "heapNotCollected": "x"}])
+    assert all_un["heapBytes"] == 900 and all_un["heapNotCollected"] == 1
+    assert lib.engine_summary([{"renderedMs": 1, "heapBytes": 5}])["heapNotCollected"] == 0
+
+
+def _quiet(loads, env):
+    """quiet_host over a scripted list of load readings (the last one repeats), on a fake clock."""
+    t, it = [0.0], iter(loads)
+    last = [loads[-1]]
+
+    def load():
+        last[0] = next(it, last[0])
+        return last[0]
+
+    async def sleep(s):
+        t[0] += s
+
+    return lib.asyncio.run(lib.quiet_host(env, load=load, sleep=sleep, now=lambda: t[0])), t[0]
+
+
+def test_a_run_waits_for_a_quiet_host_and_gives_up_with_the_reason():
+    assert _quiet([200], {}) == (None, 0.0)  # no limit given: one's own machine, no wait
+    assert _quiet([30], {"OD_MAX_LOAD": "48"}) == (None, 0.0)
+    why, waited = _quiet([90, 90, 70, 40], {"OD_MAX_LOAD": "48"})
+    assert why is None and waited == 30.0
+    why, waited = _quiet([90], {"OD_MAX_LOAD": "48", "OD_LOAD_WAIT_S": "60"})
+    assert "busy" in why and "48" in why and waited == 60.0
+
+
+def test_the_heap_is_read_after_a_collection_and_says_when_it_could_not_be():
+    class Cdp:
+        def __init__(self, fail):
+            self.fail, self.sent = fail, []
+
+        async def send(self, method):
+            self.sent.append(method)
+            if self.fail and method == "HeapProfiler.collectGarbage":
+                raise TimeoutError("no answer")
+            return {"metrics": [{"name": "JSHeapUsedSize", "value": 700.0}]}
+
+    ok = Cdp(False)
+    assert lib.asyncio.run(lib.collected_heap(ok, 1281)) == {"heapBytesBeforeGc": 1281, "heapBytes": 700}
+    assert ok.sent == ["HeapProfiler.collectGarbage", "Performance.getMetrics"]
+    bad = lib.asyncio.run(lib.collected_heap(Cdp(True), 1281))
+    assert bad["heapBytes"] == 1281 and bad["heapNotCollected"].startswith("TimeoutError")
+
+
+# --- second review round (CodeRabbit, CodeAnt, Gitar; 2026-11-20) ---
+
+
+def test_a_retry_that_fails_keeps_the_form_factor_owed_and_says_it_was_a_copy():
+    seen: dict = {}
+    lib.remember_analyses(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    first = _psi("e/plate", "D0", "M1")
+    missing = lib.still_repeated(kept, first, lib.repeated_analysis(first, seen, remember=False))
+    failed = {"page": "e/plate", "error": "PageSpeed gave no result within 240 s"}
+    missing = lib.still_repeated(kept, failed, lib.repeated_analysis(failed, seen, remember=False), missing)
+    assert missing == ["desktop"]  # still owed: the loop asks again
+    out = lib.with_kept(failed, kept, missing)
+    assert out["repeated"] == ["desktop"] and out["mobile"]["fetchTime"] == "M1"
+
+
+def test_only_published_analyses_are_remembered():
+    """D0/M0 are counted. A job gets D1 with M0 (a copy), then D2 with M1: D1 and M1 are published.
+    D2 was never published, so the next job may count it; D1 may not be counted twice."""
+    seen: dict = {}
+    lib.remember_analyses(_psi("e/plate", "D0", "M0"), seen)
+    kept: dict = {}
+    a = _psi("e/plate", "D1", "M0")
+    missing = lib.still_repeated(kept, a, lib.repeated_analysis(a, seen, remember=False))
+    b = _psi("e/plate", "D2", "M1")
+    missing = lib.still_repeated(kept, b, lib.repeated_analysis(b, seen, remember=False), missing)
+    out = lib.with_kept(b, kept, missing)
+    lib.remember_analyses(out, seen)
+    assert (out["desktop"]["fetchTime"], out["mobile"]["fetchTime"]) == ("D1", "M1")
+    assert lib.repeated_analysis(_psi("e/plate", "D2"), seen, remember=False) == []
+    assert lib.repeated_analysis(_psi("e/plate", "D1", "M1"), seen, remember=False) == ["desktop", "mobile"]
+
+
+def test_the_first_fresh_report_counts_even_with_an_error_and_a_report_without_a_time_is_kept():
+    kept: dict = {}
+    bad = {"page": "e/plate", "desktop": {"fetchTime": "D1", "error": "the engine failed to start"}}
+    # A fresh report with an error is a result: it is not asked for again.
+    assert lib.still_repeated(kept, bad, ["mobile"]) == ["mobile"]
+    good = _psi("e/plate", "D2", "M1")
+    assert lib.still_repeated(kept, good, [], ["mobile"]) == []
+    assert kept["desktop"] == bad["desktop"] and kept["mobile"]["fetchTime"] == "M1"
+    # A report that carries no time cannot be a copy: it is kept like any fresh one.
+    kept = {}
+    lib.still_repeated(kept, {"page": "e/plate", "desktop": {"performance": 90}}, ["mobile"])
+    assert kept == {"desktop": {"performance": 90}}
+
+
+def test_a_run_without_a_heap_reading_does_not_hide_the_uncollected_one():
+    s = lib.engine_summary([{"renderedMs": 1}, {"renderedMs": 1, "heapBytes": 900, "heapNotCollected": "x"}])
+    assert s["heapBytes"] == 900 and s["heapNotCollected"] == 1
+    s = lib.engine_summary([{"renderedMs": 1}, {"renderedMs": 1, "heapBytes": 900, "heapNotCollected": "x"}, {"renderedMs": 1, "heapBytes": 100}])
+    assert s["heapBytes"] == 100
+    assert lib.heap_median([{"heapBytes": 900, "heapNotCollected": "x"}, {}]) == (900, 1)
+    assert lib.heap_median([{}]) == (None, 0)
+
+
+def test_a_page_named_twice_is_analysed_once_per_round():
+    assert lib.page_list("e/plate,e/folio,e/plate, ,e/folio") == ["e/plate", "e/folio"]

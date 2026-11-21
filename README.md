@@ -9,9 +9,9 @@
 Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
 same public document URL, and measured the same way. Seventeen engines (eighteen rows on the landing page: cite-check is an application on canvas-editor, not an engine of its own): fifteen render in the browser (ten from the start, five added on
 2026-11-18). The other two, Microsoft's and Google's viewers, render on the vendor's own
-servers and are shown here in a frame: nothing of theirs renders client-side. Seven of the fifteen also
+servers and are shown here in a frame: nothing of theirs renders client-side. Nine of the fifteen also
 render **on this Val's server**, the way those two do: the server fetches the document,
-lays it out, paints it, and the browser receives finished pages. The other eight have only the
+lays it out, paints it, and the browser receives finished pages. The other six have only the
 browser page, each for a reason [given below](#no-server-route-and-why).
 
 ## Routes
@@ -48,51 +48,51 @@ Server routes: timed with curl, as their own rows say in the file.
 
 **Redline (`redline.docx`)**
 
-Measured 2026-11-18: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 6.5, highest 24.6, on 64 cores.
+Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 51.7, highest 102.0, on 64 cores.
 
 | Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |
 | --- | ---: | --- | ---: | ---: | ---: | --- |
-| canvas-editor | 1.05 s | 974 ms, 1.21 s, 1.05 s | 9.8 MB | 473 MB | 676 KB | no server route: it measures and paints on a browser canvas |
-| Docxodus | 2.19 s | 1.77 s, 2.19 s, 3.23 s | 8.0 MB | 536 MB | 7.2 MB | 1.31 s (888 ms rendering), 73 KB |
-| SuperDoc | 3.79 s | 3.79 s, 3.75 s, 4.50 s | 21 MB | 629 MB | 7.8 MB | 832 ms (594 ms rendering), 18 KB |
-| Plate | 1.44 s | 1.37 s, 1.44 s, 2.64 s | 11 MB | 437 MB | 1.1 MB | 664 ms (265 ms rendering), 38 KB |
-| docen | 1.55 s | 1.48 s, 1.55 s, 1.67 s | 20 MB | 549 MB | 1.4 MB | 708 ms (144 ms rendering), 56 KB, 4 pages |
-| docx-editor.dev | 1.08 s | 1.08 s, 872 ms, 1.10 s | 31 MB | 501 MB | 5.0 MB | 827 ms (587 ms rendering), 327 KB, 3 pages |
-| folio | 1.58 s | 1.58 s, 1.27 s, 1.73 s | 25 MB | 456 MB | 2.2 MB | 387 ms (198 ms rendering), 251 KB, 3 pages |
-| WordCraft | 3.18 s | 3.18 s, 3.00 s, 3.56 s | 3.7 MB | 829 MB | 22 MB | 248 ms (26 ms laying out), 3 KB + a page image per page viewed, 3 pages |
-| Word Online viewer | 620 ms (frame load) | 590 ms, 620 ms, 1.21 s | n/a | 949 MB | 1.5 MB | rendered on Microsoft's servers |
-| Google viewer | 11.1 s (frame load) | 1.05 s, failed, 21.1 s (failed: Google Docs viewer did not load within 60s) | n/a | 591 MB | 1.1 MB | rendered on Google's servers |
-| Apryse WebViewer | 2.70 s | 2.70 s, 2.60 s, 8.00 s | 22 MB | 659 MB | 7.0 MB | no server route: Apryse renders on a server with a native SDK |
-| Nutrient | 6.69 s | 5.37 s, 6.69 s, 9.26 s | 23 MB | 589 MB | 24 MB | no server route: Nutrient renders on a server with a Docker service |
-| react-docx | 3.04 s | failed, 2.95 s, 3.13 s (failed: react-docx could not open the first document: Failed to fetch dynamically imported module: https://viewers.benchmarks.law/eo1/vendor/npm/@extend-ai/react-docx@0) | 16 MB | 502 MB | 7.4 MB | no server route: it breaks pages by measuring text in the browser |
-| Univer | 1.67 s | 1.53 s, failed, 1.81 s (failed: not rendered within 240s) | 32 MB | 490 MB | 2.3 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 2.71 s | failed, 2.57 s, 2.84 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/opendoc?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-d) | 12 MB | 646 MB | 20 MB | not built yet: its viewer package can render pages without a browser |
-| BetterOffice | 2.47 s | 2.37 s, 2.36 s, failed, 4.48 s, 2.57 s, failed (failed: not rendered within 240s) | 17 MB | 642 MB | 12 MB | not built: its layout runs without a browser, its only painter draws on a browser canvas |
-| OnlyOffice (CryptPad build) | 3.51 s | 3.01 s, 2.98 s, 4.01 s, failed, 4.04 s, failed (failed: not rendered within 240s) | 51 MB | 703 MB | 18 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
+| canvas-editor | 1.02 s | failed, 1.02 s, failed (failed: not rendered within 240s) | 5.9 MB | 472 MB | 676 KB | no server route: it measures and paints on a browser canvas |
+| Docxodus | 2.14 s | 2.14 s, 2.13 s, failed (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/docxodus?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-) | 7.6 MB | 535 MB | 7.2 MB | 604 ms (373 ms rendering), 73 KB |
+| SuperDoc | 4.59 s | 4.35 s, 4.84 s, 4.59 s | 13 MB | 627 MB | 7.8 MB | 892 ms (697 ms rendering), 18 KB |
+| Plate | 1.58 s | 1.52 s, 1.58 s, 1.64 s | 11 MB | 437 MB | 1.1 MB | 428 ms (195 ms rendering), 38 KB |
+| docen | 2.29 s | 2.78 s, 1.79 s, failed (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/docen?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-doc) | 19 MB | 552 MB | 1.4 MB | 238 ms (41 ms rendering), 56 KB, 4 pages |
+| docx-editor.dev | 2.22 s | 2.17 s, 2.27 s, failed (failed: not rendered within 240s) | 22 MB | 496 MB | 5.0 MB | 828 ms (591 ms rendering), 327 KB, 3 pages |
+| folio | 2.20 s | 1.68 s, 2.20 s, 2.57 s | 16 MB | 456 MB | 2.2 MB | 446 ms (208 ms rendering), 251 KB, 3 pages |
+| WordCraft | 3.34 s | 3.27 s, 3.34 s, 3.41 s | 3.3 MB | 826 MB | 22 MB | 243 ms (31 ms laying out), 3 KB + a page image per page viewed, 3 pages |
+| Microsoft Word viewer | 582 ms (frame load) | 547 ms, 582 ms, 620 ms | n/a | 963 MB | 1.6 MB | rendered on Microsoft's servers |
+| Google Docs viewer | 1.15 s (frame load) | 1.38 s, 1.09 s, 1.15 s | n/a | 585 MB | 1.1 MB | rendered on Google's servers |
+| Apryse WebViewer | 3.36 s | failed, 3.10 s, 3.63 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/apryse?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-do) | 17 MB | 657 MB | 7.0 MB | no server route: Apryse renders on a server with a native SDK |
+| Nutrient | 7.12 s | 7.12 s, 6.65 s, 7.18 s | 18 MB | 589 MB | 24 MB | no server route: Nutrient renders on a server with a Docker service |
+| react-docx | 2.26 s | 3.02 s, 2.26 s, 2.05 s | 12 MB | 500 MB | 7.4 MB | no server route: it breaks pages by measuring text in the browser |
+| Univer | 1.77 s | 1.60 s, 1.77 s, 1.78 s | 24 MB | 488 MB | 2.3 MB | no server route: no .docx reader, and its layout measures text on a canvas |
+| OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | 204 ms (22 ms laying out), 3 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | 275 ms (91 ms laying out), 2 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| OnlyOffice (CryptPad build) | 3.50 s | 3.23 s, 3.74 s, 3.50 s | 45 MB | 699 MB | 18 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 
 **500 pages (`lorem-500.docx`)**
 
-Measured 2026-11-18: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 8.3, highest 45.5, on 64 cores.
+Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 47.3, highest 100.0, on 64 cores.
 
 | Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |
 | --- | ---: | --- | ---: | ---: | ---: | --- |
-| canvas-editor | 27.8 s | 28.2 s, 27.8 s, 27.5 s | 1256 MB | 6079 MB | 1.0 MB | no server route: it measures and paints on a browser canvas |
-| Docxodus | 11.6 s | 11.6 s, 12.6 s, 10.8 s | 15 MB | 1072 MB | 7.4 MB | 3.38 s (2.88 s rendering), 2.1 MB |
-| SuperDoc | 13.5 s | 12.9 s, 13.5 s, 13.8 s | 30 MB | 970 MB | 8.2 MB | 5.58 s (5.16 s rendering), 1.6 MB |
-| Plate | 56.0 s | 56.0 s, 58.8 s, 53.3 s | 64 MB | 589 MB | 1.5 MB | 1.32 s (705 ms rendering), 2.0 MB |
-| docen | 6.43 s | 6.72 s, 5.92 s, 6.43 s | 168 MB | 3675 MB | 1.8 MB | 1.52 s (1.19 s rendering), 4.8 MB, 623 pages |
-| docx-editor.dev | 2.62 s | 2.16 s, 2.79 s, 2.62 s | 91 MB | 612 MB | 5.4 MB | **failed**: this document is too large for this engine's server render (its text and structure unpack to 1.8 MB; the limit is 1.0 MB): larger ones end the server process. O |
-| folio | 4.21 s | 4.21 s, 4.33 s, 3.92 s | 52 MB | 1026 MB | 2.5 MB | 5.74 s (4.63 s rendering), 29 MB, 500 pages |
-| WordCraft | 5.06 s | 5.06 s, 5.04 s, 6.64 s | 3.6 MB | 995 MB | 22 MB | 1.59 s (1.16 s laying out), 365 KB + a page image per page viewed, 550 pages |
-| Word Online viewer | 1.65 s (frame load) | 1.87 s, 1.54 s, 1.65 s | n/a | 733 MB | 1.1 MB | rendered on Microsoft's servers |
-| Google viewer | 1.13 s (frame load) | 9.64 s, 1.13 s, 1.05 s | n/a | 604 MB | 1.1 MB | rendered on Google's servers |
-| Apryse WebViewer | 3.77 s | 3.21 s, 3.77 s, 4.17 s | 26 MB | 1066 MB | 7.4 MB | no server route: Apryse renders on a server with a native SDK |
-| Nutrient | 16.4 s | 16.4 s, 15.7 s, 17.6 s | 26 MB | 666 MB | 25 MB | no server route: Nutrient renders on a server with a Docker service |
-| react-docx | 9.67 s | 9.67 s, 9.08 s, 20.7 s | 171 MB | 923 MB | 7.3 MB | no server route: it breaks pages by measuring text in the browser |
-| Univer | 16.9 s | 16.9 s, 16.2 s, 28.8 s | 1757 MB | 2353 MB | 3.0 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 5.08 s | failed, 4.84 s, 5.32 s (failed: not rendered within 240s) | 13 MB | 914 MB | 21 MB | not built yet: its viewer package can render pages without a browser |
-| BetterOffice | 6.45 s | 6.45 s, 6.41 s, 7.53 s, 6.28 s, failed, 6.86 s (failed: not rendered within 240s) | 23 MB | 1230 MB | 11 MB | not built: its layout runs without a browser, its only painter draws on a browser canvas |
-| OnlyOffice (CryptPad build) | 5.21 s | 4.49 s, 5.60 s, 5.62 s, 11.2 s, 4.83 s, 4.75 s | 174 MB | 898 MB | 19 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
+| canvas-editor | 43.4 s | 30.7 s, 43.4 s, 47.5 s | 679 MB | 6248 MB | 1.0 MB | no server route: it measures and paints on a browser canvas |
+| Docxodus | 16.1 s | failed, 15.1 s, 17.0 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/docxodus?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-) | 8.3 MB | 1076 MB | 7.5 MB | 3.19 s (2.86 s rendering), 2.1 MB |
+| SuperDoc | 21.0 s | 21.0 s, 18.4 s, 24.8 s | 16 MB | 1007 MB | 8.2 MB | 6.12 s (5.59 s rendering), 1.6 MB |
+| Plate | 97.9 s | failed, 85.4 s, 110.5 s (failed: not rendered within 240s) | 64 MB | 594 MB | 1.5 MB | 963 ms (646 ms rendering), 2.0 MB |
+| docen | 9.13 s | failed, 8.34 s, 9.91 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/docen?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-doc) | 127 MB | 3809 MB | 1.8 MB | 971 ms (550 ms rendering), 4.8 MB, 623 pages |
+| docx-editor.dev | 6.65 s | failed, 6.73 s, 6.57 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/eigenpal?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-) | 120 MB | 690 MB | 5.4 MB | **failed**: this document is too large for this engine's server render (its text and structure unpack to 1.8 MB; the limit is 1.0 MB): larger ones end the server process. O |
+| folio | 5.34 s | failed, 5.67 s, 5.00 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/folio?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-doc) | 43 MB | 1007 MB | 2.5 MB | 3.80 s (3.03 s rendering), 29 MB, 500 pages |
+| WordCraft | 6.95 s | 6.29 s, 6.95 s, 7.68 s | 3.3 MB | 885 MB | 22 MB | 923 ms (671 ms laying out), 367 KB + a page image per page viewed, 550 pages |
+| Microsoft Word viewer | 1.65 s (frame load) | 1.42 s, 1.86 s, 1.65 s | n/a | 687 MB | 1.1 MB | rendered on Microsoft's servers |
+| Google Docs viewer | 4.83 s (frame load) | failed, 8.36 s, 1.30 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/google-viewer?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2F) | n/a | 605 MB | 1.1 MB | rendered on Google's servers |
+| Apryse WebViewer | 5.47 s | 3.58 s, 5.47 s, 8.07 s | 23 MB | 971 MB | 7.4 MB | no server route: Apryse renders on a server with a native SDK |
+| Nutrient | 20.7 s | 16.7 s, 20.7 s, 21.0 s | 19 MB | 666 MB | 25 MB | no server route: Nutrient renders on a server with a Docker service |
+| react-docx | 14.7 s | 11.2 s, 18.4 s, 14.7 s | 98 MB | 906 MB | 7.3 MB | no server route: it breaks pages by measuring text in the browser |
+| Univer | 27.5 s | 23.9 s, 33.6 s, 27.5 s | 879 MB | 2357 MB | 3.0 MB | no server route: no .docx reader, and its layout measures text on a canvas |
+| OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | 1.57 s (1.33 s laying out), 331 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | 3.97 s (3.68 s laying out), 143 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
+| OnlyOffice (CryptPad build) | 14.4 s | 13.5 s, 14.4 s, 15.9 s | 128 MB | 908 MB | 19 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 <!-- samples:end -->
 
 Tracked changes on the server routes: Docxodus is asked for them
@@ -108,7 +108,7 @@ listed in the [open-docs README](https://github.com/arthrod/open-docs#tracked-ch
 Five engines were added to both sites and open the samples here, view-only where the engine has
 such a mode. They are in the browser tables since the measuring pass of the same day, in the
 Lighthouse tables since 2026-11-20, and in the [arena](https://arena.benchmarks.law) since
-2026-11-20. None of the five has a server route: see [why](#no-server-route-and-why).
+2026-11-20. OpenDoc and BetterOffice have a server route since 2026-11-21; the other three have none: see [why](#no-server-route-and-why).
 
 | Engine | View-only here | Notes |
 | --- | --- | --- |
@@ -135,14 +135,17 @@ count of the measuring script is expected to be non-zero.
 | `docen` | docen | `@docen/docx` parse → `@docen/layout` paginator with a font-file `measureText` (opentype.js) → SVG pages painted here | positioned pages |
 | `wordcraft` | WordCraft | its reader, layout and vello_cpu rasteriser compiled to wasm ([open-docs/tools/wordcraft-render](https://github.com/arthrod/open-docs/tree/main/tools/wordcraft-render)), fetched at a pinned commit and SHA-256-checked. The page holds every page's size and one image URL per page; `/r/wordcraft/page` rasterises a page when the browser asks for its image | PNG page images, one request per page, made as the page nears the viewport |
 | `superdoc` | SuperDoc | `@superdoc/docx-engine/document-runtime` `openDocumentRuntime` (the engine's headless runtime, imported directly; that package is under SuperDoc's proprietary DOCX Engine licence, not the AGPL) → Document API `projectHtml` in `redline` review mode. **Not the paginated view**: no page breaks, colours or fonts, pictures become placeholders; what was downgraded is counted in `x-unpainted` | flowing HTML |
+| `opendoc` | OpenDoc | `@casualoffice/opendoc-viewer` 0.1.0-alpha.1: OpenDoc's own reader, pagination and rasteriser in wasm, SHA-256-checked. It is an older build than the application the browser page shows, and it draws a redline as the accepted text. Fonts are fetched from the engine's repository at the commit the package was published from (the package names them and does not ship them). `/r/opendoc/page` rasterises a page when the browser asks for its image | PNG page images, one request per page viewed |
+| `betteroffice` | BetterOffice | `@betteroffice/docx` 0.5.1: its headless layout, its display list and its own painter. The painter only draws on a browser canvas, so it draws on a canvas of ours that writes SVG ([`server/svg-canvas.ts`](server/svg-canvas.ts)); the text it sends as canvas text (list markers, small capitals, leaders) is outlined from its bundled fonts. The route uses entry points the package does not document, pinned to this version. `/r/betteroffice/page` draws a page when asked | SVG page images, one request per page viewed |
 
 ### No server route, and why
 
 A server route runs the engine inside this Val: Deno, with WebAssembly and JavaScript, and no DOM, no canvas, no
-native binaries and no subprocesses. Eight engines have only the browser page (nine rows below: cite-check is an
-application on canvas-editor). For six of them a route would mean
-faking a browser or running native code. **For two it is possible and not built**: OpenDoc, whose published viewer
-package renders pages by itself, and BetterOffice, whose layout runs headless but whose painter does not. The
+native binaries and no subprocesses. Six engines have only the browser page (seven rows below: cite-check is an
+application on canvas-editor). For each of them a route would mean
+faking a browser or running native code. OpenDoc and BetterOffice were on this list as "possible, not built"
+until 2026-11-21; both now have a route (above). The Microsoft Word viewer and the Google Docs viewer are not
+in the list: each always renders on its owner's servers, and there is no engine of theirs to run here. The
 landing page shows the same list, and every "Server render" cell above that has no figure says its reason in
 short ([`server/no-server.json`](server/no-server.json) is the one source).
 
@@ -155,14 +158,12 @@ short ([`server/no-server.json`](server/no-server.json) is the one source).
 | Nutrient | needs native code | The Web SDK converts the .docx in the browser with a .NET engine in WebAssembly that it fetches from its own workers. Nutrient's server rendering is Document Engine, a Docker service; a Val runs neither native binaries nor subprocesses. |
 | react-docx | needs a browser | `@extend-ai/react-docx@0.15.0` exports browser entries only (`.`, `./vanilla`, `./internal`). Its Rust parser in WebAssembly needs no DOM, but pagination measures text with a canvas `measureText` and with laid-out elements (`getBoundingClientRect`), and its page-image renderer throws "DOCX thumbnails require a browser environment". A route could send the parsed text, but the page breaks would be ours, not its. |
 | Univer | needs a browser | Univer's open-source packages cannot read a .docx (import and export are in its separately licensed Server SDK), so even in the browser this site hands it text and headings. Its layout (`@univerjs/engine-render@1.5.2`) takes text measurements from a canvas 2D context and has none without `document` or `OffscreenCanvas`. |
-| OpenDoc | possible, not built | This one is possible. `@casualoffice/opendoc-viewer@0.1.0-alpha.1` (Apache-2.0, pre-release) opens a .docx in WebAssembly and offers `renderPagePng` and `toPdf` with no DOM or canvas import, the same shape as the WordCraft route. It is not built yet: that package is an older build than the application of 2026-11-05 the browser page shows, and it carries one font family (Liberation Sans), so the others would have to be supplied. Read from the package's files; not run here. |
-| BetterOffice | possible, not built | `@betteroffice/docx@0.5.1` paginates without a browser (`exportDocxStructuredWithPages`, and a display list from its Rust session), but the only painter it publishes draws on a `CanvasRenderingContext2D` and returns `HTMLCanvasElement`s; it has no SVG or PDF writer for documents. A route would need a painter of ours over its display list, so the pixels would be ours. Read from the package's files; not run here. |
 | OnlyOffice (CryptPad build) | needs a browser | CryptPad compiles x2t to WebAssembly with OnlyOffice's `doctrenderer` replaced by an empty stub, so it converts between formats but cannot lay out or draw: x2t sends PDF and HTML output through that renderer. Pages are drawn by the editor's JavaScript (sdkjs) on a browser canvas. OnlyOffice's own server rendering is the native Document Server or Document Builder, which a Val cannot run. |
 <!-- no-server:end -->
 
 The reasons for the five engines added on 2026-11-18 were read from their published packages and sources on
-2026-11-20 (file listings, type declarations, build files); none of those packages was run here, so "possible"
-means the API is there, not that a route has been seen working. Also not offered: SuperDoc's **paginated** view
+2026-11-20 (file listings, type declarations, build files); OpenDoc's and BetterOffice's packages were then run
+(2026-11-21) and each has a route; the reasons for the other three were read and not run. Also not offered: SuperDoc's **paginated** view
 (its layout measures text through a browser canvas and paints into the DOM; its SDK wraps a native binary), which
 is why its route sends the engine's unpaginated HTML.
 
@@ -175,8 +176,8 @@ Known gaps, stated rather than hidden:
   once (`x-paginated-in: browser`; `Server-Timing` does not include it, ~65 ms in Chrome on the sample). That
   bundle is too large for a Val file: it is loaded from jsDelivr at a pinned commit of this repo, SRI-checked, and
   the page's CSP allows only that script and this Val's own (`scripts/build-dx-paginate.sh` rebuilds it).
-- WordCraft's page images are not in the page: the page is each page's size plus one image URL per page
-  (`loading="lazy"`, no script), and a page is rasterised (about 0.2 s, about 200 KB; 330 KB for a dense screen)
+- The page images of WordCraft, OpenDoc (PNG) and BetterOffice (SVG) are not in the page: the page is each page's size plus one image URL per page
+  (`loading="lazy"`, no script), and a page is rasterised (WordCraft: about 0.2 s, about 200 KB; 330 KB for a dense screen)
   when the browser asks for it. Microsoft's and Google's viewers send their pages the same way. Its figures
   here are therefore for opening the document: the server's time is reading and laying out, and the browser's
   load is the page and its first two images. Nothing is stored: an image URL names the document's URL and
@@ -187,7 +188,8 @@ Known gaps, stated rather than hidden:
 - Plate's import (mammoth) drops colours and highlighting, in the editor too; pictures inside list items are
   counted in `x-unpainted`.
 - Fonts are metric-compatible stand-ins (Carlito for Calibri, Liberation for Arial/Times/Courier, …); WordCraft
-  uses its own bundled faces.
+  uses its own bundled faces, BetterOffice its own font package, and OpenDoc's route loads Carlito, Liberation Serif
+  and Liberation Mono before the first layout.
 
 Hardening: `/r` pages carry a CSP with `script-src 'none'` (Docxodus: only its pinned paginator and this Val's boot script) (a `javascript:` link in a .docx cannot run), Plate keeps
 only http/https/mailto/`#` links, and a failed engine load is retried on the next request instead of cached.
@@ -206,7 +208,7 @@ with it. Two guards (2026-11-16):
   simultaneous requests all got whole pages (`results/raw/2026-11-16-burst-32-after-queue.txt`). What the queue
   bounds is the renders of one process: Val Town runs several processes, and the document is fetched (up to
   25 MB each) before a request asks for its turn, so simultaneous fetches are not bounded by it.
-  WordCraft's page images draw from a layout that is already kept without a turn; a layout that is not kept is
+  Page images (WordCraft, OpenDoc, BetterOffice) draw from a layout that is already kept without a turn; a layout that is not kept is
   made in a turn, one per document however many of its pages are asked for together.
 - docx-editor.dev's route refuses a document whose `word/document.xml` is over 1 MB as the zip's directory
   declares it (`server/docx-size.ts`), with HTTP 422: its exporter ends the process on the 500-page sample
@@ -221,18 +223,19 @@ Two Deno workarounds, each scoped to one engine and commented in place:
 ### Figures to distrust
 
 Every figure that stood far from its neighbours, or that the method cannot really measure, was looked at again
-on 2026-11-20, by hand in Chrome on a Mac and with the measuring scripts. None of the published figures was
-changed by it: they are that machine's runs, and a corrected figure needs a new pass on it.
+on 2026-11-20, by hand in Chrome on a Mac and with the measuring scripts. The two faults of the measuring were
+then corrected and every browser table was taken again that night (the pass of 2026-11-20, on a `cpu-xl`
+machine: see "Where" under Measuring). Each row below says what was found and what the new pass shows.
 
 | Figure in the tables | Verdict | What was seen |
 | --- | --- | --- |
-| **canvas-editor, 500 pages: 1,256 MB of JS heap** | **Wrong by about 80%** | The heap is read 1.5 s after the page renders, before Chrome has collected the garbage of the conversion. Here: 1,281 MiB at that moment, 702 MiB a few seconds later; with the script, 1,273 MiB before a forced collection and 697 MiB after. The editors site reads later and published 680 for the same engine and file. |
-| **JS heap, every engine** | **Read too early** | The same reading, so any engine that converts the file in JavaScript is overstated by its garbage. `scripts/measure.py` now forces a collection first (`heapBytes`) and keeps the old reading as `heapBytesBeforeGc`. |
-| **canvas-editor, 500 pages: 6,079 MB of renderer memory** | **This machine, not the engine** | With no GPU, Chrome keeps each of the 661 page canvases in the renderer's own memory. On a Mac with a GPU the same page read 2,410 MiB (2026-11-20), 1,273 MiB of it the uncollected heap. docen (3,675 MB) and Univer (2,353 MB) draw on canvases too. Compare these only with each other. |
-| **Cold render on the 500 pages** | **Not "the document is ready"** | It ends two frames after the adapter's `load()` returns. docx-editor.dev's returns at once (`ref.load(bytes)`, nothing awaited), so its 2.62 s is nearly all page start-up. docen answers after 6 s; on the editors site it then holds the main thread for more than three minutes (not checked in its read-only mode here). OnlyOffice reports ready and goes on paginating: its count reached 500 pages seconds later. Checked in the adapters: canvas-editor awaits its import, BetterOffice its `whenLayoutComplete`, react-docx its controller's loading flag. The other adapters were not checked. |
-| **Univer, every row** | **Not a .docx figure** | Univer never reads the file: this site's reader hands it text and headings. Its 1,757 MB of heap on the 500 pages is real (1,888 MiB still held a minute after loading on the editors site), but it is what Univer does with that text. |
-| **OnlyOffice and BetterOffice: 5 and 4 failed runs of 18** | **Unexplained** | "not rendered within 240 s", or the page answering an error status. Both were measured in the two passes of the day. Why they fail more often than the others was not looked for; their medians stand on the runs that worked. |
-| **Google viewer, redline: 11.1 s** | **Not a median** | Three runs: 1.05 s, a failure, 21.1 s. The figure is the mean of two readings twenty seconds apart. |
+| **canvas-editor, 500 pages: 1,256 MB of JS heap** (the tables of 2026-11-18) | **Was wrong by about 80%; corrected** | The heap was read 1.5 s after the page renders, before Chrome had collected the garbage of the conversion. The new pass forces a collection first: 679 MB in each of its three runs, 1,216 to 1,232 MB before the collection. |
+| **JS heap, every engine** | **Was read too early; corrected** | The same reading, so any engine that converts the file in JavaScript was overstated by its garbage. `scripts/measure.py` and `scripts/measure_server_client.py` (the `/r/` tables) now force a collection first (`heapBytes`) and keep the old reading as `heapBytesBeforeGc`. In the new pass every run that rendered was collected (none carries `heapNotCollected`). Had one failed, it would be left out of the median while any run of the row was collected, and counted in the row. |
+| **canvas-editor, 500 pages: 6,248 MB of renderer memory** | **This machine, not the engine** | With no GPU, Chrome keeps each of the 661 page canvases in the renderer's own memory. On a Mac with a GPU the same page read 2,410 MiB (2026-11-20). docen (3,809 MB) and Univer (2,357 MB) draw on canvases too. Compare these only with each other. |
+| **Cold render on the 500 pages** | **Not "the document is ready" for two engines** | It ends two frames after the adapter's `load()` returns. docx-editor.dev's used to return at once (2.62 s on 2026-11-18, nearly all page start-up); its adapter now waits for the layout, and the new pass reads 6.65 s. docen answers after 9 s; on the editors site it then holds the main thread for minutes (not checked in its read-only mode here). OnlyOffice reports ready and goes on paginating to 500 pages after it. |
+| **Univer, every row** | **Not a .docx figure** | Univer never reads the file: this site's reader hands it text and headings. Its heap on the 500 pages is 879 MB after a collection in each of the three runs (1,759 to 1,764 MB before it, which is what the tables of 2026-11-18 showed), and it is what Univer does with that text. |
+| **OnlyOffice and BetterOffice: 5 and 4 failed runs of 18** (2026-11-18) | **Did not come back** | In the new pass OnlyOffice failed once in 9 runs ("Fonts are not loaded", on the showcase) and BetterOffice never. Why they failed so often on 2026-11-18 was not found. |
+| **Rows that stand on fewer than three runs** | **Weak** | 14 of the 153 browser runs of the new pass did not render: 9 times the page answered an error status (most likely this site's rate limit, met by one machine loading engine after engine; the status itself was not recorded), 4 times nothing rendered within 240 s, once OnlyOffice reported its fonts missing. Twelve rows therefore stand on two runs, whose median is their mean, and canvas-editor's redline row on one. The Google Docs viewer's 4.83 s on the 500 pages is such a mean, of 8.36 s and 1.30 s. Each row's runs column shows it. |
 | **Lighthouse, OnlyOffice and OpenDoc** | **Scores the wrong frame** | Both run their whole application in a frame inside the page. Lighthouse's blocking time and paint figures are the top page's, so their scores say little about the engine, as for Microsoft's and Google's viewers. |
 | **Lighthouse, mobile LCP of 13 to 40 s beside desktop LCP of 3 to 7 s** | **Real, and about the phone** | Docxodus, folio, docx-editor.dev and SuperDoc: the emulated phone has a quarter of the CPU and slow 4G (about 1.6 Mbit/s), and these engines download 2 to 8 MB before they paint a page: Docxodus's 7.1 MB alone takes about 36 s on that line. |
 | **cite-check** | **Not measured** | It is in the engine list (an application on canvas-editor), so the landing page gives it a row in every table; no pass has measured it. Its rows say so. |
@@ -241,49 +244,55 @@ changed by it: they are that machine's runs, and a corrected figure needs a new 
 ### What the browser pays for a server render
 
 <!-- server-client:start -->
-Measured 2026-11-18: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores. Loaded = navigation start to the end of the load event (server render and download included).
+Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores. Loaded = navigation start to the end of the load event (server render and download included).
 
 **Rich sample (`showcase.docx`)**
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 1.89 s | 1.92 s, 655 ms, 1.89 s | 1.72 s | 2.3 MB | 366 MB | 927 | 59 KB |
-| folio | 1.00 s | 1.33 s, 456 ms, 1.00 s | 988 ms | 1.5 MB | 360 MB | 480 | 154 KB |
-| docx-editor.dev | 1.10 s | 1.10 s, 851 ms, 1.18 s | 1.17 s | 1.1 MB | 376 MB | 1,048 | 1.3 MB |
-| Plate | 678 ms | 466 ms, 678 ms, 700 ms | 716 ms | 1.6 MB | 343 MB | 462 | 14 KB |
-| docen | 769 ms | 769 ms, 290 ms, 870 ms | 712 ms | 993 KB | 371 MB | 303 | 1.1 MB |
-| WordCraft | 1.19 s | 1.08 s, 1.46 s, 1.19 s | 592 ms | 1.5 MB | 352 MB | 40 | 176 KB |
-| SuperDoc | 1.32 s | 1.32 s, 773 ms, 1.53 s | 1.35 s | 1.6 MB | 343 MB | 233 | 3 KB |
-| Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 562 ms | 648 ms, 562 ms, 468 ms | n/a | n/a | 881 MB | n/a | 1.7 MB |
-| Google viewer (rendered on Google's servers; `/v/` frame load) | 942 ms | 1.04 s, 942 ms, 913 ms | n/a | n/a | 586 MB | n/a | 1.1 MB |
+| Docxodus (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 1.32 s | 1.03 s, 1.43 s, 1.32 s | 1.18 s | 1.6 MB | 365 MB | 927 | 60 KB |
+| folio (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 591 ms | 591 ms, 707 ms, 490 ms | 532 ms | 956 KB | 360 MB | 480 | 156 KB |
+| docx-editor.dev (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 988 ms | 807 ms, 1.03 s, 988 ms | 1.08 s | 1.0 MB | 375 MB | 1,048 | 1.3 MB |
+| Plate (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 388 ms | 310 ms, 388 ms, 575 ms | 444 ms | 1022 KB | 343 MB | 462 | 14 KB |
+| docen (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 388 ms | 418 ms, 381 ms, 388 ms | 340 ms | 948 KB | 372 MB | 303 | 1.1 MB |
+| WordCraft (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 598 ms | 710 ms, 598 ms, 586 ms | 280 ms | 957 KB | 358 MB | 40 | 175 KB |
+| SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 839 ms | 675 ms, 839 ms, 904 ms | 884 ms | 1016 KB | 343 MB | 233 | 3 KB |
+| OpenDoc | 442 ms | 442 ms, 439 ms, 461 ms | 280 ms | 959 KB | 284 MB | 40 | 378 KB |
+| BetterOffice | 541 ms | 765 ms, 541 ms, 534 ms | 436 ms | 959 KB | 296 MB | 5,068 | 76 KB |
+| Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 792 ms | 1.26 s, 745 ms, 792 ms | n/a | n/a | 864 MB | n/a | 1.7 MB |
+| Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 1.20 s | 1.20 s, 1.36 s, 1.13 s | n/a | n/a | 589 MB | n/a | 1.1 MB |
 
 **Redline (`redline.docx`)**
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 1.53 s | 1.06 s, 1.53 s, 1.75 s | 1.37 s | 2.2 MB | 366 MB | 1,237 | 61 KB |
-| folio | 474 ms | 803 ms, 474 ms, 427 ms | 464 ms | 1.5 MB | 357 MB | 663 | 159 KB |
-| docx-editor.dev | 1.01 s | 1.01 s, 1.39 s, 812 ms | 1.10 s | 1.1 MB | 380 MB | 1,266 | 1.3 MB |
-| Plate | 405 ms | 647 ms, 400 ms, 405 ms | 440 ms | 1.6 MB | 344 MB | 722 | 14 KB |
-| docen | 356 ms | 359 ms, 326 ms, 356 ms | 292 ms | 993 KB | 371 MB | 449 | 1.1 MB |
-| WordCraft | 644 ms | 644 ms, 474 ms, 1.11 s | 272 ms | 1.5 MB | 353 MB | 40 | 210 KB |
-| SuperDoc | 773 ms | 838 ms, 682 ms, 773 ms | 804 ms | 1.6 MB | 344 MB | 351 | 4 KB |
-| Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 620 ms | 590 ms, 620 ms, 1.21 s | n/a | n/a | 949 MB | n/a | 1.5 MB |
-| Google viewer (rendered on Google's servers; `/v/` frame load) | 11.1 s | 1.05 s, failed, 21.1 s | n/a | n/a | 591 MB | n/a | 1.1 MB |
+| Docxodus (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 945 ms | 1.09 s, 857 ms, 945 ms | 620 ms | 1.6 MB | 365 MB | 1,237 | 61 KB |
+| folio (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 523 ms | 437 ms, 566 ms, 523 ms | 532 ms | 956 KB | 362 MB | 663 | 159 KB |
+| docx-editor.dev (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 871 ms | 798 ms, 871 ms, 898 ms | 944 ms | 1.0 MB | 376 MB | 1,266 | 1.3 MB |
+| Plate (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 363 ms | 326 ms, 434 ms, 363 ms | 412 ms | 1022 KB | 343 MB | 722 | 14 KB |
+| docen (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 430 ms | 430 ms, 479 ms, 309 ms | 284 ms | 948 KB | 371 MB | 449 | 1.1 MB |
+| WordCraft (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 641 ms | 641 ms, 666 ms, 608 ms | 296 ms | 957 KB | 354 MB | 40 | 210 KB |
+| SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 913 ms | 913 ms, 1.04 s, 835 ms | 956 ms | 1016 KB | 342 MB | 351 | 4 KB |
+| OpenDoc | 423 ms | 306 ms, 472 ms, 423 ms | 308 ms | 959 KB | 284 MB | 40 | 404 KB |
+| BetterOffice | 513 ms | 513 ms, 457 ms, 570 ms | 380 ms | 959 KB | 300 MB | 6,661 | 86 KB |
+| Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 582 ms | 547 ms, 582 ms, 620 ms | n/a | n/a | 963 MB | n/a | 1.6 MB |
+| Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 1.15 s | 1.38 s, 1.09 s, 1.15 s | n/a | n/a | 585 MB | n/a | 1.1 MB |
 
 **500 pages (`lorem-500.docx`)**
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 10.1 s | 13.0 s, 10.1 s, 9.74 s | 3.48 s | 13 MB | 931 MB | 45,317 | 575 KB |
-| folio | 7.36 s | 7.93 s, 6.76 s, 7.36 s | 5.10 s | 1.0 MB | 604 MB | 93,499 | 1.7 MB |
-| docx-editor.dev | **failed**: HTTP 422 | failed, failed, failed | | | | | |
-| Plate | 1.48 s | 2.17 s, 1.12 s, 1.48 s | 1.29 s | 1.1 MB | 404 MB | 15,417 | 508 KB |
-| docen | 5.51 s | 5.74 s, 4.61 s, 5.51 s | 1.76 s | 1001 KB | 1557 MB | 36,968 | 1.1 MB |
-| WordCraft | 3.26 s | 4.14 s, 3.26 s, 1.48 s | 976 ms | 1.6 MB | 359 MB | 1,134 | 389 KB |
-| SuperDoc | 6.30 s | 6.30 s, 6.28 s, 6.40 s | 6.14 s | 1.1 MB | 402 MB | 6,527 | 446 KB |
-| Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 1.65 s | 1.87 s, 1.54 s, 1.65 s | n/a | n/a | 733 MB | n/a | 1.1 MB |
-| Google viewer (rendered on Google's servers; `/v/` frame load) | 1.13 s | 9.64 s, 1.13 s, 1.05 s | n/a | n/a | 604 MB | n/a | 1.1 MB |
+| Docxodus (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 16.4 s | 16.4 s, 15.5 s, 17.7 s | 3.32 s | 2.6 MB | 847 MB | 32,490 | 575 KB |
+| folio (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 8.48 s | 8.48 s, 7.77 s, 8.54 s | 5.08 s | 961 KB | 604 MB | 93,499 | 1.7 MB |
+| docx-editor.dev (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | **failed**: HTTP 422 | failed, failed, failed | | | | | |
+| Plate (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 1.49 s | 1.43 s, 1.49 s, 1.64 s | 1.19 s | 1017 KB | 404 MB | 15,417 | 508 KB |
+| docen (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 7.25 s | 7.37 s, 6.72 s, 7.25 s | 2.03 s | 965 KB | 1779 MB | 36,968 | 1.1 MB |
+| WordCraft (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 2.08 s | 2.25 s, 2.01 s, 2.08 s | 1.62 s | 972 KB | 360 MB | 1,134 | 388 KB |
+| SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 5.99 s | 5.99 s, 6.11 s, 5.57 s | 5.78 s | 1016 KB | 400 MB | 6,527 | 446 KB |
+| OpenDoc | 1.87 s | 1.83 s, 1.93 s, 1.87 s | 1.62 s | 959 KB | 291 MB | 1,034 | 1.1 MB |
+| BetterOffice | 4.32 s | 4.32 s, 4.02 s, 4.57 s | 4.02 s | 959 KB | 328 MB | 18,509 | 66 KB |
+| Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 1.65 s | 1.42 s, 1.86 s, 1.65 s | n/a | n/a | 687 MB | n/a | 1.1 MB |
+| Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 4.83 s | failed, 8.36 s, 1.30 s | n/a | n/a | 605 MB | n/a | 1.1 MB |
 <!-- server-client:end -->
 
 ### Lighthouse
@@ -310,8 +319,8 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | canvas-editor | 98 · 94 | 223 ms · 781 ms | 61 ms · 248 ms | 0.079 · 0.033 | 223 ms · 781 ms | 749 ms · 3.23 s | 94 | 100 | 80 | 99/97/fail/98/98 · 91/99/fail/95/94 (desktop: PageSpeed gave no result within 240 s: the page never finished loading for it; mobile: PageSpeed gave no result within 240 s: the page never finished loading for it) |
 | Apryse WebViewer | 73 · 72 | 215 ms · 763 ms | 555 ms · 897 ms | 0.005 · 0.049 | 215 ms · 763 ms | 2.16 s · 7.74 s | 100 | 96 | 90 | 73/74/fail/77/66 · 72/72/fail/72/66 (desktop: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/v/apryse. Try checking the URL for validity.; mobile: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/v/apryse. Try checking the URL for validity.) |
 | Nutrient | **no result**: the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutr | | | | | | | | | fail/fail/fail/fail/fail · fail/fail/fail/fail/fail |
-| Word Online viewer | 96 · 96 | 218 ms · 772 ms | 0 ms · 0 ms | 0.086 · 0 | 218 ms · 772 ms | 1.57 s · 4.99 s | 100 | 73 | 90 | 96/97/99/93/96 · 95/96/99/97/95 |
-| Google viewer | 98 · 97 | 220 ms · 789 ms | 61 ms · 109 ms | 0.003 · 0 | 220 ms · 789 ms | 1.31 s · 3.66 s | 100 | 58 | 90 | 93/99/fail/98/99 · 94/98/fail/100/96 (desktop: PageSpeed gave no result within 240 s: the page never finished loading for it; mobile: PageSpeed gave no result within 240 s: the page never finished loading for it) |
+| Microsoft Word viewer | 96 · 96 | 218 ms · 772 ms | 0 ms · 0 ms | 0.086 · 0 | 218 ms · 772 ms | 1.57 s · 4.99 s | 100 | 73 | 90 | 96/97/99/93/96 · 95/96/99/97/95 |
+| Google Docs viewer | 98 · 97 | 220 ms · 789 ms | 61 ms · 109 ms | 0.003 · 0 | 220 ms · 789 ms | 1.31 s · 3.66 s | 100 | 58 | 90 | 93/99/fail/98/99 · 94/98/fail/100/96 (desktop: PageSpeed gave no result within 240 s: the page never finished loading for it; mobile: PageSpeed gave no result within 240 s: the page never finished loading for it) |
 | react-docx (measured 2026-11-20) | 57 · 62 | 6.22 s · 37.7 s | 403 ms · 371 ms | 0.001 · 0 | 218 ms · 764 ms | 1.26 s · 5.08 s | 96 | 100 | 91 | 57/97/68/46/56 · 63/56/63/62/59 |
 | Univer (measured 2026-11-20) | 85 · 83 | 447 ms · 1.66 s | 260 ms · 388 ms | 0.006 · 0.003 | 447 ms · 1.66 s | 2.27 s · 7.38 s | 83 | 100 | 90 | 85/89/90/73/77 · 86/83/90/78/80 |
 | OpenDoc (measured 2026-11-20) | 66 · 69 | 227 ms · 773 ms | 382 ms · 939 ms | 0.195 · 0.054 | 227 ms · 773 ms | 3.06 s · 12.2 s | 100 | 100 | 90 | 64/75/67/56/66 · 69/71/71/64/66 |
@@ -329,6 +338,8 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | docen | 97 · 95 | 1.32 s · 2.90 s | 0 ms · 0 ms | 0 · 0 | 247 ms · 794 ms | 368 ms · 893 ms | 97 | 100 | 90 | 96/97/97/100/96 · 97/77/84/98/95 |
 | WordCraft | 100 · 98 | 390 ms · 2.28 s | 0 ms · 0 ms | 0 · 0 | 234 ms · 784 ms | 290 ms · 829 ms | 97 | 100 | 91 | 100/100/100/100/100 · 100/98/98/99/98 |
 | SuperDoc | 100 · 100 | 213 ms · 768 ms | 0 ms · 0 ms | 0 · 0 | 213 ms · 768 ms | 479 ms · 1.47 s | 98 | 100 | 90 | 100/100/100/100/100 · 100/100/100/100/100 |
+| OpenDoc (measured 2026-11-21) | 100 · 87 | 557 ms · 4.05 s | 0 ms · 0 ms | 0 · 0 | 242 ms · 788 ms | 365 ms · 920 ms | 97 | 100 | 91 | 100/100/100/100/100 · 87/87/87/87/94 |
+| BetterOffice (measured 2026-11-21) | 100 · 100 | 303 ms · 1.22 s | 0 ms · 0 ms | 0 · 0 | 229 ms · 778 ms | 304 ms · 1.04 s | 97 | 100 | 91 | fail/100/100/100/100 · fail/100/100/100/100 (desktop: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity.; mobile: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity.) |
 
 **Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**
 
@@ -344,8 +355,8 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | canvas-editor | **no result**: PageSpeed gave no result within 240 s: the page never finished loading for it | | | | | | | | | fail/fail/fail/fail/fail · fail/fail/fail/fail/fail |
 | Apryse WebViewer | 66 · 75 | 217 ms · 766 ms | 1.10 s · 760 ms | 0.002 · 0 | 217 ms · 766 ms | 2.35 s · 7.04 s | 100 | 96 | 90 | 65/75/66/69/66 · 76/68/75/80/72 |
 | Nutrient | **no result**: the engine failed on Google's machine, so there is no score: [open-docs-viewer] PSPDFKitError: download 'https://cdn.cloud.pspdfkit.com/pspdfkit-web@1.25.0/nutr | | | | | | | | | fail/fail/fail/fail/fail · fail/fail/fail/fail/fail |
-| Word Online viewer | 95 · 98 | 221 ms · 774 ms | 0 ms · 0 ms | 0.003 · 0 | 221 ms · 774 ms | 2.01 s · 4.36 s | 100 | 73 | 90 | 93/100/96/95/93 · 98/98/96/100/97 |
-| Google viewer | 96 · 95 | 220 ms · 774 ms | 165 ms · 156 ms | 0.002 · 0 | 220 ms · 774 ms | 1.28 s · 3.50 s | 100 | 58 | 90 | 84/100/91/96/98 · 100/100/95/95/95 |
+| Microsoft Word viewer | 95 · 98 | 221 ms · 774 ms | 0 ms · 0 ms | 0.003 · 0 | 221 ms · 774 ms | 2.01 s · 4.36 s | 100 | 73 | 90 | 93/100/96/95/93 · 98/98/96/100/97 |
+| Google Docs viewer | 96 · 95 | 220 ms · 774 ms | 165 ms · 156 ms | 0.002 · 0 | 220 ms · 774 ms | 1.28 s · 3.50 s | 100 | 58 | 90 | 84/100/91/96/98 · 100/100/95/95/95 |
 | react-docx (measured 2026-11-20) | 39 · 36 | 6.63 s · 39.7 s | 2.43 s · 2.81 s | 0.001 · 0 | 215 ms · 774 ms | 2.85 s · 11.3 s | 96 | 100 | 90 | 38/40/39/43/36 · 36/41/36/41/35 |
 | Univer (measured 2026-11-20) | n/a · 59 | n/a · 1.68 s | n/a · 10.4 s | n/a · 0.003 | n/a · 1.68 s | n/a · 16.8 s | n/a | n/a | n/a | fail/fail/fail/fail/fail · fail/59/fail/fail/fail (desktop: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.; mobile: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.) |
 | OpenDoc (measured 2026-11-20) | 51 · 60 | 217 ms · 789 ms | 8.73 s · 16.4 s | 0.192 · 0.054 | 217 ms · 789 ms | 7.48 s · 30.5 s | 100 | 100 | 90 | 51/51/51/fail/51 · 60/fail/60/fail/fail (desktop: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.; mobile: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.) |
@@ -363,6 +374,8 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | docen | 61 · 31 | 1.58 s · 7.67 s | 979 ms · 1.67 s | 0 · 0 | 1.09 s · 4.91 s | 1.65 s · 9.75 s | 97 | 100 | 90 | 60/62/fail/63/61 · fail/fail/31/fail/fail (desktop: PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate); mobile: PROTOCOL_TIMEOUT: Waiting for DevTools protocol response has exceeded the allotted time. (Method: Runtime.evaluate)) |
 | WordCraft | 100 · 86 | 539 ms · 4.12 s | 0 ms · 0 ms | 0 · 0 | 275 ms · 841 ms | 732 ms · 3.98 s | 97 | 100 | 91 | 100/97/100/100/100 · 87/95/85/80/86 |
 | SuperDoc | 89 · 77 | 870 ms · 3.28 s | 0 ms · 6 ms | 0 · 0 | 870 ms · 3.28 s | 4.23 s · 13.1 s | 100 | 100 | 90 | 89/89/fail/90/fail · 78/77/77/77/fail (desktop: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl; mobile: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/superdoc?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolv) |
+| OpenDoc (measured 2026-11-21) | 92 · 75 | 946 ms · 7.99 s | 0 ms · 0 ms | 0 · 0 | 310 ms · 872 ms | 3.31 s · 4.19 s | 97 | 100 | 91 | 90/99/88/94/fail · fail/75/80/75/65 (desktop: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl; mobile: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl) |
+| BetterOffice (measured 2026-11-21) | 91 · 90 | 366 ms · 1.18 s | 0 ms · 76 ms | 0 · 0 | 242 ms · 800 ms | 4.60 s · 12.5 s | 97 | 100 | 83 | 78/91/94/91/93 · 82/93/90/93/78 |
 <!-- lighthouse:end -->
 
 Read the Lighthouse tables with care:
@@ -380,6 +393,94 @@ Read the Lighthouse tables with care:
 - **Microsoft's viewer sends pages ten at a time** as the reader scrolls (seen in its network requests on
   2026-11-16: the first answer holds pages 1 to 10 of the 500), so its scores and its "frame load"
   timings on the 500 pages are for the first ten pages, not the document.
+
+#### Lighthouse on our computer
+
+On Google's machines WordCraft and Nutrient do not start (their engines do not download there, and why is not
+known), so they have no browser score above. The same Lighthouse release also runs here, on a computer that has a
+graphics card, which Google's machines do not, and on every page, not only on those two (`scripts/measure_lighthouse_local.py` in the
+[open-docs](https://github.com/arthrod/open-docs) repository, with `--out results/lighthouse-local.json`).
+The price is that these figures depend on this computer and on what else it was doing: the heading gives its
+load and Lighthouse's own reading of how fast its processor was during the analyses. Compare rows within these
+tables, not with PageSpeed's.
+
+<!-- lighthouse-local:start -->
+Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4094, lowest 3542; machine load (1-minute average) median 6.4, highest 18.4, on 12 cores. Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.
+
+**Browser pages (`/v/`), rich sample**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus | 60 · 41 | 6.63 s · 38.6 s | 249 ms · 1.29 s | 0.001 · 0 | 337 ms · 901 ms | 2.58 s · 9.88 s | 95 | 100 | 91 | 58/60/61 · 41/41/41 |
+| folio | 82 · 58 | 2.55 s · 13.4 s | 68 ms · 421 ms | 0.003 · 0 | 594 ms · 1.78 s | 1.93 s · 6.43 s | 92 | 100 | 82 | 82/82/85 · 58/58/58 |
+| docx-editor.dev | 73 · 51 | 4.91 s · 27.9 s | 22 ms · 598 ms | 0.001 · 0 | 609 ms · 1.79 s | 2.03 s · 8.12 s | 100 | 100 | 90 | 73/72/73 · 51/51/51 |
+| Plate | 93 · 75 | 1.72 s · 7.84 s | 0 ms · 97 ms | 0.002 · 0 | 317 ms · 837 ms | 382 ms · 1.62 s | 98 | 100 | 91 | 94/93/93 · 75/75/75 |
+| docen (measured 2026-11-21: Lighthouse's CPU benchmark index median 4309, lowest 4240; machine load (1-minute average) median 2.9, highest 5.7, on 12 cores) | 87 · 85 | 2.08 s · 864 ms | 20 ms · 435 ms | 0.006 · 0.04 | 379 ms · 864 ms | 1.77 s · 4.85 s | 82 | 88 | 90 | 84/87/88 · 84/85/86 |
+| WordCraft | 83 · 67 | 329 ms · 874 ms | 223 ms · 1.07 s | 0.003 · 0.02 | 329 ms · 874 ms | 8.53 s · 47.3 s | 94 | 96 | 90 | 83/82/83 · 67/68/67 |
+| SuperDoc | 74 · 57 | 3.22 s · 17.3 s | 41 ms · 352 ms | 0.129 · 0.046 | 628 ms · 1.86 s | 1.95 s · 8.99 s | 94 | 100 | 90 | 74/72/75 · 57/57/98 |
+| canvas-editor | 99 · 96 | 330 ms · 885 ms | 0 ms · 188 ms | 0.075 · 0.056 | 330 ms · 885 ms | 704 ms · 3.02 s | 94 | 100 | 80 | 99/99/100 · 96/100/96 |
+| Apryse WebViewer (measured 2026-11-21: Lighthouse's CPU benchmark index median 4309, lowest 4240; machine load (1-minute average) median 2.9, highest 5.7, on 12 cores) | 96 · 73 | 328 ms · 845 ms | 18 ms · 681 ms | 0.009 · 0.086 | 328 ms · 845 ms | 2.05 s · 8.86 s | 100 | 96 | 90 | 96/100/96 · 73/71/77 |
+| Nutrient | 62 · 57 | 2.41 s · 12.1 s | 66 ms · 426 ms | 0.582 · 0.02 | 312 ms · 862 ms | 1.73 s · 7.39 s | 100 | 100 | 91 | 62/62/63 · 57/57/57 |
+| Microsoft Word viewer | 100 · 99 | 321 ms · 889 ms | 0 ms · 0 ms | 0.003 · 0.039 | 321 ms · 889 ms | 835 ms · 2.55 s | 100 | 73 | 90 | 100/100/98 · 99/100/99 |
+| Google Docs viewer | 82 · 80 | 366 ms · 913 ms | 0 ms · 0 ms | 0.364 · 0.455 | 366 ms · 913 ms | 1.04 s · 2.80 s | 100 | 77 | 90 | 82/82/82 · 80/98/80 |
+| react-docx | 75 · 64 | 6.34 s · 37.6 s | 14 ms · 390 ms | 0.001 · 0 | 240 ms · 771 ms | 1.15 s · 3.67 s | 96 | 100 | 91 | 74/75/75 · 64/65/63 |
+| Univer | 97 · 90 | 512 ms · 1.63 s | 0 ms · 185 ms | 0.014 · 0.003 | 512 ms · 1.63 s | 1.78 s · 6.36 s | 83 | 100 | 90 | 97/97/98 · 90/91/90 |
+| OpenDoc | 83 · 72 | 326 ms · 851 ms | 54 ms · 724 ms | 0.202 · 0.057 | 326 ms · 851 ms | 3.16 s · 13.9 s | 100 | 100 | 90 | 83/83/82 · 72/72/70 |
+| BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4175, lowest 3849; machine load (1-minute average) median 9.4, highest 22.6, on 12 cores) | 95 · 76 | 1.39 s · 6.12 s | 0 ms · 0 ms | 0.001 · 0 | 588 ms · 1.65 s | 1.47 s · 3.57 s | 100 | 100 | 90 | 93/95/95 · 75/76/99 |
+| OnlyOffice (CryptPad build) | 84 · 62 | 269 ms · 806 ms | 200 ms · 1.70 s | 0.047 · 0.077 | 269 ms · 806 ms | 5.72 s · 26.9 s | 96 | 96 | 90 | 79/84/100 · 63/62/62 |
+
+**Server-rendered pages (`/r/`), rich sample**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus | 99 · 99 | 636 ms · 1.97 s | 0 ms · 14 ms | 0 · 0 | 379 ms · 1.01 s | 1.16 s · 1.71 s | 90 | 96 | 83 | 99/99/99 · 99/99/99 |
+| folio | 96 · 100 | 1.17 s · 1.11 s | 0 ms · 0 ms | 0 · 0 | 831 ms · 1.11 s | 1.12 s · 1.11 s | 70 | 96 | 75 | 96/98/96 · 100/100/100 |
+| docx-editor.dev | 88 · 97 | 1.95 s · 2.17 s | 0 ms · 0 ms | 0.005 · 0 | 1.12 s · 2.17 s | 1.33 s · 2.17 s | 92 | 96 | 82 | 84/95/88 · 96/97/97 |
+| Plate | 100 · 100 | 552 ms · 926 ms | 0 ms · 0 ms | 0 · 0 | 552 ms · 926 ms | 665 ms · 926 ms | 96 | 96 | 83 | 100/100/100 · 100/100/100 |
+| docen | 98 · 100 | 1.15 s · 882 ms | 0 ms · 0 ms | 0 · 0 | 553 ms · 882 ms | 711 ms · 882 ms | 97 | 96 | 82 | 98/98/96 · 100/100/100 |
+| WordCraft | 100 · 98 | 427 ms · 2.30 s | 0 ms · 0 ms | 0 · 0 | 270 ms · 975 ms | 577 ms · 1.19 s | 97 | 96 | 83 | 99/100/100 · 99/98/98 |
+| SuperDoc | 97 · 100 | 918 ms · 1.03 s | 0 ms · 0 ms | 0 · 0 | 918 ms · 1.03 s | 1.30 s · 1.25 s | 98 | 96 | 82 | 97/97/97 · 100/100/100 |
+| OpenDoc (measured 2026-11-21: Lighthouse's CPU benchmark index median 4309, lowest 4240; machine load (1-minute average) median 2.9, highest 5.7, on 12 cores) | 100 · 87 | 590 ms · 4.10 s | 0 ms · 0 ms | 0 · 0 | 275 ms · 805 ms | 457 ms · 808 ms | 97 | 96 | 83 | 100/100/100 · 87/87/87 |
+| BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4206, lowest 4146; machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 100 · 100 | 358 ms · 1.25 s | 0 ms · 0 ms | 0 · 0 | 281 ms · 802 ms | 825 ms · 804 ms | 97 | 96 | 83 | 100/100/100 · 100/100/100 |
+
+The 500-page tables: Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4105, lowest 3427; machine load (1-minute average) median 5.1, highest 22.9, on 12 cores. Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.
+
+**Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus | 35 · 35 | 7.44 s · 40.6 s | 3.35 s · 10.3 s | 0.001 · 0 | 429 ms · 943 ms | 7.52 s · 21.9 s | 96 | 100 | 90 | 35/36/35 · 35/35/35 |
+| folio | 47 · 37 | 3.12 s · 16.5 s | 1.17 s · 4.70 s | 0.002 · 0 | 601 ms · 1.78 s | 2.52 s · 7.57 s | 96 | 100 | 91 | 46/47/49 · 37/37/36 |
+| docx-editor.dev | 72 · 66 | 5.15 s · 1.86 s | 83 ms · 1.12 s | 0.001 · 0 | 608 ms · 1.86 s | 2.15 s · 9.34 s | 100 | 100 | 90 | 72/72/71 · 67/65/66 |
+| Plate | 37 · 35 | 11.9 s · 19.6 s | 11.7 s · 17.4 s | 0.001 · 0 | 319 ms · 847 ms | 3.11 s · 16.9 s | 100 | 100 | 90 | 37/38/37 · 35/35/35 |
+| docen (measured 2026-11-21: Lighthouse's CPU benchmark index median 4240, lowest 4190; machine load (1-minute average) median 2.2, highest 3.6, on 12 cores) | **no result**: Lighthouse stopped while waiting for the page and wrote no report | | | | | | | | | fail/fail/fail · fail/fail/fail |
+| WordCraft (measured 2026-11-21: Lighthouse's CPU benchmark index median 4240, lowest 4190; machine load (1-minute average) median 2.2, highest 3.6, on 12 cores) | 60 · 60 | 309 ms · 850 ms | 2.52 s · 9.97 s | 0.002 · 0.02 | 309 ms · 850 ms | 7.77 s · 38.1 s | 94 | 96 | 90 | 100/60/60 · 60/60/60 |
+| SuperDoc (measured 2026-11-21: Lighthouse's CPU benchmark index median 4240, lowest 4190; machine load (1-minute average) median 2.2, highest 3.6, on 12 cores) | 75 · 64 | 3.43 s · 19.5 s | 34 ms · 329 ms | 0.129 · 0 | 565 ms · 1.81 s | 1.35 s · 4.61 s | 94 | 100 | 90 | 75/76/75 · 64/64/60 |
+| canvas-editor (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 60 · 60 | 332 ms · 932 ms | 5.05 s · 10.4 s | 0.07 · 0.008 | 332 ms · 932 ms | 3.93 s · 21.5 s | 94 | 100 | 80 | 60/60/60 · 60/60/60 |
+| Apryse WebViewer | 95 · 70 | 337 ms · 880 ms | 19 ms · 794 ms | 0.009 · 0.086 | 337 ms · 880 ms | 2.42 s · 10.1 s | 100 | 96 | 90 | 95/95/93 · 71/70/70 |
+| Nutrient | 97 · 83 | 317 ms · 876 ms | 65 ms · 398 ms | 0.002 · 0.02 | 317 ms · 876 ms | 1.86 s · 7.21 s | 100 | 100 | 90 | 97/96/97 · 83/83/84 |
+| Microsoft Word viewer | 98 · 98 | 372 ms · 910 ms | 0 ms · 0 ms | 0.087 · 0.039 | 372 ms · 910 ms | 1.23 s · 3.87 s | 100 | 73 | 90 | 98/98/97 · 98/98/99 |
+| Google Docs viewer | 78 · 98 | 375 ms · 870 ms | 0 ms · 32 ms | 0.364 · 0.085 | 375 ms · 870 ms | 2.16 s · 2.68 s | 100 | 77 | 90 | 78/82/77 · 98/98/98 |
+| react-docx | 42 · 37 | 6.63 s · 39.7 s | 1.21 s · 5.70 s | 0.001 · 0 | 232 ms · 772 ms | 2.17 s · 8.18 s | 96 | 100 | 90 | 42/42/42 · 37/37/37 |
+| Univer | 60 · 59 | 511 ms · 1.61 s | 3.60 s · 10.6 s | 0.006 · 0.003 | 511 ms · 1.61 s | 6.61 s · 17.6 s | 83 | 100 | 90 | 60/60/60 · 59/59/59 |
+| OpenDoc | 52 · 60 | 314 ms · 849 ms | 1.77 s · 14.2 s | 0.19 · 0.045 | 314 ms · 849 ms | 4.25 s · 19.2 s | 100 | 100 | 90 | 52/52/52 · 60/60/60 |
+| BetterOffice | 93 · 72 | 1.57 s · 8.17 s | 0 ms · 0 ms | 0.001 · 0 | 552 ms · 1.65 s | 1.28 s · 4.30 s | 100 | 100 | 90 | 92/93/94 · 72/73/70 |
+| OnlyOffice (CryptPad build) (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 65 · 59 | 263 ms · 791 ms | 658 ms · 3.53 s | 0.046 · 0.075 | 263 ms · 791 ms | 7.01 s · 31.0 s | 96 | 96 | 90 | 65/65/65 · 59/59/59 |
+
+**Server-rendered pages (`/r/`), 500 pages**
+
+| Page | Performance | LCP | TBT | CLS | FCP | Speed Index | Accessibility | Best practices | SEO | Performance, each analysis |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Docxodus (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 47 · 29 | 2.51 s · 10.5 s | 1.47 s · 6.06 s | 0 · 0 | 749 ms · 3.59 s | 4.06 s · 11.4 s | 91 | 96 | 82 | 48/47/47 · 29/29/29 |
+| folio (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 59 · 55 | 4.19 s · 11.8 s | 0 ms · 78 ms | 0 · 0 | 3.90 s · 10.8 s | 4.65 s · 10.8 s | 74 | n/a | 73 | 59/58/59 · 55/55/55 |
+| docx-editor.dev (measured 2026-11-21: Lighthouse's CPU benchmark index median 4240, lowest 4190; machine load (1-minute average) median 2.2, highest 3.6, on 12 cores) | **no result**: ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is proper | | | | | | | | | fail/fail/fail · fail/fail/fail |
+| Plate | 92 · 79 | 1.32 s · 3.85 s | 0 ms · 74 ms | 0 · 0 | 1.32 s · 3.85 s | 1.46 s · 3.85 s | 97 | 96 | 82 | 85/92/92 · 79/80/79 |
+| docen | 69 · 36 | 2.35 s · 7.70 s | 230 ms · 1.99 s | 0 · 0 | 1.79 s · 4.85 s | 2.23 s · 4.85 s | 97 | 96 | 82 | 69/71/66 · 36/36/36 |
+| WordCraft | 99 · 87 | 560 ms · 3.65 s | 0 ms · 2 ms | 0 · 0 | 246 ms · 833 ms | 1.16 s · 1.80 s | 97 | 96 | 83 | 93/100/99 · 86/87/98 |
+| SuperDoc | 62 · 61 | 3.40 s · 5.58 s | 0 ms · 0 ms | 0 · 0 | 3.40 s · 5.58 s | 4.87 s · 9.37 s | 100 | 96 | 82 | 63/62/61 · 61/61/61 |
+| OpenDoc (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 95 · 78 | 1.14 s · 5.67 s | 0 ms · 0 ms | 0 · 0 | 264 ms · 853 ms | 1.76 s · 3.08 s | 97 | 96 | 83 | 93/95/95 · 78/81/74 |
+| BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 93 · 95 | 311 ms · 1.07 s | 0 ms · 4 ms | 0 · 0 | 247 ms · 779 ms | 2.89 s · 6.00 s | 97 | 96 | 83 | 92/93/93 · 94/95/95 |
+<!-- lighthouse-local:end -->
 
 ## Tests
 
@@ -401,43 +502,45 @@ when it was taken.
 **Browser pages (`/v/`), rich sample** ([`results/browser.json`](results/browser.json))
 
 <!-- browser:start -->
-Measured 2026-11-18: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs (6 for OnlyOffice and BetterOffice, measured in both passes of the day; OpenDoc in the second only), median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 9.7, highest 15.1, on 64 cores. Document: showcase.docx (47,871 B) with a never-seen ?n= per run.
+Measured 2026-11-20: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 56.2, highest 94.5, on 64 cores. Document: showcase.docx (47,871 B) with a never-seen ?n= per run.
 
 | Engine | Cold render (`/v/`) | Each run | Downloaded | Requests | JS heap | Renderer memory |
 | --- | ---: | --- | ---: | ---: | ---: | ---: |
-| canvas-editor | 882 ms | 1.15 s, 842 ms, 882 ms | 644 KB | 29 | 9.7 MB | 466 MB |
-| Docxodus | 1.87 s | 1.86 s, 1.87 s, 1.88 s | 7.1 MB | 61 | 7.7 MB | 536 MB |
-| SuperDoc | 4.30 s | 4.35 s, 4.30 s, 3.67 s | 7.8 MB | 26 | 19 MB | 610 MB |
-| Plate | 1.51 s | 3.43 s, 1.51 s, 1.18 s | 1.1 MB | 435 | 11 MB | 431 MB |
-| docen | 1.53 s | 2.55 s, 1.53 s, 1.51 s | 1.4 MB | 329 | 31 MB | 549 MB |
-| docx-editor.dev | 992 ms | 1.64 s, 944 ms, 992 ms | 5.0 MB | 205 | 32 MB | 499 MB |
-| folio | 1.31 s | 2.11 s, 1.29 s, 1.31 s | 2.1 MB | 82 | 21 MB | 445 MB |
-| WordCraft | 2.93 s | 2.93 s, 3.01 s, 2.85 s | 22 MB | 23 | 3.6 MB | 842 MB |
-| Word Online viewer | 562 ms (frame load) | 648 ms, 562 ms, 468 ms | 1.7 MB | 71 | n/a | 881 MB |
-| Google viewer | 942 ms (frame load) | 1.04 s, 942 ms, 913 ms | 1.1 MB | 32 | n/a | 586 MB |
-| Apryse WebViewer | 2.74 s | 4.62 s, 2.69 s, 2.74 s | 7.0 MB | 163 | 21 MB | 653 MB |
-| Nutrient | 5.67 s | 6.06 s, 5.60 s, 5.67 s | 24 MB | 103 | 24 MB | 585 MB |
-| react-docx | 3.10 s | 3.10 s, 3.24 s, 3.00 s | 7.4 MB | 38 | 17 MB | 513 MB |
-| Univer | 1.63 s | 1.70 s, 1.63 s, 1.49 s | 2.3 MB | 374 | 31 MB | 485 MB |
-| OpenDoc | 2.96 s | 8.63 s, 2.96 s, 2.51 s | 20 MB | 378 | 18 MB | 667 MB |
-| BetterOffice | 2.51 s | failed, 2.40 s, 2.09 s, 3.61 s, 2.51 s, 2.67 s (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/betteroffice?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fo) | 12 MB | 249 | 12 MB | 607 MB |
-| OnlyOffice (CryptPad build) | 3.53 s | failed, 2.89 s, failed, 4.02 s, 3.53 s, failed (failed: Error: Page.goto: net::ERR_HTTP_RESPONSE_CODE_FAILURE at https://viewers.benchmarks.law/v/onlyoffice?src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fope) | 18 MB | 80 | 72 MB | 690 MB |
+| canvas-editor | 1.33 s | 1.40 s, failed, 1.26 s (failed: not rendered within 240s) | 644 KB | 29 | 5.6 MB | 465 MB |
+| Docxodus | 3.44 s | 3.44 s, 3.79 s, 2.45 s | 7.1 MB | 61 | 7.3 MB | 535 MB |
+| SuperDoc | 5.60 s | 3.75 s, 6.09 s, 5.60 s | 7.8 MB | 26 | 12 MB | 609 MB |
+| Plate | 2.46 s | 1.46 s, 5.16 s, 2.46 s | 1.1 MB | 436 | 10 MB | 434 MB |
+| docen | 1.92 s | 1.67 s, 2.98 s, 1.92 s | 1.4 MB | 329 | 18 MB | 550 MB |
+| docx-editor.dev | 2.24 s | 2.08 s, 2.75 s, 2.24 s | 5.0 MB | 206 | 22 MB | 503 MB |
+| folio | 1.80 s | 1.52 s, 2.73 s, 1.80 s | 2.1 MB | 82 | 15 MB | 445 MB |
+| WordCraft | 3.46 s | 3.16 s, 4.01 s, 3.46 s | 22 MB | 23 | 3.3 MB | 664 MB |
+| Microsoft Word viewer | 792 ms (frame load) | 1.26 s, 745 ms, 792 ms | 1.7 MB | 74 | n/a | 864 MB |
+| Google Docs viewer | 1.20 s (frame load) | 1.20 s, 1.36 s, 1.13 s | 1.1 MB | 32 | n/a | 589 MB |
+| Apryse WebViewer | 3.83 s | 6.34 s, 2.69 s, 3.83 s | 7.0 MB | 163 | 17 MB | 657 MB |
+| Nutrient | 8.44 s | 5.63 s, 17.3 s, 8.44 s | 24 MB | 103 | 18 MB | 585 MB |
+| react-docx | 2.18 s | 1.78 s, 2.29 s, 2.18 s | 7.4 MB | 39 | 11 MB | 512 MB |
+| Univer | 1.80 s | 1.45 s, 2.11 s, 1.80 s | 2.3 MB | 374 | 24 MB | 495 MB |
+| OpenDoc | 2.90 s | 2.41 s, 3.75 s, 2.90 s | 20 MB | 379 | 12 MB | 670 MB |
+| BetterOffice | 2.61 s | 2.08 s, 2.92 s, 2.61 s | 12 MB | 250 | 8.5 MB | 637 MB |
+| OnlyOffice (CryptPad build) | 4.00 s | failed, 4.00 s, 4.01 s (failed: OnlyOffice: Fonts are not loaded.<br>Please contact your Document Server administrator.) | 18 MB | 81 | 44 MB | 691 MB |
 <!-- browser:end -->
 
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-21: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 6.8, highest 7.0, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 1.73 s | 189 ms · 890 ms | 471 ms | 282 ms | 1.13 s, 494 ms, 443 ms, 463 ms, 479 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
-| folio | 1.33 s | 347 ms · 332 ms | 399 ms | 212 ms | 1.31 s, 441 ms, 375 ms, 356 ms, 423 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
-| docx-editor.dev | 1.25 s | 119 ms · 866 ms | 710 ms | 503 ms | 739 ms, 1.25 s, 718 ms, 683 ms, 702 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
-| Plate | 718 ms | 135 ms · 212 ms | 306 ms | 146 ms | 1.10 s, 361 ms, 271 ms, 313 ms, 300 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
-| docen | 660 ms | 343 ms · 126 ms | 193 ms | 39 ms | 728 ms, 195 ms, 191 ms, 183 ms, 263 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
-| WordCraft | 476 ms | 187 ms · 126 ms | 221 ms | 23 ms | 171 ms, 191 ms, 375 ms, 221 ms, 256 ms | 3 KB + a page image per page viewed |
-| SuperDoc | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
+| Docxodus (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.73 s | 189 ms · 890 ms | 471 ms | 282 ms | 1.13 s, 494 ms, 443 ms, 463 ms, 479 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
+| folio (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.33 s | 347 ms · 332 ms | 399 ms | 212 ms | 1.31 s, 441 ms, 375 ms, 356 ms, 423 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
+| docx-editor.dev (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.25 s | 119 ms · 866 ms | 710 ms | 503 ms | 739 ms, 1.25 s, 718 ms, 683 ms, 702 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
+| Plate (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 718 ms | 135 ms · 212 ms | 306 ms | 146 ms | 1.10 s, 361 ms, 271 ms, 313 ms, 300 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
+| docen (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 660 ms | 343 ms · 126 ms | 193 ms | 39 ms | 728 ms, 195 ms, 191 ms, 183 ms, 263 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
+| WordCraft (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 476 ms | 187 ms · 126 ms | 221 ms | 23 ms | 171 ms, 191 ms, 375 ms, 221 ms, 256 ms | 3 KB + a page image per page viewed |
+| SuperDoc (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
+| OpenDoc | 934 ms | 179 ms · 151 ms | 220 ms | 24 ms | 257 ms, 210 ms, 389 ms, 220 ms, 202 ms | 3 KB + a page image per page viewed |
+| BetterOffice | 914 ms | 319 ms · 446 ms | 279 ms | 85 ms | 368 ms, 261 ms, 230 ms, 318 ms, 297 ms (1 reached a process that had not loaded the engine: not in the median) | 2 KB + a page image per page viewed |
 <!-- server:end -->
 
 How each is measured:
@@ -459,25 +562,26 @@ How each is measured:
   JS heap, renderer memory, DOM nodes and bytes. The landing page shows them under the server tables.
 - Lighthouse: `uv run --with playwright python -I scripts/measure_pagespeed.py https://viewers.benchmarks.law v/docxodus,r/docxodus 3 --out results/lighthouse.json`
   (PageSpeed Insights, through its own site because the keyless API quota is usually spent; median of the analyses).
-- Where: since 2026-11-18 the browser timings are made on a Hugging Face Jobs machine (`cpu-upgrade`: 8 vCPU,
-  32 GB, Linux, no GPU, so Chrome draws in software; headed under Xvfb) by open-docs'
+- Where: the browser timings are made on a Hugging Face Jobs machine (Linux, no GPU, so Chrome draws in
+  software; headed under Xvfb) by open-docs'
   [`scripts/hf_job.sh`](https://github.com/arthrod/open-docs/blob/main/scripts/hf_job.sh), 3 runs per engine and
   document. It runs none of our other work and anyone can rent the same machine. The load average and core count
-  in each heading are the shared host's (64 cores), not our 8 vCPU: the load reached 45 during the browser runs, and
-  how much of that slowed our Chrome cannot be told from inside the job. These figures do not continue the
+  in each run are the shared host's (64 cores), not ours. The pass of 2026-11-20 ran on the `cpu-xl` type
+  (16 vCPU, 124 GB); the one of 2026-11-18 on `cpu-upgrade` (8 vCPU, 32 GB), whose hosts were too busy all of
+  2026-11-20 (load 100 to 440) for a single run to start. A run starts only while the host's load is under a
+  limit, 100 for this pass: the load was between 3 and 102 during the browser runs (median about 50) and 39 to 47
+  during the `/r/` runs, and how much of that slowed our Chrome cannot be told from inside the job. Several
+  timings are slower than on 2026-11-18 although the machine is larger; the busier host is the likely reason,
+  and each run in `results/raw/` carries its load. These figures do not continue the
   earlier series, which came from a GitHub-hosted macOS runner (3 cores, 5 runs; the files of 2026-11-16 and
   2026-11-17 in `results/raw/`, and the [Measure workflow](.github/workflows/measure.yml) that still makes
   them). Read the figures as that machine's; what carries to another machine is the order between engines, not
   the seconds.
-- That pass, honestly: OpenDoc failed all 9 starts of the first pass, because its adapter handed it a document
-  before its engine was ready (fixed in open-docs the same day); its rows are from a second pass, and the failed
-  runs stay in the raw files. OnlyOffice and BetterOffice were measured in both passes (6 runs). The second pass
-  was a separate job on the same machine type, and its load-average readings do not continue the first job's, so
-  it ran on another host of that type (64 cores, 493 GB). A third job that evening, meant to take every row on one
-  host, was not used: its host's load reached 102 during the browser runs, and it saved no new 500-page file. 14 of the 171
-  runs behind the tables did not render, 5 of them OnlyOffice's (of its 18) and 4 BetterOffice's (of 18): mostly
-  "not rendered within 240 s" or the page answering an error status. Each row's runs column shows them, and the
-  raw files give the reason.
+- The pass of 2026-11-20 (files dated 2026-11-20 in `results/raw/`; it ran past midnight UTC, so two headings say
+  2026-11-21): one job, one host, 3 runs per engine and document, every engine. 14 of its 153 browser runs did not
+  render (see "Figures to distrust"); the three `/r/` runs of docx-editor.dev on the 500 pages answered HTTP 422,
+  as designed. The files of 2026-11-18 stay in `results/raw/`, with the account of that day's two passes in
+  their history.
   The first-and-warm server table was not taken again. The Lighthouse rows of the five engines added on
   2026-11-18 were taken on 2026-11-20 (PageSpeed runs on Google's machines, so the day's other figures do not
   bear on them); the other Lighthouse rows are still those of 2026-11-16.

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_the_readme_in_the_repository_matches_its_data():
-    files = {n: json.loads((ROOT / "results" / f"{n}.json").read_text()) for n in ("browser", "server", "samples", "server-client", "lighthouse")}
+    files = {n: json.loads((ROOT / "results" / f"{n}.json").read_text()) for n in ("browser", "server", "samples", "server-client", "lighthouse", "lighthouse-local")}
     readme = (ROOT / "README.md").read_text()
     assert rt.render(readme, files) == readme, "run scripts/readme_tables.py"
 
@@ -25,7 +25,7 @@ def test_browser_rows_frames_failures_and_other_dates():
     }}
     out = rt.browser_block(data)
     assert "| folio (measured 2026-11-10) | 1.12 s | 2.28 s, 1.08 s, 1.12 s | 2.0 MB | 78 | 21 MB | 365 MB |" in out
-    assert "| Google viewer | 808 ms (frame load) | 808 ms, failed | 1.0 MB | 27 | n/a | n/a |" in out
+    assert "| Google Docs viewer | 808 ms (frame load) | 808 ms, failed | 1.0 MB | 27 | n/a | n/a |" in out
     assert "| Plate | **failed**: not rendered within 240s | failed | | | | |" in out
 
 
@@ -49,7 +49,7 @@ def test_sample_rows_and_their_server_cells():
     assert out.count("not measured on this file yet") == 1 and "| folio |" in out  # folio has a route, and no figure here
     # An engine with no server route says why in its cell (server/no-server.json).
     assert "| Apryse WebViewer | 1.70 s | 1.70 s | 3.0 MB | 649 MB | 22 MB | no server route: Apryse renders on a server with a native SDK |" in out
-    assert "| Word Online viewer | 1.70 s (frame load) | 1.70 s | n/a | 649 MB | 22 MB | rendered on Microsoft's servers |" in out
+    assert "| Microsoft Word viewer | 1.70 s (frame load) | 1.70 s | n/a | 649 MB | 22 MB | rendered on Microsoft's servers |" in out
     assert '**failed**: "socket hang up"' in out
 
 
@@ -61,7 +61,7 @@ def test_server_client_and_lighthouse_blocks_and_missing_markers():
     out = rt.server_client_block(client, browser, {"samples": {}})
     assert "| docen | 1.29 s | 1.29 s, failed | 940 ms | 706 KB | 266 MB | 36,966 | 1.1 MB |" in out
     assert "| docx-editor.dev | **failed**: HTTP 500 | failed | | | | | |" in out
-    assert "| Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 769 ms | 769 ms | n/a | n/a | n/a | n/a | 1.0 MB |" in out
+    assert "| Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 769 ms | 769 ms | n/a | n/a | n/a | n/a | 1.0 MB |" in out
     page = {"performance": 100, "accessibility": 90, "bestPractices": 100, "seo": 91, "fcpMs": 261, "lcpMs": 521, "tbtMs": 0, "cls": 0, "speedIndexMs": 809, "performanceRuns": [100, 100], "error": None}
     lh = rt.lighthouse_block({"measuredAt": "2026-11-16", "environment": "PSI", "pages": {"v/docxodus": {"desktop": page, "mobile": page}, "r/docxodus": {"desktop": page}}})
     assert lh.count("| Docxodus |") == 2 and "| Docxodus | 100 · n/a |" in lh
@@ -120,5 +120,48 @@ def test_every_engine_without_a_server_route_says_why():
         r = rt.NO_SERVER[e]
         assert r["status"] in rt.NO_SERVER_KIND and len(r["why"]) > 40 and r["cell"].startswith(("no server route: ", "not built"))
     block = rt.no_server_block(rt.NO_SERVER)
-    assert "| OpenDoc | possible, not built | This one is possible." in block
+    # OpenDoc and BetterOffice were "possible, not built" until 2026-11-21: with a route, neither is in the list.
+    assert "opendoc" in rt.SERVER and "betteroffice" in rt.SERVER and "| OpenDoc |" not in block and "| BetterOffice |" not in block
+    assert "| react-docx | needs a browser | " in block
     assert "| OnlyOffice (CryptPad build) | needs a browser | " in block
+
+
+def test_a_heap_that_was_not_collected_first_is_said_in_the_table():
+    import readme_tables as rt
+
+    assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 2}) == "5.0 MB (not collected first in 2 runs)"
+    assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 0}) == "5.0 MB"
+
+
+def test_the_server_client_table_says_an_uncollected_heap_too():
+    import inspect
+
+    import readme_tables as rt
+
+    assert "heap(r)" in inspect.getsource(rt.server_client_block)
+
+
+def test_the_local_lighthouse_block_is_empty_until_measured_and_then_headed_by_its_machine():
+    assert rt.local_block({"measuredAt": None, "environment": "", "pages": {}}) == "Not measured yet."
+    page = {"performance": 60, "accessibility": 94, "bestPractices": 96, "seo": 90, "fcpMs": 500, "lcpMs": 500, "tbtMs": 1840, "cls": 0.002, "speedIndexMs": 8500, "performanceRuns": [60, 61, 59], "error": None}
+    none = {**page, "performance": None, "performanceRuns": [None, None, None]}
+    out = rt.local_block({"measuredAt": "2026-11-21", "environment": "Lighthouse 13.6.0 run on a MacBook Pro",
+                          "pages": {"v/wordcraft": {"desktop": page, "mobile": page}, "v/nutrient": {"desktop": none, "mobile": none}, "r/wordcraft": {"desktop": page, "mobile": page}}})
+    assert "Lighthouse 13.6.0 run on a MacBook Pro" in out
+    assert "| WordCraft | 60 · 60 |" in out
+    assert "| Nutrient | **no result**: Lighthouse gave no score |" in out
+    assert "PageSpeed" not in out
+
+
+def test_a_server_route_timed_from_another_machine_says_so_in_its_cell():
+    b = {"renderedMs": 1700, "runs": [1700], "bytes": 22 << 20, "requests": 20, "heapBytes": 3 << 20, "rendererRss": 649 << 20}
+    cloud = "curl, 3 runs, median; from a cloud machine (16 vCPU; shared); machine load (1-minute average) median 2.0"
+    mac = "curl, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.6"
+    s = lambda env: {"code": 200, "totalMs": 300, "renderMs": 20, "bytes": 3000, "pages": 3, "runs": [300], "measuredAt": "2026-11-21", "environment": env}
+    data = {"measuredAt": "2026-11-21", "environment": "test", "samples": {"redline": {"document": "redline.docx",
+            "browser": {"folio": b, "docxodus": b, "opendoc": b},
+            "server": {"folio": s(cloud), "docxodus": s(cloud), "opendoc": s(mac)}}}}
+    out = rt.samples_block(data)
+    assert rt.server_from(s(cloud)) == "a cloud machine" and rt.server_from({}) is None
+    assert "pages (timed from Darwin arm64, not from a cloud machine as the other rows) |" in out
+    assert out.count("timed from") == 1
