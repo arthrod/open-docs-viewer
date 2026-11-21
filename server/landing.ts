@@ -88,7 +88,12 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
 }
 
 /** PageSpeed Insights, every engine: its /v/ page, and its /r/ page where it has one. */
-export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIGHTHOUSE, local: LighthouseResults = LIGHTHOUSE_LOCAL): string {
+/** `local` defaults to the repository's file only beside the repository's PageSpeed file: a caller with its own data gets none of ours. */
+export function lighthouseSection(
+  engines: Engine[],
+  lh: LighthouseResults = LIGHTHOUSE,
+  local: LighthouseResults = lh === LIGHTHOUSE ? LIGHTHOUSE_LOCAL : { measuredAt: null, environment: "", pages: {} },
+): string {
   // Either table is enough to show the section: the 500 pages can be analysed on their own.
   if (!Object.keys(lh.pages ?? {}).length && !Object.keys(lh.docs?.["lorem-500"] ?? {}).length) return "";
   const score = (n: number | null | undefined) => n == null ? "n/a" : `<b class="lh ${n >= 90 ? "lh-good" : n >= 50 ? "lh-mid" : "lh-bad"}">${n}</b>`;
