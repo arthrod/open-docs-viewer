@@ -10,9 +10,11 @@ Per run:
               render, the download, and the browser parsing, laying out and
               decoding every picture of what it was sent
   paintMs     navigation start → first contentful paint
-  heapBytes   JSHeapUsedSize (Chrome DevTools Protocol), 1.5 s after load: no
-              engine script runs on these pages (Docxodus's paginator excepted),
-              so this is close to an empty page's heap
+  heapBytes   JSHeapUsedSize (Chrome DevTools Protocol), 1.5 s after load and
+              after a forced garbage collection, as scripts/measure.py reads it
+              (heapBytesBeforeGc is the reading before it): no engine script
+              runs on these pages (Docxodus's paginator excepted), so this is
+              close to an empty page's heap
   rendererRss resident memory of every renderer process of that Chrome (`ps`),
               same moment: the DOM, decoded pictures and Chrome's spare renderer
   domNodes    DOM nodes alive in the page
@@ -35,7 +37,7 @@ from playwright.async_api import async_playwright
 
 # These scripts are run with `python -I`, which leaves the script's folder off the import path.
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
-from measure_lib import chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
+from measure_lib import collected_heap, heap_median, quiet_host, chrome_args, chrome_note, client_args, end_chrome, load_note, machine_load, renderer_rss, runs_note, stamp_rows, write_raw, where_note
 
 # Parsed before any browser starts.
 ARGS = client_args(sys.argv[1:])
@@ -128,9 +130,11 @@ async def one(pw, slug: str, doc: str) -> dict:
                 out["chrome"] = (await asyncio.wait_for(cdp.send("Browser.getVersion"), 30)).get("product")
                 await cdp.send("Performance.enable")
                 m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
-                out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
                 out["domNodes"] = int(m.get("Nodes", 0))
                 out["rendererRss"] = renderer_rss(profile)
+                # The heap after a forced collection, as scripts/measure.py reads it: both land
+                # under "JS heap". The reading before it is kept beside it.
+                out.update(await collected_heap(cdp, int(m.get("JSHeapUsedSize", 0))))
         except Exception as e:
             out["error"] = f"{type(e).__name__}: {e}"[:300]
         out["bytes"] = sum(sizes)
@@ -146,6 +150,9 @@ async def one(pw, slug: str, doc: str) -> dict:
     return out
 
 
+STOPPED: list[str] = []  # why the run loop ended early, when it did
+
+
 async def main():
     engines = ALL if ARGS.engines == "all" else ARGS.engines.split(",")
     docs = ARGS.docs.split(",")
@@ -157,6 +164,10 @@ async def main():
         for _ in range(runs):
             for d in docs:
                 for e in engines:
+                    busy = await quiet_host()
+                    if busy:
+                        stopped = busy
+                        break
                     x = await one(pw, e, d)
                     raw.append(x)
                     print(json.dumps(x), file=sys.stderr, flush=True)
@@ -169,6 +180,7 @@ async def main():
                 # A Chrome that would not end is still using the machine: what was measured so far is
                 # written, and nothing more is measured beside it.
                 print(f"stopping: {stopped}", file=sys.stderr, flush=True)
+                STOPPED.append(stopped)
                 break
     try:
         result = json.load(open(path)) if path else {}
@@ -191,9 +203,13 @@ async def main():
             if not xs:
                 continue  # a stopped run never reached it: its entry stays as it was
             ok = [x for x in xs if "loadMs" in x]
+            heap, uncollected = heap_median(ok)
             med = lambda k: int(statistics.median(x[k] for x in ok if k in x)) if any(k in x for x in ok) else None
             result.setdefault("docs", {}).setdefault(d, {})[e] = {
                 **{k: med(k) for k in KEYS},
+                # As in measure_lib.engine_summary: an uncollected heap stays out of the median.
+                "heapBytes": heap,
+                "heapNotCollected": uncollected,
                 "runs": [x.get("loadMs") for x in xs],
                 "error": next((x["error"] for x in xs if "error" in x), None),
                 **meta,
@@ -206,3 +222,5 @@ async def main():
 
 
 asyncio.run(main())
+if STOPPED:
+    sys.exit(4)  # stopped before the end: what was measured is written, and the caller is told

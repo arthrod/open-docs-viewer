@@ -20,6 +20,9 @@ const ms = (n: number | null | undefined) =>
 /** Said under a figure measured on another day than its table's heading (a partial re-run). */
 const when = (row: { measuredAt?: string } | undefined, head: { measuredAt?: string | null }) =>
   row?.measuredAt && row.measuredAt !== head.measuredAt ? `<div class="ro odv-prov">measured ${esc(row.measuredAt)}</div>` : "";
+/** Said beside a heap whose garbage could not be collected first in some runs (the median leaves them out while it can). */
+const uncollected = (r?: { heapNotCollected?: number } | null) =>
+  r?.heapNotCollected ? ` <small class="odv-fail">not collected first in ${r.heapNotCollected} run${r.heapNotCollected === 1 ? "" : "s"}</small>` : "";
 const mb = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1048576 ? `${Math.round(n / 1024)} KB` : `${(n / 1048576).toFixed(1)} MB`;
 
@@ -67,7 +70,7 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
     if (!c) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6" class="ro">not measured yet</td></tr>`;
     if (c.loadMs == null) return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a></td><td colspan="6"><span class="odv-fail">failed</span> <span class="ro">${esc(c.error ?? "")}</span></td></tr>`;
     return `<tr><td><a href="/r/${r.slug}?src=${q}">${esc(r.name)}</a>${when(c, client)}</td><td class="n"><b>${ms(c.loadMs)}</b></td><td class="n hide-sm">${ms(c.paintMs)}</td>
-<td class="n">${mb(c.heapBytes)}</td><td class="n">${mb(c.rendererRss)}</td><td class="n hide-sm">${c.domNodes?.toLocaleString("en-US") ?? "n/a"}</td><td class="n hide-sm">${mb(c.bytes)}</td></tr>`;
+<td class="n">${mb(c.heapBytes)}${uncollected(c)}</td><td class="n">${mb(c.rendererRss)}</td><td class="n hide-sm">${c.domNodes?.toLocaleString("en-US") ?? "n/a"}</td><td class="n hide-sm">${mb(c.bytes)}</td></tr>`;
   }).join("");
   const vendors = engines.filter((e) => e.frame).map((e) => {
     const b = results.engines[e.slug];
@@ -189,7 +192,7 @@ export function samplesSection(
       // Chrome's reading of the server page is its own measurement: shown whatever curl got.
       const inBrowser = !c ? "" : c.loadMs == null
         ? `<div class="ro">in the browser: <span class="odv-fail">failed</span> ${esc(c.error ?? "")}</div>`
-        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
+        : `<div class="ro">in the browser: loaded ${ms(c.loadMs)} · heap ${mb(c.heapBytes)}${uncollected(c)} · memory ${mb(c.rendererRss)}${c.measuredAt && c.measuredAt !== client.measuredAt ? ` (measured ${esc(c.measuredAt)})` : ""}</div>`;
       const server = e.frame
         ? `<span class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers: the columns on the left are their frame</span>`
         : !v
@@ -211,7 +214,7 @@ export function samplesSection(
       }</td>
       <td class="n">${browser}</td>
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
-      <td class="n">${e.frame ? "n/a" : mb(b?.heapBytes)}</td>
+      <td class="n">${e.frame ? "n/a" : mb(b?.heapBytes) + uncollected(b)}</td>
       <td class="n">${mb(b?.rendererRss)}</td>
       <td class="n hide-sm">${mb(b?.bytes)}</td>
       <td class="n">${server}</td>
@@ -251,7 +254,7 @@ export function landingPage(engines: Engine[], results: Results, defaultSrc: str
       <td class="n hide-sm">${runs.length ? runs.map((x) => (x == null ? "fail" : ms(x))).join(" · ") : "n/a"}</td>
       <td class="n">${mb(r?.bytes)}</td>
       <td class="n hide-sm">${r?.requests ?? "n/a"}</td>
-      <td class="n">${mb(r?.heapBytes)}</td>
+      <td class="n">${mb(r?.heapBytes)}${uncollected(r)}</td>
       <td class="n hide-sm">${runs.length ? `${runs.length - failed}/${runs.length}` : "n/a"}</td>
       <td class="n hide-sm"><span class="odv-bar"><i style="width:${r?.renderedMs ? ((100 * r.renderedMs) / max).toFixed(1) : 0}%"></i></span></td>
     </tr>`;

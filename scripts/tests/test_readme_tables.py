@@ -122,3 +122,18 @@ def test_every_engine_without_a_server_route_says_why():
     block = rt.no_server_block(rt.NO_SERVER)
     assert "| OpenDoc | possible, not built | This one is possible." in block
     assert "| OnlyOffice (CryptPad build) | needs a browser | " in block
+
+
+def test_a_heap_that_was_not_collected_first_is_said_in_the_table():
+    import readme_tables as rt
+
+    assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 2}) == "5.0 MB (not collected first in 2 runs)"
+    assert rt.heap({"heapBytes": 5 * 1048576, "heapNotCollected": 0}) == "5.0 MB"
+
+
+def test_the_server_client_table_says_an_uncollected_heap_too():
+    import inspect
+
+    import readme_tables as rt
+
+    assert "heap(r)" in inspect.getsource(rt.server_client_block)

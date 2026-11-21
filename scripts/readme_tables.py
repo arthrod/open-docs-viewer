@@ -49,6 +49,12 @@ def ms(n) -> str:
     return f"{rnd(n)} ms" if n < 1000 else f"{n / 1000:.2f} s" if n < 10000 else f"{n / 1000:.1f} s"
 
 
+def heap(r: dict) -> str:
+    """A row's JS heap, and how many of its runs could not collect garbage first (the figure is then the earlier reading)."""
+    n = r.get("heapNotCollected") or 0
+    return mb(r.get("heapBytes")) + (f" (not collected first in {n} run{'s' if n != 1 else ''})" if n else "")
+
+
 def mb(n) -> str:
     """A size in bytes."""
     if n is None:
@@ -96,7 +102,7 @@ def browser_block(data: dict) -> str:
             continue
         frame = e in FRAMES
         out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'), r.get('incomplete'))} | {mb(r.get('bytes'))} | "
-                   f"{r.get('requests') if r.get('requests') is not None else 'n/a'} | {'n/a' if frame else mb(r.get('heapBytes'))} | {mb(r.get('rendererRss'))} |")
+                   f"{r.get('requests') if r.get('requests') is not None else 'n/a'} | {'n/a' if frame else heap(r)} | {mb(r.get('rendererRss'))} |")
     return "\n".join(out)
 
 
@@ -161,7 +167,7 @@ def samples_block(data: dict) -> str:
             if r.get("renderedMs") is None:
                 out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | {srv} |")
                 continue
-            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'), r.get('incomplete'))} | {'n/a' if frame else mb(r.get('heapBytes'))} | "
+            out.append(f"| {name} | {ms(r['renderedMs'])}{' (frame load)' if frame else ''} | {each(r.get('runs'), r.get('failed'), r.get('incomplete'))} | {'n/a' if frame else heap(r)} | "
                        f"{mb(r.get('rendererRss'))} | {mb(r.get('bytes'))} | {srv} |")
         out.append("")
     return "\n".join(out).rstrip()
@@ -185,7 +191,7 @@ def server_client_block(client: dict, browser: dict, samples: dict) -> str:
                 out.append(f"| {name} | **failed**: {cell(r.get('error') or 'no answer')} | {each(r.get('runs'))} | | | | | |")
                 continue
             nodes = f"{r['domNodes']:,}" if r.get("domNodes") is not None else "n/a"
-            out.append(f"| {name} | {ms(r['loadMs'])} | {each(r.get('runs'))} | {ms(r.get('paintMs'))} | {mb(r.get('heapBytes'))} | {mb(r.get('rendererRss'))} | {nodes} | {mb(r.get('bytes'))} |")
+            out.append(f"| {name} | {ms(r['loadMs'])} | {each(r.get('runs'))} | {ms(r.get('paintMs'))} | {heap(r)} | {mb(r.get('rendererRss'))} | {nodes} | {mb(r.get('bytes'))} |")
         for e, who in FRAMES.items():
             r = (browser.get("engines", {}) if doc == "showcase" else samples.get("samples", {}).get(doc, {}).get("browser", {})).get(e)
             if not r:

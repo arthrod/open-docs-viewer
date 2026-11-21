@@ -19,6 +19,8 @@ export interface EngineResult {
   failed?: string | null;
   /** What a run that rendered then failed to read (its time is kept). */
   incomplete?: string | null;
+  /** Runs whose heap could not be collected first: left out of heapBytes while any run was collected. */
+  heapNotCollected?: number;
   /** When and how this engine was measured, when the file records it per engine (a partial re-run). */
   measuredAt?: string;
   environment?: string;

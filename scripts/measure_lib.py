@@ -14,6 +14,7 @@ import shlex
 import re
 import statistics
 import subprocess
+import sys
 import time
 
 LH_CATS = {"performance": "performance", "accessibility": "accessibility", "best-practices": "bestPractices", "seo": "seo"}
@@ -139,6 +140,37 @@ def renderer_rss(profile: str) -> int:
     return renderer_rss_of([(int(r[0]), int(r[1]), int(r[2]) * 1024, r[3]) for r in rows if len(r) == 4], profile)
 
 
+async def collected_heap(cdp, before: int) -> dict:
+    """The JS heap after a forced collection, beside the reading before it (`before`, bytes).
+
+    An engine that has just converted a file holds garbage: canvas-editor read 1,281 MiB at
+    1.5 s after rendering 500 pages and 702 MiB once Chrome had collected (2026-11-20). When
+    the collection fails the figure is the earlier reading, and the run says so.
+    """
+    out = {"heapBytesBeforeGc": before}
+    try:
+        await asyncio.wait_for(cdp.send("HeapProfiler.collectGarbage"), 120)
+        m = {x["name"]: x["value"] for x in (await asyncio.wait_for(cdp.send("Performance.getMetrics"), 60))["metrics"]}
+        out["heapBytes"] = int(m.get("JSHeapUsedSize", 0))
+    except Exception as e:
+        out["heapBytes"] = before
+        out["heapNotCollected"] = f"{type(e).__name__}: {e}"[:160]
+    return out
+
+
+def heap_median(ok: list[dict]) -> tuple[int | None, int]:
+    """The JS heap of a row, and how many of its runs could not collect garbage first.
+
+    A heap that could not be collected first is the uncollected figure under the collected
+    one's name: it stays out of the median while any run has a collected reading. When none
+    has, the median of the uncollected readings is shown, and the count beside it says so.
+    A run with no heap reading at all counts for neither.
+    """
+    read = [x for x in ok if x.get("heapBytes") is not None]
+    collected = [x for x in read if not x.get("heapNotCollected")]
+    return median(collected or read, "heapBytes"), sum(1 for x in ok if x.get("heapNotCollected"))
+
+
 def engine_summary(xs: list[dict]) -> dict:
     """One engine's published entry from its cold runs (scripts/measure.py).
 
@@ -148,12 +180,14 @@ def engine_summary(xs: list[dict]) -> dict:
     `failed`, beside the median of the runs that did.
     """
     ok = [x for x in xs if "renderedMs" in x]
+    heap, uncollected = heap_median(ok)
     return {
         "renderedMs": median(ok, "renderedMs"),
         "runs": [x.get("renderedMs") for x in xs],
         "bytes": median(ok, "bytes"),
         "requests": median(ok, "requests"),
-        "heapBytes": median(ok, "heapBytes"),
+        "heapBytes": heap,
+        "heapNotCollected": uncollected,
         "rendererRss": median(ok, "rendererRss"),
         "how": "data-od-rendered" if ok else (xs[0].get("blocked") or xs[0].get("error")),
         "incomplete": next((x["error"] for x in ok if x.get("error")), None),
@@ -304,14 +338,17 @@ def summarize(l: dict) -> dict:
 PSI_REPEAT = "PageSpeed answered with an analysis it had already made (its cache): not counted again"
 
 
-def repeated_analysis(x: dict, seen: dict) -> list[str]:
-    """The form factors of analysis `x` that PageSpeed served from its cache, and remember the fresh ones.
+def repeated_analysis(x: dict, seen: dict, remember: bool = True) -> list[str]:
+    """The form factors of analysis `x` that PageSpeed served from its cache.
 
     PageSpeed keeps an analysis for a short while and answers a second request for the same
     address with it. Five requests in three minutes came back as two or three analyses
     (2026-11-20, five pages per round: 18 of 50 were copies), and a median of copies is not a
     median of five. Every Lighthouse report carries the time it was made: one seen before, for
     the same page and form factor, is a copy. `seen` maps (page, form factor) to those times.
+    With `remember`, the fresh ones are added to it; a caller that asks again before it
+    publishes (scripts/measure_pagespeed.py) passes False and calls remember_analyses on what
+    it publishes, so that an analysis it then threw away is not held against a later request.
     """
     again = []
     for f in ("desktop", "mobile"):
@@ -321,9 +358,17 @@ def repeated_analysis(x: dict, seen: dict) -> list[str]:
         times = seen.setdefault((x.get("page"), f), set())
         if at in times:
             again.append(f)
-        else:
+        elif remember:
             times.add(at)
     return again
+
+
+def remember_analyses(x: dict, seen: dict) -> None:
+    """Count the analyses in `x` as published: the same one again is a copy from now on."""
+    for f in ("desktop", "mobile"):
+        at = (x.get(f) or {}).get("fetchTime")
+        if at:
+            seen.setdefault((x.get("page"), f), set()).add(at)
 
 
 def without_repeats(x: dict, again: list[str]) -> dict:
@@ -334,6 +379,27 @@ def without_repeats(x: dict, again: list[str]) -> dict:
     out.setdefault("error", PSI_REPEAT)
     out["repeated"] = again
     return out
+
+
+def still_repeated(kept: dict, x: dict, again: list[str], owed: list[str] | None = None) -> list[str]:
+    """Keep the fresh form factors of attempt `x` in `kept`; the ones still without a fresh analysis.
+
+    An attempt can bring one form factor fresh and the other as a copy: the fresh one is kept,
+    and only the other is owed. `owed` is what the attempt before left owed: an attempt that
+    fails brings nothing, and without it the form factor stopped being asked for and lost its
+    "repeated" mark. The first fresh report of a form factor is the one counted, whatever it
+    says: a report with an error (the engine failed to start) is a result, which page_entry
+    counts, and one that a later attempt replaced or asked for again would be a failure hidden.
+    """
+    for f in ("desktop", "mobile"):
+        if f in x and f not in again and f not in kept:
+            kept[f] = x[f]
+    return [f for f in ("desktop", "mobile") if (f in again or f in (owed or [])) and f not in kept]
+
+
+def with_kept(x: dict, kept: dict, missing: list[str]) -> dict:
+    """The last attempt with the fresh form factors of the earlier ones, less those that stayed copies."""
+    return without_repeats({**x, **kept}, missing)
 
 
 def page_entry(xs: list[dict], limit_s: int) -> dict:
@@ -413,6 +479,32 @@ def machine_load() -> dict:
     return {"load1": round(os.getloadavg()[0], 2), "cores": os.cpu_count() or 1}
 
 
+async def quiet_host(env: dict | None = None, load=None, sleep=asyncio.sleep, now=time.monotonic) -> str | None:
+    """Wait until the machine is quiet enough to time a page; the reason, when it never was.
+
+    On a shared host the load changes within minutes (2026-11-20: 38 when a step started, 98
+    when it ended), so it is looked at before every run, not once per step. OD_MAX_LOAD is the
+    1-minute load average a run may start under; without it nothing waits (one's own machine).
+    OD_LOAD_WAIT_S is how long one run waits (six hours unless given). A wait that runs out
+    stops the script like a Chrome that will not end: what was measured is written, the rest
+    is left as it was, and the script ends with a status that says it did not finish.
+    """
+    env = os.environ if env is None else env
+    if not env.get("OD_MAX_LOAD"):
+        return None
+    limit, wait = float(env["OD_MAX_LOAD"]), float(env.get("OD_LOAD_WAIT_S", 21600))
+    load = load or (lambda: os.getloadavg()[0])
+    end, said = now() + wait, False
+    while (at := load()) > limit:
+        if now() >= end:
+            return f"the host stayed busy for {wait:g} s (load {at:.1f}, a run starts under {limit:g})"
+        if not said:
+            print(f"waiting for the host: load {at:.1f}, a run starts under {limit:g}", file=sys.stderr, flush=True)
+            said = True
+        await sleep(10)
+    return None
+
+
 def load_note(runs: list[dict]) -> str:
     """One phrase for the environment line: the load the runs were taken under."""
     loads = sorted(r["load1"] for r in runs if isinstance(r.get("load1"), (int, float)))
@@ -432,6 +524,15 @@ def runs_note(asked: int, raw: list[dict], key: str = "engine") -> str:
     if not counts or counts == [asked]:
         return f"{asked} runs"
     return f"{counts[0]} to {counts[-1]} runs ({asked} asked; the measuring stopped early)" if len(counts) > 1 else f"{counts[0]} runs ({asked} asked; the measuring stopped early)"
+
+
+def page_list(pages: str) -> list[str]:
+    """The pages to analyse, each once, in the order given.
+
+    A page named twice ran as two jobs of one round: both could keep the same fresh analysis
+    while they waited for the other form factor, and both published it.
+    """
+    return list(dict.fromkeys(p.strip() for p in pages.split(",") if p.strip()))
 
 
 def pagespeed_args(argv: list[str]) -> argparse.Namespace:
