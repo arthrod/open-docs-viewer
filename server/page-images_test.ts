@@ -212,7 +212,7 @@ Deno.test("a page request for a layout still being made by a request whose turn 
   const id = (await sha256(a)).slice(0, 16);
   // The first request's turn runs out while the layout goes on: the layout stays kept, unfinished.
   const first = route.page({ doc: id, n: "1", s: "1" }, () => Promise.resolve(a), (job) => {
-    job();
+    job().catch(() => {}); // the layout goes on by itself; this test never lets it finish
     return Promise.reject(new TookTooLong(1));
   });
   let err: unknown;

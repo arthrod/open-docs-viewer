@@ -114,8 +114,8 @@ export function pageImages(engine: PageImageEngine) {
     const kept = laid.get(id);
     let hit = anew ? undefined : kept;
     laid.delete(id); // set again below, which also makes it the most recently used
-    if (anew && kept) evict(kept);
-    if (!hit) {
+    if (anew && kept !== undefined) evict(kept);
+    if (hit === undefined) {
       // Room is made before the new layout, not after: the engine never holds more than `keep` (unless a page is being drawn from one).
       const room = [...laid].slice(0, Math.max(0, laid.size - (keep - 1)));
       for (const [old] of room) laid.delete(old);
@@ -154,7 +154,7 @@ export function pageImages(engine: PageImageEngine) {
       return await fn(await wait);
     } finally {
       const p = key();
-      if (p) unpin(p);
+      if (p !== undefined) unpin(p);
     }
   }
 
@@ -205,7 +205,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
     let hit = laid.get(id);
     let key: () => Promise<Laid> | undefined;
     let fetchMs = 0;
-    if (!hit) {
+    if (hit === undefined) {
       let pending = fetching.get(id);
       if (!pending) {
         pending = getBytes().finally(() => fetching.delete(id));
@@ -218,7 +218,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
         return refuse(409, "the document at that URL is no longer the one this page was made from: reload the page");
       }
       let queued = laying.get(id);
-      if (!queued) {
+      if (queued === undefined) {
         // layOut is called when the turn comes, not before: a layout waiting for its turn is not
         // in `laid`, so a render that holds the turn never waits on one queued behind itself.
         const q: Queued = queued = { sharers: 0, promise: undefined as unknown as Promise<Laid> };
@@ -232,7 +232,7 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
         laying.set(id, q);
       }
       const q = queued;
-      if (q.made) pin(q.made);
+      if (q.made !== undefined) pin(q.made);
       else q.sharers++;
       hit = q.promise;
       key = () => q.made;
