@@ -42,7 +42,7 @@ why one is missing.
 
 - [x] 3.1 Same menu as editors.benchmarks.law, with the Blog link
 - [ ] 3.2 Same engine names as the other sites
-- [~] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes` (live 2026-11-21 for the engines whose section is published; the six new tools get their link when benchmarks.law has their sections, through `VENDOR_NOTE_PENDING` in the open-docs registry)
+- [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes`, the six new tools included since benchmarks.law published their sections (et-v0.10.6, 2026-11-21)
 
 ## Log
 
@@ -52,3 +52,4 @@ why one is missing.
 | 2026-11-21 | 3.3 | Each engine links to its vendor note |
 | 2026-11-21 | 1.6, 1.7 | Server routes for OpenDoc and BetterOffice, built and measured |
 | 2026-11-21 | 1.11 | Lighthouse on our computer published for every page and route |
+| 2026-11-21 | vendor notes | benchmarks.law has the six new sections; their links are on |
