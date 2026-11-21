@@ -1,283 +1,299 @@
 {
- "measuredAt": "2026-11-18",
- "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores",
+ "measuredAt": "2026-11-21",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores",
  "docs": {
   "showcase": {
    "docxodus": {
-    "loadMs": 1893,
-    "paintMs": 1716,
-    "heapBytes": 2426732,
-    "rendererRss": 383766528,
+    "loadMs": 1325,
+    "paintMs": 1180,
+    "heapBytes": 1641044,
+    "rendererRss": 382492672,
     "domNodes": 927,
-    "bytes": 60924,
+    "bytes": 61208,
     "requests": 3,
+    "heapNotCollected": 0,
     "runs": [
-     1924,
-     655,
-     1893
+     1030,
+     1427,
+     1325
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "folio": {
-    "loadMs": 1005,
-    "paintMs": 988,
-    "heapBytes": 1535104,
-    "rendererRss": 377622528,
+    "loadMs": 591,
+    "paintMs": 532,
+    "heapBytes": 978640,
+    "rendererRss": 377364480,
     "domNodes": 480,
-    "bytes": 157950,
+    "bytes": 160051,
     "requests": 8,
+    "heapNotCollected": 0,
     "runs": [
-     1328,
-     456,
-     1005
+     591,
+     707,
+     490
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "eigenpal": {
-    "loadMs": 1097,
-    "paintMs": 1168,
-    "heapBytes": 1119228,
-    "rendererRss": 394190848,
+    "loadMs": 988,
+    "paintMs": 1076,
+    "heapBytes": 1049192,
+    "rendererRss": 393588736,
     "domNodes": 1048,
-    "bytes": 1331349,
+    "bytes": 1334064,
     "requests": 8,
+    "heapNotCollected": 0,
     "runs": [
-     1097,
-     851,
-     1175
+     807,
+     1029,
+     988
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "plate": {
-    "loadMs": 678,
-    "paintMs": 716,
-    "heapBytes": 1638508,
-    "rendererRss": 359559168,
+    "loadMs": 388,
+    "paintMs": 444,
+    "heapBytes": 1046972,
+    "rendererRss": 359997440,
     "domNodes": 462,
-    "bytes": 13855,
+    "bytes": 13854,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     466,
-     678,
-     700
+     310,
+     388,
+     575
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "docen": {
-    "loadMs": 769,
-    "paintMs": 712,
-    "heapBytes": 1016916,
-    "rendererRss": 388505600,
+    "loadMs": 388,
+    "paintMs": 340,
+    "heapBytes": 970956,
+    "rendererRss": 389779456,
     "domNodes": 303,
-    "bytes": 1103853,
+    "bytes": 1103886,
     "requests": 6,
+    "heapNotCollected": 0,
     "runs": [
-     769,
-     290,
-     870
+     418,
+     381,
+     388
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "wordcraft": {
-    "loadMs": 1186,
-    "paintMs": 592,
-    "heapBytes": 1569860,
-    "rendererRss": 369004544,
+    "loadMs": 598,
+    "paintMs": 280,
+    "heapBytes": 979616,
+    "rendererRss": 374996992,
     "domNodes": 40,
-    "bytes": 179765,
+    "bytes": 179703,
     "requests": 4,
+    "heapNotCollected": 0,
     "runs": [
-     1085,
-     1458,
-     1186
+     710,
+     598,
+     586
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "superdoc": {
-    "loadMs": 1318,
-    "paintMs": 1348,
-    "heapBytes": 1631512,
-    "rendererRss": 359325696,
+    "loadMs": 839,
+    "paintMs": 884,
+    "heapBytes": 1040548,
+    "rendererRss": 359170048,
     "domNodes": 233,
-    "bytes": 3503,
+    "bytes": 3498,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     1318,
-     773,
-     1530
+     675,
+     839,
+     904
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    }
   },
   "redline": {
    "docxodus": {
-    "loadMs": 1526,
-    "paintMs": 1372,
-    "heapBytes": 2279584,
-    "rendererRss": 383451136,
+    "loadMs": 945,
+    "paintMs": 620,
+    "heapBytes": 1646664,
+    "rendererRss": 383029248,
     "domNodes": 1237,
-    "bytes": 62335,
+    "bytes": 62334,
     "requests": 3,
+    "heapNotCollected": 0,
     "runs": [
-     1056,
-     1526,
-     1747
+     1095,
+     857,
+     945
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "folio": {
-    "loadMs": 474,
-    "paintMs": 464,
-    "heapBytes": 1535104,
-    "rendererRss": 374165504,
+    "loadMs": 523,
+    "paintMs": 532,
+    "heapBytes": 978640,
+    "rendererRss": 380035072,
     "domNodes": 663,
-    "bytes": 163122,
+    "bytes": 163164,
     "requests": 8,
+    "heapNotCollected": 0,
     "runs": [
-     803,
-     474,
-     427
+     437,
+     566,
+     523
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "eigenpal": {
-    "loadMs": 1006,
-    "paintMs": 1100,
-    "heapBytes": 1119048,
-    "rendererRss": 398745600,
+    "loadMs": 871,
+    "paintMs": 944,
+    "heapBytes": 1049192,
+    "rendererRss": 394506240,
     "domNodes": 1266,
-    "bytes": 1337785,
+    "bytes": 1337844,
     "requests": 8,
+    "heapNotCollected": 0,
     "runs": [
-     1006,
-     1390,
-     812
+     798,
+     871,
+     898
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "plate": {
-    "loadMs": 405,
-    "paintMs": 440,
-    "heapBytes": 1638652,
-    "rendererRss": 360968192,
+    "loadMs": 363,
+    "paintMs": 412,
+    "heapBytes": 1047036,
+    "rendererRss": 360009728,
     "domNodes": 722,
-    "bytes": 14529,
+    "bytes": 14528,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     647,
-     400,
-     405
+     326,
+     434,
+     363
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "docen": {
-    "loadMs": 356,
-    "paintMs": 292,
-    "heapBytes": 1016916,
-    "rendererRss": 388882432,
+    "loadMs": 430,
+    "paintMs": 284,
+    "heapBytes": 970956,
+    "rendererRss": 389259264,
     "domNodes": 449,
-    "bytes": 1105356,
+    "bytes": 1105372,
     "requests": 6,
+    "heapNotCollected": 0,
     "runs": [
-     359,
-     326,
-     356
+     430,
+     479,
+     309
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "wordcraft": {
-    "loadMs": 644,
-    "paintMs": 272,
-    "heapBytes": 1542412,
-    "rendererRss": 370069504,
+    "loadMs": 641,
+    "paintMs": 296,
+    "heapBytes": 979616,
+    "rendererRss": 371601408,
     "domNodes": 40,
     "bytes": 215247,
     "requests": 4,
+    "heapNotCollected": 0,
     "runs": [
-     644,
-     474,
-     1114
+     641,
+     666,
+     608
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "superdoc": {
-    "loadMs": 773,
-    "paintMs": 804,
-    "heapBytes": 1631616,
-    "rendererRss": 360648704,
+    "loadMs": 913,
+    "paintMs": 956,
+    "heapBytes": 1040612,
+    "rendererRss": 358719488,
     "domNodes": 351,
     "bytes": 4504,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     838,
-     682,
-     773
+     913,
+     1039,
+     835
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    }
   },
   "lorem-500": {
    "docxodus": {
-    "loadMs": 10054,
-    "paintMs": 3480,
-    "heapBytes": 13887472,
-    "rendererRss": 976601088,
-    "domNodes": 45317,
-    "bytes": 588687,
+    "loadMs": 16370,
+    "paintMs": 3320,
+    "heapBytes": 2688384,
+    "rendererRss": 887693312,
+    "domNodes": 32490,
+    "bytes": 588719,
     "requests": 3,
+    "heapNotCollected": 0,
     "runs": [
-     13023,
-     10054,
-     9737
+     16370,
+     15503,
+     17721
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "folio": {
-    "loadMs": 7355,
-    "paintMs": 5096,
-    "heapBytes": 1096244,
-    "rendererRss": 632860672,
+    "loadMs": 8478,
+    "paintMs": 5080,
+    "heapBytes": 984340,
+    "rendererRss": 633647104,
     "domNodes": 93499,
-    "bytes": 1794828,
+    "bytes": 1795119,
     "requests": 3,
+    "heapNotCollected": 0,
     "runs": [
-     7935,
-     6761,
-     7355
+     8478,
+     7769,
+     8537
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "eigenpal": {
     "loadMs": null,
@@ -287,82 +303,87 @@
     "domNodes": null,
     "bytes": null,
     "requests": null,
+    "heapNotCollected": 0,
     "runs": [
      null,
      null,
      null
     ],
     "error": "HTTP 422",
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "plate": {
-    "loadMs": 1477,
-    "paintMs": 1292,
-    "heapBytes": 1143204,
-    "rendererRss": 423415808,
+    "loadMs": 1489,
+    "paintMs": 1192,
+    "heapBytes": 1041000,
+    "rendererRss": 423464960,
     "domNodes": 15417,
-    "bytes": 520503,
+    "bytes": 520509,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     2170,
-     1123,
-     1477
+     1427,
+     1489,
+     1635
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "docen": {
-    "loadMs": 5515,
-    "paintMs": 1756,
-    "heapBytes": 1025456,
-    "rendererRss": 1632382976,
+    "loadMs": 7254,
+    "paintMs": 2032,
+    "heapBytes": 987820,
+    "rendererRss": 1865334784,
     "domNodes": 36968,
-    "bytes": 1184482,
+    "bytes": 1183972,
     "requests": 3,
+    "heapNotCollected": 0,
     "runs": [
-     5738,
-     4611,
-     5515
+     7368,
+     6717,
+     7254
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "wordcraft": {
-    "loadMs": 3264,
-    "paintMs": 976,
-    "heapBytes": 1633940,
-    "rendererRss": 376102912,
+    "loadMs": 2081,
+    "paintMs": 1616,
+    "heapBytes": 995036,
+    "rendererRss": 377425920,
     "domNodes": 1134,
-    "bytes": 397837,
+    "bytes": 397794,
     "requests": 4,
+    "heapNotCollected": 0,
     "runs": [
-     4140,
-     3264,
-     1477
+     2255,
+     2009,
+     2081
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    },
    "superdoc": {
-    "loadMs": 6301,
-    "paintMs": 6136,
-    "heapBytes": 1110672,
-    "rendererRss": 421122048,
+    "loadMs": 5985,
+    "paintMs": 5780,
+    "heapBytes": 1040880,
+    "rendererRss": 419721216,
     "domNodes": 6527,
-    "bytes": 456483,
+    "bytes": 456500,
     "requests": 1,
+    "heapNotCollected": 0,
     "runs": [
-     6301,
-     6278,
-     6397
+     5985,
+     6108,
+     5573
     ],
     "error": null,
-    "measuredAt": "2026-11-18",
-    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-upgrade machine (8 vCPU, 32 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 37.0, highest 50.8, on 64 cores"
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores"
    }
   }
  }
