@@ -89,6 +89,11 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
 
 /** PageSpeed Insights, every engine: its /v/ page, and its /r/ page where it has one. */
 /** `local` defaults to the repository's file only beside the repository's PageSpeed file: a caller with its own data gets none of ours. */
+/** A row's own environment beside its table's: when the method and machine are the same, only what varied (its load, its CPU index). */
+const variedPart = (env: string, head?: string | null) => {
+  const mine = env.split("; "), theirs = (head ?? "").split("; ");
+  return mine[0] === theirs[0] && mine.length > 1 ? mine.slice(1).join("; ") : env;
+};
 export function lighthouseSection(
   engines: Engine[],
   lh: LighthouseResults = LIGHTHOUSE,
@@ -105,7 +110,7 @@ export function lighthouseSection(
   // A page analysed in another run than the table's heading (a partial re-run) says when.
   const elsewhere = (p: { measuredAt?: string; environment?: string } | undefined) =>
     p && ((p.measuredAt && p.measuredAt !== head.measuredAt) || (p.environment && p.environment !== head.environment))
-      ? `<div class="ro odv-prov">measured ${esc(p.measuredAt ?? "")} · ${esc(p.environment ?? "")}</div>`
+      ? `<div class="ro odv-prov">measured ${esc(p.measuredAt ?? "")} · ${esc(variedPart(p.environment ?? "", head.environment))}</div>`
       : "";
   const psi = (path: string) => `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(`https://viewers.benchmarks.law/${path}${q}`)}`;
   const row = (e: Engine) => {

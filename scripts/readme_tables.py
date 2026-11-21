@@ -78,7 +78,10 @@ def dated(name: str, row: dict, head: dict) -> str:
     """The row's name, with its own date when it was measured apart from its table, and its environment when that differs."""
     when, where = row.get("measuredAt") or head.get("measuredAt"), row.get("environment") or head.get("environment")
     if where != head.get("environment"):
-        return f"{name} (measured {when}: {str(where).replace('|', chr(92) + '|')})"
+        # "<method and machine>; <what varied>": when the first part is the table's own, only the rest is said.
+        mine, theirs = str(where).split("; "), str(head.get("environment") or "").split("; ")
+        told = "; ".join(mine[1:]) if mine[0] == theirs[0] and len(mine) > 1 else where
+        return f"{name} (measured {when}: {str(told).replace('|', chr(92) + '|')})"
     return f"{name} (measured {when})" if when != head.get("measuredAt") else name
 
 

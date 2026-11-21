@@ -1,0 +1,379 @@
+{
+ "measuredAt": "2026-11-21",
+ "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4240, lowest 4190; machine load (1-minute average) median 2.2, highest 3.6, on 12 cores",
+ "base": "https://viewers.benchmarks.law",
+ "query": "src=https%3A%2F%2Fhuggingface.co%2Fdatasets%2Farthrod%2Fopen-docs-fixtures%2Fresolve%2Fmain%2Florem-500.docx",
+ "stopped": null,
+ "raw": [
+  {
+   "page": "v/docen",
+   "run": 0,
+   "load1": 1.87,
+   "cores": 12,
+   "desktop": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 1.68,
+    "cores": 12
+   },
+   "mobile": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 1.87,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "run": 0,
+   "load1": 2.36,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4205,
+    "fetchTime": "2026-11-21T12:25:59.419Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 361,
+    "lcpMs": 361,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 469,
+    "load1": 2.43,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4203,
+    "fetchTime": "2026-11-21T12:26:10.406Z",
+    "performance": 60,
+    "accessibility": 95,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 837,
+    "lcpMs": 837,
+    "tbtMs": 9964,
+    "cls": 0.02,
+    "speedIndexMs": 38082,
+    "load1": 2.36,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "run": 0,
+   "load1": 2.19,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4203,
+    "fetchTime": "2026-11-21T12:26:24.835Z",
+    "performance": 75,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 565,
+    "lcpMs": 3422,
+    "tbtMs": 35,
+    "cls": 0.129,
+    "speedIndexMs": 1353,
+    "load1": 2.13,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4223,
+    "fetchTime": "2026-11-21T12:26:38.159Z",
+    "performance": 64,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1811,
+    "lcpMs": 19505,
+    "tbtMs": 329,
+    "cls": 0.0,
+    "speedIndexMs": 4596,
+    "load1": 2.19,
+    "cores": 12
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "run": 0,
+   "load1": 1.77,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4385,
+    "fetchTime": "2026-11-21T12:31:40.120Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 2.22,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4399,
+    "fetchTime": "2026-11-21T12:36:35.254Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 1.77,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/docen",
+   "run": 1,
+   "load1": 2.03,
+   "cores": 12,
+   "desktop": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 2.18,
+    "cores": 12
+   },
+   "mobile": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 2.03,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "run": 1,
+   "load1": 2.17,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4222,
+    "fetchTime": "2026-11-21T12:37:55.394Z",
+    "performance": 60,
+    "accessibility": 94,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 309,
+    "lcpMs": 309,
+    "tbtMs": 2523,
+    "cls": 0.002,
+    "speedIndexMs": 8124,
+    "load1": 2.12,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4252,
+    "fetchTime": "2026-11-21T12:38:10.502Z",
+    "performance": 60,
+    "accessibility": 95,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 867,
+    "lcpMs": 867,
+    "tbtMs": 9972,
+    "cls": 0.02,
+    "speedIndexMs": 51317,
+    "load1": 2.17,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "run": 1,
+   "load1": 2.37,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4214,
+    "fetchTime": "2026-11-21T12:38:24.303Z",
+    "performance": 76,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 553,
+    "lcpMs": 3437,
+    "tbtMs": 34,
+    "cls": 0.129,
+    "speedIndexMs": 1269,
+    "load1": 2.13,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4212,
+    "fetchTime": "2026-11-21T12:38:37.521Z",
+    "performance": 64,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1775,
+    "lcpMs": 19351,
+    "tbtMs": 329,
+    "cls": 0.0,
+    "speedIndexMs": 4609,
+    "load1": 2.37,
+    "cores": 12
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "run": 1,
+   "load1": 1.47,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4356,
+    "fetchTime": "2026-11-21T12:43:50.738Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 2.33,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4406,
+    "fetchTime": "2026-11-21T12:48:45.724Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 1.47,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/docen",
+   "run": 2,
+   "load1": 2.32,
+   "cores": 12,
+   "desktop": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 1.59,
+    "cores": 12
+   },
+   "mobile": {
+    "error": "Lighthouse stopped while waiting for the page and wrote no report",
+    "load1": 2.32,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/wordcraft",
+   "run": 2,
+   "load1": 3.57,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4229,
+    "fetchTime": "2026-11-21T12:50:04.641Z",
+    "performance": 60,
+    "accessibility": 94,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 303,
+    "lcpMs": 303,
+    "tbtMs": 2527,
+    "cls": 0.002,
+    "speedIndexMs": 7767,
+    "load1": 3.16,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4190,
+    "fetchTime": "2026-11-21T12:50:19.490Z",
+    "performance": 60,
+    "accessibility": 95,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 850,
+    "lcpMs": 850,
+    "tbtMs": 9978,
+    "cls": 0.02,
+    "speedIndexMs": 37207,
+    "load1": 3.57,
+    "cores": 12
+   }
+  },
+  {
+   "page": "v/superdoc",
+   "run": 2,
+   "load1": 3.38,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4258,
+    "fetchTime": "2026-11-21T12:50:33.293Z",
+    "performance": 75,
+    "accessibility": 94,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 579,
+    "lcpMs": 3431,
+    "tbtMs": 32,
+    "cls": 0.129,
+    "speedIndexMs": 1497,
+    "load1": 3.3,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4275,
+    "fetchTime": "2026-11-21T12:51:37.413Z",
+    "performance": 60,
+    "accessibility": 95,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 1845,
+    "lcpMs": 19494,
+    "tbtMs": 333,
+    "cls": 0.049,
+    "speedIndexMs": 6456,
+    "loadTries": 2,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 3.38,
+    "cores": 12
+   }
+  },
+  {
+   "page": "r/eigenpal",
+   "run": 2,
+   "load1": 2.66,
+   "cores": 12,
+   "desktop": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4346,
+    "fetchTime": "2026-11-21T12:56:40.943Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 3.43,
+    "cores": 12
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "benchmarkIndex": 4378,
+    "fetchTime": "2026-11-21T13:01:35.876Z",
+    "error": "ERRORED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Status c",
+    "loadTries": 4,
+    "netErrors": [
+     "ERR_DNS_NAME_HTTPS_ONLY"
+    ],
+    "load1": 2.66,
+    "cores": 12
+   }
+  }
+ ]
+}
