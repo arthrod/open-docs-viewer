@@ -135,14 +135,16 @@ count of the measuring script is expected to be non-zero.
 | `docen` | docen | `@docen/docx` parse → `@docen/layout` paginator with a font-file `measureText` (opentype.js) → SVG pages painted here | positioned pages |
 | `wordcraft` | WordCraft | its reader, layout and vello_cpu rasteriser compiled to wasm ([open-docs/tools/wordcraft-render](https://github.com/arthrod/open-docs/tree/main/tools/wordcraft-render)), fetched at a pinned commit and SHA-256-checked. The page holds every page's size and one image URL per page; `/r/wordcraft/page` rasterises a page when the browser asks for its image | PNG page images, one request per page, made as the page nears the viewport |
 | `superdoc` | SuperDoc | `@superdoc/docx-engine/document-runtime` `openDocumentRuntime` (the engine's headless runtime, imported directly; that package is under SuperDoc's proprietary DOCX Engine licence, not the AGPL) → Document API `projectHtml` in `redline` review mode. **Not the paginated view**: no page breaks, colours or fonts, pictures become placeholders; what was downgraded is counted in `x-unpainted` | flowing HTML |
+| `opendoc` | OpenDoc | `@casualoffice/opendoc-viewer` 0.1.0-alpha.1: OpenDoc's own reader, pagination and rasteriser in wasm, SHA-256-checked. It is an older build than the application the browser page shows, and it draws a redline as the accepted text. Fonts are fetched from the engine's repository at the commit the package was published from (the package names them and does not ship them). `/r/opendoc/page` rasterises a page when the browser asks for its image | PNG page images, one request per page viewed |
+| `betteroffice` | BetterOffice | `@betteroffice/docx` 0.5.1: its headless layout, its display list and its own painter. The painter only draws on a browser canvas, so it draws on a canvas of ours that writes SVG ([`server/svg-canvas.ts`](server/svg-canvas.ts)); the text it sends as canvas text (list markers, small capitals, leaders) is outlined from its bundled fonts. The route uses entry points the package does not document, pinned to this version. `/r/betteroffice/page` draws a page when asked | SVG page images, one request per page viewed |
 
 ### No server route, and why
 
 A server route runs the engine inside this Val: Deno, with WebAssembly and JavaScript, and no DOM, no canvas, no
-native binaries and no subprocesses. Eight engines have only the browser page (nine rows below: cite-check is an
-application on canvas-editor). For six of them a route would mean
-faking a browser or running native code. **For two it is possible and not built**: OpenDoc, whose published viewer
-package renders pages by itself, and BetterOffice, whose layout runs headless but whose painter does not. The
+native binaries and no subprocesses. Six engines have only the browser page (seven rows below: cite-check is an
+application on canvas-editor). For each of them a route would mean
+faking a browser or running native code. OpenDoc and BetterOffice were on this list as "possible, not built"
+until 2026-11-21; both now have a route (above). The
 landing page shows the same list, and every "Server render" cell above that has no figure says its reason in
 short ([`server/no-server.json`](server/no-server.json) is the one source).
 
@@ -159,8 +161,8 @@ short ([`server/no-server.json`](server/no-server.json) is the one source).
 <!-- no-server:end -->
 
 The reasons for the five engines added on 2026-11-18 were read from their published packages and sources on
-2026-11-20 (file listings, type declarations, build files); none of those packages was run here, so "possible"
-means the API is there, not that a route has been seen working. Also not offered: SuperDoc's **paginated** view
+2026-11-20 (file listings, type declarations, build files); OpenDoc's and BetterOffice's packages were then run
+(2026-11-21) and each has a route; the reasons for the other three were read and not run. Also not offered: SuperDoc's **paginated** view
 (its layout measures text through a browser canvas and paints into the DOM; its SDK wraps a native binary), which
 is why its route sends the engine's unpaginated HTML.
 
@@ -173,8 +175,8 @@ Known gaps, stated rather than hidden:
   once (`x-paginated-in: browser`; `Server-Timing` does not include it, ~65 ms in Chrome on the sample). That
   bundle is too large for a Val file: it is loaded from jsDelivr at a pinned commit of this repo, SRI-checked, and
   the page's CSP allows only that script and this Val's own (`scripts/build-dx-paginate.sh` rebuilds it).
-- WordCraft's page images are not in the page: the page is each page's size plus one image URL per page
-  (`loading="lazy"`, no script), and a page is rasterised (about 0.2 s, about 200 KB; 330 KB for a dense screen)
+- The page images of WordCraft, OpenDoc (PNG) and BetterOffice (SVG) are not in the page: the page is each page's size plus one image URL per page
+  (`loading="lazy"`, no script), and a page is rasterised (WordCraft: about 0.2 s, about 200 KB; 330 KB for a dense screen)
   when the browser asks for it. Microsoft's and Google's viewers send their pages the same way. Its figures
   here are therefore for opening the document: the server's time is reading and laying out, and the browser's
   load is the page and its first two images. Nothing is stored: an image URL names the document's URL and
@@ -185,7 +187,8 @@ Known gaps, stated rather than hidden:
 - Plate's import (mammoth) drops colours and highlighting, in the editor too; pictures inside list items are
   counted in `x-unpainted`.
 - Fonts are metric-compatible stand-ins (Carlito for Calibri, Liberation for Arial/Times/Courier, …); WordCraft
-  uses its own bundled faces.
+  uses its own bundled faces, BetterOffice its own font package, and OpenDoc's route loads Carlito, Liberation Serif
+  and Liberation Mono before the first layout.
 
 Hardening: `/r` pages carry a CSP with `script-src 'none'` (Docxodus: only its pinned paginator and this Val's boot script) (a `javascript:` link in a .docx cannot run), Plate keeps
 only http/https/mailto/`#` links, and a failed engine load is retried on the next request instead of cached.
@@ -204,7 +207,7 @@ with it. Two guards (2026-11-16):
   simultaneous requests all got whole pages (`results/raw/2026-11-16-burst-32-after-queue.txt`). What the queue
   bounds is the renders of one process: Val Town runs several processes, and the document is fetched (up to
   25 MB each) before a request asks for its turn, so simultaneous fetches are not bounded by it.
-  WordCraft's page images draw from a layout that is already kept without a turn; a layout that is not kept is
+  Page images (WordCraft, OpenDoc, BetterOffice) draw from a layout that is already kept without a turn; a layout that is not kept is
   made in a turn, one per document however many of its pages are asked for together.
 - docx-editor.dev's route refuses a document whose `word/document.xml` is over 1 MB as the zip's directory
   declares it (`server/docx-size.ts`), with HTTP 422: its exporter ends the process on the 500-page sample
