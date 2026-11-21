@@ -127,13 +127,17 @@ export function pageImages(engine: PageImageEngine) {
         const doc = await engine.open(bytes);
         return { id, doc, initMs: Math.round(t1 - t0), layoutMs: Math.round(performance.now() - t1), evicted: false };
       })();
-      hit.catch(() => laid.get(id) === hit && laid.delete(id));
+      hit.catch(() => {
+        if (laid.get(id) === hit) laid.delete(id);
+      });
     }
     laid.set(id, hit);
     return hit;
   }
 
-  const pin = (p: Promise<Laid>, n = 1) => n > 0 && pinned.set(p, (pinned.get(p) ?? 0) + n);
+  const pin = (p: Promise<Laid>, n = 1) => {
+    if (n > 0) pinned.set(p, (pinned.get(p) ?? 0) + n);
+  };
   function unpin(p: Promise<Laid>) {
     const left = (pinned.get(p) ?? 1) - 1;
     if (left > 0) return void pinned.set(p, left);
@@ -222,7 +226,9 @@ img.page{display:block;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.12),0
           // Every request already waiting takes hold of the layout the moment it exists.
           pin(q.made = layOut(id, bytes), q.sharers);
           return q.made;
-        }).finally(() => laying.get(id) === q && laying.delete(id));
+        }).finally(() => {
+          if (laying.get(id) === q) laying.delete(id);
+        });
         laying.set(id, q);
       }
       const q = queued;

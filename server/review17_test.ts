@@ -42,10 +42,10 @@ Deno.test("the toggle's list of server routes is the router's list", async () =>
   // The router imports Val Town's std utils, whose client wants a key at import time; none is used here.
   if (!Deno.env.get("VAL_TOWN_API_KEY")) Deno.env.set("VAL_TOWN_API_KEY", "not-used-by-this-test");
   const { RENDERERS, PAGE_RENDERERS } = await import("../main.http.ts");
-  assertEquals([...SERVER_RENDER_SLUGS].sort(), Object.keys(RENDERERS).sort());
+  assertEquals([...SERVER_RENDER_SLUGS].sort((a, b) => a.localeCompare(b)), Object.keys(RENDERERS).sort((a, b) => a.localeCompare(b)));
   // The landing's table of server routes lists the same ones, and says which send their pages as images.
-  assertEquals(SERVER_ROUTES.map((r) => r.slug).sort(), Object.keys(RENDERERS).sort());
-  assertEquals(SERVER_ROUTES.filter((r) => r.output === "images").map((r) => r.slug).sort(), Object.keys(PAGE_RENDERERS).sort());
+  assertEquals(SERVER_ROUTES.map((r) => r.slug).sort((a, b) => a.localeCompare(b)), Object.keys(RENDERERS).sort((a, b) => a.localeCompare(b)));
+  assertEquals(SERVER_ROUTES.filter((r) => r.output === "images").map((r) => r.slug).sort((a, b) => a.localeCompare(b)), Object.keys(PAGE_RENDERERS).sort((a, b) => a.localeCompare(b)));
 });
 
 Deno.test("code paragraphs keep revision marks (the Plate route)", () => {
