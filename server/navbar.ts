@@ -20,6 +20,8 @@ export const SERVER_RENDER_SLUGS = new Set([
   "eigenpal",
   "plate",
   "superdoc",
+  "opendoc",
+  "betteroffice",
 ]);
 
 export const WORDMARK_HTML = `<a class="wm" href="/" title="All engines and results">

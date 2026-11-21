@@ -4,6 +4,7 @@ import { ENGINES, NO_SERVER, noServerCell } from "./engines.ts";
 import { lighthouseSection, noServerList, samplesSection } from "./landing.ts";
 import { renderToggle, SERVER_RENDER_SLUGS, serverToggle } from "./navbar.ts";
 import { codeLines } from "./plate.ts";
+import { SERVER_ROUTES } from "./results.ts";
 import type { LighthousePage, LighthouseResults, SampleResults, ServerClientResults } from "./samples.ts";
 import { SUPERDOC_CSS } from "./superdoc.ts";
 
@@ -40,8 +41,11 @@ Deno.test("a struck-out side of the toggle says why to a screen reader too", () 
 Deno.test("the toggle's list of server routes is the router's list", async () => {
   // The router imports Val Town's std utils, whose client wants a key at import time; none is used here.
   if (!Deno.env.get("VAL_TOWN_API_KEY")) Deno.env.set("VAL_TOWN_API_KEY", "not-used-by-this-test");
-  const { RENDERERS } = await import("../main.http.ts");
+  const { RENDERERS, PAGE_RENDERERS } = await import("../main.http.ts");
   assertEquals([...SERVER_RENDER_SLUGS].sort(), Object.keys(RENDERERS).sort());
+  // The landing's table of server routes lists the same ones, and says which send their pages as images.
+  assertEquals(SERVER_ROUTES.map((r) => r.slug).sort(), Object.keys(RENDERERS).sort());
+  assertEquals(SERVER_ROUTES.filter((r) => r.output === "images").map((r) => r.slug).sort(), Object.keys(PAGE_RENDERERS).sort());
 });
 
 Deno.test("code paragraphs keep revision marks (the Plate route)", () => {
@@ -185,7 +189,7 @@ Deno.test("samples: a run that rendered and then lost a reading says so", () => 
 
 Deno.test("no server route: every engine without one says why, in its cells and in the list", () => {
   const without = ENGINES.filter((e) => !e.frame && !SERVER_RENDER_SLUGS.has(e.slug));
-  assert(without.length >= 8, "the engines with only a browser page");
+  assert(without.length >= 6, "the engines with only a browser page");
   for (const e of without) {
     assert(NO_SERVER[e.slug], `${e.slug} has no server route and no reason on file (server/no-server.json)`);
     assert(noServerCell(e.slug) !== "no server route", `${e.slug}'s cell gives no reason`);
@@ -194,8 +198,10 @@ Deno.test("no server route: every engine without one says why, in its cells and 
   for (const slug of Object.keys(NO_SERVER)) assert(without.some((e) => e.slug === slug), `${slug} is listed as having no route`);
   const html = noServerList(ENGINES);
   assertStringIncludes(html, 'id="no-server"');
-  assertStringIncludes(html, "possible, not built");
-  assertStringIncludes(html, "<code>renderPagePng</code>");
+  // OpenDoc and BetterOffice were listed as possible and not built until 2026-11-21; both have a route now.
+  for (const built of ["opendoc", "betteroffice"]) assert(SERVER_RENDER_SLUGS.has(built) && !NO_SERVER[built], `${built} has a server route`);
+  assert(!html.includes("possible, not built"), "no engine is listed as possible and not built");
+  assertStringIncludes(html, "<code>measureText</code>");
   for (const e of without) assertStringIncludes(html, `/v/${e.slug}"`);
   assert(!html.includes("/v/folio\""), "an engine with a server route is not in the list");
   // A sample table's server cell carries the short reason instead of a bare "no server route".

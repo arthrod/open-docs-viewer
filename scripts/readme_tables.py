@@ -23,9 +23,9 @@ NAMES = {
 # Cross-origin frames: only the frame's load is timed, and the heap read is this page's, not theirs.
 FRAMES = {"word-online": "Microsoft", "google-viewer": "Google"}
 # Routes with a server render, in the order the landing lists them.
-SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc")
+SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice")
 # Routes whose page images are separate requests, made as each page nears the viewport.
-IMAGES = {"wordcraft"}
+IMAGES = {"wordcraft", "opendoc", "betteroffice"}
 # Why an engine has no server route: the file the landing page reads too.
 NO_SERVER = json.load(open(f"{ROOT}/server/no-server.json"))
 NO_SERVER_KIND = {"needs-a-browser": "needs a browser", "needs-native": "needs native code", "not-built": "possible, not built"}

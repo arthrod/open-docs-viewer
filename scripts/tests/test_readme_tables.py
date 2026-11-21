@@ -120,7 +120,9 @@ def test_every_engine_without_a_server_route_says_why():
         r = rt.NO_SERVER[e]
         assert r["status"] in rt.NO_SERVER_KIND and len(r["why"]) > 40 and r["cell"].startswith(("no server route: ", "not built"))
     block = rt.no_server_block(rt.NO_SERVER)
-    assert "| OpenDoc | possible, not built | This one is possible." in block
+    # OpenDoc and BetterOffice were "possible, not built" until 2026-11-21: with a route, neither is in the list.
+    assert "opendoc" in rt.SERVER and "betteroffice" in rt.SERVER and "| OpenDoc |" not in block and "| BetterOffice |" not in block
+    assert "| react-docx | needs a browser | " in block
     assert "| OnlyOffice (CryptPad build) | needs a browser | " in block
 
 
