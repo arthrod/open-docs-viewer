@@ -50,8 +50,13 @@ export function partSize(zip: Uint8Array, name: string): number | null {
  * answering with it: a page load beside it got HTTP 500 (2026-11-16). Only two
  * sizes were tried, 20 KB (renders) and 1.8 MB (ends the isolate); the limit sits
  * between them and is a guard, not a measured capacity.
+ *
+ * BetterOffice: its layout is made whole before any page is drawn, and its wasm memory grows
+ * with the document and is not given back: about 0.5 GB for the 500-page sample (1.8 MB of
+ * document XML, measured 2026-11-21). The limit is a little over twice that sample; nothing
+ * larger was tried. A page count cannot be the test: it is known only after the layout.
  */
-export const RENDER_LIMIT: Record<string, number> = { eigenpal: 1_000_000 };
+export const RENDER_LIMIT: Record<string, number> = { eigenpal: 1_000_000, betteroffice: 4_000_000 };
 
 /** Why `engine` will not be given this document, or null when it will. */
 export function tooLarge(engine: string, docx: Uint8Array, limits = RENDER_LIMIT): string | null {

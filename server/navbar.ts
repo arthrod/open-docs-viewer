@@ -20,6 +20,8 @@ export const SERVER_RENDER_SLUGS = new Set([
   "eigenpal",
   "plate",
   "superdoc",
+  "opendoc",
+  "betteroffice",
 ]);
 
 export const WORDMARK_HTML = `<a class="wm" href="/" title="All engines and results">
@@ -132,6 +134,7 @@ function viewerMenu(e: Engine, src: URL): string {
         <hr />
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>
         ${server}
+        ${e.vendorNote ? `<a href="${esc(e.vendorNote)}" target="_blank" rel="noopener">About ${esc(e.name)}: pros, cons, every benchmark →</a>` : ""}
         <a href="/">All engines &amp; results</a>
         <a href="${OPEN_DOCS}/" target="_blank" rel="noopener">open-docs editors →</a>
         <a href="${ARENA}" target="_blank" rel="noopener">Editors arena →</a>

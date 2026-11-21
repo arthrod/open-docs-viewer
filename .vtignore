@@ -8,3 +8,5 @@ __pycache__
 .pytest_cache
 cov
 .ruff_cache
+.DS_Store
+README.md

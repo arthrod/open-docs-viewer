@@ -9,9 +9,11 @@ import {
   statStripHtml,
 } from "./results.ts";
 import { landingNavBar, SERVER_RENDER_SLUGS } from "./navbar.ts";
+/** A count in words, as the copy has it; the routes are counted, not typed. */
+const COUNT = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen"];
 import CAVEATS from "../results/caveats.json" with { type: "json" };
 import { VIEWER_DS_CSS } from "./render.ts";
-import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, type LighthousePage, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
+import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, LIGHTHOUSE_LOCAL, type LighthousePage, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
 
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -35,7 +37,7 @@ const mb = (n: number | null | undefined) =>
 const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-viewer": "Google" };
 
 /**
- * The browser's side of a server render, on the rich sample: the seven /r/
+ * The browser's side of a server render, on the rich sample: the /r/
  * routes, then the two vendor viewers, which are server renders too (their
  * row is the /v/ page that frames them).
  */
@@ -86,15 +88,29 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
 }
 
 /** PageSpeed Insights, every engine: its /v/ page, and its /r/ page where it has one. */
-export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIGHTHOUSE): string {
+/** `local` defaults to the repository's file only beside the repository's PageSpeed file: a caller with its own data gets none of ours. */
+/** A row's own environment beside its table's: when the method and machine are the same, only what varied (its load, its CPU index). */
+const variedPart = (env: string, head?: string | null) => {
+  const mine = env.split("; "), theirs = (head ?? "").split("; ");
+  return mine[0] === theirs[0] && mine.length > 1 ? mine.slice(1).join("; ") : env;
+};
+export function lighthouseSection(
+  engines: Engine[],
+  lh: LighthouseResults = LIGHTHOUSE,
+  local: LighthouseResults = lh === LIGHTHOUSE ? LIGHTHOUSE_LOCAL : { measuredAt: null, environment: "", pages: {} },
+): string {
   // Either table is enough to show the section: the 500 pages can be analysed on their own.
-  if (!Object.keys(lh.pages ?? {}).length && !Object.keys(lh.docs?.["lorem-500"] ?? {}).length) return "";
+  // The four populations stand by themselves: PageSpeed's two, and the two measured on our computer.
+  const some = (p?: Record<string, unknown>) => Object.keys(p ?? {}).length > 0;
+  const localSome = some(local.pages) || some(local.docs?.["lorem-500"]);
+  if (!some(lh.pages) && !some(lh.docs?.["lorem-500"]) && !localSome) return "";
   const score = (n: number | null | undefined) => n == null ? "n/a" : `<b class="lh ${n >= 90 ? "lh-good" : n >= 50 ? "lh-mid" : "lh-bad"}">${n}</b>`;
-  const table = (pages: LighthouseResults["pages"], q: string, head: { measuredAt?: string | null; environment?: string }) => {
+  // `ours`: a pass made on our computer. Its scores do not link to PageSpeed.
+  const table = (pages: LighthouseResults["pages"], q: string, head: { measuredAt?: string | null; environment?: string }, ours = false) => {
   // A page analysed in another run than the table's heading (a partial re-run) says when.
   const elsewhere = (p: { measuredAt?: string; environment?: string } | undefined) =>
     p && ((p.measuredAt && p.measuredAt !== head.measuredAt) || (p.environment && p.environment !== head.environment))
-      ? `<div class="ro odv-prov">measured ${esc(p.measuredAt ?? "")} · ${esc(p.environment ?? "")}</div>`
+      ? `<div class="ro odv-prov">measured ${esc(p.measuredAt ?? "")} · ${esc(variedPart(p.environment ?? "", head.environment))}</div>`
       : "";
   const psi = (path: string) => `https://pagespeed.web.dev/analysis?url=${encodeURIComponent(`https://viewers.benchmarks.law/${path}${q}`)}`;
   const row = (e: Engine) => {
@@ -118,12 +134,12 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
     };
     const server = !r ? `<span class="ro">${e.frame ? "vendor's servers" : SERVER_RENDER_SLUGS.has(e.slug) ? "not measured yet" : esc(noServerCell(e.slug))}</span>`
       : r.desktop.performance == null && r.mobile.performance == null ? `<span class="odv-fail">no result</span><div class="ro">${esc((r.desktop.error ?? r.mobile.error ?? "").slice(0, 60))}</div>`
-      : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">${score(r.desktop.performance)} · ${score(r.mobile.performance)}</a><div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}${elsewhere(r)}`;
+      : `${ours ? "" : `<a href="${psi(`r/${e.slug}`)}" target="_blank" rel="noopener">`}${score(r.desktop.performance)} · ${score(r.mobile.performance)}${ours ? "" : "</a>"}<div class="ro">LCP ${ms(r.desktop.lcpMs)} · ${ms(r.mobile.lcpMs)}</div>${partial(r)}${elsewhere(r)}`;
     // The server route was measured on its own: keep its cell, say the browser page was not.
     if (!v) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7" class="ro">not measured yet</td><td class="n">${server}</td></tr>`;
     const d = v.desktop, m = v.mobile;
     if (d.performance == null && m.performance == null) return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a></td><td colspan="7"><span class="odv-fail">no result</span> <span class="ro">${esc((d.error ?? m.error ?? "").slice(0, 140))}</span></td><td class="n">${server}</td></tr>`;
-    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a><div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div>${partial(v)}${elsewhere(v)}</td>
+    return `<tr><td><a href="/v/${e.slug}${q}">${esc(e.name)}</a>${ours ? "" : `<div class="ro"><a href="${psi(`v/${e.slug}`)}" target="_blank" rel="noopener">run it on PageSpeed →</a></div>`}${partial(v)}${elsewhere(v)}</td>
 <td class="n">${score(d.performance)} · ${score(m.performance)}</td><td class="n">${ms(d.lcpMs)} · ${ms(m.lcpMs)}</td><td class="n">${ms(d.tbtMs)} · ${ms(m.tbtMs)}</td><td class="n hide-sm">${d.cls ?? "n/a"} · ${m.cls ?? "n/a"}</td>
 <td class="n hide-sm">${score(d.accessibility)}</td><td class="n hide-sm">${score(d.bestPractices)}</td><td class="n hide-sm">${score(d.seo)}</td><td class="n">${server}</td></tr>`;
   };
@@ -140,16 +156,37 @@ export function lighthouseSection(engines: Engine[], lh: LighthouseResults = LIG
     }</p>
   ${table(bigPages, `?src=${encodeURIComponent(sampleUrl(big))}`, lh.docsMeta?.["lorem-500"] ?? lh)}`
     : "";
+  const localBig = local.docs?.["lorem-500"];
+  // The long table's own run when the file records one, else the file's: the table is never undated.
+  const localHead = local.docsMeta?.["lorem-500"] ?? { measuredAt: local.measuredAt ?? "", environment: local.environment };
+  const localBlock = localSome
+    ? `<h3 class="odv-h3" id="lighthouse-local">Lighthouse on our computer <span class="ro">the same pages, the same Lighthouse release, on a machine with a graphics card</span></h3>
+  <p class="fine">On Google's machines two engines do not start (their files do not download there; why is not known), so they have no score above. This computer has a graphics card, which Google's machines do not.
+So the same Lighthouse was also run here, on every page and not only on those. These figures depend on this computer and on what else it was doing:
+the heading gives its load and Lighthouse's own reading of how fast its processor was. Compare rows within this table, not with the one above.
+${some(local.pages) ? `Measured ${esc(local.measuredAt ?? "")} · ${esc(local.environment)}.` : ""}</p>
+  ${some(local.pages) ? table(local.pages, "", local, true) : ""}${
+      big && localBig && Object.keys(localBig).length
+        ? `<h3 class="odv-h3" id="lighthouse-local-lorem-500">${esc(big.label)}, on our computer <span class="ro">${esc(big.file)}</span></h3>${
+          (!some(local.pages) || localHead.measuredAt !== local.measuredAt || localHead.environment !== local.environment)
+            ? `<p class="fine">Measured ${esc(localHead.measuredAt)} · ${esc(localHead.environment)}.</p>`
+            : ""
+        }
+  ${table(localBig, `?src=${encodeURIComponent(sampleUrl(big))}`, localHead, true)}`
+        : ""
+    }`
+    : "";
   return `<section class="odv-section" id="lighthouse">
   <div class="sec-label"><span class="sq"></span><span>/ Lighthouse</span></div>
   <p class="fine">Google's <a href="https://pagespeed.web.dev">PageSpeed Insights</a> on every engine's page with the rich sample: Lighthouse run on Google's machines, so the figures do not depend on anyone's computer.
-Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. Every cell reads <strong>desktop · mobile</strong>; mobile emulates a mid-range phone on slow 4G. Scores are 0 to 100.
+${some(lh.pages) || some(lh.docs?.["lorem-500"]) ? `Measured ${esc(lh.measuredAt ?? "")} · ${esc(lh.environment)}. ` : ""}Every cell reads <strong>desktop · mobile</strong>; mobile emulates a mid-range phone on slow 4G. Scores are 0 to 100.
 <strong>LCP</strong>: largest contentful paint. <strong>TBT</strong>: total blocking time, how long the main thread was too busy to answer input. <strong>CLS</strong>: layout shift.
 Accessibility, best practices and SEO are the desktop scores. Lighthouse scores the page load, not how faithfully the document is drawn. For Microsoft's and Google's viewers it sees this site's frame page, not their servers' work.
 An engine that could not start on Google's machine has no score (a failed page paints fast, and its score would flatter it): WordCraft's and Nutrient's engines (22 and 24 MB over the network) do not download there.
 <strong>Server route</strong>: the performance score and LCP of the same engine's <code>/r/</code> page.</p>
-  ${table(lh.pages, "", lh)}
+  ${some(lh.pages) ? table(lh.pages, "", lh) : ""}
   ${bigTable}
+  ${localBlock}
 </section>`;
 }
 
@@ -169,7 +206,8 @@ export function samplesSection(
   // The caveats are about the published file: another data set (a test's) has none unless it brings its own.
   caveats: Caveats = res === SAMPLE_RESULTS ? (CAVEATS as Caveats) : {},
 ): string {
-  const tables = SAMPLES.filter((s) => res.samples[s.id]).map((s: Sample) => {
+  // The rich sample has the page's main tables; this section is the two harder files.
+  const tables = SAMPLES.filter((s) => s.id !== "showcase" && res.samples[s.id]).map((s: Sample) => {
     const r = res.samples[s.id];
     const told = caveats[s.id];
     const care = (slug: string) =>
@@ -232,7 +270,7 @@ export function samplesSection(
 <strong>Cold render</strong>: navigation start to the page's own "document is showing" signal; on 500 pages an engine may still be laying out the pages below the first screen.
 <strong>JS heap</strong>: JavaScript objects of the top page only. <strong>Renderer memory</strong>: resident memory of every renderer process of that Chrome,
 which also counts WebAssembly memory, canvases, the DOM and cross-origin frames (Chrome's own spare renderer is in it too, so compare engines with each other rather than reading it as an absolute).
-<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; seven engines have one (SuperDoc's sends unpaginated HTML).
+<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; ${COUNT[SERVER_RENDER_SLUGS.size]} engines have one (SuperDoc's sends unpaginated HTML).
 <strong>In the browser</strong>, under it: the same route opened in Chrome (${esc(client.measuredAt ?? "")}), navigation start to the end of the load event, with the page's JS heap and that Chrome's renderer memory.
 Whether an engine <em>draws</em> the redline's tracked changes is a different question from how fast it opens it: open each link and look.</p>
   ${tables.join("\n")}
@@ -296,7 +334,7 @@ ${stats}
 
 <section class="odv-section">
   <div class="sec-label"><span class="sq"></span><span>/ Server render</span></div>
-  <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
+  <p class="fine">${COUNT[SERVER_RENDER_SLUGS.size].replace(/^./, (c) => c.toUpperCase())} engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
 <strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot). It is one request per engine, not a median, and moves from one deploy to the next.
 <strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. The engines with no server route, and why, are <a href="#no-server">listed below</a>.</p>

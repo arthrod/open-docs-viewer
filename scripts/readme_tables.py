@@ -15,17 +15,17 @@ import sys
 ROOT = __file__.rsplit("/", 2)[0]
 NAMES = {
     "canvas-editor": "canvas-editor", "docxodus": "Docxodus", "superdoc": "SuperDoc", "plate": "Plate", "docen": "docen",
-    "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Word Online viewer",
-    "google-viewer": "Google viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
+    "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Microsoft Word viewer",
+    "google-viewer": "Google Docs viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
     "react-docx": "react-docx", "univer": "Univer", "opendoc": "OpenDoc", "betteroffice": "BetterOffice",
     "onlyoffice": "OnlyOffice (CryptPad build)",
 }
 # Cross-origin frames: only the frame's load is timed, and the heap read is this page's, not theirs.
 FRAMES = {"word-online": "Microsoft", "google-viewer": "Google"}
 # Routes with a server render, in the order the landing lists them.
-SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc")
+SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice")
 # Routes whose page images are separate requests, made as each page nears the viewport.
-IMAGES = {"wordcraft"}
+IMAGES = {"wordcraft", "opendoc", "betteroffice"}
 # Why an engine has no server route: the file the landing page reads too.
 NO_SERVER = json.load(open(f"{ROOT}/server/no-server.json"))
 NO_SERVER_KIND = {"needs-a-browser": "needs a browser", "needs-native": "needs native code", "not-built": "possible, not built"}
@@ -78,7 +78,10 @@ def dated(name: str, row: dict, head: dict) -> str:
     """The row's name, with its own date when it was measured apart from its table, and its environment when that differs."""
     when, where = row.get("measuredAt") or head.get("measuredAt"), row.get("environment") or head.get("environment")
     if where != head.get("environment"):
-        return f"{name} (measured {when}: {str(where).replace('|', chr(92) + '|')})"
+        # "<method and machine>; <what varied>": when the first part is the table's own, only the rest is said.
+        mine, theirs = str(where).split("; "), str(head.get("environment") or "").split("; ")
+        told = "; ".join(mine[1:]) if mine[0] == theirs[0] and len(mine) > 1 else where
+        return f"{name} (measured {when}: {str(told).replace('|', chr(92) + '|')})"
     return f"{name} (measured {when})" if when != head.get("measuredAt") else name
 
 
@@ -125,6 +128,12 @@ def server_block(data: dict) -> str:
     return "\n".join(out)
 
 
+def server_from(x: dict | None) -> str | None:
+    """Where a server route was timed from, as its record says ("... median; from <where>; machine load ...")."""
+    env = (x or {}).get("environment") or ""
+    return env.split("; from ", 1)[1].split("; machine load")[0].split(" (")[0] if "; from " in env else None
+
+
 def server_cell(e: str, x: dict | None) -> str:
     """One /r/ route on one sample, in a sentence."""
     if x is None:
@@ -153,6 +162,16 @@ def samples_block(data: dict) -> str:
         head = dict(zip(("measuredAt", "environment"), max(dict.fromkeys(stamps), key=stamps.count))) if stamps else data
         out += [f"**{title}**", "", said(head), "", "| Engine | Cold render (`/v/`) | Each run | JS heap | Renderer memory | Downloaded | Server render (`/r/`) |",
                 "| --- | ---: | --- | ---: | ---: | ---: | --- |"]
+        # curl's total includes the way to the server: a route timed from another machine than
+        # most of its table says so in its own cell.
+        froms = [w for w in (server_from(x) for x in d.get("server", {}).values()) if w]
+        usual = max(dict.fromkeys(froms), key=froms.count) if froms else None
+
+        def server_said(e: str) -> str:
+            x = d.get("server", {}).get(e)
+            where = server_from(x)
+            return server_cell(e, x) + (f" (timed from {where}, not from {usual} as the other rows)" if where and where != usual else "")
+
         for e in NAMES:
             r = d.get("browser", {}).get(e)
             frame = e in FRAMES
@@ -160,9 +179,9 @@ def samples_block(data: dict) -> str:
                 # Measured with curl only (measure_server.py --samples before the browser pass): the
                 # server cell is a result, and dropping the row would hide it.
                 if d.get("server", {}).get(e):
-                    out.append(f"| {NAMES[e]} | not measured | n/a | n/a | n/a | n/a | {server_cell(e, d['server'][e])} |")
+                    out.append(f"| {NAMES[e]} | not measured | n/a | n/a | n/a | n/a | {server_said(e)} |")
                 continue
-            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_cell(e, d.get("server", {}).get(e))
+            srv = f"rendered on {FRAMES[e]}'s servers" if frame else server_said(e)
             name = dated(NAMES[e], r, head)
             if r.get("renderedMs") is None:
                 out.append(f"| {name} | **failed**: {cell(r.get('how') or 'no answer')} | {each(r.get('runs'))} | | | | {srv} |")
@@ -207,14 +226,14 @@ LH_HEAD = [
 ]
 
 
-def lighthouse_line(label: str, r: dict, head: dict) -> str:
-    """One page's row: desktop · mobile in each cell."""
+def lighthouse_line(label: str, r: dict, head: dict, who: str = "PageSpeed") -> str:
+    """One page's row: desktop · mobile in each cell. `who` made the analyses."""
     d, m = r.get("desktop") or {}, r.get("mobile") or {}
     label = dated(label, r, head)
     runs = lambda x: "/".join("fail" if v is None else str(v) for v in x.get("performanceRuns") or [])
     if d.get("performance") is None and m.get("performance") is None:
         # Both reasons, and every analysis: desktop and mobile often fail differently.
-        reasons = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error")) or "PageSpeed gave no score"
+        reasons = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error")) or f"{who} gave no score"
         if d.get("error") and d.get("error") == m.get("error"):
             reasons = cell(d["error"])
         listed = f"{runs(d)} · {runs(m)}" if d.get("performanceRuns") or m.get("performanceRuns") else ""
@@ -227,10 +246,10 @@ def lighthouse_line(label: str, r: dict, head: dict) -> str:
             f"{two('speedIndexMs', ms)} | {one('accessibility')} | {one('bestPractices')} | {one('seo')} | {runs(d)} · {runs(m)}{f' ({why})' if why else ''} |")
 
 
-def lighthouse_block(data: dict) -> str:
+def lighthouse_block(data: dict, who: str = "PageSpeed") -> str:
     """Lighthouse: the /v/ pages and the /r/ routes, on the rich sample and on the 500 pages."""
     intro = lambda h: said(h, " Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.")
-    table = lambda pages, prefix, head: [*LH_HEAD, *[lighthouse_line(NAMES.get(k[2:], k), r, head) for k, r in pages.items() if k.startswith(prefix)]]
+    table = lambda pages, prefix, head: [*LH_HEAD, *[lighthouse_line(NAMES.get(k[2:], k), r, head, who) for k, r in pages.items() if k.startswith(prefix)]]
     out = [intro(data), "", "**Browser pages (`/v/`), rich sample**", "", *table(data["pages"], "v/", data),
            "", "**Server-rendered pages (`/r/`), rich sample**", "", *table(data["pages"], "r/", data)]
     big = data.get("docs", {}).get("lorem-500")
@@ -241,6 +260,11 @@ def lighthouse_block(data: dict) -> str:
         out += ["", "**Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**", "", *table(big, "v/", head),
                 "", "**Server-rendered pages (`/r/`), 500 pages**", "", *table(big, "r/", head)]
     return "\n".join(out)
+
+
+def local_block(data: dict) -> str:
+    """The same tables from Lighthouse run on our computer (results/lighthouse-local.json)."""
+    return lighthouse_block(data, "Lighthouse") if data.get("pages") else "Not measured yet."
 
 
 def no_server_block(reasons: dict) -> str:
@@ -267,6 +291,7 @@ def render(readme: str, files: dict) -> str:
         ("samples", samples_block(files["samples"])),
         ("server-client", server_client_block(files["server-client"], files["browser"], files["samples"])),
         ("lighthouse", lighthouse_block(files["lighthouse"])),
+        *([("lighthouse-local", local_block(files["lighthouse-local"]))] if "lighthouse-local" in files else []),
         ("no-server", no_server_block(files.get("no-server", NO_SERVER))),
     ):
         readme = put(readme, name, body)
@@ -276,7 +301,7 @@ def render(readme: str, files: dict) -> str:
 def main(argv: list[str]) -> int:
     path = f"{ROOT}/README.md"
     before = open(path).read()
-    files = {n: json.load(open(f"{ROOT}/results/{n}.json")) for n in ("browser", "server", "samples", "server-client", "lighthouse")}
+    files = {n: json.load(open(f"{ROOT}/results/{n}.json")) for n in ("browser", "server", "samples", "server-client", "lighthouse", "lighthouse-local")}
     after = render(before, files)
     if "--check" in argv:
         if after != before:
