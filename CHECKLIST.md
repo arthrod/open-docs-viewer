@@ -39,12 +39,13 @@ why one is missing.
 
 ## 3. Cross-site consistency
 
-- [ ] 3.1 Same menu as editors.benchmarks.law, with the Blog link
+- [x] 3.1 Same menu as editors.benchmarks.law, with the Blog link
 - [ ] 3.2 Same engine names as the other sites
-- [ ] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes`
+- [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes` (live 2026-11-21; the sections of the six new tools appear on benchmarks.law with its next deploy)
 
 ## Log
 
 | Date | Part | What changed |
 | --- | --- | --- |
 | 2026-11-21 | all | Checklist created |
+| 2026-11-21 | 3.3 | Each engine links to its vendor note |
