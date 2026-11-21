@@ -1034,6 +1034,92 @@
    "measuredAt": "2026-11-20",
    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
    "base": "https://viewers.benchmarks.law"
+  },
+  "r/opendoc": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 242,
+    "lcpMs": 557,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 365,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 87,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 788,
+    "lcpMs": 4051,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 920,
+    "performanceRuns": [
+     87,
+     87,
+     87,
+     87,
+     94
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "r/betteroffice": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 229,
+    "lcpMs": 303,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 304,
+    "performanceRuns": [
+     null,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity."
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 778,
+    "lcpMs": 1224,
+    "tbtMs": 0,
+    "cls": 0.0,
+    "speedIndexMs": 1036,
+    "performanceRuns": [
+     null,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": "PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity."
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   }
  },
  "docs": {
@@ -2061,6 +2147,92 @@
      "error": null
     },
     "measuredAt": "2026-11-20",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/opendoc": {
+    "desktop": {
+     "performance": 92,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 310,
+     "lcpMs": 946,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 3309,
+     "performanceRuns": [
+      90,
+      99,
+      88,
+      94,
+      null
+     ],
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Details: "
+    },
+    "mobile": {
+     "performance": 75,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 872,
+     "lcpMs": 7988,
+     "tbtMs": 0,
+     "cls": 0.0,
+     "speedIndexMs": 4192,
+     "performanceRuns": [
+      null,
+      75,
+      80,
+      75,
+      65
+     ],
+     "error": "FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properly responding to all requests. (Details: "
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/betteroffice": {
+    "desktop": {
+     "performance": 91,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 83,
+     "fcpMs": 242,
+     "lcpMs": 366,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 4596,
+     "performanceRuns": [
+      78,
+      91,
+      94,
+      91,
+      93
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 90,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 83,
+     "fcpMs": 800,
+     "lcpMs": 1175,
+     "tbtMs": 76,
+     "cls": 0,
+     "speedIndexMs": 12531,
+     "performanceRuns": [
+      82,
+      93,
+      90,
+      93,
+      78
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
     "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
     "base": "https://viewers.benchmarks.law"
    }

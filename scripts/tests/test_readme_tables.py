@@ -25,7 +25,7 @@ def test_browser_rows_frames_failures_and_other_dates():
     }}
     out = rt.browser_block(data)
     assert "| folio (measured 2026-11-10) | 1.12 s | 2.28 s, 1.08 s, 1.12 s | 2.0 MB | 78 | 21 MB | 365 MB |" in out
-    assert "| Google viewer | 808 ms (frame load) | 808 ms, failed | 1.0 MB | 27 | n/a | n/a |" in out
+    assert "| Google Docs viewer | 808 ms (frame load) | 808 ms, failed | 1.0 MB | 27 | n/a | n/a |" in out
     assert "| Plate | **failed**: not rendered within 240s | failed | | | | |" in out
 
 
@@ -49,7 +49,7 @@ def test_sample_rows_and_their_server_cells():
     assert out.count("not measured on this file yet") == 1 and "| folio |" in out  # folio has a route, and no figure here
     # An engine with no server route says why in its cell (server/no-server.json).
     assert "| Apryse WebViewer | 1.70 s | 1.70 s | 3.0 MB | 649 MB | 22 MB | no server route: Apryse renders on a server with a native SDK |" in out
-    assert "| Word Online viewer | 1.70 s (frame load) | 1.70 s | n/a | 649 MB | 22 MB | rendered on Microsoft's servers |" in out
+    assert "| Microsoft Word viewer | 1.70 s (frame load) | 1.70 s | n/a | 649 MB | 22 MB | rendered on Microsoft's servers |" in out
     assert '**failed**: "socket hang up"' in out
 
 
@@ -61,7 +61,7 @@ def test_server_client_and_lighthouse_blocks_and_missing_markers():
     out = rt.server_client_block(client, browser, {"samples": {}})
     assert "| docen | 1.29 s | 1.29 s, failed | 940 ms | 706 KB | 266 MB | 36,966 | 1.1 MB |" in out
     assert "| docx-editor.dev | **failed**: HTTP 500 | failed | | | | | |" in out
-    assert "| Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 769 ms | 769 ms | n/a | n/a | n/a | n/a | 1.0 MB |" in out
+    assert "| Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 769 ms | 769 ms | n/a | n/a | n/a | n/a | 1.0 MB |" in out
     page = {"performance": 100, "accessibility": 90, "bestPractices": 100, "seo": 91, "fcpMs": 261, "lcpMs": 521, "tbtMs": 0, "cls": 0, "speedIndexMs": 809, "performanceRuns": [100, 100], "error": None}
     lh = rt.lighthouse_block({"measuredAt": "2026-11-16", "environment": "PSI", "pages": {"v/docxodus": {"desktop": page, "mobile": page}, "r/docxodus": {"desktop": page}}})
     assert lh.count("| Docxodus |") == 2 and "| Docxodus | 100 · n/a |" in lh

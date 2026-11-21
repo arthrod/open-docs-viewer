@@ -15,8 +15,8 @@ import sys
 ROOT = __file__.rsplit("/", 2)[0]
 NAMES = {
     "canvas-editor": "canvas-editor", "docxodus": "Docxodus", "superdoc": "SuperDoc", "plate": "Plate", "docen": "docen",
-    "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Word Online viewer",
-    "google-viewer": "Google viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
+    "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Microsoft Word viewer",
+    "google-viewer": "Google Docs viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
     "react-docx": "react-docx", "univer": "Univer", "opendoc": "OpenDoc", "betteroffice": "BetterOffice",
     "onlyoffice": "OnlyOffice (CryptPad build)",
 }
