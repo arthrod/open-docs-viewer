@@ -382,6 +382,20 @@ Read the Lighthouse tables with care:
   2026-11-16: the first answer holds pages 1 to 10 of the 500), so its scores and its "frame load"
   timings on the 500 pages are for the first ten pages, not the document.
 
+#### Lighthouse on our computer
+
+Google's machines have no graphics card, and an engine that draws through one cannot start there, so WordCraft
+and Nutrient have no browser score above. The same Lighthouse release also runs here, on a computer with a
+graphics card, and on every page, not only on those two (`scripts/measure_lighthouse_local.py` in the
+[open-docs](https://github.com/arthrod/open-docs) repository, with `--out results/lighthouse-local.json`).
+The price is that these figures depend on this computer and on what else it was doing: the heading gives its
+load and Lighthouse's own reading of how fast its processor was during the analyses. Compare rows within these
+tables, not with PageSpeed's.
+
+<!-- lighthouse-local:start -->
+Not measured yet.
+<!-- lighthouse-local:end -->
+
 ## Tests
 
 ```sh

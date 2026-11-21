@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def test_the_readme_in_the_repository_matches_its_data():
-    files = {n: json.loads((ROOT / "results" / f"{n}.json").read_text()) for n in ("browser", "server", "samples", "server-client", "lighthouse")}
+    files = {n: json.loads((ROOT / "results" / f"{n}.json").read_text()) for n in ("browser", "server", "samples", "server-client", "lighthouse", "lighthouse-local")}
     readme = (ROOT / "README.md").read_text()
     assert rt.render(readme, files) == readme, "run scripts/readme_tables.py"
 
@@ -137,3 +137,15 @@ def test_the_server_client_table_says_an_uncollected_heap_too():
     import readme_tables as rt
 
     assert "heap(r)" in inspect.getsource(rt.server_client_block)
+
+
+def test_the_local_lighthouse_block_is_empty_until_measured_and_then_headed_by_its_machine():
+    assert rt.local_block({"measuredAt": None, "environment": "", "pages": {}}) == "Not measured yet."
+    page = {"performance": 60, "accessibility": 94, "bestPractices": 96, "seo": 90, "fcpMs": 500, "lcpMs": 500, "tbtMs": 1840, "cls": 0.002, "speedIndexMs": 8500, "performanceRuns": [60, 61, 59], "error": None}
+    none = {**page, "performance": None, "performanceRuns": [None, None, None]}
+    out = rt.local_block({"measuredAt": "2026-11-21", "environment": "Lighthouse 13.6.0 run on a MacBook Pro",
+                          "pages": {"v/wordcraft": {"desktop": page, "mobile": page}, "v/nutrient": {"desktop": none, "mobile": none}, "r/wordcraft": {"desktop": page, "mobile": page}}})
+    assert "Lighthouse 13.6.0 run on a MacBook Pro" in out
+    assert "| WordCraft | 60 · 60 |" in out
+    assert "| Nutrient | **no result**: Lighthouse gave no score |" in out
+    assert "PageSpeed" not in out

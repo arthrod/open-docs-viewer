@@ -207,14 +207,14 @@ LH_HEAD = [
 ]
 
 
-def lighthouse_line(label: str, r: dict, head: dict) -> str:
-    """One page's row: desktop · mobile in each cell."""
+def lighthouse_line(label: str, r: dict, head: dict, who: str = "PageSpeed") -> str:
+    """One page's row: desktop · mobile in each cell. `who` made the analyses."""
     d, m = r.get("desktop") or {}, r.get("mobile") or {}
     label = dated(label, r, head)
     runs = lambda x: "/".join("fail" if v is None else str(v) for v in x.get("performanceRuns") or [])
     if d.get("performance") is None and m.get("performance") is None:
         # Both reasons, and every analysis: desktop and mobile often fail differently.
-        reasons = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error")) or "PageSpeed gave no score"
+        reasons = "; ".join(f"{f}: {cell(x['error'])}" for f, x in (("desktop", d), ("mobile", m)) if x.get("error")) or f"{who} gave no score"
         if d.get("error") and d.get("error") == m.get("error"):
             reasons = cell(d["error"])
         listed = f"{runs(d)} · {runs(m)}" if d.get("performanceRuns") or m.get("performanceRuns") else ""
@@ -227,10 +227,10 @@ def lighthouse_line(label: str, r: dict, head: dict) -> str:
             f"{two('speedIndexMs', ms)} | {one('accessibility')} | {one('bestPractices')} | {one('seo')} | {runs(d)} · {runs(m)}{f' ({why})' if why else ''} |")
 
 
-def lighthouse_block(data: dict) -> str:
+def lighthouse_block(data: dict, who: str = "PageSpeed") -> str:
     """Lighthouse: the /v/ pages and the /r/ routes, on the rich sample and on the 500 pages."""
     intro = lambda h: said(h, " Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.")
-    table = lambda pages, prefix, head: [*LH_HEAD, *[lighthouse_line(NAMES.get(k[2:], k), r, head) for k, r in pages.items() if k.startswith(prefix)]]
+    table = lambda pages, prefix, head: [*LH_HEAD, *[lighthouse_line(NAMES.get(k[2:], k), r, head, who) for k, r in pages.items() if k.startswith(prefix)]]
     out = [intro(data), "", "**Browser pages (`/v/`), rich sample**", "", *table(data["pages"], "v/", data),
            "", "**Server-rendered pages (`/r/`), rich sample**", "", *table(data["pages"], "r/", data)]
     big = data.get("docs", {}).get("lorem-500")
@@ -241,6 +241,11 @@ def lighthouse_block(data: dict) -> str:
         out += ["", "**Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**", "", *table(big, "v/", head),
                 "", "**Server-rendered pages (`/r/`), 500 pages**", "", *table(big, "r/", head)]
     return "\n".join(out)
+
+
+def local_block(data: dict) -> str:
+    """The same tables from Lighthouse run on our computer (results/lighthouse-local.json)."""
+    return lighthouse_block(data, "Lighthouse") if data.get("pages") else "Not measured yet."
 
 
 def no_server_block(reasons: dict) -> str:
@@ -267,6 +272,7 @@ def render(readme: str, files: dict) -> str:
         ("samples", samples_block(files["samples"])),
         ("server-client", server_client_block(files["server-client"], files["browser"], files["samples"])),
         ("lighthouse", lighthouse_block(files["lighthouse"])),
+        *([("lighthouse-local", local_block(files["lighthouse-local"]))] if "lighthouse-local" in files else []),
         ("no-server", no_server_block(files.get("no-server", NO_SERVER))),
     ):
         readme = put(readme, name, body)
@@ -276,7 +282,7 @@ def render(readme: str, files: dict) -> str:
 def main(argv: list[str]) -> int:
     path = f"{ROOT}/README.md"
     before = open(path).read()
-    files = {n: json.load(open(f"{ROOT}/results/{n}.json")) for n in ("browser", "server", "samples", "server-client", "lighthouse")}
+    files = {n: json.load(open(f"{ROOT}/results/{n}.json")) for n in ("browser", "server", "samples", "server-client", "lighthouse", "lighthouse-local")}
     after = render(before, files)
     if "--check" in argv:
         if after != before:
