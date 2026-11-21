@@ -9,6 +9,8 @@ import {
   statStripHtml,
 } from "./results.ts";
 import { landingNavBar, SERVER_RENDER_SLUGS } from "./navbar.ts";
+/** A count in words, as the copy has it; the routes are counted, not typed. */
+const COUNT = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen"];
 import CAVEATS from "../results/caveats.json" with { type: "json" };
 import { VIEWER_DS_CSS } from "./render.ts";
 import { SAMPLE_RESULTS, type Sample, type SampleResults, SAMPLES, sampleUrl, LIGHTHOUSE, LIGHTHOUSE_LOCAL, type LighthousePage, type LighthouseResults, SERVER_CLIENT, type ServerClientResults } from "./samples.ts";
@@ -35,7 +37,7 @@ const mb = (n: number | null | undefined) =>
 const VENDOR: Record<string, string> = { "word-online": "Microsoft", "google-viewer": "Google" };
 
 /**
- * The browser's side of a server render, on the rich sample: the seven /r/
+ * The browser's side of a server render, on the rich sample: the /r/
  * routes, then the two vendor viewers, which are server renders too (their
  * row is the /v/ page that frames them).
  */
@@ -253,7 +255,7 @@ export function samplesSection(
 <strong>Cold render</strong>: navigation start to the page's own "document is showing" signal; on 500 pages an engine may still be laying out the pages below the first screen.
 <strong>JS heap</strong>: JavaScript objects of the top page only. <strong>Renderer memory</strong>: resident memory of every renderer process of that Chrome,
 which also counts WebAssembly memory, canvases, the DOM and cross-origin frames (Chrome's own spare renderer is in it too, so compare engines with each other rather than reading it as an absolute).
-<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; seven engines have one (SuperDoc's sends unpaginated HTML).
+<strong>Server render</strong>: the <code>/r/</code> route, wall clock by <code>curl</code>, median; ${COUNT[SERVER_RENDER_SLUGS.size]} engines have one (SuperDoc's sends unpaginated HTML).
 <strong>In the browser</strong>, under it: the same route opened in Chrome (${esc(client.measuredAt ?? "")}), navigation start to the end of the load event, with the page's JS heap and that Chrome's renderer memory.
 Whether an engine <em>draws</em> the redline's tracked changes is a different question from how fast it opens it: open each link and look.</p>
   ${tables.join("\n")}
@@ -317,7 +319,7 @@ ${stats}
 
 <section class="odv-section">
   <div class="sec-label"><span class="sq"></span><span>/ Server render</span></div>
-  <p class="fine">Seven engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
+  <p class="fine">${COUNT[SERVER_RENDER_SLUGS.size].replace(/^./, (c) => c.toUpperCase())} engines also run <strong>on the Val</strong>: the Deno server fetches the document, the engine lays it out and paints it, and the
 browser receives finished pages. No engine code runs in your browser. Measured with plain HTTP: ${esc(SERVER_MEASURED_AT)}.
 <strong>First</strong>: the first request to each engine after a deploy (engine download plus compile counted as init; only the first row also paid the isolate boot). It is one request per engine, not a median, and moves from one deploy to the next.
 <strong>Warm</strong>: median of the requests after it. SuperDoc's row is not its paginated view, which needs a browser: it is the engine's headless HTML projection, with no page breaks, colours or pictures. The engines with no server route, and why, are <a href="#no-server">listed below</a>.</p>

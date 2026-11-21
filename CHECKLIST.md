@@ -20,11 +20,12 @@ why one is missing.
 - [ ] 1.3 Samples: redline table
 - [ ] 1.4 Samples: 500 pages table
 - [ ] 1.5 Engines added on 2026-11-18 (react-docx, Univer, OpenDoc, BetterOffice, OnlyOffice)
-- [ ] 1.6 Server rendering: the routes that exist (one row per engine with a route)
+- [x] 1.6 Server rendering: the routes that exist (nine, one row each)
 - [ ] 1.7 No server route, and why (one row per engine without one)
-  - [ ] OpenDoc: "possible, not built". Build it with `@casualoffice/opendoc-viewer`, or record the measured reason it cannot be built
-  - [ ] BetterOffice: "possible, not built". Build it over `@betteroffice/docx`, or record the measured reason it cannot be built
-  - [ ] After either is built: its row moves to 1.6, and the three samples tables, the transfer table, the first-and-warm table and the home page are updated
+  - [x] OpenDoc: built. `/r/opendoc` runs `@casualoffice/opendoc-viewer@0.1.0-alpha.1` on the server and sends one PNG per page; an older build than the browser page, and the route says so
+  - [x] BetterOffice: built. `/r/betteroffice` runs `@betteroffice/docx`'s layout and its own painter on a canvas of ours that writes SVG (the package publishes no other surface)
+  - [x] Both rows moved to 1.6; the three samples tables, the transfer tables, the first-and-warm table and the home page carry their measurements (live 2026-11-21, checked in Chrome on the three samples)
+  - [ ] Lighthouse for `/r/opendoc` and `/r/betteroffice` (PageSpeed and this computer)
 - [ ] 1.8 Figures to distrust (table)
 - [ ] 1.9 What the browser pays for a server render (3 tables)
 - [ ] 1.10 Lighthouse, PageSpeed (`/v/` and `/r/`, 3 samples)
@@ -49,3 +50,4 @@ why one is missing.
 | --- | --- | --- |
 | 2026-11-21 | all | Checklist created |
 | 2026-11-21 | 3.3 | Each engine links to its vendor note |
+| 2026-11-21 | 1.6, 1.7 | Server routes for OpenDoc and BetterOffice, built and measured |

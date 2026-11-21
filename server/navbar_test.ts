@@ -167,3 +167,13 @@ Deno.test("view page: the menu links to the engine's vendor note when it has one
   const without = viewPage({ ...e, vendorNote: null }, shell, src, absolutize);
   assertEquals(without.includes("pros, cons, every benchmark"), false);
 });
+
+Deno.test("landing: the number of engines with a server route is counted from the routes, in both sentences", () => {
+  const html = landingPage(ENGINES, RESULTS, SAMPLE_SRC);
+  const words = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+  const n = words[SERVER_RENDER_SLUGS.size];
+  assertEquals(SERVER_RENDER_SLUGS.size, 9);
+  assertStringIncludes(html, `median; ${n} engines have one`);
+  assertStringIncludes(html, `${n[0].toUpperCase()}${n.slice(1)} engines also run <strong>on the Val</strong>`);
+  assertEquals(/[Ss]even engines/.test(html), false);
+});

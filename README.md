@@ -9,9 +9,9 @@
 Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
 same public document URL, and measured the same way. Seventeen engines (eighteen rows on the landing page: cite-check is an application on canvas-editor, not an engine of its own): fifteen render in the browser (ten from the start, five added on
 2026-11-18). The other two, Microsoft's and Google's viewers, render on the vendor's own
-servers and are shown here in a frame: nothing of theirs renders client-side. Seven of the fifteen also
+servers and are shown here in a frame: nothing of theirs renders client-side. Nine of the fifteen also
 render **on this Val's server**, the way those two do: the server fetches the document,
-lays it out, paints it, and the browser receives finished pages. The other eight have only the
+lays it out, paints it, and the browser receives finished pages. The other six have only the
 browser page, each for a reason [given below](#no-server-route-and-why).
 
 ## Routes
@@ -66,8 +66,8 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | Nutrient | 7.12 s | 7.12 s, 6.65 s, 7.18 s | 18 MB | 589 MB | 24 MB | no server route: Nutrient renders on a server with a Docker service |
 | react-docx | 2.26 s | 3.02 s, 2.26 s, 2.05 s | 12 MB | 500 MB | 7.4 MB | no server route: it breaks pages by measuring text in the browser |
 | Univer | 1.77 s | 1.60 s, 1.77 s, 1.78 s | 24 MB | 488 MB | 2.3 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | not measured on this file yet |
-| BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | not measured on this file yet |
+| OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | 204 ms (22 ms laying out), 3 KB + a page image per page viewed, 3 pages |
+| BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | 275 ms (91 ms laying out), 2 KB + a page image per page viewed, 3 pages |
 | OnlyOffice (CryptPad build) | 3.50 s | 3.23 s, 3.74 s, 3.50 s | 45 MB | 699 MB | 18 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 
 **500 pages (`lorem-500.docx`)**
@@ -90,8 +90,8 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | Nutrient | 20.7 s | 16.7 s, 20.7 s, 21.0 s | 19 MB | 666 MB | 25 MB | no server route: Nutrient renders on a server with a Docker service |
 | react-docx | 14.7 s | 11.2 s, 18.4 s, 14.7 s | 98 MB | 906 MB | 7.3 MB | no server route: it breaks pages by measuring text in the browser |
 | Univer | 27.5 s | 23.9 s, 33.6 s, 27.5 s | 879 MB | 2357 MB | 3.0 MB | no server route: no .docx reader, and its layout measures text on a canvas |
-| OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | not measured on this file yet |
-| BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | not measured on this file yet |
+| OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | 1.57 s (1.33 s laying out), 331 KB + a page image per page viewed, 500 pages |
+| BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | 3.97 s (3.68 s laying out), 143 KB + a page image per page viewed, 500 pages |
 | OnlyOffice (CryptPad build) | 14.4 s | 13.5 s, 14.4 s, 15.9 s | 128 MB | 908 MB | 19 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
 <!-- samples:end -->
 
@@ -240,19 +240,21 @@ machine: see "Where" under Measuring). Each row below says what was found and wh
 ### What the browser pays for a server render
 
 <!-- server-client:start -->
-Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores. Loaded = navigation start to the end of the load event (server render and download included).
+Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores. Loaded = navigation start to the end of the load event (server render and download included).
 
 **Rich sample (`showcase.docx`)**
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 1.32 s | 1.03 s, 1.43 s, 1.32 s | 1.18 s | 1.6 MB | 365 MB | 927 | 60 KB |
-| folio | 591 ms | 591 ms, 707 ms, 490 ms | 532 ms | 956 KB | 360 MB | 480 | 156 KB |
-| docx-editor.dev | 988 ms | 807 ms, 1.03 s, 988 ms | 1.08 s | 1.0 MB | 375 MB | 1,048 | 1.3 MB |
-| Plate | 388 ms | 310 ms, 388 ms, 575 ms | 444 ms | 1022 KB | 343 MB | 462 | 14 KB |
-| docen | 388 ms | 418 ms, 381 ms, 388 ms | 340 ms | 948 KB | 372 MB | 303 | 1.1 MB |
-| WordCraft | 598 ms | 710 ms, 598 ms, 586 ms | 280 ms | 957 KB | 358 MB | 40 | 175 KB |
-| SuperDoc | 839 ms | 675 ms, 839 ms, 904 ms | 884 ms | 1016 KB | 343 MB | 233 | 3 KB |
+| Docxodus (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 1.32 s | 1.03 s, 1.43 s, 1.32 s | 1.18 s | 1.6 MB | 365 MB | 927 | 60 KB |
+| folio (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 591 ms | 591 ms, 707 ms, 490 ms | 532 ms | 956 KB | 360 MB | 480 | 156 KB |
+| docx-editor.dev (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 988 ms | 807 ms, 1.03 s, 988 ms | 1.08 s | 1.0 MB | 375 MB | 1,048 | 1.3 MB |
+| Plate (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 388 ms | 310 ms, 388 ms, 575 ms | 444 ms | 1022 KB | 343 MB | 462 | 14 KB |
+| docen (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 388 ms | 418 ms, 381 ms, 388 ms | 340 ms | 948 KB | 372 MB | 303 | 1.1 MB |
+| WordCraft (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 598 ms | 710 ms, 598 ms, 586 ms | 280 ms | 957 KB | 358 MB | 40 | 175 KB |
+| SuperDoc (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 839 ms | 675 ms, 839 ms, 904 ms | 884 ms | 1016 KB | 343 MB | 233 | 3 KB |
+| OpenDoc | 442 ms | 442 ms, 439 ms, 461 ms | 280 ms | 959 KB | 284 MB | 40 | 378 KB |
+| BetterOffice | 541 ms | 765 ms, 541 ms, 534 ms | 436 ms | 959 KB | 296 MB | 5,068 | 76 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 792 ms | 1.26 s, 745 ms, 792 ms | n/a | n/a | 864 MB | n/a | 1.7 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 1.20 s | 1.20 s, 1.36 s, 1.13 s | n/a | n/a | 589 MB | n/a | 1.1 MB |
 
@@ -260,13 +262,15 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 945 ms | 1.09 s, 857 ms, 945 ms | 620 ms | 1.6 MB | 365 MB | 1,237 | 61 KB |
-| folio | 523 ms | 437 ms, 566 ms, 523 ms | 532 ms | 956 KB | 362 MB | 663 | 159 KB |
-| docx-editor.dev | 871 ms | 798 ms, 871 ms, 898 ms | 944 ms | 1.0 MB | 376 MB | 1,266 | 1.3 MB |
-| Plate | 363 ms | 326 ms, 434 ms, 363 ms | 412 ms | 1022 KB | 343 MB | 722 | 14 KB |
-| docen | 430 ms | 430 ms, 479 ms, 309 ms | 284 ms | 948 KB | 371 MB | 449 | 1.1 MB |
-| WordCraft | 641 ms | 641 ms, 666 ms, 608 ms | 296 ms | 957 KB | 354 MB | 40 | 210 KB |
-| SuperDoc | 913 ms | 913 ms, 1.04 s, 835 ms | 956 ms | 1016 KB | 342 MB | 351 | 4 KB |
+| Docxodus (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 945 ms | 1.09 s, 857 ms, 945 ms | 620 ms | 1.6 MB | 365 MB | 1,237 | 61 KB |
+| folio (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 523 ms | 437 ms, 566 ms, 523 ms | 532 ms | 956 KB | 362 MB | 663 | 159 KB |
+| docx-editor.dev (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 871 ms | 798 ms, 871 ms, 898 ms | 944 ms | 1.0 MB | 376 MB | 1,266 | 1.3 MB |
+| Plate (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 363 ms | 326 ms, 434 ms, 363 ms | 412 ms | 1022 KB | 343 MB | 722 | 14 KB |
+| docen (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 430 ms | 430 ms, 479 ms, 309 ms | 284 ms | 948 KB | 371 MB | 449 | 1.1 MB |
+| WordCraft (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 641 ms | 641 ms, 666 ms, 608 ms | 296 ms | 957 KB | 354 MB | 40 | 210 KB |
+| SuperDoc (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 913 ms | 913 ms, 1.04 s, 835 ms | 956 ms | 1016 KB | 342 MB | 351 | 4 KB |
+| OpenDoc | 423 ms | 306 ms, 472 ms, 423 ms | 308 ms | 959 KB | 284 MB | 40 | 404 KB |
+| BetterOffice | 513 ms | 513 ms, 457 ms, 570 ms | 380 ms | 959 KB | 300 MB | 6,661 | 86 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 582 ms | 547 ms, 582 ms, 620 ms | n/a | n/a | 963 MB | n/a | 1.6 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 1.15 s | 1.38 s, 1.09 s, 1.15 s | n/a | n/a | 585 MB | n/a | 1.1 MB |
 
@@ -274,13 +278,15 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 
 | Engine (`/r/`) | Loaded | Each run | First paint | JS heap | Renderer memory | DOM nodes | Downloaded |
 | --- | ---: | --- | ---: | ---: | ---: | ---: | ---: |
-| Docxodus | 16.4 s | 16.4 s, 15.5 s, 17.7 s | 3.32 s | 2.6 MB | 847 MB | 32,490 | 575 KB |
-| folio | 8.48 s | 8.48 s, 7.77 s, 8.54 s | 5.08 s | 961 KB | 604 MB | 93,499 | 1.7 MB |
-| docx-editor.dev | **failed**: HTTP 422 | failed, failed, failed | | | | | |
-| Plate | 1.49 s | 1.43 s, 1.49 s, 1.64 s | 1.19 s | 1017 KB | 404 MB | 15,417 | 508 KB |
-| docen | 7.25 s | 7.37 s, 6.72 s, 7.25 s | 2.03 s | 965 KB | 1779 MB | 36,968 | 1.1 MB |
-| WordCraft | 2.08 s | 2.25 s, 2.01 s, 2.08 s | 1.62 s | 972 KB | 360 MB | 1,134 | 388 KB |
-| SuperDoc | 5.99 s | 5.99 s, 6.11 s, 5.57 s | 5.78 s | 1016 KB | 400 MB | 6,527 | 446 KB |
+| Docxodus (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 16.4 s | 16.4 s, 15.5 s, 17.7 s | 3.32 s | 2.6 MB | 847 MB | 32,490 | 575 KB |
+| folio (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 8.48 s | 8.48 s, 7.77 s, 8.54 s | 5.08 s | 961 KB | 604 MB | 93,499 | 1.7 MB |
+| docx-editor.dev (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | **failed**: HTTP 422 | failed, failed, failed | | | | | |
+| Plate (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 1.49 s | 1.43 s, 1.49 s, 1.64 s | 1.19 s | 1017 KB | 404 MB | 15,417 | 508 KB |
+| docen (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 7.25 s | 7.37 s, 6.72 s, 7.25 s | 2.03 s | 965 KB | 1779 MB | 36,968 | 1.1 MB |
+| WordCraft (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 2.08 s | 2.25 s, 2.01 s, 2.08 s | 1.62 s | 972 KB | 360 MB | 1,134 | 388 KB |
+| SuperDoc (measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 5.99 s | 5.99 s, 6.11 s, 5.57 s | 5.78 s | 1016 KB | 400 MB | 6,527 | 446 KB |
+| OpenDoc | 1.87 s | 1.83 s, 1.93 s, 1.87 s | 1.62 s | 959 KB | 291 MB | 1,034 | 1.1 MB |
+| BetterOffice | 4.32 s | 4.32 s, 4.02 s, 4.57 s | 4.02 s | 959 KB | 328 MB | 18,509 | 66 KB |
 | Word Online viewer (rendered on Microsoft's servers; `/v/` frame load) | 1.65 s | 1.42 s, 1.86 s, 1.65 s | n/a | n/a | 687 MB | n/a | 1.1 MB |
 | Google viewer (rendered on Google's servers; `/v/` frame load) | 4.83 s | failed, 8.36 s, 1.30 s | n/a | n/a | 605 MB | n/a | 1.1 MB |
 <!-- server-client:end -->
@@ -440,17 +446,19 @@ Measured 2026-11-20: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
 
 <!-- server:start -->
-Measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores. Document: showcase.docx (47,871 B).
+Measured 2026-11-21: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 6.8, highest 7.0, on 12 cores. Document: showcase.docx (47,871 B).
 
 | Engine (`/r/`) | First request | of which init · render | Warm (median) | of which render | Each warm request | Sent |
 | --- | ---: | ---: | ---: | ---: | --- | ---: |
-| Docxodus | 1.73 s | 189 ms · 890 ms | 471 ms | 282 ms | 1.13 s, 494 ms, 443 ms, 463 ms, 479 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
-| folio | 1.33 s | 347 ms · 332 ms | 399 ms | 212 ms | 1.31 s, 441 ms, 375 ms, 356 ms, 423 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
-| docx-editor.dev | 1.25 s | 119 ms · 866 ms | 710 ms | 503 ms | 739 ms, 1.25 s, 718 ms, 683 ms, 702 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
-| Plate | 718 ms | 135 ms · 212 ms | 306 ms | 146 ms | 1.10 s, 361 ms, 271 ms, 313 ms, 300 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
-| docen | 660 ms | 343 ms · 126 ms | 193 ms | 39 ms | 728 ms, 195 ms, 191 ms, 183 ms, 263 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
-| WordCraft | 476 ms | 187 ms · 126 ms | 221 ms | 23 ms | 171 ms, 191 ms, 375 ms, 221 ms, 256 ms | 3 KB + a page image per page viewed |
-| SuperDoc | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
+| Docxodus (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.73 s | 189 ms · 890 ms | 471 ms | 282 ms | 1.13 s, 494 ms, 443 ms, 463 ms, 479 ms (1 reached a process that had not loaded the engine: not in the median) | 61 KB |
+| folio (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.33 s | 347 ms · 332 ms | 399 ms | 212 ms | 1.31 s, 441 ms, 375 ms, 356 ms, 423 ms (1 reached a process that had not loaded the engine: not in the median) | 204 KB |
+| docx-editor.dev (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.25 s | 119 ms · 866 ms | 710 ms | 503 ms | 739 ms, 1.25 s, 718 ms, 683 ms, 702 ms (1 reached a process that had not loaded the engine: not in the median) | 238 KB |
+| Plate (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 718 ms | 135 ms · 212 ms | 306 ms | 146 ms | 1.10 s, 361 ms, 271 ms, 313 ms, 300 ms (1 reached a process that had not loaded the engine: not in the median) | 32 KB |
+| docen (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 660 ms | 343 ms · 126 ms | 193 ms | 39 ms | 728 ms, 195 ms, 191 ms, 183 ms, 263 ms (1 reached a process that had not loaded the engine: not in the median) | 43 KB |
+| WordCraft (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 476 ms | 187 ms · 126 ms | 221 ms | 23 ms | 171 ms, 191 ms, 375 ms, 221 ms, 256 ms | 3 KB + a page image per page viewed |
+| SuperDoc (measured 2026-11-17: curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
+| OpenDoc | 934 ms | 179 ms · 151 ms | 220 ms | 24 ms | 257 ms, 210 ms, 389 ms, 220 ms, 202 ms | 3 KB + a page image per page viewed |
+| BetterOffice | 914 ms | 319 ms · 446 ms | 279 ms | 85 ms | 368 ms, 261 ms, 230 ms, 318 ms, 297 ms (1 reached a process that had not loaded the engine: not in the median) | 2 KB + a page image per page viewed |
 <!-- server:end -->
 
 How each is measured:
