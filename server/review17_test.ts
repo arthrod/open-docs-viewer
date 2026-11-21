@@ -221,3 +221,24 @@ Deno.test("a heap that could not be collected first in some runs is said beside 
   const html = samplesSection(ENGINES, samples({}, { folio: { ...browserRow, heapNotCollected: 1 } as typeof browserRow, plate: browserRow }), noClient);
   assertEquals(html.split("not collected first in 1 run<").length - 1, 1);
 });
+
+Deno.test("Lighthouse on our computer: its own tables, headed by its machine, with no PageSpeed link", () => {
+  const psi: LighthouseResults = { measuredAt: "2026-11-16", environment: "PSI", pages: { "v/folio": both() } };
+  const local: LighthouseResults = {
+    measuredAt: "2026-11-21", environment: "Lighthouse 13.6.0 run on a MacBook Pro",
+    pages: { "v/wordcraft": both(lh({ performance: 61 }), lh({ performance: 44 })), "r/wordcraft": both(lh({ performance: 99 })) },
+    docs: { "lorem-500": { "v/wordcraft": both(lh({ performance: 52 })) } },
+  };
+  const html = lighthouseSection(ENGINES, psi, local);
+  const at = html.indexOf('id="lighthouse-local"');
+  assertEquals(at > 0, true);
+  const mine = html.slice(at);
+  assertStringIncludes(mine, "Measured 2026-11-21 · Lighthouse 13.6.0 run on a MacBook Pro");
+  assertStringIncludes(mine, '<b class="lh lh-mid">61</b> · <b class="lh lh-bad">44</b>');
+  assertStringIncludes(mine, '<b class="lh lh-good">99</b>');
+  assertStringIncludes(mine, 'id="lighthouse-local-lorem-500"');
+  assertEquals(mine.includes("pagespeed.web.dev"), false);
+  assertStringIncludes(html.slice(0, at), "pagespeed.web.dev/analysis");
+  // Without a local pass there is no such block.
+  assertEquals(lighthouseSection(ENGINES, psi, { measuredAt: null, environment: "", pages: {} }).includes('id="lighthouse-local"'), false);
+});

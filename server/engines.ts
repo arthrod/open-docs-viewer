@@ -28,7 +28,10 @@ async function currentEsm(path: string): Promise<string> {
   }
 }
 
-const { editors } = await import(await currentEsm("/server/registry.ts"));
+const registry = await import(await currentEsm("/server/registry.ts"));
+const { editors } = registry;
+/** The engine's section in benchmarks.law's vendor notes, from the registry (null: it has none, or the registry read is an older one). */
+const vendorNote = (slug: string): string | null => registry.vendorNote?.(slug) ?? null;
 
 export interface Maker {
   name: string;
@@ -45,6 +48,8 @@ export interface Engine {
   license: string;
   packages: string[];
   repo: string;
+  /** Its section of benchmarks.law/editors-trial/vendor-notes, when it has one. */
+  vendorNote?: string | null;
   proprietary: boolean;
   /** Renders in a cross-origin frame on its vendor's servers (Microsoft, Google). */
   frame: boolean;
@@ -94,6 +99,7 @@ export const ENGINES: Engine[] = (editors as any[]).map((e) => ({
   license: e.license,
   packages: e.packages,
   repo: e.repo,
+  vendorNote: vendorNote(e.slug),
   proprietary: e.kind === "viewer",
   frame: e.opensFiles === false,
   readOnly: READ_ONLY[e.slug] ?? "",
