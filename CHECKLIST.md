@@ -29,7 +29,7 @@ why one is missing.
 - [ ] 1.8 Figures to distrust (table)
 - [ ] 1.9 What the browser pays for a server render (3 tables)
 - [ ] 1.10 Lighthouse, PageSpeed (`/v/` and `/r/`, 3 samples)
-- [~] 1.11 Lighthouse on our computer: rich sample done for all 17 browser pages and 7 server routes (every engine has a score, WordCraft and Nutrient included); the 500 pages are running; `/r/opendoc` and `/r/betteroffice` follow
+- [x] 1.11 Lighthouse on our computer: all 17 browser pages and 9 server routes, rich sample and 500 pages, live 2026-11-21 (seen in Chrome). No score on the 500 pages for docen (Lighthouse stopped while waiting for the page) and for the docx-editor.dev server route (it refuses that file)
 - [ ] 1.12 First and warm server render table
 - [ ] 1.13 Tests, Measuring, Development, License
 
@@ -51,3 +51,4 @@ why one is missing.
 | 2026-11-21 | all | Checklist created |
 | 2026-11-21 | 3.3 | Each engine links to its vendor note |
 | 2026-11-21 | 1.6, 1.7 | Server routes for OpenDoc and BetterOffice, built and measured |
+| 2026-11-21 | 1.11 | Lighthouse on our computer published for every page and route |
