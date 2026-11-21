@@ -42,7 +42,7 @@ why one is missing.
 
 - [x] 3.1 Same menu as editors.benchmarks.law, with the Blog link
 - [ ] 3.2 Same engine names as the other sites
-- [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes` (live 2026-11-21; the sections of the six new tools appear on benchmarks.law with its next deploy)
+- [~] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes` (live 2026-11-21 for the engines whose section is published; the six new tools get their link when benchmarks.law has their sections, through `VENDOR_NOTE_PENDING` in the open-docs registry)
 
 ## Log
 
