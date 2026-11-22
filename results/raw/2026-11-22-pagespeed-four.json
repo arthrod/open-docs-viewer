@@ -1,0 +1,1023 @@
+{
+ "measuredAt": "2026-11-21",
+ "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+ "base": "https://viewers.benchmarks.law",
+ "query": "",
+ "raw": [
+  {
+   "page": "v/docs-plus",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:29.953Z",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 69,
+    "cls": 0.001,
+    "speedIndexMs": 1414
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:30.208Z",
+    "performance": 89,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 368,
+    "cls": 0.0,
+    "speedIndexMs": 3987
+   }
+  },
+  {
+   "page": "v/fidus-writer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:30.452Z",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 295,
+    "cls": 0.026,
+    "speedIndexMs": 2553
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:30.666Z",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 164,
+    "cls": 0.008,
+    "speedIndexMs": 965
+   }
+  },
+  {
+   "page": "v/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:29.804Z",
+    "performance": 66,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 648,
+    "cls": 0.349,
+    "speedIndexMs": 3316
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:29.803Z",
+    "performance": 77,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 500,
+    "cls": 0.001,
+    "speedIndexMs": 1407
+   }
+  },
+  {
+   "page": "v/genoffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:30.084Z",
+    "performance": 74,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 232,
+    "lcpMs": 232,
+    "tbtMs": 324,
+    "cls": 0.149,
+    "speedIndexMs": 2670
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:30.426Z",
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 781,
+    "lcpMs": 781,
+    "tbtMs": 764,
+    "cls": 0.103,
+    "speedIndexMs": 7805
+   }
+  },
+  {
+   "page": "r/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:50.418Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 761,
+    "lcpMs": 761,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 761
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:50.675Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 221,
+    "lcpMs": 221,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 273
+   }
+  },
+  {
+   "page": "r/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:47.400Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 763
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:47.872Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 228,
+    "lcpMs": 228,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 289
+   }
+  },
+  {
+   "page": "r/fidus-writer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:47.520Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 759,
+    "lcpMs": 759,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 759
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:37:47.994Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 212,
+    "lcpMs": 212,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 275
+   }
+  },
+  {
+   "page": "v/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:02.083Z",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 212,
+    "lcpMs": 212,
+    "tbtMs": 26,
+    "cls": 0.008,
+    "speedIndexMs": 1604
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:02.561Z",
+    "performance": 96,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 229,
+    "cls": 0.026,
+    "speedIndexMs": 2275
+   }
+  },
+  {
+   "page": "v/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:02.628Z",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 764,
+    "tbtMs": 328,
+    "cls": 0.0,
+    "speedIndexMs": 4332
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:02.921Z",
+    "performance": 91,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 230,
+    "cls": 0.001,
+    "speedIndexMs": 1225
+   }
+  },
+  {
+   "page": "r/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:18.731Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 759,
+    "lcpMs": 759,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 759
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:19.006Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 209,
+    "lcpMs": 209,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 225
+   }
+  },
+  {
+   "page": "v/genoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:03.114Z",
+    "performance": 68,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 788,
+    "lcpMs": 788,
+    "tbtMs": 861,
+    "cls": 0.103,
+    "speedIndexMs": 9792
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:11.531Z",
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 365,
+    "cls": 0.149,
+    "speedIndexMs": 2938
+   }
+  },
+  {
+   "page": "r/fidus-writer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:17.461Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 769,
+    "lcpMs": 769,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 769
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:20.499Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 209,
+    "lcpMs": 209,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 243
+   }
+  },
+  {
+   "page": "r/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:30.382Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 758,
+    "lcpMs": 758,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 758
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:27.855Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 285
+   }
+  },
+  {
+   "page": "v/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:38:02.798Z",
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 1526,
+    "cls": 0.349,
+    "speedIndexMs": 2579
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:19.384Z",
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 219,
+    "lcpMs": 219,
+    "tbtMs": 1023,
+    "cls": 0.001,
+    "speedIndexMs": 1199
+   }
+  },
+  {
+   "page": "v/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:54.985Z",
+    "performance": 82,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 771,
+    "lcpMs": 771,
+    "tbtMs": 690,
+    "cls": 0.0,
+    "speedIndexMs": 3509
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:53.853Z",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 217,
+    "lcpMs": 217,
+    "tbtMs": 72,
+    "cls": 0.001,
+    "speedIndexMs": 1331
+   }
+  },
+  {
+   "page": "v/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:53.812Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 22,
+    "cls": 0.008,
+    "speedIndexMs": 1117
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:54.669Z",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 773,
+    "lcpMs": 773,
+    "tbtMs": 394,
+    "cls": 0.026,
+    "speedIndexMs": 2591
+   }
+  },
+  {
+   "page": "v/genoffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:53.760Z",
+    "performance": 79,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 220,
+    "lcpMs": 220,
+    "tbtMs": 250,
+    "cls": 0.148,
+    "speedIndexMs": 2508
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:54.277Z",
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 769,
+    "lcpMs": 769,
+    "tbtMs": 772,
+    "cls": 0.103,
+    "speedIndexMs": 7715
+   }
+  },
+  {
+   "page": "r/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:40:12.014Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 918
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:40:12.496Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 241,
+    "lcpMs": 241,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 257
+   }
+  },
+  {
+   "page": "v/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:54.490Z",
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 778,
+    "lcpMs": 778,
+    "tbtMs": 1480,
+    "cls": 0.349,
+    "speedIndexMs": 2684
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:39:54.582Z",
+    "performance": 70,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 216,
+    "lcpMs": 216,
+    "tbtMs": 1334,
+    "cls": 0.001,
+    "speedIndexMs": 1058
+   }
+  },
+  {
+   "page": "r/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:40:12.187Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 211,
+    "lcpMs": 211,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 312
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:09.663Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 821,
+    "lcpMs": 821,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 2222
+   }
+  },
+  {
+   "page": "r/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:40:14.417Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 761,
+    "lcpMs": 761,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 761
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:11.348Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 211,
+    "lcpMs": 211,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 255
+   }
+  },
+  {
+   "page": "v/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.648Z",
+    "performance": 91,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 352,
+    "cls": 0.0,
+    "speedIndexMs": 3261
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.400Z",
+    "performance": 97,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 212,
+    "lcpMs": 212,
+    "tbtMs": 124,
+    "cls": 0.001,
+    "speedIndexMs": 1356
+   }
+  },
+  {
+   "page": "v/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.223Z",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 32,
+    "cls": 0.008,
+    "speedIndexMs": 1206
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.977Z",
+    "performance": 94,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 286,
+    "cls": 0.026,
+    "speedIndexMs": 2304
+   }
+  },
+  {
+   "page": "v/genoffice",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.618Z",
+    "performance": 69,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 774,
+    "lcpMs": 774,
+    "tbtMs": 926,
+    "cls": 0.101,
+    "speedIndexMs": 7468
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.595Z",
+    "performance": 63,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 614,
+    "cls": 0.149,
+    "speedIndexMs": 2666
+   }
+  },
+  {
+   "page": "r/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:40.611Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 762,
+    "lcpMs": 762,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 762
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:40.342Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 241
+   }
+  },
+  {
+   "page": "r/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:46.796Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 759,
+    "lcpMs": 759,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 759
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:46.823Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 210,
+    "lcpMs": 210,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 313
+   }
+  },
+  {
+   "page": "v/office-open",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.670Z",
+    "performance": 70,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 1263,
+    "cls": 0.001,
+    "speedIndexMs": 1031
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:25.662Z",
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 771,
+    "lcpMs": 771,
+    "tbtMs": 1457,
+    "cls": 0.349,
+    "speedIndexMs": 2450
+   }
+  },
+  {
+   "page": "r/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:41:42.528Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 1103
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:42.356Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 766
+   }
+  },
+  {
+   "page": "v/docs-plus",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.450Z",
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 762,
+    "lcpMs": 762,
+    "tbtMs": 97,
+    "cls": 0.0,
+    "speedIndexMs": 3445
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.675Z",
+    "performance": 99,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 64,
+    "cls": 0.001,
+    "speedIndexMs": 1300
+   }
+  },
+  {
+   "page": "v/genoffice",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.258Z",
+    "performance": 82,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 228,
+    "cls": 0.148,
+    "speedIndexMs": 2179
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.542Z",
+    "performance": 74,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 764,
+    "lcpMs": 764,
+    "tbtMs": 666,
+    "cls": 0.103,
+    "speedIndexMs": 7104
+   }
+  },
+  {
+   "page": "v/fidus-writer",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.475Z",
+    "performance": 100,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 763,
+    "lcpMs": 763,
+    "tbtMs": 68,
+    "cls": 0.026,
+    "speedIndexMs": 2015
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:57.006Z",
+    "performance": 93,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 219,
+    "cls": 0.008,
+    "speedIndexMs": 899
+   }
+  },
+  {
+   "page": "r/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:10.998Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 759,
+    "lcpMs": 759,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 776
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:11.492Z",
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 212,
+    "lcpMs": 212,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 231
+   }
+  },
+  {
+   "page": "r/fidus-writer",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:13.317Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 208,
+    "lcpMs": 208,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 224
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:13.573Z",
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 765,
+    "lcpMs": 765,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 765
+   }
+  },
+  {
+   "page": "v/office-open",
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.891Z",
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 1398,
+    "cls": 0.349,
+    "speedIndexMs": 3078
+   },
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:42:56.821Z",
+    "performance": 72,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 863,
+    "cls": 0.001,
+    "speedIndexMs": 1240
+   }
+  },
+  {
+   "page": "r/docs-plus",
+   "desktop": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:14.295Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 241
+   },
+   "mobile": {
+    "version": "13.6.0",
+    "fetchTime": "2026-11-22T01:43:14.576Z",
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 766
+   }
+  }
+ ]
+}
