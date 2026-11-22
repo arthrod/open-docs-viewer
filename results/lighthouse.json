@@ -1120,6 +1120,307 @@
    "measuredAt": "2026-11-21",
    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
    "base": "https://viewers.benchmarks.law"
+  },
+  "v/genoffice": {
+   "desktop": {
+    "performance": 74,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 90,
+    "fcpMs": 218,
+    "lcpMs": 218,
+    "tbtMs": 324,
+    "cls": 0.149,
+    "speedIndexMs": 2666,
+    "performanceRuns": [
+     74,
+     71,
+     79,
+     63,
+     82
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 96,
+    "seo": 91,
+    "fcpMs": 774,
+    "lcpMs": 774,
+    "tbtMs": 772,
+    "cls": 0.103,
+    "speedIndexMs": 7715,
+    "performanceRuns": [
+     71,
+     68,
+     71,
+     69,
+     74
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/office-open": {
+   "desktop": {
+    "performance": 71,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 215,
+    "lcpMs": 215,
+    "tbtMs": 1023,
+    "cls": 0.001,
+    "speedIndexMs": 1199,
+    "performanceRuns": [
+     77,
+     71,
+     70,
+     70,
+     72
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 57,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 768,
+    "lcpMs": 768,
+    "tbtMs": 1457,
+    "cls": 0.349,
+    "speedIndexMs": 2684,
+    "performanceRuns": [
+     66,
+     57,
+     57,
+     57,
+     57
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/fidus-writer": {
+   "desktop": {
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 32,
+    "cls": 0.008,
+    "speedIndexMs": 1117,
+    "performanceRuns": [
+     96,
+     98,
+     100,
+     99,
+     93
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 94,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 767,
+    "lcpMs": 767,
+    "tbtMs": 286,
+    "cls": 0.026,
+    "speedIndexMs": 2304,
+    "performanceRuns": [
+     93,
+     96,
+     90,
+     94,
+     100
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "v/docs-plus": {
+   "desktop": {
+    "performance": 98,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 214,
+    "lcpMs": 214,
+    "tbtMs": 72,
+    "cls": 0.001,
+    "speedIndexMs": 1331,
+    "performanceRuns": [
+     98,
+     91,
+     99,
+     97,
+     99
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 91,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 352,
+    "cls": 0.0,
+    "speedIndexMs": 3509,
+    "performanceRuns": [
+     89,
+     90,
+     82,
+     91,
+     98
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "r/office-open": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 241,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 97,
+    "bestPractices": 100,
+    "seo": 90,
+    "fcpMs": 762,
+    "lcpMs": 762,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 763,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "r/fidus-writer": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 211,
+    "lcpMs": 211,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 275,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 89,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 766,
+    "lcpMs": 766,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 766,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
+  },
+  "r/docs-plus": {
+   "desktop": {
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 213,
+    "lcpMs": 213,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 273,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "mobile": {
+    "performance": 100,
+    "accessibility": 91,
+    "bestPractices": 100,
+    "seo": 82,
+    "fcpMs": 761,
+    "lcpMs": 761,
+    "tbtMs": 0,
+    "cls": 0,
+    "speedIndexMs": 761,
+    "performanceRuns": [
+     100,
+     100,
+     100,
+     100,
+     100
+    ],
+    "error": null
+   },
+   "measuredAt": "2026-11-21",
+   "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+   "base": "https://viewers.benchmarks.law"
   }
  },
  "docs": {
@@ -2229,6 +2530,307 @@
       90,
       93,
       78
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/genoffice": {
+    "desktop": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed refused the address: Oops! Something went wrong."
+    },
+    "mobile": {
+     "performance": null,
+     "accessibility": null,
+     "bestPractices": null,
+     "seo": null,
+     "fcpMs": null,
+     "lcpMs": null,
+     "tbtMs": null,
+     "cls": null,
+     "speedIndexMs": null,
+     "performanceRuns": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "error": "PageSpeed refused the address: Oops! Something went wrong."
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/office-open": {
+    "desktop": {
+     "performance": 68,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 213,
+     "lcpMs": 213,
+     "tbtMs": 1054,
+     "cls": 0.001,
+     "speedIndexMs": 1766,
+     "performanceRuns": [
+      68,
+      68,
+      68,
+      71,
+      68
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 56,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 765,
+     "lcpMs": 765,
+     "tbtMs": 1296,
+     "cls": 0.349,
+     "speedIndexMs": 4179,
+     "performanceRuns": [
+      56,
+      58,
+      53,
+      58,
+      56
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/fidus-writer": {
+    "desktop": {
+     "performance": 91,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 213,
+     "lcpMs": 213,
+     "tbtMs": 220,
+     "cls": 0.007,
+     "speedIndexMs": 1495,
+     "performanceRuns": [
+      81,
+      91,
+      91,
+      94,
+      73
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 79,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 765,
+     "lcpMs": 765,
+     "tbtMs": 694,
+     "cls": 0.026,
+     "speedIndexMs": 4895,
+     "performanceRuns": [
+      77,
+      94,
+      79,
+      89,
+      72
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/docs-plus": {
+    "desktop": {
+     "performance": 67,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 212,
+     "lcpMs": 212,
+     "tbtMs": 1363,
+     "cls": 0.001,
+     "speedIndexMs": 1928,
+     "performanceRuns": [
+      67,
+      69,
+      67,
+      67,
+      68
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 69,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 762,
+     "lcpMs": 762,
+     "tbtMs": 1960,
+     "cls": 0.0,
+     "speedIndexMs": 5648,
+     "performanceRuns": [
+      69,
+      71,
+      67,
+      69,
+      66
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/office-open": {
+    "desktop": {
+     "performance": 99,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 807,
+     "lcpMs": 807,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 892,
+     "performanceRuns": [
+      99,
+      99,
+      98,
+      98,
+      99
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 85,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3318,
+     "lcpMs": 3318,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 3318,
+     "performanceRuns": [
+      86,
+      85,
+      85,
+      86,
+      83
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/fidus-writer": {
+    "desktop": {
+     "performance": 99,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 799,
+     "lcpMs": 799,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 913,
+     "performanceRuns": [
+      99,
+      97,
+      99,
+      99,
+      99
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 86,
+     "accessibility": 97,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3288,
+     "lcpMs": 3288,
+     "tbtMs": 10,
+     "cls": 0,
+     "speedIndexMs": 3288,
+     "performanceRuns": [
+      86,
+      82,
+      85,
+      86,
+      86
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 on Google's servers, 5 analyses per page and form factor, median of those that gave a result",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/docs-plus": {
+    "desktop": {
+     "performance": 98,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 876,
+     "lcpMs": 876,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 1196,
+     "performanceRuns": [
+      98,
+      98,
+      98,
+      95,
+      97
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 86,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 3262,
+     "lcpMs": 3262,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 3262,
+     "performanceRuns": [
+      86,
+      86,
+      85,
+      86,
+      86
      ],
      "error": null
     },

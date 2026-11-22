@@ -352,6 +352,10 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | OpenDoc (measured 2026-11-20) | 66 · 69 | 227 ms · 773 ms | 382 ms · 939 ms | 0.195 · 0.054 | 227 ms · 773 ms | 3.06 s · 12.2 s | 100 | 100 | 90 | 64/75/67/56/66 · 69/71/71/64/66 |
 | BetterOffice (measured 2026-11-20) | 92 · 71 | 1.27 s · 6.51 s | 96 ms · 129 ms | 0.001 · 0 | 413 ms · 1.51 s | 1.82 s · 5.67 s | 100 | 100 | 90 | 92/94/92/90/96 · 69/72/71/69/74 |
 | OnlyOffice (CryptPad build) (measured 2026-11-20) | 100 · 100 | 217 ms · 771 ms | 0 ms · 0 ms | 0.002 · 0 | 217 ms · 771 ms | 417 ms · 1.36 s | 100 | 96 | 90 | 100/100/100/100/100 · 100/100/100/100/100 |
+| GenOffice (measured 2026-11-21) | 74 · 71 | 218 ms · 774 ms | 324 ms · 772 ms | 0.149 · 0.103 | 218 ms · 774 ms | 2.67 s · 7.71 s | 100 | 96 | 90 | 74/71/79/63/82 · 71/68/71/69/74 |
+| office-open (measured 2026-11-21) | 71 · 57 | 215 ms · 768 ms | 1.02 s · 1.46 s | 0.001 · 0.349 | 215 ms · 768 ms | 1.20 s · 2.68 s | 100 | 100 | 90 | 77/71/70/70/72 · 66/57/57/57/57 |
+| Fidus Writer (measured 2026-11-21) | 98 · 94 | 213 ms · 767 ms | 32 ms · 286 ms | 0.008 · 0.026 | 213 ms · 767 ms | 1.12 s · 2.30 s | 100 | 100 | 90 | 96/98/100/99/93 · 93/96/90/94/100 |
+| docs.plus (measured 2026-11-21) | 98 · 90 | 214 ms · 766 ms | 72 ms · 352 ms | 0.001 · 0 | 214 ms · 766 ms | 1.33 s · 3.51 s | 100 | 100 | 90 | 98/91/99/97/99 · 89/90/82/91/98 |
 
 **Server-rendered pages (`/r/`), rich sample**
 
@@ -366,6 +370,9 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | SuperDoc | 100 · 100 | 213 ms · 768 ms | 0 ms · 0 ms | 0 · 0 | 213 ms · 768 ms | 479 ms · 1.47 s | 98 | 100 | 90 | 100/100/100/100/100 · 100/100/100/100/100 |
 | OpenDoc (measured 2026-11-21) | 100 · 87 | 557 ms · 4.05 s | 0 ms · 0 ms | 0 · 0 | 242 ms · 788 ms | 365 ms · 920 ms | 97 | 100 | 91 | 100/100/100/100/100 · 87/87/87/87/94 |
 | BetterOffice (measured 2026-11-21) | 100 · 100 | 303 ms · 1.22 s | 0 ms · 0 ms | 0 · 0 | 229 ms · 778 ms | 304 ms · 1.04 s | 97 | 100 | 91 | fail/100/100/100/100 · fail/100/100/100/100 (desktop: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity.; mobile: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/betteroffice. Try checking the URL for validity.) |
+| office-open (measured 2026-11-21) | 100 · 100 | 213 ms · 762 ms | 0 ms · 0 ms | 0 · 0 | 213 ms · 762 ms | 241 ms · 763 ms | 97 | 100 | 90 | 100/100/100/100/100 · 100/100/100/100/100 |
+| Fidus Writer (measured 2026-11-21) | 100 · 100 | 211 ms · 766 ms | 0 ms · 0 ms | 0 · 0 | 211 ms · 766 ms | 275 ms · 766 ms | 89 | 100 | 82 | 100/100/100/100/100 · 100/100/100/100/100 |
+| docs.plus (measured 2026-11-21) | 100 · 100 | 213 ms · 761 ms | 0 ms · 0 ms | 0 · 0 | 213 ms · 761 ms | 273 ms · 761 ms | 91 | 100 | 82 | 100/100/100/100/100 · 100/100/100/100/100 |
 
 **Browser pages (`/v/`), 500 pages (`lorem-500.docx`)**
 
@@ -388,6 +395,10 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | OpenDoc (measured 2026-11-20) | 51 · 60 | 217 ms · 789 ms | 8.73 s · 16.4 s | 0.192 · 0.054 | 217 ms · 789 ms | 7.48 s · 30.5 s | 100 | 100 | 90 | 51/51/51/fail/51 · 60/fail/60/fail/fail (desktop: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.; mobile: PAGE_HUNG: Lighthouse was unable to reliably load the URL you requested because the page stopped responding.) |
 | BetterOffice (measured 2026-11-20) | 90 · 69 | 1.58 s · 8.59 s | 0 ms · 0 ms | 0.001 · 0 | 423 ms · 1.51 s | 2.17 s · 6.25 s | 100 | 100 | 90 | 90/91/85/90/92 · 67/71/65/69/72 |
 | OnlyOffice (CryptPad build) (measured 2026-11-20) | 100 · 100 | 216 ms · 768 ms | 0 ms · 0 ms | 0.002 · 0 | 216 ms · 768 ms | 597 ms · 1.03 s | 100 | 96 | 90 | 100/100/100/100/100 · 100/100/100/100/98 |
+| GenOffice (measured 2026-11-21) | **no result**: PageSpeed refused the address: Oops! Something went wrong. | | | | | | | | | fail/fail/fail/fail/fail · fail/fail/fail/fail/fail |
+| office-open (measured 2026-11-21) | 68 · 56 | 213 ms · 765 ms | 1.05 s · 1.30 s | 0.001 · 0.349 | 213 ms · 765 ms | 1.77 s · 4.18 s | 100 | 100 | 90 | 68/68/68/71/68 · 56/58/53/58/56 |
+| Fidus Writer (measured 2026-11-21) | 91 · 79 | 213 ms · 765 ms | 220 ms · 694 ms | 0.007 · 0.026 | 213 ms · 765 ms | 1.50 s · 4.89 s | 100 | 100 | 90 | 81/91/91/94/73 · 77/94/79/89/72 |
+| docs.plus (measured 2026-11-21) | 67 · 69 | 212 ms · 762 ms | 1.36 s · 1.96 s | 0.001 · 0 | 212 ms · 762 ms | 1.93 s · 5.65 s | 100 | 100 | 90 | 67/69/67/67/68 · 69/71/67/69/66 |
 
 **Server-rendered pages (`/r/`), 500 pages**
 
@@ -402,6 +413,9 @@ Measured 2026-11-16: PageSpeed Insights (pagespeed.web.dev), Lighthouse 13.6.0 o
 | SuperDoc | 89 · 77 | 870 ms · 3.28 s | 0 ms · 6 ms | 0 · 0 | 870 ms · 3.28 s | 4.23 s · 13.1 s | 100 | 100 | 90 | 89/89/fail/90/fail · 78/77/77/77/fail (desktop: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl; mobile: PageSpeed refused the address: Unable to resolve https://viewers.benchmarks.law/r/superdoc?src=https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolv) |
 | OpenDoc (measured 2026-11-21) | 92 · 75 | 946 ms · 7.99 s | 0 ms · 0 ms | 0 · 0 | 310 ms · 872 ms | 3.31 s · 4.19 s | 97 | 100 | 91 | 90/99/88/94/fail · fail/75/80/75/65 (desktop: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl; mobile: FAILED_DOCUMENT_REQUEST: Lighthouse was unable to reliably load the page you requested. Make sure you are testing the correct URL and that the server is properl) |
 | BetterOffice (measured 2026-11-21) | 91 · 90 | 366 ms · 1.18 s | 0 ms · 76 ms | 0 · 0 | 242 ms · 800 ms | 4.60 s · 12.5 s | 97 | 100 | 83 | 78/91/94/91/93 · 82/93/90/93/78 |
+| office-open (measured 2026-11-21) | 99 · 85 | 807 ms · 3.32 s | 0 ms · 0 ms | 0 · 0 | 807 ms · 3.32 s | 892 ms · 3.32 s | 100 | 100 | 90 | 99/99/98/98/99 · 86/85/85/86/83 |
+| Fidus Writer (measured 2026-11-21) | 99 · 86 | 799 ms · 3.29 s | 0 ms · 10 ms | 0 · 0 | 799 ms · 3.29 s | 913 ms · 3.29 s | 97 | 100 | 90 | 99/97/99/99/99 · 86/82/85/86/86 |
+| docs.plus (measured 2026-11-21) | 98 · 86 | 876 ms · 3.26 s | 0 ms · 0 ms | 0 · 0 | 876 ms · 3.26 s | 1.20 s · 3.26 s | 100 | 100 | 90 | 98/98/98/95/97 · 86/86/85/86/86 |
 <!-- lighthouse:end -->
 
 Read the Lighthouse tables with care:
@@ -499,6 +513,10 @@ The 500-page tables: Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro
 | OpenDoc | 52 · 60 | 314 ms · 849 ms | 1.77 s · 14.2 s | 0.19 · 0.045 | 314 ms · 849 ms | 4.25 s · 19.2 s | 100 | 100 | 90 | 52/52/52 · 60/60/60 |
 | BetterOffice | 93 · 72 | 1.57 s · 8.17 s | 0 ms · 0 ms | 0.001 · 0 | 552 ms · 1.65 s | 1.28 s · 4.30 s | 100 | 100 | 90 | 92/93/94 · 72/73/70 |
 | OnlyOffice (CryptPad build) (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 65 · 59 | 263 ms · 791 ms | 658 ms · 3.53 s | 0.046 · 0.075 | 263 ms · 791 ms | 7.01 s · 31.0 s | 96 | 96 | 90 | 65/65/65 · 59/59/59 |
+| GenOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 56 · 59 | 247 ms · 788 ms | 7.93 s · 12.2 s | 0.149 · 0.101 | 247 ms · 788 ms | 3.36 s · 9.23 s | 100 | 96 | 90 | 55/56/56 · 59/59/57 |
+| office-open (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 84 · 55 | 319 ms · 848 ms | 358 ms · 1.93 s | 0.001 · 0.348 | 319 ms · 848 ms | 1.17 s · 2.52 s | 100 | 100 | 90 | 77/84/93 · 56/55/55 |
+| Fidus Writer (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 99 · 94 | 262 ms · 772 ms | 0 ms · 264 ms | 0.007 · 0.03 | 262 ms · 772 ms | 1.18 s · 2.85 s | 100 | 100 | 90 | 99/100/99 · 94/96/93 |
+| docs.plus (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 85 · 71 | 287 ms · 837 ms | 328 ms · 2.07 s | 0.001 · 0 | 287 ms · 837 ms | 1.13 s · 3.23 s | 100 | 100 | 90 | 87/85/85 · 71/71/71 |
 
 **Server-rendered pages (`/r/`), 500 pages**
 
@@ -513,6 +531,9 @@ The 500-page tables: Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro
 | SuperDoc | 62 · 61 | 3.40 s · 5.58 s | 0 ms · 0 ms | 0 · 0 | 3.40 s · 5.58 s | 4.87 s · 9.37 s | 100 | 96 | 82 | 63/62/61 · 61/61/61 |
 | OpenDoc (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 95 · 78 | 1.14 s · 5.67 s | 0 ms · 0 ms | 0 · 0 | 264 ms · 853 ms | 1.76 s · 3.08 s | 97 | 96 | 83 | 93/95/95 · 78/81/74 |
 | BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores) | 93 · 95 | 311 ms · 1.07 s | 0 ms · 4 ms | 0 · 0 | 247 ms · 779 ms | 2.89 s · 6.00 s | 97 | 96 | 83 | 92/93/93 · 94/95/95 |
+| office-open (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 97 · 85 | 978 ms · 3.34 s | 0 ms · 50 ms | 0 · 0 | 978 ms · 3.34 s | 978 ms · 3.34 s | 100 | 96 | 82 | 97/89/97 · 85/85/84 |
+| Fidus Writer (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 97 · 86 | 1.04 s · 3.25 s | 0 ms · 6 ms | 0 · 0 | 1.04 s · 3.25 s | 1.04 s · 3.25 s | 97 | 96 | 82 | 94/98/97 · 86/85/86 |
+| docs.plus (measured 2026-11-21: Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores) | 96 · 83 | 1.07 s · 3.51 s | 0 ms · 109 ms | 0 · 0 | 1.07 s · 3.51 s | 1.10 s · 3.51 s | 100 | 96 | 82 | 93/96/96 · 70/83/84 |
 <!-- lighthouse-local:end -->
 
 ## Tests

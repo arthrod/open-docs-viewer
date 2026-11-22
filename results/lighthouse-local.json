@@ -2306,6 +2306,279 @@
     "measuredAt": "2026-11-21",
     "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4184, lowest 4094; machine load (1-minute average) median 2.6, highest 6.0, on 12 cores",
     "base": "https://viewers.benchmarks.law"
+   },
+   "v/genoffice": {
+    "desktop": {
+     "performance": 56,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 90,
+     "fcpMs": 247,
+     "lcpMs": 247,
+     "tbtMs": 7934,
+     "cls": 0.149,
+     "speedIndexMs": 3362,
+     "performanceRuns": [
+      55,
+      56,
+      56
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 59,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 91,
+     "fcpMs": 788,
+     "lcpMs": 788,
+     "tbtMs": 12154,
+     "cls": 0.101,
+     "speedIndexMs": 9232,
+     "performanceRuns": [
+      59,
+      59,
+      57
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/office-open": {
+    "desktop": {
+     "performance": 84,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 319,
+     "lcpMs": 319,
+     "tbtMs": 358,
+     "cls": 0.001,
+     "speedIndexMs": 1173,
+     "performanceRuns": [
+      77,
+      84,
+      93
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 55,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 848,
+     "lcpMs": 848,
+     "tbtMs": 1927,
+     "cls": 0.348,
+     "speedIndexMs": 2523,
+     "performanceRuns": [
+      56,
+      55,
+      55
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/fidus-writer": {
+    "desktop": {
+     "performance": 99,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 262,
+     "lcpMs": 262,
+     "tbtMs": 0,
+     "cls": 0.007,
+     "speedIndexMs": 1181,
+     "performanceRuns": [
+      99,
+      100,
+      99
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 94,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 772,
+     "lcpMs": 772,
+     "tbtMs": 264,
+     "cls": 0.03,
+     "speedIndexMs": 2848,
+     "performanceRuns": [
+      94,
+      96,
+      93
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "v/docs-plus": {
+    "desktop": {
+     "performance": 85,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 90,
+     "fcpMs": 287,
+     "lcpMs": 287,
+     "tbtMs": 328,
+     "cls": 0.001,
+     "speedIndexMs": 1126,
+     "performanceRuns": [
+      87,
+      85,
+      85
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 71,
+     "accessibility": 100,
+     "bestPractices": 100,
+     "seo": 91,
+     "fcpMs": 837,
+     "lcpMs": 837,
+     "tbtMs": 2070,
+     "cls": 0,
+     "speedIndexMs": 3227,
+     "performanceRuns": [
+      71,
+      71,
+      71
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/office-open": {
+    "desktop": {
+     "performance": 97,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 978,
+     "lcpMs": 978,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 978,
+     "performanceRuns": [
+      97,
+      89,
+      97
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 85,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 3336,
+     "lcpMs": 3336,
+     "tbtMs": 50,
+     "cls": 0,
+     "speedIndexMs": 3336,
+     "performanceRuns": [
+      85,
+      85,
+      84
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/fidus-writer": {
+    "desktop": {
+     "performance": 97,
+     "accessibility": 97,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 1041,
+     "lcpMs": 1041,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 1044,
+     "performanceRuns": [
+      94,
+      98,
+      97
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 86,
+     "accessibility": 97,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 3250,
+     "lcpMs": 3250,
+     "tbtMs": 6,
+     "cls": 0,
+     "speedIndexMs": 3250,
+     "performanceRuns": [
+      86,
+      85,
+      86
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
+   },
+   "r/docs-plus": {
+    "desktop": {
+     "performance": 96,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 1072,
+     "lcpMs": 1072,
+     "tbtMs": 0,
+     "cls": 0,
+     "speedIndexMs": 1099,
+     "performanceRuns": [
+      93,
+      96,
+      96
+     ],
+     "error": null
+    },
+    "mobile": {
+     "performance": 83,
+     "accessibility": 100,
+     "bestPractices": 96,
+     "seo": 82,
+     "fcpMs": 3507,
+     "lcpMs": 3507,
+     "tbtMs": 109,
+     "cls": 0,
+     "speedIndexMs": 3507,
+     "performanceRuns": [
+      70,
+      83,
+      84
+     ],
+     "error": null
+    },
+    "measuredAt": "2026-11-21",
+    "environment": "Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4198, lowest 4110; machine load (1-minute average) median 2.7, highest 6.3, on 12 cores",
+    "base": "https://viewers.benchmarks.law"
    }
   }
  },
