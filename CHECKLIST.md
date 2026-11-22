@@ -44,7 +44,7 @@ why one is missing.
 - [x] 3.2 Same engine names as the other sites The README tables now use the sites' names for the two embed viewers (2026-11-21)
 - [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes`, the six new tools included since benchmarks.law published their sections (et-v0.10.6, 2026-11-21)
 - [x] 3.4 GenOffice, office-open, Fidus Writer and docs.plus (added to editors.benchmarks.law on 2026-11-21) are listed here, read from its registry. Browser pages: all four. Server routes: office-open, Fidus Writer and docs.plus, each with its own code (2026-11-21); GenOffice needs a browser and says so. This line first said they had no view here, which was wrong: the engine list is read from the editors site
-- [x] 3.5 The four are in the measured tables, measured on a Mac on 2026-11-21 (each row names it; the tables' headings are still the rented machine's): browser pages on the three samples, the three server routes with curl and in Chrome, Lighthouse on our computer and PageSpeed. Lighthouse and PageSpeed on the 500 pages for these pages are item 3.6
+- [x] 3.5 The four are in the measured tables. First measured on a Mac on 2026-11-21; on 2026-11-22 re-timed on the rented machine (cpu-xl, Chrome 158.0.8127.36, three runs): browser pages on the three samples, the curl timings of the tracked-changes and 500-page samples, and what the browser pays for a server render. Their rows in those tables now come from the rented machine like the others. The first-request table (`results/server.json`) and the Lighthouse tables were taken from the Mac for every engine, so the four stay there as measured
 - [x] 3.6 Lighthouse on our computer and PageSpeed for the four engines' browser pages and the three new server routes, on each page's default document (the rich sample: these pages have no blank state) and with the 500-page file (2026-11-22; `results/lighthouse-local.json`, `results/lighthouse.json`, `pages` and `docs.lorem-500`). This line first said "blank page", which this site does not have. PageSpeed refused GenOffice's 500-page address in every analysis; its row says so
 
 ## Log
@@ -61,3 +61,4 @@ why one is missing.
 | 2026-11-21 | 3.4, 3.5 | Server routes for office-open, Fidus Writer and docs.plus; GenOffice has its reason; the earlier line was wrong |
 | 2026-11-21 | 3.5 | The four new engines measured on a Mac and added to every measured table |
 | 2026-11-22 | 3.6 | Lighthouse and PageSpeed for the new pages, on the default document and the 500 pages |
+| 2026-11-22 | 3.5 | The four re-timed on the rented machine (owner approved the cost); Mac rows replaced where the table is the rented machine's |

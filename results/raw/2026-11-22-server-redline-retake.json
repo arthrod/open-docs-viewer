@@ -1,0 +1,115 @@
+{
+ "measuredAt": "2026-11-22",
+ "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 14.9, highest 14.9, on 64 cores",
+ "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments",
+ "raw": [
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 8924,
+   "totalMs": 480,
+   "load1": 14.38,
+   "cores": 64,
+   "fetch": 57.0,
+   "queue": 0.0,
+   "init": 137.0,
+   "render": 164.0
+  },
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 8925,
+   "totalMs": 252,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 106.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 73.0
+  },
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 8925,
+   "totalMs": 238,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 108.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 61.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 28794,
+   "totalMs": 672,
+   "load1": 14.38,
+   "cores": 64,
+   "fetch": 89.0,
+   "queue": 0.0,
+   "init": 333.0,
+   "render": 147.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 28790,
+   "totalMs": 334,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 61.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 98.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 28795,
+   "totalMs": 257,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 59.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 73.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 17118,
+   "totalMs": 519,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 83.0,
+   "queue": 0.0,
+   "init": 46.0,
+   "render": 311.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 17118,
+   "totalMs": 292,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 72.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 89.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 17118,
+   "totalMs": 253,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 62.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 87.0
+  }
+ ]
+}
