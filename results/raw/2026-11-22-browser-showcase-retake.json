@@ -1,0 +1,151 @@
+{
+ "measuredAt": "2026-11-22",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 18.4, highest 18.8, on 64 cores",
+ "document": "showcase.docx (47,871 B)",
+ "raw": [
+  {
+   "engine": "genoffice",
+   "load1": 18.45,
+   "cores": 64,
+   "renderedMs": 4191,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 535810048,
+   "heapBytesBeforeGc": 22037024,
+   "heapBytes": 17705224,
+   "bytes": 5802974,
+   "requests": 37
+  },
+  {
+   "engine": "genoffice",
+   "load1": 18.45,
+   "cores": 64,
+   "renderedMs": 1704,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 531480576,
+   "heapBytesBeforeGc": 22062692,
+   "heapBytes": 17709148,
+   "bytes": 5802570,
+   "requests": 37
+  },
+  {
+   "engine": "genoffice",
+   "load1": 18.45,
+   "cores": 64,
+   "renderedMs": 1936,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 532705280,
+   "heapBytesBeforeGc": 23048516,
+   "heapBytes": 17718100,
+   "bytes": 5802449,
+   "requests": 37
+  },
+  {
+   "engine": "office-open",
+   "load1": 18.25,
+   "cores": 64,
+   "renderedMs": 1553,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 559300608,
+   "heapBytesBeforeGc": 6355908,
+   "heapBytes": 6226136,
+   "bytes": 418386,
+   "requests": 26
+  },
+  {
+   "engine": "office-open",
+   "load1": 17.86,
+   "cores": 64,
+   "renderedMs": 1492,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 559833088,
+   "heapBytesBeforeGc": 6791152,
+   "heapBytes": 6661692,
+   "bytes": 418373,
+   "requests": 26
+  },
+  {
+   "engine": "office-open",
+   "load1": 18.82,
+   "cores": 64,
+   "renderedMs": 1432,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 559575040,
+   "heapBytesBeforeGc": 6386824,
+   "heapBytes": 6256948,
+   "bytes": 418417,
+   "requests": 26
+  },
+  {
+   "engine": "fidus-writer",
+   "load1": 18.23,
+   "cores": 64,
+   "renderedMs": 1607,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 427905024,
+   "heapBytesBeforeGc": 10667968,
+   "heapBytes": 5207280,
+   "bytes": 922541,
+   "requests": 32
+  },
+  {
+   "engine": "fidus-writer",
+   "load1": 17.71,
+   "cores": 64,
+   "renderedMs": 865,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 430039040,
+   "heapBytesBeforeGc": 11147832,
+   "heapBytes": 5205080,
+   "bytes": 922517,
+   "requests": 32
+  },
+  {
+   "engine": "fidus-writer",
+   "load1": 18.75,
+   "cores": 64,
+   "renderedMs": 1259,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 425279488,
+   "heapBytesBeforeGc": 12787996,
+   "heapBytes": 5206700,
+   "bytes": 922558,
+   "requests": 32
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 18.45,
+   "cores": 64,
+   "renderedMs": 1958,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 442191872,
+   "heapBytesBeforeGc": 22333232,
+   "heapBytes": 10032576,
+   "bytes": 951171,
+   "requests": 27
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 18.45,
+   "cores": 64,
+   "renderedMs": 1159,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 441372672,
+   "heapBytesBeforeGc": 22330288,
+   "heapBytes": 10036240,
+   "bytes": 950910,
+   "requests": 27
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 18.75,
+   "cores": 64,
+   "renderedMs": 1092,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 443777024,
+   "heapBytesBeforeGc": 22352220,
+   "heapBytes": 10030808,
+   "bytes": 950879,
+   "requests": 27
+  }
+ ]
+}

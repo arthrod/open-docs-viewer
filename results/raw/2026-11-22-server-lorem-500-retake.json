@@ -1,0 +1,115 @@
+{
+ "measuredAt": "2026-11-22",
+ "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64; the load average and core count recorded with each run are the shared host's); machine load (1-minute average) median 14.9, highest 15.0, on 64 cores",
+ "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word",
+ "raw": [
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 1684265,
+   "totalMs": 545,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 61.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 247.0
+  },
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 1684265,
+   "totalMs": 443,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 60.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 133.0
+  },
+  {
+   "engine": "office-open",
+   "code": 200,
+   "bytes": 1684265,
+   "totalMs": 507,
+   "load1": 14.99,
+   "cores": 64,
+   "fetch": 94.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 155.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 1642517,
+   "totalMs": 513,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 59.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 248.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 1642520,
+   "totalMs": 573,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 60.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 211.0
+  },
+  {
+   "engine": "fidus-writer",
+   "code": 200,
+   "bytes": 1642517,
+   "totalMs": 516,
+   "load1": 14.99,
+   "cores": 64,
+   "fetch": 58.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 236.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 1637452,
+   "totalMs": 622,
+   "load1": 14.91,
+   "cores": 64,
+   "fetch": 74.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 344.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 1637452,
+   "totalMs": 667,
+   "load1": 14.99,
+   "cores": 64,
+   "fetch": 72.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 333.0
+  },
+  {
+   "engine": "docs-plus",
+   "code": 200,
+   "bytes": 1637452,
+   "totalMs": 551,
+   "load1": 14.99,
+   "cores": 64,
+   "fetch": 59.0,
+   "queue": 0.0,
+   "init": 0.0,
+   "render": 289.0
+  }
+ ]
+}
