@@ -164,6 +164,60 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "office-open": {
+    "loadMs": 362,
+    "paintMs": 420,
+    "heapBytes": 1043400,
+    "rendererRss": 293027840,
+    "domNodes": 175,
+    "bytes": 4227,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     362,
+     244,
+     619
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "fidus-writer": {
+    "loadMs": 408,
+    "paintMs": 460,
+    "heapBytes": 1050224,
+    "rendererRss": 290439168,
+    "domNodes": 182,
+    "bytes": 11422,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     611,
+     313,
+     408
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "docs-plus": {
+    "loadMs": 283,
+    "paintMs": 348,
+    "heapBytes": 1050728,
+    "rendererRss": 299679744,
+    "domNodes": 228,
+    "bytes": 11384,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     631,
+     283,
+     270
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
    }
   },
   "redline": {
@@ -328,6 +382,60 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "office-open": {
+    "loadMs": 294,
+    "paintMs": 352,
+    "heapBytes": 1043528,
+    "rendererRss": 293142528,
+    "domNodes": 179,
+    "bytes": 4196,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     308,
+     294,
+     248
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "fidus-writer": {
+    "loadMs": 331,
+    "paintMs": 388,
+    "heapBytes": 1050320,
+    "rendererRss": 290881536,
+    "domNodes": 193,
+    "bytes": 11536,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     445,
+     331,
+     301
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "docs-plus": {
+    "loadMs": 433,
+    "paintMs": 496,
+    "heapBytes": 1050792,
+    "rendererRss": 301252608,
+    "domNodes": 235,
+    "bytes": 11518,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     433,
+     438,
+     286
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
    }
   },
   "lorem-500": {
@@ -492,6 +600,60 @@
     "error": null,
     "measuredAt": "2026-11-21",
     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from Darwin arm64; machine load (1-minute average) median 9.1, highest 11.0, on 12 cores"
+   },
+   "office-open": {
+    "loadMs": 498,
+    "paintMs": 468,
+    "heapBytes": 1039172,
+    "rendererRss": 361463808,
+    "domNodes": 6194,
+    "bytes": 460654,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     771,
+     400,
+     498
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "fidus-writer": {
+    "loadMs": 509,
+    "paintMs": 504,
+    "heapBytes": 1044116,
+    "rendererRss": 355926016,
+    "domNodes": 6181,
+    "bytes": 459398,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     509,
+     466,
+     564
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
+   },
+   "docs-plus": {
+    "loadMs": 698,
+    "paintMs": 648,
+    "heapBytes": 1044116,
+    "rendererRss": 356106240,
+    "domNodes": 6177,
+    "bytes": 455764,
+    "requests": 1,
+    "heapNotCollected": 0,
+    "runs": [
+     1341,
+     698,
+     679
+    ],
+    "error": null,
+    "measuredAt": "2026-11-21",
+    "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores"
    }
   }
  }

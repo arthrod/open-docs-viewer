@@ -69,6 +69,10 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | OpenDoc | 3.10 s | 3.05 s, 3.10 s, 3.15 s | 12 MB | 698 MB | 20 MB | 204 ms (22 ms laying out), 3 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | BetterOffice | 2.68 s | 3.44 s, 2.68 s, 2.63 s | 11 MB | 652 MB | 12 MB | 275 ms (91 ms laying out), 2 KB + a page image per page viewed, 3 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | OnlyOffice (CryptPad build) | 3.50 s | 3.23 s, 3.74 s, 3.50 s | 45 MB | 699 MB | 18 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
+| GenOffice (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.7, on 12 cores) | 1.52 s | 1.49 s, 1.52 s, 2.94 s | 18 MB | 517 MB | 5.4 MB | no server route: it is a desktop application's window, drawn in a browser |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.4, highest 5.5, on 12 cores) | 1.64 s | 2.52 s, 1.29 s, 1.64 s | 6.5 MB | 771 MB | 441 KB | 289 ms (56 ms rendering), 9 KB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.7, on 12 cores) | 1.30 s | 1.44 s, 1.08 s, 1.30 s | 5.2 MB | 349 MB | 933 KB | 323 ms (101 ms rendering), 28 KB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.4, highest 5.5, on 12 cores) | 1.39 s | 1.33 s, 41.9 s, 1.39 s | 9.6 MB | 394 MB | 961 KB | 312 ms (73 ms rendering), 17 KB |
 
 **500 pages (`lorem-500.docx`)**
 
@@ -93,6 +97,10 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | OpenDoc | 6.40 s | 4.87 s, 6.40 s, 6.60 s | 12 MB | 901 MB | 21 MB | 1.57 s (1.33 s laying out), 331 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | BetterOffice | 8.98 s | 8.25 s, 8.98 s, 9.92 s | 17 MB | 1235 MB | 11 MB | 3.97 s (3.68 s laying out), 143 KB + a page image per page viewed, 500 pages (timed from Darwin arm64, not from a Hugging Face Jobs cpu-xl machine as the other rows) |
 | OnlyOffice (CryptPad build) | 14.4 s | 13.5 s, 14.4 s, 15.9 s | 128 MB | 908 MB | 19 MB | no server route: its converter is built without the renderer, and drawing needs the editor in a browser |
+| GenOffice (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores) | 1.68 s | 1.71 s, 1.60 s, 1.68 s | 39 MB | 1120 MB | 5.7 MB | no server route: it is a desktop application's window, drawn in a browser |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores) | 1.62 s | 1.62 s, 1.28 s, 1.70 s | 5.3 MB | 1028 MB | 819 KB | 513 ms (131 ms rendering), 1.6 MB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores) | 1.13 s | 1.04 s, 1.13 s, 1.38 s | 6.7 MB | 438 MB | 1.2 MB | 632 ms (222 ms rendering), 1.6 MB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores) | 1.39 s | 1.49 s, 1.39 s, 1.38 s | 13 MB | 558 MB | 1.3 MB | 715 ms (316 ms rendering), 1.6 MB |
 <!-- samples:end -->
 
 Tracked changes on the server routes: Docxodus is asked for them
@@ -167,7 +175,7 @@ short ([`server/no-server.json`](server/no-server.json) is the one source).
 | react-docx | needs a browser | `@extend-ai/react-docx@0.15.0` exports browser entries only (`.`, `./vanilla`, `./internal`). Its Rust parser in WebAssembly needs no DOM, but pagination measures text with a canvas `measureText` and with laid-out elements (`getBoundingClientRect`), and its page-image renderer throws "DOCX thumbnails require a browser environment". A route could send the parsed text, but the page breaks would be ours, not its. |
 | Univer | needs a browser | Univer's open-source packages cannot read a .docx (import and export are in its separately licensed Server SDK), so even in the browser this site hands it text and headings. Its layout (`@univerjs/engine-render@1.5.2`) takes text measurements from a canvas 2D context and has none without `document` or `OffscreenCanvas`. |
 | OnlyOffice (CryptPad build) | needs a browser | CryptPad compiles x2t to WebAssembly with OnlyOffice's `doctrenderer` replaced by an empty stub, so it converts between formats but cannot lay out or draw: x2t sends PDF and HTML output through that renderer. Pages are drawn by the editor's JavaScript (sdkjs) on a browser canvas. OnlyOffice's own server rendering is the native Document Server or Document Builder, which a Val cannot run. |
-| genoffice | needs a browser | GenOffice's Docs application is an Electron renderer: a React application that lays out its pages in the DOM, shown on editors.benchmarks.law with a stand-in for the desktop it expects. It has no headless entry, so running it here would mean faking a browser. |
+| GenOffice | needs a browser | GenOffice's Docs application is an Electron renderer: a React application that lays out its pages in the DOM, shown on editors.benchmarks.law with a stand-in for the desktop it expects. It has no headless entry, so running it here would mean faking a browser. |
 <!-- no-server:end -->
 
 The reasons for the five engines added on 2026-11-18 were read from their published packages and sources on
@@ -268,6 +276,9 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 839 ms | 675 ms, 839 ms, 904 ms | 884 ms | 1016 KB | 343 MB | 233 | 3 KB |
 | OpenDoc | 442 ms | 442 ms, 439 ms, 461 ms | 280 ms | 959 KB | 284 MB | 40 | 378 KB |
 | BetterOffice | 541 ms | 765 ms, 541 ms, 534 ms | 436 ms | 959 KB | 296 MB | 5,068 | 76 KB |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 362 ms | 362 ms, 244 ms, 619 ms | 420 ms | 1019 KB | 279 MB | 175 | 4 KB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 408 ms | 611 ms, 313 ms, 408 ms | 460 ms | 1.0 MB | 277 MB | 182 | 11 KB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 283 ms | 631 ms, 283 ms, 270 ms | 348 ms | 1.0 MB | 286 MB | 228 | 11 KB |
 | Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 792 ms | 1.26 s, 745 ms, 792 ms | n/a | n/a | 864 MB | n/a | 1.7 MB |
 | Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 1.20 s | 1.20 s, 1.36 s, 1.13 s | n/a | n/a | 589 MB | n/a | 1.1 MB |
 
@@ -284,6 +295,9 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 913 ms | 913 ms, 1.04 s, 835 ms | 956 ms | 1016 KB | 342 MB | 351 | 4 KB |
 | OpenDoc | 423 ms | 306 ms, 472 ms, 423 ms | 308 ms | 959 KB | 284 MB | 40 | 404 KB |
 | BetterOffice | 513 ms | 513 ms, 457 ms, 570 ms | 380 ms | 959 KB | 300 MB | 6,661 | 86 KB |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 294 ms | 308 ms, 294 ms, 248 ms | 352 ms | 1019 KB | 280 MB | 179 | 4 KB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 331 ms | 445 ms, 331 ms, 301 ms | 388 ms | 1.0 MB | 277 MB | 193 | 11 KB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 433 ms | 433 ms, 438 ms, 286 ms | 496 ms | 1.0 MB | 287 MB | 235 | 11 KB |
 | Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 582 ms | 547 ms, 582 ms, 620 ms | n/a | n/a | 963 MB | n/a | 1.6 MB |
 | Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 1.15 s | 1.38 s, 1.09 s, 1.15 s | n/a | n/a | 585 MB | n/a | 1.1 MB |
 
@@ -300,6 +314,9 @@ Measured 2026-11-21: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | SuperDoc (measured 2026-11-21: from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 41.2, highest 46.5, on 64 cores) | 5.99 s | 5.99 s, 6.11 s, 5.57 s | 5.78 s | 1016 KB | 400 MB | 6,527 | 446 KB |
 | OpenDoc | 1.87 s | 1.83 s, 1.93 s, 1.87 s | 1.62 s | 959 KB | 291 MB | 1,034 | 1.1 MB |
 | BetterOffice | 4.32 s | 4.32 s, 4.02 s, 4.57 s | 4.02 s | 959 KB | 328 MB | 18,509 | 66 KB |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 498 ms | 771 ms, 400 ms, 498 ms | 468 ms | 1015 KB | 345 MB | 6,194 | 450 KB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 509 ms | 509 ms, 466 ms, 564 ms | 504 ms | 1020 KB | 339 MB | 6,181 | 449 KB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.1, highest 3.8, on 12 cores) | 698 ms | 1.34 s, 698 ms, 679 ms | 648 ms | 1020 KB | 340 MB | 6,177 | 445 KB |
 | Microsoft Word viewer (rendered on Microsoft's servers; `/v/` frame load) | 1.65 s | 1.42 s, 1.86 s, 1.65 s | n/a | n/a | 687 MB | n/a | 1.1 MB |
 | Google Docs viewer (rendered on Google's servers; `/v/` frame load) | 4.83 s | failed, 8.36 s, 1.30 s | n/a | n/a | 605 MB | n/a | 1.1 MB |
 <!-- server-client:end -->
@@ -437,6 +454,10 @@ Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 co
 | OpenDoc | 83 · 72 | 326 ms · 851 ms | 54 ms · 724 ms | 0.202 · 0.057 | 326 ms · 851 ms | 3.16 s · 13.9 s | 100 | 100 | 90 | 83/83/82 · 72/72/70 |
 | BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4175, lowest 3849; machine load (1-minute average) median 9.4, highest 22.6, on 12 cores) | 95 · 76 | 1.39 s · 6.12 s | 0 ms · 0 ms | 0.001 · 0 | 588 ms · 1.65 s | 1.47 s · 3.57 s | 100 | 100 | 90 | 93/95/95 · 75/76/99 |
 | OnlyOffice (CryptPad build) | 84 · 62 | 269 ms · 806 ms | 200 ms · 1.70 s | 0.047 · 0.077 | 269 ms · 806 ms | 5.72 s · 26.9 s | 96 | 96 | 90 | 79/84/100 · 63/62/62 |
+| GenOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 89 · 81 | 241 ms · 774 ms | 8 ms · 433 ms | 0.149 · 0.103 | 241 ms · 774 ms | 2.24 s · 6.25 s | 100 | 96 | 90 | 89/89/90 · 82/79/81 |
+| office-open (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 98 · 62 | 301 ms · 849 ms | 134 ms · 930 ms | 0.001 · 0.348 | 301 ms · 849 ms | 843 ms · 2.00 s | 100 | 100 | 90 | 98/96/98 · 62/62/62 |
+| Fidus Writer (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 100 · 100 | 233 ms · 775 ms | 0 ms · 66 ms | 0.007 · 0.03 | 233 ms · 775 ms | 704 ms · 1.73 s | 100 | 100 | 90 | 100/100/100 · 100/100/100 |
+| docs.plus (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 100 · 99 | 300 ms · 836 ms | 0 ms · 111 ms | 0.001 · 0 | 300 ms · 836 ms | 1.10 s · 2.98 s | 100 | 100 | 90 | 99/100/100 · 98/99/99 |
 
 **Server-rendered pages (`/r/`), rich sample**
 
@@ -451,6 +472,9 @@ Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 co
 | SuperDoc | 97 · 100 | 918 ms · 1.03 s | 0 ms · 0 ms | 0 · 0 | 918 ms · 1.03 s | 1.30 s · 1.25 s | 98 | 96 | 82 | 97/97/97 · 100/100/100 |
 | OpenDoc (measured 2026-11-21: Lighthouse's CPU benchmark index median 4309, lowest 4240; machine load (1-minute average) median 2.9, highest 5.7, on 12 cores) | 100 · 87 | 590 ms · 4.10 s | 0 ms · 0 ms | 0 · 0 | 275 ms · 805 ms | 457 ms · 808 ms | 97 | 96 | 83 | 100/100/100 · 87/87/87 |
 | BetterOffice (measured 2026-11-21: Lighthouse's CPU benchmark index median 4206, lowest 4146; machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 100 · 100 | 358 ms · 1.25 s | 0 ms · 0 ms | 0 · 0 | 281 ms · 802 ms | 825 ms · 804 ms | 97 | 96 | 83 | 100/100/100 · 100/100/100 |
+| office-open (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 100 · 100 | 356 ms · 905 ms | 0 ms · 0 ms | 0 · 0 | 356 ms · 905 ms | 363 ms · 905 ms | 97 | 96 | 82 | 100/100/100 · 100/100/100 |
+| Fidus Writer (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 100 · 100 | 384 ms · 879 ms | 0 ms · 0 ms | 0 · 0 | 384 ms · 879 ms | 396 ms · 879 ms | 89 | 96 | 75 | 100/100/100 · 100/100/100 |
+| docs.plus (measured 2026-11-21: Lighthouse's CPU benchmark index median 4274, lowest 4215; machine load (1-minute average) median 2.5, highest 4.3, on 12 cores) | 100 · 100 | 356 ms · 887 ms | 0 ms · 35 ms | 0 · 0 | 356 ms · 887 ms | 377 ms · 887 ms | 91 | 96 | 75 | 100/100/100 · 100/100/100 |
 
 The 500-page tables: Measured 2026-11-21: Lighthouse 13.6.0 run on a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card), Google Chrome 158.0.8127.36, headless, 3 analyses per page and form factor, median of those that gave a result; Lighthouse's CPU benchmark index median 4105, lowest 3427; machine load (1-minute average) median 5.1, highest 22.9, on 12 cores. Cells read desktop · mobile; accessibility, best practices and SEO are the desktop scores.
 
@@ -532,6 +556,10 @@ Measured 2026-11-20: Google Chrome 158.0.8127.36 (installed, headed) via Playwri
 | OpenDoc | 2.90 s | 2.41 s, 3.75 s, 2.90 s | 20 MB | 379 | 12 MB | 670 MB |
 | BetterOffice | 2.61 s | 2.08 s, 2.92 s, 2.61 s | 12 MB | 250 | 8.5 MB | 637 MB |
 | OnlyOffice (CryptPad build) | 4.00 s | failed, 4.00 s, 4.01 s (failed: OnlyOffice: Fonts are not loaded.<br>Please contact your Document Server administrator.) | 18 MB | 81 | 44 MB | 691 MB |
+| GenOffice (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 1.74 s | 2.92 s, 1.74 s, 1.44 s | 5.3 MB | 36 | 17 MB | 495 MB |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 1.55 s | 1.67 s, 1.55 s, 1.37 s | 409 KB | 26 | 6.4 MB | 768 MB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 1.44 s | 1.79 s, 1.00 s, 1.44 s | 901 KB | 32 | 5.0 MB | 348 MB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.8, on 12 cores) | 1.01 s | 1.54 s, 962 ms, 1.01 s | 929 KB | 26 | 9.6 MB | 391 MB |
 <!-- browser:end -->
 
 **Server routes (`/r/`) with plain HTTP, rich sample** ([`results/server.json`](results/server.json))
@@ -550,6 +578,9 @@ Measured 2026-11-21: curl, a new connection (so DNS, TLS and connecting are in e
 | SuperDoc (measured 2026-11-17: from Darwin arm64; machine load (1-minute average) median 5.8, highest 6.1, on 12 cores) | 1.39 s | 516 ms · 619 ms | 604 ms | 436 ms | 651 ms, 568 ms, 598 ms, 604 ms, 687 ms | 7 KB |
 | OpenDoc | 934 ms | 179 ms · 151 ms | 220 ms | 24 ms | 257 ms, 210 ms, 389 ms, 220 ms, 202 ms | 3 KB + a page image per page viewed |
 | BetterOffice | 914 ms | 319 ms · 446 ms | 279 ms | 85 ms | 368 ms, 261 ms, 230 ms, 318 ms, 297 ms (1 reached a process that had not loaded the engine: not in the median) | 2 KB + a page image per page viewed |
+| office-open (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores) | 425 ms | 127 ms · 154 ms | 257 ms | 66 ms | 300 ms, 283 ms, 237 ms, 254 ms, 257 ms | 9 KB |
+| Fidus Writer (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores) | 608 ms | 301 ms · 114 ms | 260 ms | 70 ms | 270 ms, 260 ms, 298 ms, 202 ms, 247 ms | 28 KB |
+| docs.plus (measured 2026-11-21: a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores) | 593 ms | 43 ms · 313 ms | 268 ms | 75 ms | 243 ms, 270 ms, 268 ms, 273 ms, 229 ms | 16 KB |
 <!-- server:end -->
 
 How each is measured:

@@ -173,6 +173,63 @@
    "warmColdRuns": 1,
    "measuredAt": "2026-11-21",
    "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; from Darwin arm64; machine load (1-minute average) median 6.8, highest 7.0, on 12 cores"
+  },
+  "office-open": {
+   "firstMs": 425,
+   "firstInitMs": 127,
+   "firstRenderMs": 154,
+   "firstCold": true,
+   "warmMs": 257,
+   "warmRenderMs": 66,
+   "bytes": 8897,
+   "warmRuns": [
+    300,
+    283,
+    237,
+    254,
+    257
+   ],
+   "warmColdRuns": 0,
+   "measuredAt": "2026-11-21",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores"
+  },
+  "fidus-writer": {
+   "firstMs": 608,
+   "firstInitMs": 301,
+   "firstRenderMs": 114,
+   "firstCold": true,
+   "warmMs": 260,
+   "warmRenderMs": 70,
+   "bytes": 28270,
+   "warmRuns": [
+    270,
+    260,
+    298,
+    202,
+    247
+   ],
+   "warmColdRuns": 0,
+   "measuredAt": "2026-11-21",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores"
+  },
+  "docs-plus": {
+   "firstMs": 593,
+   "firstInitMs": 43,
+   "firstRenderMs": 313,
+   "firstCold": true,
+   "warmMs": 268,
+   "warmRenderMs": 75,
+   "bytes": 16821,
+   "warmRuns": [
+    243,
+    270,
+    268,
+    273,
+    229
+   ],
+   "warmColdRuns": 0,
+   "measuredAt": "2026-11-21",
+   "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.2, highest 3.2, on 12 cores"
   }
  }
 }

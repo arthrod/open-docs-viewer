@@ -309,6 +309,78 @@
      "failed": null,
      "measuredAt": "2026-11-21",
      "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 51.7, highest 102.0, on 64 cores"
+    },
+    "genoffice": {
+     "renderedMs": 1525,
+     "runs": [
+      1491,
+      1525,
+      2939
+     ],
+     "bytes": 5631093,
+     "requests": 36,
+     "heapBytes": 18393392,
+     "heapNotCollected": 0,
+     "rendererRss": 541933568,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.7, on 12 cores"
+    },
+    "office-open": {
+     "renderedMs": 1639,
+     "runs": [
+      2515,
+      1292,
+      1639
+     ],
+     "bytes": 451431,
+     "requests": 26,
+     "heapBytes": 6769708,
+     "heapNotCollected": 0,
+     "rendererRss": 808632320,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.4, highest 5.5, on 12 cores"
+    },
+    "fidus-writer": {
+     "renderedMs": 1296,
+     "runs": [
+      1444,
+      1078,
+      1296
+     ],
+     "bytes": 955517,
+     "requests": 32,
+     "heapBytes": 5410028,
+     "heapNotCollected": 0,
+     "rendererRss": 366247936,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 2.4, highest 2.7, on 12 cores"
+    },
+    "docs-plus": {
+     "renderedMs": 1387,
+     "runs": [
+      1334,
+      41901,
+      1387
+     ],
+     "bytes": 983801,
+     "requests": 26,
+     "heapBytes": 10059428,
+     "heapNotCollected": 0,
+     "rendererRss": 413417472,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.4, highest 5.5, on 12 cores"
     }
    },
    "server": {
@@ -437,6 +509,54 @@
      ],
      "measuredAt": "2026-11-21",
      "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.4, highest 6.4, on 12 cores"
+    },
+    "office-open": {
+     "code": 200,
+     "totalMs": 289,
+     "renderMs": 56,
+     "bytes": 8925,
+     "pages": null,
+     "runs": [
+      1034,
+      276,
+      239,
+      289,
+      296
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.0, highest 5.1, on 12 cores"
+    },
+    "fidus-writer": {
+     "code": 200,
+     "totalMs": 323,
+     "renderMs": 101,
+     "bytes": 28794,
+     "pages": null,
+     "runs": [
+      913,
+      301,
+      323,
+      754,
+      309
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.0, highest 5.1, on 12 cores"
+    },
+    "docs-plus": {
+     "code": 200,
+     "totalMs": 312,
+     "renderMs": 73,
+     "bytes": 17118,
+     "pages": null,
+     "runs": [
+      519,
+      312,
+      298,
+      293,
+      328
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.0, highest 5.1, on 12 cores"
     }
    },
    "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments with a never-seen ?n= per run"
@@ -748,6 +868,78 @@
      "failed": null,
      "measuredAt": "2026-11-21",
      "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; from a Hugging Face Jobs cpu-xl machine (16 vCPU, 124 GB, Linux x86-64, no GPU: Chrome draws in software; the load average and core count recorded with each run are the shared host's), Chrome under Xvfb with --no-sandbox --disable-dev-shm-usage; machine load (1-minute average) median 47.3, highest 100.0, on 64 cores"
+    },
+    "genoffice": {
+     "renderedMs": 1681,
+     "runs": [
+      1708,
+      1596,
+      1681
+     ],
+     "bytes": 6019014,
+     "requests": 36,
+     "heapBytes": 40915996,
+     "heapNotCollected": 0,
+     "rendererRss": 1174519808,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores"
+    },
+    "office-open": {
+     "renderedMs": 1622,
+     "runs": [
+      1622,
+      1277,
+      1699
+     ],
+     "bytes": 839054,
+     "requests": 26,
+     "heapBytes": 5597468,
+     "heapNotCollected": 0,
+     "rendererRss": 1077526528,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores"
+    },
+    "fidus-writer": {
+     "renderedMs": 1134,
+     "runs": [
+      1044,
+      1134,
+      1384
+     ],
+     "bytes": 1218054,
+     "requests": 30,
+     "heapBytes": 7030080,
+     "heapNotCollected": 0,
+     "rendererRss": 459292672,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores"
+    },
+    "docs-plus": {
+     "renderedMs": 1386,
+     "runs": [
+      1488,
+      1386,
+      1378
+     ],
+     "bytes": 1371422,
+     "requests": 26,
+     "heapBytes": 13829264,
+     "heapNotCollected": 0,
+     "rendererRss": 584728576,
+     "how": "data-od-rendered",
+     "incomplete": null,
+     "failed": null,
+     "measuredAt": "2026-11-21",
+     "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 3.3, highest 3.8, on 12 cores"
     }
    },
    "server": {
@@ -877,6 +1069,54 @@
      ],
      "measuredAt": "2026-11-21",
      "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 3 runs, median; from Darwin arm64; machine load (1-minute average) median 6.7, highest 8.5, on 12 cores"
+    },
+    "office-open": {
+     "code": 200,
+     "totalMs": 513,
+     "renderMs": 131,
+     "bytes": 1684265,
+     "pages": null,
+     "runs": [
+      912,
+      490,
+      682,
+      513,
+      482
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 4.9, highest 5.1, on 12 cores"
+    },
+    "fidus-writer": {
+     "code": 200,
+     "totalMs": 632,
+     "renderMs": 222,
+     "bytes": 1642512,
+     "pages": null,
+     "runs": [
+      640,
+      672,
+      632,
+      605,
+      552
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 4.9, highest 5.1, on 12 cores"
+    },
+    "docs-plus": {
+     "code": 200,
+     "totalMs": 715,
+     "renderMs": 316,
+     "bytes": 1637452,
+     "pages": null,
+     "runs": [
+      899,
+      728,
+      715,
+      639,
+      705
+     ],
+     "measuredAt": "2026-11-21",
+     "environment": "curl, a new connection (so DNS, TLS and connecting are in every total) and a never-seen ?n= per request, 5 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 4.9, highest 5.1, on 12 cores"
     }
    },
    "document": "lorem-500.docx (467,814 B): 500 pages in Microsoft Word with a never-seen ?n= per run"
