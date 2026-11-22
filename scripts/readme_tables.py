@@ -19,11 +19,12 @@ NAMES = {
     "google-viewer": "Google Docs viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
     "react-docx": "react-docx", "univer": "Univer", "opendoc": "OpenDoc", "betteroffice": "BetterOffice",
     "onlyoffice": "OnlyOffice (CryptPad build)",
+    "genoffice": "GenOffice", "office-open": "office-open", "fidus-writer": "Fidus Writer", "docs-plus": "docs.plus",
 }
 # Cross-origin frames: only the frame's load is timed, and the heap read is this page's, not theirs.
 FRAMES = {"word-online": "Microsoft", "google-viewer": "Google"}
 # Routes with a server render, in the order the landing lists them.
-SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice")
+SERVER = ("docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice", "office-open", "fidus-writer", "docs-plus")
 # Routes whose page images are separate requests, made as each page nears the viewport.
 IMAGES = {"wordcraft", "opendoc", "betteroffice"}
 # Why an engine has no server route: the file the landing page reads too.

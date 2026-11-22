@@ -1,0 +1,79 @@
+{
+ "measuredAt": "2026-11-21",
+ "environment": "Google Chrome 158.0.8127.36 (installed, headed) via Playwright, fresh profile per run (cold cache), 3 runs, median; a MacBook Pro (Apple M4 Pro, 12 cores, 24 GB, with its graphics card); machine load (1-minute average) median 5.4, highest 5.5, on 12 cores",
+ "document": "redline.docx (80,450 B): 23 tracked changes, 6 comments",
+ "raw": [
+  {
+   "engine": "office-open",
+   "load1": 5.5,
+   "cores": 12,
+   "renderedMs": 2515,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 521093120,
+   "heapBytesBeforeGc": 6847324,
+   "heapBytes": 6745612,
+   "bytes": 451431,
+   "requests": 26
+  },
+  {
+   "engine": "office-open",
+   "load1": 5.54,
+   "cores": 12,
+   "renderedMs": 1292,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 808632320,
+   "heapBytesBeforeGc": 6894584,
+   "heapBytes": 6778896,
+   "bytes": 451435,
+   "requests": 26
+  },
+  {
+   "engine": "office-open",
+   "load1": 5.19,
+   "cores": 12,
+   "renderedMs": 1639,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 819904512,
+   "heapBytesBeforeGc": 6806544,
+   "heapBytes": 6769708,
+   "bytes": 451428,
+   "requests": 26
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 5.54,
+   "cores": 12,
+   "renderedMs": 1334,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 413417472,
+   "heapBytesBeforeGc": 22824244,
+   "heapBytes": 10062544,
+   "bytes": 983395,
+   "requests": 26
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 5.34,
+   "cores": 12,
+   "renderedMs": 41901,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 405585920,
+   "heapBytesBeforeGc": 20497584,
+   "heapBytes": 10047900,
+   "bytes": 983801,
+   "requests": 26
+  },
+  {
+   "engine": "docs-plus",
+   "load1": 5.09,
+   "cores": 12,
+   "renderedMs": 1387,
+   "chrome": "Chrome/158.0.8127.36",
+   "rendererRss": 413745152,
+   "heapBytesBeforeGc": 22787324,
+   "heapBytes": 10059428,
+   "bytes": 983833,
+   "requests": 26
+  }
+ ]
+}
