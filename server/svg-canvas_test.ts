@@ -194,16 +194,14 @@ Deno.test("an image filter that is not a list of CSS filter functions is refused
   // Under the 512-character guard, so the pattern itself has to refuse it; `href` is what drawImage reads.
   c.filter = "blur(1px) ".repeat(50) + "x";
   const t0 = performance.now();
-  // deno-lint-ignore no-explicit-any
-  c.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" } as any, 0, 0);
+  c.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" }, 0, 0);
   assert(performance.now() - t0 < 200, "the filter pattern backtracked");
   assertStringIncludes(c.toSvg(), "<image", "the picture is drawn");
   assert(!c.toSvg().includes("filter:"), c.toSvg());
   // And a real filter list is kept, so the refusal above is the pattern's doing.
   const ok = new SvgCanvas(10, 10);
   ok.filter = "blur(1px) ".repeat(50).trim();
-  // deno-lint-ignore no-explicit-any
-  ok.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" } as any, 0, 0);
+  ok.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" }, 0, 0);
   assertStringIncludes(ok.toSvg(), 'style="filter:blur(1px)');
 });
 

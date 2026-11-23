@@ -15,11 +15,20 @@ def all_of(script: str) -> list[str]:
     raise AssertionError(f"{script} has no ALL")
 
 
-def server_routes() -> set[str]:
-    src = (ROOT / "server/results.ts").read_text()
+def routes_in(src: str) -> set[str]:
     block = src[src.index("export const SERVER_ROUTES"):]
     block = block[: block.index("\n];")]
-    return set(re.findall(r'"slug": "([^"]+)"', block))
+    return set(re.findall(r'''["']?\bslug["']?\s*:\s*["']([^"']+)["']''', block))
+
+
+def server_routes() -> set[str]:
+    return routes_in((ROOT / "server/results.ts").read_text())
+
+
+def test_route_extraction_reads_quoted_and_unquoted_keys():
+    # CodeRabbit on PR #43: a route written `slug: "x"` was not seen, so the coverage test could pass without it.
+    src = 'export const SERVER_ROUTES = [\n  { "slug": "a" },\n  { slug: "b" },\n  { \'slug\': \'c\' },\n];'
+    assert routes_in(src) == {"a", "b", "c"}
 
 
 def test_browser_all_covers_every_engine_in_the_browser_table():
