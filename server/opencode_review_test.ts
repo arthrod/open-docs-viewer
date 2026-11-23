@@ -48,7 +48,7 @@ Deno.test("an engine with no read-only mode is not labelled view-only, on its pa
   const { ENGINES } = await import("./engines.ts");
   const { viewNavBar } = await import("./navbar.ts");
   const src = new URL("https://example.com/a.docx");
-  const editable = ENGINES.filter((e) => /still editable/.test(e.readOnly)).map((e) => e.slug).sort();
+  const editable = ENGINES.filter((e) => /still editable/.test(e.readOnly)).map((e) => e.slug).sort((a, b) => a.localeCompare(b));
   assertEquals(editable, ["docs-plus", "fidus-writer", "genoffice", "univer", "wordcraft"]);
   for (const slug of editable) {
     const bar = viewNavBar(ENGINES.find((e) => e.slug === slug)!, ENGINES, src);
@@ -58,5 +58,5 @@ Deno.test("an engine with no read-only mode is not labelled view-only, on its pa
   assert(viewNavBar(ENGINES.find((e) => e.slug === "folio")!, ENGINES, src).includes("· view-only"));
   const { landingPage } = await import("./landing.ts");
   const html = landingPage(ENGINES, { measuredAt: null, environment: null, engines: {} } as never, "https://example.com/a.docx");
-  assert(!/\d+ engines as <strong>view-only<\/strong>/.test(html), "the lede says every engine is view-only");
+  assert(!/\d engines as <strong>view-only<\/strong>/.test(html), "the lede says every engine is view-only");
 });
