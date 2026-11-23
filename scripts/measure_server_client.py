@@ -44,7 +44,7 @@ ARGS = client_args(sys.argv[1:])
 
 BASE = os.environ.get("ODV_BASE", "https://viewers.benchmarks.law")
 FIXTURES = "https://huggingface.co/datasets/arthrod/open-docs-fixtures/resolve/main"
-ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice"]
+ALL = ["docxodus", "folio", "eigenpal", "plate", "docen", "wordcraft", "superdoc", "opendoc", "betteroffice", "office-open", "fidus-writer", "docs-plus"]
 TIMEOUT_S = int(os.environ.get("ODV_TIMEOUT_S", "360"))
 KEYS = ("loadMs", "paintMs", "heapBytes", "rendererRss", "domNodes", "bytes", "requests")
 

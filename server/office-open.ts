@@ -282,7 +282,7 @@ function renderJsonNode(value: unknown, key: string | null, depth: number): HTML
 
 /* ---------- the route ---------- */
 
-const CSS = String.raw`:root {
+export const CSS = String.raw`:root {
   color-scheme: light;
   --ink: #1a1a1a;
   --muted: #5c564e;
@@ -497,7 +497,8 @@ summary {
   p.block { font-size: 16px; }
 }
 
-body{margin:0;background:#f2efe7}main.oo-page{max-width:820px;margin:24px auto;padding:32px 40px;background:#fffdf7;box-shadow:0 1px 3px rgba(16,24,40,.12)}
+/* The demo's body is a fixed-height column for panes that scroll on their own; this page has none, so it scrolls as a page. */
+body{margin:0;background:#f2efe7;display:block;height:auto;min-height:100dvh;overflow:visible}main.oo-page{max-width:820px;margin:24px auto;padding:32px 40px;background:#fffdf7;box-shadow:0 1px 3px rgba(16,24,40,.12)}
 @media(max-width:700px){main.oo-page{margin:0;padding:20px}}`;
 
 export async function officeOpenHtml(bytes: Uint8Array) {

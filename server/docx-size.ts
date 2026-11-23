@@ -58,6 +58,12 @@ export function partSize(zip: Uint8Array, name: string): number | null {
  */
 export const RENDER_LIMIT: Record<string, number> = { eigenpal: 1_000_000, betteroffice: 4_000_000 };
 
+/** What the limit guards against, as far as it was seen: only docx-editor.dev was seen to end the process. */
+const WHY: Record<string, string> = {
+  eigenpal: "larger ones end the server process",
+  betteroffice: "its memory grows with the document and is not given back, and larger ones were not tried",
+};
+
 /** Why `engine` will not be given this document, or null when it will. */
 export function tooLarge(engine: string, docx: Uint8Array, limits = RENDER_LIMIT): string | null {
   const limit = limits[engine];
@@ -67,5 +73,5 @@ export function tooLarge(engine: string, docx: Uint8Array, limits = RENDER_LIMIT
   const mb = (n: number) => (n / 1e6).toFixed(1);
   // Never "1.0 MB; the limit is 1.0 MB" for a document a byte over.
   const said = mb(size) === mb(limit) ? `just over ${mb(limit)}` : mb(size);
-  return `this document is too large for this engine's server render (its text and structure unpack to ${said} MB; the limit is ${mb(limit)} MB): larger ones end the server process. Open it in the browser render instead.`;
+  return `this document is too large for this engine's server render (its text and structure unpack to ${said} MB; the limit is ${mb(limit)} MB): ${WHY[engine] ?? "the limit guards the server"}. Open it in the browser render instead.`;
 }

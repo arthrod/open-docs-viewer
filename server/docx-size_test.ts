@@ -48,6 +48,16 @@ Deno.test("an engine with a limit refuses a document past it, with the sizes; ot
   assertEquals(tooLarge("eigenpal", new Uint8Array(5), limits), null); // not a zip: the engine's own error says so
 });
 
+Deno.test("the refusal says only what was seen for that engine: an ended process for docx-editor.dev, a memory guard for BetterOffice", async () => {
+  const { tooLarge } = await import("./docx-size.ts");
+  const big = zipOf("word/document.xml", new Uint8Array(3000));
+  const limits = { eigenpal: 1000, betteroffice: 1000 };
+  assertEquals(tooLarge("eigenpal", big, limits)?.includes("larger ones end the server process"), true);
+  const bo = tooLarge("betteroffice", big, limits) ?? "";
+  assertEquals(bo.includes("end the server process"), false, bo);
+  assertEquals(bo.includes("its memory grows with the document"), true, bo);
+});
+
 /** A zip of stored (uncompressed) entries, each declaring `declared` bytes whatever its real length. */
 function zipDeclaring(entries: { name: string; declared: number }[], comment = ""): Uint8Array {
   const te = new TextEncoder();
