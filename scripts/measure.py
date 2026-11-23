@@ -15,7 +15,7 @@ Per run:
               included. heapBytesBeforeGc is the reading just before it, 1.5 s after
               rendering: what the files up to 2026-11-18 call heapBytes
   rendererRss resident memory of every renderer process of that Chrome (`ps`),
-              read at the same moment: unlike the JS heap it includes
+              read before heap collection: unlike the JS heap it includes
               WebAssembly memory, canvases, the DOM and cross-origin frames
   load1, cores the machine's 1-minute load average when the run started, and its
               core count: a timing taken on a busy machine is slower than the engine
