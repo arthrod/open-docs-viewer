@@ -639,8 +639,8 @@ How each is measured:
   (16 vCPU, 124 GB); the one of 2026-11-18 on `cpu-upgrade` (8 vCPU, 32 GB), whose hosts were too busy all of
   2026-11-20 (load 100 to 440) for a single run to start. A browser run starts only while the host's load is under a
   limit, 100 for this pass: the load was between 3 and 102 during the browser runs (median about 50) and 39 to 47
-  while Chrome opened the `/r/` pages. The curl timings of the `/r/` routes (`measure_server.py`) do not wait
-  for a quiet host; they ran at a load of 47 to 65, and how much of that slowed our Chrome cannot be told from inside the job. Several
+  while Chrome opened the `/r/` pages; how much of that slowed our Chrome cannot be told from inside the job.
+  The curl timings of the `/r/` routes (`measure_server.py`) do not wait for a quiet host. Several
   timings are slower than on 2026-11-18 although the machine is larger; the busier host is the likely reason,
   and each run in `results/raw/` carries its load. These figures do not continue the
   earlier series, which came from a GitHub-hosted macOS runner (3 cores, 5 runs; the files of 2026-11-16 and
