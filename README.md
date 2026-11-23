@@ -6,8 +6,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Engines](https://img.shields.io/badge/engines-arthrod%2Fopen--docs-0f172a)](https://github.com/arthrod/open-docs)
 
-Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, **view-only**, fed the
-same public document URL, and measured the same way. Twenty-one engines (twenty-two rows on the landing page: cite-check is an application on canvas-editor, not an engine of its own): nineteen render in the browser (ten from the start, five added on
+Every `.docx` renderer from the [open-docs](https://github.com/arthrod/open-docs) bench, in its own read-only mode where it has one (five have none and stay editable: WordCraft,
+Univer, GenOffice, Fidus Writer and docs.plus), fed the same public document URL, and measured the same way. Twenty-one engines (twenty-two rows on the landing page: cite-check is an application on canvas-editor, not an engine of its own): nineteen render in the browser (ten from the start, five added on
 2026-11-18, four on 2026-11-21). The other two, Microsoft's and Google's viewers, render on the vendor's own
 servers and are shown here in a frame: nothing of theirs renders client-side. Twelve of the nineteen also
 render **on this Val's server**, the way those two do: the server fetches the document,
@@ -19,7 +19,7 @@ browser page, each for a reason [given below](#no-server-route-and-why).
 | Route | What |
 | --- | --- |
 | `GET /` | the engines, the measurements, a URL form |
-| `GET /v/<engine>?src=<url>` | view-only page: the engine runs in the browser, in its own read-only mode (Microsoft's and Google's viewers: a frame onto their server render) |
+| `GET /v/<engine>?src=<url>` | the engine runs in the browser, in its own read-only mode where it has one (Microsoft's and Google's viewers: a frame onto their server render) |
 | `GET /r/<engine>?src=<url>` | **server-rendered**: the engine runs here; timings in `Server-Timing` (`fetch`, `init`, `render`), page count in `x-pages`, anything laid out but not painted in `x-unpainted` |
 | `GET /api/doc?src=<url>` | this server fetches the document (https only, no private hosts, every redirect re-checked, ≤ 25 MB read in chunks, 20 s deadline, must be a zip); refusals are 4xx with the reason as text |
 | `GET /results.json` | the browser-side measurements |
@@ -119,7 +119,7 @@ such a mode: five on 2026-11-18 (react-docx, BetterOffice, OpenDoc, OnlyOffice, 
 Lighthouse tables since 2026-11-20, and in the [arena](https://arena.benchmarks.law) since
 2026-11-20; the last four are in the browser tables since 2026-11-22. OpenDoc and BetterOffice have a server route since 2026-11-21, and so do office-open, Fidus Writer and docs.plus; react-docx, OnlyOffice, Univer and GenOffice have none: see [why](#no-server-route-and-why).
 
-| Engine | View-only here | Notes |
+| Engine | Read-only mode | Notes |
 | --- | --- | --- |
 | [react-docx](https://viewers.benchmarks.law/v/react-docx) | its `read-only` mode | Rust WASM reader, DOM pages |
 | [BetterOffice](https://viewers.benchmarks.law/v/betteroffice) | `readOnly` (no toolbar or rulers) | Rust WASM engines in a Worker |

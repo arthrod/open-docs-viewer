@@ -9,7 +9,8 @@ Legend: `[x]` done and checked live · `[~]` in progress · `[ ]` not done ·
 
 ## The engines this site covers
 
-The twenty-one engines of editors.benchmarks.law in read-only mode (seventeen until
+The twenty-one engines of editors.benchmarks.law, in read-only mode where the engine has one
+(WordCraft, Univer, GenOffice, Fidus Writer and docs.plus have none and stay editable; seventeen until
 the four of 3.4 were added on 2026-11-21). A part that lists engines is complete only
 when all twenty-one are in it, or the part says why one is missing.
 
