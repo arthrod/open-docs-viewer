@@ -16,7 +16,7 @@ ROOT = __file__.rsplit("/", 2)[0]
 NAMES = {
     "canvas-editor": "canvas-editor", "docxodus": "Docxodus", "superdoc": "SuperDoc", "plate": "Plate", "docen": "docen",
     "eigenpal": "docx-editor.dev", "folio": "folio", "wordcraft": "WordCraft", "word-online": "Microsoft Word viewer",
-    "google-viewer": "Google Docs viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient",
+    "google-viewer": "Google Docs viewer", "apryse": "Apryse WebViewer", "nutrient": "Nutrient Web SDK",
     "react-docx": "react-docx", "univer": "Univer", "opendoc": "OpenDoc", "betteroffice": "BetterOffice",
     "onlyoffice": "OnlyOffice (CryptPad build)",
     "genoffice": "GenOffice", "office-open": "office-open", "fidus-writer": "Fidus Writer", "docs-plus": "docs.plus",
@@ -216,7 +216,10 @@ def server_client_block(client: dict, browser: dict, samples: dict) -> str:
             r = (browser.get("engines", {}) if doc == "showcase" else samples.get("samples", {}).get(doc, {}).get("browser", {})).get(e)
             if not r:
                 continue
-            out.append(f"| {NAMES[e]} (rendered on {who}'s servers; `/v/` frame load) | {ms(r.get('renderedMs'))} | {each(r.get('runs'))} | n/a | n/a | {mb(r.get('rendererRss'))} | n/a | {mb(r.get('bytes'))} |")
+            # These come from the browser tables, not from this table's runs: their own date and machine are said.
+            src = browser if doc == "showcase" else samples
+            r = {"measuredAt": src.get("measuredAt"), "environment": src.get("environment"), **{k: v for k, v in r.items() if v is not None or k not in ("measuredAt", "environment")}}
+            out.append(f"| {dated(NAMES[e], r, client)} (rendered on {who}'s servers; `/v/` frame load) | {ms(r.get('renderedMs'))} | {each(r.get('runs'))} | n/a | n/a | {mb(r.get('rendererRss'))} | n/a | {mb(r.get('bytes'))} |")
         out.append("")
     return "\n".join(out).rstrip()
 

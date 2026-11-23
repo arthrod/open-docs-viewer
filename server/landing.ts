@@ -20,8 +20,15 @@ const esc = (s: string) =>
 const ms = (n: number | null | undefined) =>
   n == null ? "n/a" : n < 1000 ? `${Math.round(n)} ms` : `${(n / 1000).toFixed(2)} s`;
 /** Said under a figure measured on another day than its table's heading (a partial re-run). */
-const when = (row: { measuredAt?: string } | undefined, head: { measuredAt?: string | null }) =>
-  row?.measuredAt && row.measuredAt !== head.measuredAt ? `<div class="ro odv-prov">measured ${esc(row.measuredAt)}</div>` : "";
+/** "a Hugging Face Jobs cpu-xl machine" out of "…; from a Hugging Face Jobs cpu-xl machine (16 vCPU…); machine load …". */
+const machine = (env: string) => (env.match(/\bfrom (.+?)(?: \(|;|$)/)?.[1] ?? env).trim();
+/** A row's own date, and its machine when that is not its table's, under its name. */
+export const when = (row: { measuredAt?: string | null; environment?: string | null } | undefined, head: { measuredAt?: string | null; environment?: string | null }) => {
+  const date = row?.measuredAt && row.measuredAt !== head.measuredAt ? row.measuredAt : null;
+  const there = row?.environment && head.environment && machine(row.environment) !== machine(head.environment) ? machine(row.environment) : null;
+  if (!date && !there) return "";
+  return `<div class="ro odv-prov">measured ${esc(row?.measuredAt ?? head.measuredAt ?? "")}${there ? ` on ${esc(there)}` : ""}</div>`;
+};
 /** Said beside a heap whose garbage could not be collected first in some runs (the median leaves them out while it can). */
 const uncollected = (r?: { heapNotCollected?: number } | null) =>
   r?.heapNotCollected ? ` <small class="odv-fail">not collected first in ${r.heapNotCollected} run${r.heapNotCollected === 1 ? "" : "s"}</small>` : "";
@@ -76,7 +83,7 @@ export function serverClientTable(engines: Engine[], results: Results, defaultSr
   }).join("");
   const vendors = engines.filter((e) => e.frame).map((e) => {
     const b = results.engines[e.slug];
-    return `<tr><td><a href="/v/${e.slug}?src=${q}">${esc(e.name)}</a><div class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers; loaded = the frame's load event</div></td>
+    return `<tr><td><a href="/v/${e.slug}?src=${q}">${esc(e.name)}</a><div class="ro">rendered on ${VENDOR[e.slug] ?? "the vendor"}'s servers; loaded = the frame's load event</div>${when({ measuredAt: b?.measuredAt ?? results.measuredAt, environment: b?.environment ?? results.environment }, client)}</td>
 <td class="n"><b>${ms(b?.renderedMs)}</b></td><td class="n hide-sm">n/a</td><td class="n" title="The viewer runs in the vendor's cross-origin frame: its heap cannot be read from this page">n/a</td><td class="n">n/a</td><td class="n hide-sm">n/a</td><td class="n hide-sm">${mb(b?.bytes)}</td></tr>`;
   }).join("");
   return `<p class="fine"><strong>What the browser pays for a server render.</strong> The same routes opened in Chrome, rich sample. Measured ${esc(client.measuredAt ?? "")} · ${esc(client.environment)}.
@@ -315,9 +322,9 @@ ${landingNavBar()}
 <div class="wrap">
 <header class="hero">
   <h1>Every .docx renderer, the same document, the same harness.</h1>
-  <p class="lede">${engines.length} engines as <strong>view-only</strong> pages that all take one input: a public .docx URL. Microsoft's and Google's
+  <p class="lede">${engines.length} engines, each on a page that takes one input: a public .docx URL; ${engines.length - engines.filter((e) => e.editable).length} of them in a <strong>view-only</strong> mode, and ${engines.filter((e) => e.editable).length} (${engines.filter((e) => e.editable).map((e) => esc(e.name)).join(", ")}) still editable, because they have none. Microsoft's and Google's
   viewers fetch it and render on their own servers (nothing of theirs renders in your browser: the page here is a frame); for the ${open.length} open-source engines and Apryse and Nutrient,
-  this val's Deno server fetches it and the browser renders it in the engine's own read-only mode. Every page is
+  this val's Deno server fetches it and the browser renders it, in the engine's own read-only mode where it has one. Every page is
   measured cold by the same script. The editable versions live at <a href="https://editors.benchmarks.law">open-docs</a>.</p>
   <form class="odv-form" action="/go" method="get" onsubmit="event.preventDefault(); const f=new FormData(this); location.href='/v/'+f.get('engine')+'?src='+encodeURIComponent(f.get('src'));">
     <div class="fld"><label for="odv-src">Public .docx URL</label><input id="odv-src" name="src" type="url" required value="${esc(defaultSrc)}" /></div>

@@ -149,7 +149,7 @@ def test_the_local_lighthouse_block_is_empty_until_measured_and_then_headed_by_i
                           "pages": {"v/wordcraft": {"desktop": page, "mobile": page}, "v/nutrient": {"desktop": none, "mobile": none}, "r/wordcraft": {"desktop": page, "mobile": page}}})
     assert "Lighthouse 13.6.0 run on a MacBook Pro" in out
     assert "| WordCraft | 60 · 60 |" in out
-    assert "| Nutrient | **no result**: Lighthouse gave no score |" in out
+    assert "| Nutrient Web SDK | **no result**: Lighthouse gave no score |" in out
     assert "PageSpeed" not in out
 
 
@@ -165,3 +165,17 @@ def test_a_server_route_timed_from_another_machine_says_so_in_its_cell():
     assert rt.server_from(s(cloud)) == "a cloud machine" and rt.server_from({}) is None
     assert "pages (timed from Darwin arm64, not from a cloud machine as the other rows) |" in out
     assert out.count("timed from") == 1
+
+
+def test_the_vendor_frames_under_the_server_cost_table_say_when_and_where_they_were_measured():
+    # Their figures come from the browser table, measured apart from the /r/ runs (outside review, 2026-11-23).
+    client = {"measuredAt": "2026-11-21", "environment": "a Mac", "docs": {"showcase": {"docen": {"loadMs": 900, "runs": [900]}}}}
+    browser = {"measuredAt": "2026-11-23", "environment": "a GitHub runner",
+               "engines": {"word-online": {"renderedMs": 1090, "runs": [1090], "bytes": 1 << 20, "rendererRss": None}}}
+    out = rt.server_client_block(client, browser, {"samples": {}})
+    assert "| Microsoft Word viewer (measured 2026-11-23: a GitHub runner) (rendered on Microsoft's servers; `/v/` frame load) | 1.09 s |" in out
+
+
+def test_nutrient_is_named_as_the_registry_and_the_landing_name_it():
+    # The open-docs registry, and so every page of the site, says "Nutrient Web SDK" (outside review, 2026-11-23).
+    assert rt.NAMES["nutrient"] == "Nutrient Web SDK"

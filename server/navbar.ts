@@ -132,7 +132,7 @@ function viewerMenu(e: Engine, src: URL): string {
     : "";
   return `      <div class="od-menu" id="od-menu" hidden>
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Engine</div>
-        <div class="od-menu-note"><span class="chip${e.proprietary ? " is-prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · view-only</span><small>${esc(e.readOnly)}</small></div>
+        <div class="od-menu-note"><span class="chip${e.proprietary ? " is-prop" : ""}">${e.proprietary ? "proprietary" : "open source"} · ${e.editable ? "still editable" : "view-only"}</span><small>${esc(e.readOnly)}</small></div>
         <button type="button" id="od-remeasure" hidden title="Read JS heap, bytes and files loaded again, as the page is now">Re-measure now</button>${madeBy(e)}
         <hr />
         <div class="od-menu-label"><span class="sq" aria-hidden="true"></span> / Site</div>

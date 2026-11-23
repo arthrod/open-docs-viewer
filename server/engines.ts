@@ -55,6 +55,8 @@ export interface Engine {
   frame: boolean;
   /** How this page makes it view-only (the library's own mechanism). */
   readOnly: string;
+  /** It has no read-only mode, so its page here can still be edited (WordCraft, Univer, the demo builds). */
+  editable: boolean;
 }
 
 const READ_ONLY: Record<string, string> = {
@@ -107,5 +109,6 @@ export const ENGINES: Engine[] = (editors as any[]).map((e) => ({
   proprietary: e.kind === "viewer",
   frame: e.opensFiles === false,
   readOnly: READ_ONLY[e.slug] ?? "",
+  editable: /still editable/.test(READ_ONLY[e.slug] ?? ""),
   makers: e.makers ?? [],
 }));
