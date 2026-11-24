@@ -636,8 +636,7 @@ How each is measured:
   [`scripts/hf_job.sh`](https://github.com/arthrod/open-docs/blob/main/scripts/hf_job.sh), 3 runs per engine and
   document. It runs none of our other work and anyone can rent the same machine. The load average and core count
   in each run are the shared host's (64 cores), not ours. The pass of 2026-11-20 ran on the `cpu-xl` type
-  (16 vCPU, 124 GB); the one of 2026-11-18 on `cpu-upgrade` (8 vCPU, 32 GB), whose hosts were too busy all of
-  2026-11-20 (load 100 to 440) for a single run to start. A browser run starts only while the host's load is under a
+  (16 vCPU, 124 GB); the one of 2026-11-18 on `cpu-upgrade` (8 vCPU, 32 GB). A browser run starts only while the host's load is under a
   limit, 100 for this pass. The curl timings of the `/r/` routes (`measure_server.py`) do not wait for a quiet
   host. How much the host's other work slowed our runs cannot be told from inside the job. Several
   timings are slower than on 2026-11-18 although the machine is larger; the busier host is the likely reason,
