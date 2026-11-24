@@ -9,28 +9,29 @@ Legend: `[x]` done and checked live · `[~]` in progress · `[ ]` not done ·
 
 ## The engines this site covers
 
-The seventeen engines of editors.benchmarks.law in read-only mode. A part that
-lists engines is complete only when all seventeen are in it, or the part says
-why one is missing.
+The twenty-one engines of editors.benchmarks.law, in read-only mode where the engine has one
+(WordCraft, Univer, GenOffice, Fidus Writer and docs.plus have none and stay editable; seventeen until
+the four of 3.4 were added on 2026-11-21). A part that lists engines is complete only
+when all twenty-one are in it, or the part says why one is missing.
 
 ## 1. Home page and README
 
 - [x] 1.1 Routes (`/v/<id>`, `/r/<id>`, parameters) Audited 2026-11-21: the five routes answer; `src` takes each of the three samples on every page
-- [x] 1.2 Samples: showcase table (browser render, runs, heap, renderer memory, transfer, server render) Audited 2026-11-21: the rich-sample table is under Measuring: 17 browser rows and 9 server rows
-- [x] 1.3 Samples: redline table Audited 2026-11-21: 17 rows
-- [x] 1.4 Samples: 500 pages table Audited 2026-11-21: 17 rows
-- [x] 1.5 Engines added on 2026-11-18 (react-docx, Univer, OpenDoc, BetterOffice, OnlyOffice) Audited 2026-11-21: five rows; OpenDoc and BetterOffice now have server routes and the section says so
-- [x] 1.6 Server rendering: the routes that exist (nine, one row each)
-- [x] 1.7 No server route, and why (one row per engine without one) Audited 2026-11-21: seven rows (six engines and cite-check); the README now says why the two hosted viewers are not in it
+- [x] 1.2 Samples: showcase table (browser render, runs, heap, renderer memory, transfer, server render) Audited 2026-11-21: the rich-sample table is under Measuring: 21 browser rows and 12 server rows (recounted 2026-11-23, with the four of 3.4)
+- [x] 1.3 Samples: redline table Audited 2026-11-21: 21 rows (recounted 2026-11-23, with the four of 3.4)
+- [x] 1.4 Samples: 500 pages table Audited 2026-11-21: 21 rows (recounted 2026-11-23, with the four of 3.4)
+- [x] 1.5 Engines added since 2026-11-18 (react-docx, Univer, OpenDoc, BetterOffice, OnlyOffice; then the four of 3.4) Audited 2026-11-21: five rows, nine (recounted 2026-11-23, with the four of 3.4); OpenDoc and BetterOffice now have server routes and the section says so
+- [x] 1.6 Server rendering: the routes that exist (twelve, one row each (recounted 2026-11-23, with the four of 3.4))
+- [x] 1.7 No server route, and why (one row per engine without one) Audited 2026-11-21: eight rows (seven engines and cite-check) (recounted 2026-11-23, with the four of 3.4); the README now says why the two hosted viewers are not in it
   - [x] OpenDoc: built. `/r/opendoc` runs `@casualoffice/opendoc-viewer@0.1.0-alpha.1` on the server and sends one PNG per page; an older build than the browser page, and the route says so
   - [x] BetterOffice: built. `/r/betteroffice` runs `@betteroffice/docx`'s layout and its own painter on a canvas of ours that writes SVG (the package publishes no other surface)
   - [x] Both rows moved to 1.6; the three samples tables, the transfer tables, the first-and-warm table and the home page carry their measurements (live 2026-11-21, checked in Chrome on the three samples)
   - [x] Lighthouse for `/r/opendoc` and `/r/betteroffice` (PageSpeed and this computer) Done 2026-11-21: PageSpeed (5 analyses each; one of OpenDoc's desktop analyses on the 500 pages failed at Google and the row says so) and this computer
 - [x] 1.8 Figures to distrust (table) Audited 2026-11-21: eleven rows, each read against the table it cites
-- [x] 1.9 What the browser pays for a server render (3 tables) Audited 2026-11-21: three tables of eleven rows: nine routes and the two hosted viewers. OpenDoc and BetterOffice were timed from the Mac, the other seven from the cloud machine, and each row says which; re-timing the two on the cloud machine costs money and was not approved
-- [x] 1.10 Lighthouse, PageSpeed (`/v/` and `/r/`, 3 samples) Audited 2026-11-21: 17 browser pages and 9 server routes, rich sample and 500 pages; `/r/opendoc` and `/r/betteroffice` added 2026-11-21
-- [x] 1.11 Lighthouse on our computer: all 17 browser pages and 9 server routes, rich sample and 500 pages, live 2026-11-21 (seen in Chrome). No score on the 500 pages for docen (Lighthouse stopped while waiting for the page) and for the docx-editor.dev server route (it refuses that file)
-- [x] 1.12 First and warm server render table Audited 2026-11-21: nine rows
+- [x] 1.9 What the browser pays for a server render (3 tables) Audited 2026-11-21: three tables of fourteen rows: twelve routes and the two hosted viewers (recounted 2026-11-23, with the four of 3.4). OpenDoc and BetterOffice were timed from the Mac, the other seven from the cloud machine, and each row says which; re-timing the two on the cloud machine costs money and was not approved
+- [x] 1.10 Lighthouse, PageSpeed (`/v/` and `/r/`, 3 samples) Audited 2026-11-21: 21 browser pages and 12 server routes (recounted 2026-11-23, with the four of 3.4), rich sample and 500 pages; `/r/opendoc` and `/r/betteroffice` added 2026-11-21
+- [x] 1.11 Lighthouse on our computer: all 21 browser pages and 12 server routes (recounted 2026-11-23, with the four of 3.4), rich sample and 500 pages, live 2026-11-21 (seen in Chrome). No score on the 500 pages for docen (Lighthouse stopped while waiting for the page) and for the docx-editor.dev server route (it refuses that file)
+- [x] 1.12 First and warm server render table Audited 2026-11-21: twelve rows (recounted 2026-11-23, with the four of 3.4)
 - [x] 1.13 Tests, Measuring, Development, License Audited 2026-11-21: the commands named exist and the tests pass
 
 ## 2. Per-engine pages
@@ -41,7 +42,7 @@ why one is missing.
 ## 3. Cross-site consistency
 
 - [x] 3.1 Same menu as editors.benchmarks.law, with the Blog link
-- [x] 3.2 Same engine names as the other sites The README tables now use the sites' names for the two embed viewers (2026-11-21)
+- [x] 3.2 Same engine names as the other sites The README tables now use the sites' names for the two embed viewers (2026-11-21); and "Nutrient Web SDK", not "Nutrient" (2026-11-23, from the outside review: the one name left that differed from the registry)
 - [x] 3.3 Each engine links to its vendor note at `benchmarks.law/editors-trial/vendor-notes`, the six new tools included since benchmarks.law published their sections (et-v0.10.6, 2026-11-21)
 - [x] 3.4 GenOffice, office-open, Fidus Writer and docs.plus (added to editors.benchmarks.law on 2026-11-21) are listed here, read from its registry. Browser pages: all four. Server routes: office-open, Fidus Writer and docs.plus, each with its own code (2026-11-21); GenOffice needs a browser and says so. This line first said they had no view here, which was wrong: the engine list is read from the editors site
 - [x] 3.5 The four are in the measured tables. First measured on a Mac on 2026-11-21; on 2026-11-22 re-timed on the rented machine (cpu-xl, Chrome 158.0.8127.36, three runs): browser pages on the three samples, the curl timings of the tracked-changes and 500-page samples, and what the browser pays for a server render. Their rows in those tables now come from the rented machine like the others. The first-request table (`results/server.json`) and the Lighthouse tables were taken from the Mac for every engine, so the four stay there as measured

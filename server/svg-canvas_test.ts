@@ -191,12 +191,18 @@ Deno.test("text whose outlines the caller gives is drawn as those outlines, each
 
 Deno.test("an image filter that is not a list of CSS filter functions is refused quickly, however many near-misses it holds", () => {
   const c = new SvgCanvas(10, 10);
-  c.filter = "blur(1px) ".repeat(60) + "x";
+  // Under the 512-character guard, so the pattern itself has to refuse it; `href` is what drawImage reads.
+  c.filter = "blur(1px) ".repeat(50) + "x";
   const t0 = performance.now();
-  // deno-lint-ignore no-explicit-any
-  c.drawImage({ width: 1, height: 1, src: "data:image/png;base64,AAAA" } as any, 0, 0);
+  c.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" }, 0, 0);
   assert(performance.now() - t0 < 200, "the filter pattern backtracked");
-  assert(!c.toSvg().includes("filter="), c.toSvg());
+  assertStringIncludes(c.toSvg(), "<image", "the picture is drawn");
+  assert(!c.toSvg().includes("filter:"), c.toSvg());
+  // And a real filter list is kept, so the refusal above is the pattern's doing.
+  const ok = new SvgCanvas(10, 10);
+  ok.filter = "blur(1px) ".repeat(50).trim();
+  ok.drawImage({ width: 1, height: 1, href: "data:image/png;base64,AAAA" }, 0, 0);
+  assertStringIncludes(ok.toSvg(), 'style="filter:blur(1px)');
 });
 
 Deno.test("a colour that is not a colour is drawn in black, and a number that is not finite draws nothing", () => {

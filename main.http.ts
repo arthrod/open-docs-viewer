@@ -8,7 +8,8 @@
  *                               Microsoft's and Google's servers fetch theirs)
  *   GET /r/<engine>?src=<url>   server-rendered: the engine runs HERE and the browser
  *                               gets finished pages (docxodus, folio, eigenpal, plate,
- *                               docen, wordcraft, superdoc, opendoc, betteroffice);
+ *                               docen, wordcraft, superdoc, opendoc, betteroffice,
+ *                               office-open, fidus-writer, docs-plus);
  *                               timings in the Server-Timing header
  *   GET /r/<engine>/page?src=<url>&doc=<id>&n=<page>&s=<density>
  *                               one page of a server render that sends page images:
